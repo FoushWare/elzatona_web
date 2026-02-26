@@ -1,0 +1,2998 @@
+{
+  "graph": {
+    "nodes": {
+      "shared-atoms": {
+        "name": "shared-atoms",
+        "type": "lib",
+        "data": {
+          "root": "libs/shared-atoms",
+          "name": "shared-atoms",
+          "tags": ["npm:public"],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@elzatona/shared-atoms",
+              "packageVersion": "0.0.1",
+              "packageMain": "./src/index.ts",
+              "isInPackageManagerWorkspaces": false
+            }
+          },
+          "targets": {
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": ["{options.reportsDirectory}"],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/shared-atoms"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": ["{options.outputFile}"],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/shared-atoms/src",
+          "projectType": "library",
+          "implicitDependencies": []
+        }
+      },
+      "common-ui": {
+        "name": "common-ui",
+        "type": "lib",
+        "data": {
+          "root": "libs/common-ui",
+          "name": "common-ui",
+          "tags": ["npm:public"],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@elzatona/common-ui",
+              "packageVersion": "0.0.1",
+              "packageMain": "./src/index.ts",
+              "isInPackageManagerWorkspaces": false
+            }
+          },
+          "targets": {
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": ["{options.outputPath}"],
+              "dependsOn": [],
+              "options": {
+                "outputPath": "dist/libs/common-ui"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": ["production", "^production"],
+              "cache": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": ["{options.reportsDirectory}"],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/common-ui"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "storybook": {
+              "executor": "@storybook/react-vite:start",
+              "options": {
+                "port": 4400,
+                "configDir": ".storybook"
+              },
+              "configurations": {
+                "ci": {
+                  "quiet": true
+                }
+              },
+              "parallelism": true
+            },
+            "build-storybook": {
+              "executor": "@storybook/react-vite:build",
+              "options": {
+                "configDir": ".storybook",
+                "outputDir": "dist/storybook/common-ui"
+              },
+              "configurations": {
+                "ci": {
+                  "quiet": true
+                }
+              },
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": ["{options.outputFile}"],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/common-ui/src",
+          "projectType": "library",
+          "implicitDependencies": []
+        }
+      },
+      "utilities": {
+        "name": "utilities",
+        "type": "lib",
+        "data": {
+          "root": "libs/utilities",
+          "name": "utilities",
+          "tags": ["npm:public", "type:lib", "scope:utilities"],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@elzatona/utilities",
+              "packageVersion": "0.0.1",
+              "packageMain": "./src/index.ts",
+              "isInPackageManagerWorkspaces": false
+            }
+          },
+          "targets": {
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": ["{options.outputPath}"],
+              "options": {
+                "outputPath": "dist/libs/utilities"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "inputs": ["production", "^production"],
+              "cache": true
+            },
+            "test": {
+              "executor": "@nx/jest:jest",
+              "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+              "options": {
+                "jestConfig": "libs/utilities/jest.config.ts",
+                "passWithNoTests": true
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": ["{options.outputFile}"],
+              "options": {
+                "lintFilePatterns": ["libs/utilities/**/*.{ts,tsx,js,jsx}"]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/utilities/src",
+          "projectType": "library",
+          "implicitDependencies": []
+        }
+      },
+      "contexts": {
+        "name": "contexts",
+        "type": "lib",
+        "data": {
+          "root": "libs/contexts",
+          "name": "contexts",
+          "tags": ["npm:public"],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@elzatona/contexts",
+              "packageVersion": "0.0.1",
+              "packageMain": "./src/index.ts",
+              "isInPackageManagerWorkspaces": false
+            }
+          },
+          "targets": {
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": ["{options.reportsDirectory}"],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/contexts"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": ["{options.outputFile}"],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/contexts/src",
+          "projectType": "library",
+          "implicitDependencies": []
+        }
+      },
+      "database": {
+        "name": "database",
+        "type": "lib",
+        "data": {
+          "root": "libs/database",
+          "name": "database",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/database/src",
+          "projectType": "library",
+          "tags": ["type:lib", "scope:database"],
+          "targets": {
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": ["{options.outputPath}"],
+              "options": {
+                "outputPath": "dist/libs/database"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "inputs": ["production", "^production"],
+              "cache": true
+            },
+            "test": {
+              "executor": "@nx/jest:jest",
+              "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+              "options": {
+                "jestConfig": "libs/database/jest.config.ts",
+                "passWithNoTests": true
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": ["{options.outputFile}"],
+              "options": {
+                "lintFilePatterns": ["libs/database/**/*.{ts,tsx,js,jsx}"]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "website": {
+        "name": "website",
+        "type": "app",
+        "data": {
+          "root": "apps/website",
+          "targets": {
+            "build": {
+              "executor": "@nx/next:build",
+              "outputs": ["{options.outputPath}"],
+              "defaultConfiguration": "production",
+              "dependsOn": [],
+              "options": {
+                "outputPath": "apps/website/.next"
+              },
+              "configurations": {
+                "development": {
+                  "outputPath": "apps/website/.next"
+                },
+                "production": {}
+              },
+              "parallelism": true,
+              "inputs": ["production", "^production"],
+              "cache": true
+            },
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "next dev",
+                "runCommand": "bun run dev -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": false
+            },
+            "start": {
+              "continuous": true,
+              "dependsOn": ["build"],
+              "executor": "nx:run-commands",
+              "options": {
+                "cwd": "apps/website",
+                "command": "next start"
+              },
+              "configurations": {
+                "production": {
+                  "buildTarget": "website:build:production"
+                }
+              },
+              "parallelism": true,
+              "cache": false
+            },
+            "serve-static": {
+              "continuous": true,
+              "options": {
+                "cwd": "apps/website",
+                "command": "next start"
+              },
+              "dependsOn": ["build"],
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": ["^build"],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": ["build-deps"],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "bun nx watch --projects website --includeDependentProjects -- bun nx build-deps website"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "jest --watch",
+                "runCommand": "bun run test:watch -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "jest --coverage",
+                "runCommand": "bun run test:coverage -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve": {
+              "executor": "@nx/next:server",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "website:build",
+                "dev": true,
+                "port": 3000
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "website:build:development",
+                  "dev": true,
+                  "port": 3000
+                },
+                "production": {
+                  "buildTarget": "website:build:production",
+                  "dev": false,
+                  "port": 3000
+                }
+              },
+              "parallelism": true,
+              "continuous": true
+            },
+            "export": {
+              "executor": "@nx/next:export",
+              "options": {
+                "buildTarget": "website:build:production"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/jest:jest",
+              "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+              "options": {
+                "jestConfig": "apps/website/jest.config.js",
+                "passWithNoTests": true
+              },
+              "configurations": {
+                "ci": {
+                  "ci": true,
+                  "coverageReporters": ["text"]
+                }
+              },
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": ["{options.outputFile}"],
+              "options": {
+                "lintFilePatterns": ["apps/website/**/*.{ts,tsx,js,jsx}"]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            }
+          },
+          "name": "website",
+          "tags": ["npm:private"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": ["dev", "test:watch", "test:coverage"]
+            },
+            "js": {
+              "packageName": "website",
+              "packageVersion": "0.1.0",
+              "isInPackageManagerWorkspaces": false
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/website/src",
+          "projectType": "application",
+          "implicitDependencies": [
+            "contexts",
+            "hooks",
+            "shared-atoms",
+            "types",
+            "common-ui",
+            "utilities"
+          ]
+        }
+      },
+      "admin": {
+        "name": "admin",
+        "type": "app",
+        "data": {
+          "root": "apps/admin",
+          "targets": {
+            "build": {
+              "executor": "@nx/next:build",
+              "outputs": ["{options.outputPath}"],
+              "defaultConfiguration": "production",
+              "options": {
+                "outputPath": "apps/admin/.next"
+              },
+              "configurations": {
+                "development": {
+                  "outputPath": "apps/admin/.next"
+                },
+                "production": {}
+              },
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "inputs": ["production", "^production"],
+              "cache": true
+            },
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "next dev -p 3001",
+                "runCommand": "bun run dev -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": false
+            },
+            "start": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start"
+              },
+              "metadata": {
+                "scriptContent": "next start -p 3001",
+                "runCommand": "bun run start -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": false
+            },
+            "serve-static": {
+              "continuous": true,
+              "options": {
+                "cwd": "apps/admin",
+                "command": "next start"
+              },
+              "dependsOn": ["build"],
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": ["^build"],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": ["build-deps"],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "bun nx watch --projects admin --includeDependentProjects -- bun nx build-deps admin"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve": {
+              "executor": "@nx/next:server",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "admin:build",
+                "dev": true,
+                "port": 3001
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "admin:build:development",
+                  "dev": true,
+                  "port": 3001
+                },
+                "production": {
+                  "buildTarget": "admin:build:production",
+                  "dev": false,
+                  "port": 3001
+                }
+              },
+              "parallelism": true,
+              "continuous": true
+            },
+            "export": {
+              "executor": "@nx/next:export",
+              "options": {
+                "buildTarget": "admin:build:production"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "vite:test",
+              "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+              "options": {
+                "configFile": "../../vitest.config.ts",
+                "passWithNoTests": true
+              },
+              "configurations": {
+                "ci": {
+                  "ci": true,
+                  "coverageReporters": ["text"]
+                }
+              },
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": ["{options.outputFile}"],
+              "options": {
+                "lintFilePatterns": ["apps/admin/**/*.{ts,tsx,js,jsx}"]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            }
+          },
+          "name": "admin",
+          "tags": ["npm:private", "type:app", "scope:admin"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": ["dev", "start"]
+            },
+            "js": {
+              "packageName": "admin",
+              "packageVersion": "0.1.0",
+              "isInPackageManagerWorkspaces": false
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/admin/src",
+          "projectType": "application",
+          "implicitDependencies": []
+        }
+      },
+      "hooks": {
+        "name": "hooks",
+        "type": "lib",
+        "data": {
+          "root": "libs/hooks",
+          "name": "hooks",
+          "tags": ["npm:public"],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@elzatona/hooks",
+              "packageVersion": "0.0.1",
+              "packageMain": "./src/index.ts",
+              "isInPackageManagerWorkspaces": false
+            }
+          },
+          "targets": {
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": ["{options.reportsDirectory}"],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/hooks"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": ["{options.outputFile}"],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/hooks/src",
+          "projectType": "library",
+          "implicitDependencies": []
+        }
+      },
+      "types": {
+        "name": "types",
+        "type": "lib",
+        "data": {
+          "root": "libs/types",
+          "name": "types",
+          "tags": ["npm:public"],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@elzatona/types",
+              "packageVersion": "0.0.1",
+              "packageMain": "./src/index.ts",
+              "isInPackageManagerWorkspaces": false
+            }
+          },
+          "targets": {
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": ["{options.reportsDirectory}"],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/types"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": ["{options.outputFile}"],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/types/src",
+          "projectType": "library",
+          "implicitDependencies": []
+        }
+      },
+      "auth": {
+        "name": "auth",
+        "type": "lib",
+        "data": {
+          "root": "libs/auth",
+          "name": "auth",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/auth/src",
+          "projectType": "library",
+          "tags": ["type:lib", "scope:auth"],
+          "targets": {
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": ["{options.outputPath}"],
+              "options": {
+                "outputPath": "dist/libs/auth"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "inputs": ["production", "^production"],
+              "cache": true
+            },
+            "test": {
+              "executor": "@nx/jest:jest",
+              "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+              "options": {
+                "jestConfig": "libs/auth/jest.config.ts",
+                "passWithNoTests": true
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": ["{options.outputFile}"],
+              "options": {
+                "lintFilePatterns": ["libs/auth/**/*.{ts,tsx,js,jsx}"]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "ui": {
+        "name": "ui",
+        "type": "lib",
+        "data": {
+          "root": "libs/ui",
+          "name": "ui",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/ui/src",
+          "projectType": "library",
+          "tags": ["type:lib", "scope:ui"],
+          "targets": {
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": ["{options.outputPath}"],
+              "options": {
+                "outputPath": "dist/libs/ui"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "inputs": ["production", "^production"],
+              "cache": true
+            },
+            "test": {
+              "executor": "@nx/jest:jest",
+              "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+              "options": {
+                "jestConfig": "libs/ui/jest.config.ts",
+                "passWithNoTests": true
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": ["{options.outputFile}"],
+              "options": {
+                "lintFilePatterns": ["libs/ui/**/*.{ts,tsx,js,jsx}"]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "zatona-web": {
+        "name": "zatona-web",
+        "type": "app",
+        "data": {
+          "root": ".",
+          "name": "zatona-web",
+          "tags": ["npm:private"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "dev:prod",
+                "dev:test",
+                "dev:admin",
+                "dev:admin:prod",
+                "dev:turbo",
+                "build",
+                "build:admin",
+                "build:all",
+                "build:check",
+                "build:check-and-push",
+                "check-build-push",
+                "start",
+                "start:admin",
+                "test",
+                "test:ui",
+                "test:auth",
+                "test:database",
+                "test:utils",
+                "lint:all",
+                "lint",
+                "lint:fix",
+                "type-check",
+                "check:schema",
+                "configure:sonarqube-mcp",
+                "download:sonarqube-mcp-jar",
+                "configure:sentry-mcp",
+                "setup:github-test-secrets",
+                "check:all",
+                "check:all:quick",
+                "check:pre-push",
+                "fix:issues",
+                "fix:all",
+                "fix:all:auto",
+                "fix:all:quick",
+                "fix:from-log",
+                "detect-fix",
+                "detect-fix:quick",
+                "fix:lint:analyze",
+                "setup:hooks",
+                "sonar",
+                "sonar:light",
+                "sonar:skip-tests",
+                "sonar:skip-build",
+                "sonar:quick",
+                "codeql",
+                "codeql:upload",
+                "codeql:precommit",
+                "codeql:fix",
+                "code-scanning:batch:start",
+                "code-scanning:batch:pr",
+                "issues:dedupe:bugs",
+                "issues:dedupe:bugs:apply",
+                "format",
+                "cleanup:playwright-videos",
+                "prepare",
+                "pre-commit:switch",
+                "pre-push:switch",
+                "pre-push:with-sonar",
+                "pre-commit:fast",
+                "pre-commit:fast-tests",
+                "pre-commit:with-tests",
+                "pre-commit:standard",
+                "pre-commit:full",
+                "pre-commit:e2e",
+                "cleanup",
+                "cleanup:deep",
+                "cleanup:project",
+                "health-check",
+                "maintenance",
+                "setup-env",
+                "seed:testing-to-main",
+                "clear:main-db",
+                "seed:clean",
+                "verify:env",
+                "github:delete-failed-actions",
+                "github:delete-failed-actions:dry-run",
+                "generate:options",
+                "test:admin-login",
+                "test:admin-login:fast",
+                "test:admin-login:watch",
+                "test:admin-login:coverage",
+                "test:admin",
+                "test:admin:all",
+                "test:admin:watch",
+                "test:admin:auth",
+                "test:admin:api",
+                "test:admin:ui",
+                "test:admin:integration",
+                "test:e2e",
+                "test:e2e:ui",
+                "test:e2e:headed",
+                "test:e2e:debug",
+                "test:e2e:report",
+                "test:e2e:install",
+                "test:e2e:codegen",
+                "test:e2e:chromium",
+                "test:e2e:firefox",
+                "test:e2e:webkit",
+                "test:e2e:mobile",
+                "test:questions",
+                "test:questions:fast",
+                "test:unit",
+                "test:unit:fast",
+                "test:unit:sequential",
+                "test:unit:vitest",
+                "test:unit:guided-flow",
+                "test:unit:freestyle-flow",
+                "test:unit:admin",
+                "test:unit:shared-components",
+                "test:admin-navbar",
+                "test:admin-navbar:watch",
+                "test:admin-navbar:fast",
+                "test:integration",
+                "test:integration:guided-flow",
+                "test:integration:freestyle-flow",
+                "test:integration:admin",
+                "test:integration:shared-components",
+                "test:e2e:guided-flow",
+                "test:e2e:freestyle-flow",
+                "test:e2e:admin",
+                "test:e2e:admin:questions:basic",
+                "test:e2e:admin:questions:crud",
+                "test:e2e:admin:questions:search",
+                "test:e2e:admin:questions:pagination",
+                "test:e2e:admin:questions:bulk",
+                "test:e2e:admin:questions:stats",
+                "test:e2e:admin:questions:validation",
+                "test:e2e:admin:questions",
+                "test:e2e:admin:login:basic",
+                "test:e2e:admin:login:validation",
+                "test:e2e:admin:login:flow",
+                "test:e2e:admin:login:split",
+                "git-hooks:standard",
+                "git-hooks:admin-tests",
+                "git-hooks:fast",
+                "git-hooks:comprehensive",
+                "git-hooks:status",
+                "dev:memory-check"
+              ]
+            },
+            "description": "A platform for frontend developers to practice coding challenges and prepare for technical interviews",
+            "js": {
+              "packageName": "zatona-web",
+              "packageVersion": "1.0.0",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "APP_ENV=development NEXT_PUBLIC_APP_ENV=development NODE_ENV=development dotenv -e .env.development -- nx serve website",
+                "runCommand": "bun run dev -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": false
+            },
+            "dev:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:prod"
+              },
+              "metadata": {
+                "scriptContent": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NODE_ENV=development dotenv -e .env.production -- nx serve website",
+                "runCommand": "bun run dev:prod -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:test"
+              },
+              "metadata": {
+                "scriptContent": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test NODE_ENV=development dotenv -e .env.test.local -- nx serve website",
+                "runCommand": "bun run dev:test -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:admin": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:admin"
+              },
+              "metadata": {
+                "scriptContent": "APP_ENV=development NEXT_PUBLIC_APP_ENV=development NODE_ENV=development dotenv -e .env.development -- nx serve admin --port=3001",
+                "runCommand": "bun run dev:admin -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:admin:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:admin:prod"
+              },
+              "metadata": {
+                "scriptContent": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NODE_ENV=development dotenv -e .env.production -- nx serve admin --port=3001",
+                "runCommand": "bun run dev:admin:prod -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:turbo": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:turbo"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=2048 nx serve website --turbopack",
+                "runCommand": "bun run dev:turbo -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "NODE_ENV=production nx build website",
+                "runCommand": "bun run build -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "inputs": ["production", "^production"],
+              "cache": true
+            },
+            "build:admin": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:admin"
+              },
+              "metadata": {
+                "scriptContent": "nx build admin",
+                "runCommand": "bun run build:admin -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:all": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:all"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --target=build --all",
+                "runCommand": "bun run build:all -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:check"
+              },
+              "metadata": {
+                "scriptContent": "nx build website --turbopack && echo '✅ Build successful' || (echo '❌ Build failed' && exit 1)",
+                "runCommand": "bun run build:check -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:check-and-push": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:check-and-push"
+              },
+              "metadata": {
+                "scriptContent": "bash .cursor/check-build-and-push.sh",
+                "runCommand": "bun run build:check-and-push -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "check-build-push": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "check-build-push"
+              },
+              "metadata": {
+                "scriptContent": "bash .cursor/check-build-and-push.sh",
+                "runCommand": "bun run check-build-push -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "start": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start"
+              },
+              "metadata": {
+                "scriptContent": "nx start website",
+                "runCommand": "bun run start -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": false
+            },
+            "start:admin": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start:admin"
+              },
+              "metadata": {
+                "scriptContent": "nx start admin",
+                "runCommand": "bun run start:admin -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "APP_ENV=test NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 nx run-many --target=test --all --maxWorkers=1",
+                "runCommand": "bun run test -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/tests/config/jest.preset.js",
+                "{workspaceRoot}/tests/config/jest.config.js",
+                "{workspaceRoot}/src/test-setup.ts"
+              ],
+              "cache": true
+            },
+            "test:ui": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:ui"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 nx test ui --maxWorkers=1",
+                "runCommand": "bun run test:ui -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:auth": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:auth"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 nx test auth --maxWorkers=1",
+                "runCommand": "bun run test:auth -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:database": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:database"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 nx test database --maxWorkers=1",
+                "runCommand": "bun run test:database -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:utils": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:utils"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 nx test utils --maxWorkers=1",
+                "runCommand": "bun run test:utils -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint:all": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:all"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --target=lint --all",
+                "runCommand": "bun run lint:all -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint"
+              },
+              "metadata": {
+                "scriptContent": "eslint . --ext .js,.jsx,.ts,.tsx",
+                "runCommand": "bun run lint -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+              ],
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+                "runCommand": "bun run lint:fix -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "type-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "type-check"
+              },
+              "metadata": {
+                "scriptContent": "npx tsc --noEmit",
+                "runCommand": "bun run type-check -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "check:schema": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "check:schema"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/check-supabase-schema.js",
+                "runCommand": "bun run check:schema -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "configure:sonarqube-mcp": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "configure:sonarqube-mcp"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/configure-sonarqube-mcp.sh",
+                "runCommand": "bun run configure:sonarqube-mcp -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "download:sonarqube-mcp-jar": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "download:sonarqube-mcp-jar"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/download-sonarqube-mcp-jar.sh",
+                "runCommand": "bun run download:sonarqube-mcp-jar -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "configure:sentry-mcp": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "configure:sentry-mcp"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/configure-sentry-mcp.sh",
+                "runCommand": "bun run configure:sentry-mcp -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "setup:github-test-secrets": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "setup:github-test-secrets"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/setup-github-test-secrets.sh",
+                "runCommand": "bun run setup:github-test-secrets -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "check:all": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "check:all"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/run-all-checks.js",
+                "runCommand": "bun run check:all -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "check:all:quick": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "check:all:quick"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/run-all-checks.js --skip-sonar",
+                "runCommand": "bun run check:all:quick -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "check:pre-push": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "check:pre-push"
+              },
+              "metadata": {
+                "scriptContent": "npm run lint && npm run type-check && npm run sonar:quick",
+                "runCommand": "bun run check:pre-push -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "fix:issues": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "fix:issues"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/fix-issues-interactive.js",
+                "runCommand": "bun run fix:issues -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "fix:all": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "fix:all"
+              },
+              "metadata": {
+                "scriptContent": "npm run format && npm run lint:fix",
+                "runCommand": "bun run fix:all -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "fix:all:auto": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "fix:all:auto"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/fix-all-automatically.js",
+                "runCommand": "bun run fix:all:auto -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "fix:all:quick": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "fix:all:quick"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/fix-all-automatically.js --skip-sonar --skip-type-check",
+                "runCommand": "bun run fix:all:quick -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "fix:from-log": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "fix:from-log"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/fix-issues-from-log.js",
+                "runCommand": "bun run fix:from-log -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "detect-fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "detect-fix"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/detect-analyze-fix.js",
+                "runCommand": "bun run detect-fix -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "detect-fix:quick": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "detect-fix:quick"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/detect-analyze-fix.js --skip-sonar --skip-type-check",
+                "runCommand": "bun run detect-fix:quick -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "fix:lint:analyze": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "fix:lint:analyze"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/fix-lint-issues-batch.js",
+                "runCommand": "bun run fix:lint:analyze -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "setup:hooks": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "setup:hooks"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/setup-git-hooks.sh",
+                "runCommand": "bun run setup:hooks -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "sonar": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "sonar"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1024 node libs/utilities/scripts/run-sonarqube-local.js",
+                "runCommand": "bun run sonar -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "sonar:light": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "sonar:light"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 SONAR_MEMORY_LIMIT=768 node libs/utilities/scripts/run-sonarqube-local.js",
+                "runCommand": "bun run sonar:light -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "sonar:skip-tests": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "sonar:skip-tests"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1024 node libs/utilities/scripts/run-sonarqube-local.js --skip-tests",
+                "runCommand": "bun run sonar:skip-tests -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "sonar:skip-build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "sonar:skip-build"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1024 node libs/utilities/scripts/run-sonarqube-local.js --skip-build",
+                "runCommand": "bun run sonar:skip-build -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "sonar:quick": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "sonar:quick"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 SONAR_MEMORY_LIMIT=768 node libs/utilities/scripts/run-sonarqube-local.js --skip-tests --skip-build",
+                "runCommand": "bun run sonar:quick -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "codeql": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "codeql"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/run-codeql-local.sh",
+                "runCommand": "bun run codeql -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "codeql:upload": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "codeql:upload"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/run-codeql-local.sh --upload",
+                "runCommand": "bun run codeql:upload -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "codeql:precommit": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "codeql:precommit"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/check-codeql-precommit.sh",
+                "runCommand": "bun run codeql:precommit -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "codeql:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "codeql:fix"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/fix-codeql-issues.js",
+                "runCommand": "bun run codeql:fix -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "code-scanning:batch:start": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "code-scanning:batch:start"
+              },
+              "metadata": {
+                "scriptContent": "bash tools/code-scanning-batch-flow.sh start",
+                "runCommand": "bun run code-scanning:batch:start -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "code-scanning:batch:pr": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "code-scanning:batch:pr"
+              },
+              "metadata": {
+                "scriptContent": "bash tools/code-scanning-batch-flow.sh pr",
+                "runCommand": "bun run code-scanning:batch:pr -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "issues:dedupe:bugs": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "issues:dedupe:bugs"
+              },
+              "metadata": {
+                "scriptContent": "bash tools/reconcile-code-scanning-issues.sh dedupe-bugs",
+                "runCommand": "bun run issues:dedupe:bugs -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "issues:dedupe:bugs:apply": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "issues:dedupe:bugs:apply"
+              },
+              "metadata": {
+                "scriptContent": "bash tools/reconcile-code-scanning-issues.sh dedupe-bugs --apply",
+                "runCommand": "bun run issues:dedupe:bugs:apply -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write .",
+                "runCommand": "bun run format -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "cleanup:playwright-videos": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "cleanup:playwright-videos"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/cleanup-playwright-videos.sh",
+                "runCommand": "bun run cleanup:playwright-videos -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepare": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepare"
+              },
+              "metadata": {
+                "scriptContent": "husky",
+                "runCommand": "bun run prepare -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "pre-commit:switch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "pre-commit:switch"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/switch-pre-commit.sh",
+                "runCommand": "bun run pre-commit:switch -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "pre-push:switch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "pre-push:switch"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/switch-pre-push.sh",
+                "runCommand": "bun run pre-push:switch -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "pre-push:with-sonar": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "pre-push:with-sonar"
+              },
+              "metadata": {
+                "scriptContent": "cp Rest/other/.husky/pre-push-with-sonar Rest/other/.husky/pre-push && cp Rest/other/.husky/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push && echo '✅ Switched to pre-push with optional SonarQube (enable with: export SONAR_ENABLE_PRE_PUSH=true)'",
+                "runCommand": "bun run pre-push:with-sonar -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "pre-commit:fast": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "pre-commit:fast"
+              },
+              "metadata": {
+                "scriptContent": "cp Rest/other/.husky/pre-commit-fast Rest/other/.husky/pre-commit && cp Rest/other/.husky/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo '✅ Switched to FAST pre-commit checks (no tests)'",
+                "runCommand": "bun run pre-commit:fast -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "pre-commit:fast-tests": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "pre-commit:fast-tests"
+              },
+              "metadata": {
+                "scriptContent": "cp Rest/other/.husky/pre-commit-fast-tests Rest/other/.husky/pre-commit && cp Rest/other/.husky/pre-commit-fast-tests .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo '✅ Switched to FAST pre-commit with tests (unit tests only)'",
+                "runCommand": "bun run pre-commit:fast-tests -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "pre-commit:with-tests": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "pre-commit:with-tests"
+              },
+              "metadata": {
+                "scriptContent": "cp Rest/other/.husky/pre-commit-with-tests Rest/other/.husky/pre-commit && cp Rest/other/.husky/pre-commit-with-tests .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo '✅ Switched to pre-commit with tests (unit + integration)'",
+                "runCommand": "bun run pre-commit:with-tests -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "pre-commit:standard": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "pre-commit:standard"
+              },
+              "metadata": {
+                "scriptContent": "cp Rest/other/.husky/pre-commit Rest/other/.husky/pre-commit && cp Rest/other/.husky/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo '✅ Switched to STANDARD pre-commit checks'",
+                "runCommand": "bun run pre-commit:standard -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "pre-commit:full": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "pre-commit:full"
+              },
+              "metadata": {
+                "scriptContent": "cp Rest/other/.husky/pre-commit-full Rest/other/.husky/pre-commit && cp Rest/other/.husky/pre-commit-full .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo '✅ Switched to FULL pre-commit checks (includes E2E)'",
+                "runCommand": "bun run pre-commit:full -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "pre-commit:e2e": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "pre-commit:e2e"
+              },
+              "metadata": {
+                "scriptContent": "cp Rest/other/.husky/pre-commit-e2e Rest/other/.husky/pre-commit && cp Rest/other/.husky/pre-commit-e2e .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo '✅ Switched to E2E pre-commit checks with auto-resolution'",
+                "runCommand": "bun run pre-commit:e2e -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "cleanup": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "cleanup"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/cleanup-build.sh",
+                "runCommand": "bun run cleanup -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "cleanup:deep": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "cleanup:deep"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/cleanup-build.sh --deep",
+                "runCommand": "bun run cleanup:deep -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "cleanup:project": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "cleanup:project"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/cleanup-project.js",
+                "runCommand": "bun run cleanup:project -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "health-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "health-check"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/project-health-check.js",
+                "runCommand": "bun run health-check -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "maintenance": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "maintenance"
+              },
+              "metadata": {
+                "scriptContent": "bun run cleanup:project && bun run health-check",
+                "runCommand": "bun run maintenance -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "setup-env": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "setup-env"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/setup-env.mjs",
+                "runCommand": "bun run setup-env -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "seed:testing-to-main": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "seed:testing-to-main"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/seed-from-testing-to-main.mjs",
+                "runCommand": "bun run seed:testing-to-main -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clear:main-db": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clear:main-db"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/clear-main-database.mjs",
+                "runCommand": "bun run clear:main-db -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "seed:clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "seed:clean"
+              },
+              "metadata": {
+                "scriptContent": "bun run clear:main-db && bun run seed:testing-to-main",
+                "runCommand": "bun run seed:clean -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "verify:env": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "verify:env"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/verify-env-setup.mjs",
+                "runCommand": "bun run verify:env -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "github:delete-failed-actions": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "github:delete-failed-actions"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/delete-failed-github-actions.mjs",
+                "runCommand": "bun run github:delete-failed-actions -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "github:delete-failed-actions:dry-run": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "github:delete-failed-actions:dry-run"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/delete-failed-github-actions.mjs --dry-run",
+                "runCommand": "bun run github:delete-failed-actions:dry-run -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:options": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:options"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/generate-options-for-questions.mjs",
+                "runCommand": "bun run generate:options -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin-login": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin-login"
+              },
+              "metadata": {
+                "scriptContent": "node Rest/other/tests/libs/utilities/scripts/run-admin-login-tests.mjs",
+                "runCommand": "bun run test:admin-login -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin-login:fast": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin-login:fast"
+              },
+              "metadata": {
+                "scriptContent": "npx jest Rest/other/tests/admin/admin-login-api.test.ts --verbose",
+                "runCommand": "bun run test:admin-login:fast -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin-login:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin-login:watch"
+              },
+              "metadata": {
+                "scriptContent": "npx jest Rest/other/tests/admin/ --watch",
+                "runCommand": "bun run test:admin-login:watch -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin-login:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin-login:coverage"
+              },
+              "metadata": {
+                "scriptContent": "cd apps/website && npx jest ../../Rest/other/tests/admin/ --coverage --config jest.config.js",
+                "runCommand": "bun run test:admin-login:coverage -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/run-admin-tests.mjs",
+                "runCommand": "bun run test:admin -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin:all": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin:all"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/run-admin-tests.mjs all",
+                "runCommand": "bun run test:admin:all -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin:watch"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/run-admin-tests.mjs watch",
+                "runCommand": "bun run test:admin:watch -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin:auth": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin:auth"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/run-admin-tests.mjs category \"Authentication Tests\"",
+                "runCommand": "bun run test:admin:auth -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin:api": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin:api"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/run-admin-tests.mjs category \"API Tests\"",
+                "runCommand": "bun run test:admin:api -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin:ui": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin:ui"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/run-admin-tests.mjs category \"UI Component Tests\"",
+                "runCommand": "bun run test:admin:ui -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin:integration": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin:integration"
+              },
+              "metadata": {
+                "scriptContent": "node libs/utilities/scripts/run-admin-tests.mjs category \"Integration Tests\"",
+                "runCommand": "bun run test:admin:integration -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e"
+              },
+              "metadata": {
+                "scriptContent": "APP_ENV=test NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts --workers=1",
+                "runCommand": "bun run test:e2e -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:ui": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:ui"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts --ui --workers=1",
+                "runCommand": "bun run test:e2e:ui -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:headed": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:headed"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts --headed --workers=1",
+                "runCommand": "bun run test:e2e:headed -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:debug": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:debug"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts --debug --workers=1",
+                "runCommand": "bun run test:e2e:debug -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:report": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:report"
+              },
+              "metadata": {
+                "scriptContent": "playwright show-report",
+                "runCommand": "bun run test:e2e:report -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:install": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:install"
+              },
+              "metadata": {
+                "scriptContent": "playwright install",
+                "runCommand": "bun run test:e2e:install -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:codegen": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:codegen"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright codegen",
+                "runCommand": "bun run test:e2e:codegen -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:chromium": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:chromium"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts --project=chromium --workers=1",
+                "runCommand": "bun run test:e2e:chromium -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:firefox": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:firefox"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts --project=firefox --workers=1",
+                "runCommand": "bun run test:e2e:firefox -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:webkit": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:webkit"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts --project=webkit --workers=1",
+                "runCommand": "bun run test:e2e:webkit -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:mobile": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:mobile"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts --project='Mobile Chrome' --project='Mobile Safari' --workers=1",
+                "runCommand": "bun run test:e2e:mobile -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:questions": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:questions"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns=questions --maxWorkers=1 --silent",
+                "runCommand": "bun run test:questions -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:questions:fast": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:questions:fast"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 JEST_NO_CACHE=true jest --config=apps/website/jest.config.js --testPathPatterns=questions --maxWorkers=1 --no-cache --silent",
+                "runCommand": "bun run test:questions:fast -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:unit": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:unit"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --maxWorkers=1 --silent",
+                "runCommand": "bun run test:unit -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:unit:fast": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:unit:fast"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 JEST_NO_CACHE=true jest --config=apps/website/jest.config.js --maxWorkers=1 --no-cache --silent",
+                "runCommand": "bun run test:unit:fast -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:unit:sequential": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:unit:sequential"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=512 JEST_RUN_IN_BAND=true jest --config=apps/website/jest.config.js --runInBand --silent",
+                "runCommand": "bun run test:unit:sequential -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:unit:vitest": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:unit:vitest"
+              },
+              "metadata": {
+                "scriptContent": "vitest run",
+                "runCommand": "bun run test:unit:vitest -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:unit:guided-flow": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:unit:guided-flow"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns=guided-flow --maxWorkers=1 --silent",
+                "runCommand": "bun run test:unit:guided-flow -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:unit:freestyle-flow": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:unit:freestyle-flow"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns=freestyle-flow --maxWorkers=1 --silent",
+                "runCommand": "bun run test:unit:freestyle-flow -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:unit:admin": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:unit:admin"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns=admin --maxWorkers=1 --silent",
+                "runCommand": "bun run test:unit:admin -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:unit:shared-components": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:unit:shared-components"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns=shared-components --maxWorkers=1 --silent",
+                "runCommand": "bun run test:unit:shared-components -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin-navbar": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin-navbar"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns=AdminNavbar --maxWorkers=1 --silent",
+                "runCommand": "bun run test:admin-navbar -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin-navbar:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin-navbar:watch"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns=AdminNavbar --watch --maxWorkers=1",
+                "runCommand": "bun run test:admin-navbar:watch -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:admin-navbar:fast": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:admin-navbar:fast"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 JEST_NO_CACHE=true jest --config=apps/website/jest.config.js --testPathPatterns=AdminNavbar --maxWorkers=1 --no-cache --silent",
+                "runCommand": "bun run test:admin-navbar:fast -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:integration": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:integration"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns=integration --maxWorkers=1 --silent",
+                "runCommand": "bun run test:integration -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:integration:guided-flow": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:integration:guided-flow"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns='(guided-flow|integration)' --maxWorkers=1 --silent",
+                "runCommand": "bun run test:integration:guided-flow -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:integration:freestyle-flow": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:integration:freestyle-flow"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns='(freestyle-flow|integration)' --maxWorkers=1 --silent",
+                "runCommand": "bun run test:integration:freestyle-flow -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:integration:admin": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:integration:admin"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns='(admin|integration)' --maxWorkers=1 --silent",
+                "runCommand": "bun run test:integration:admin -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:integration:shared-components": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:integration:shared-components"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns='(shared-components|integration)' --maxWorkers=1 --silent",
+                "runCommand": "bun run test:integration:shared-components -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:guided-flow": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:guided-flow"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/guided-flow/ --workers=1",
+                "runCommand": "bun run test:e2e:guided-flow -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:freestyle-flow": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:freestyle-flow"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/freestyle-flow/ --workers=1",
+                "runCommand": "bun run test:e2e:freestyle-flow -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/ --workers=1",
+                "runCommand": "bun run test:e2e:admin -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:questions:basic": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:questions:basic"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-questions-page.basic.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:questions:basic -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:questions:crud": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:questions:crud"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-questions-page.crud.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:questions:crud -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:questions:search": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:questions:search"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-questions-page.search.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:questions:search -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:questions:pagination": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:questions:pagination"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-questions-page.pagination.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:questions:pagination -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:questions:bulk": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:questions:bulk"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-questions-page.bulk.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:questions:bulk -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:questions:stats": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:questions:stats"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-questions-page.stats.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:questions:stats -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:questions:validation": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:questions:validation"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-questions-page.validation.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:questions:validation -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:questions": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:questions"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-questions-page.basic.spec.ts tests/e2e/admin/admin-questions-page.crud.spec.ts tests/e2e/admin/admin-questions-page.search.spec.ts tests/e2e/admin/admin-questions-page.pagination.spec.ts tests/e2e/admin/admin-questions-page.bulk.spec.ts tests/e2e/admin/admin-questions-page.stats.spec.ts tests/e2e/admin/admin-questions-page.validation.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:questions -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:login:basic": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:login:basic"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-login.basic.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:login:basic -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:login:validation": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:login:validation"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-login.validation.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:login:validation -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:login:flow": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:login:flow"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-login.flow.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:login:flow -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:e2e:admin:login:split": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:e2e:admin:login:split"
+              },
+              "metadata": {
+                "scriptContent": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-login.basic.spec.ts tests/e2e/admin/admin-login.validation.spec.ts tests/e2e/admin/admin-login.flow.spec.ts --workers=1",
+                "runCommand": "bun run test:e2e:admin:login:split -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "git-hooks:standard": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "git-hooks:standard"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/configure-git-hooks.sh standard",
+                "runCommand": "bun run git-hooks:standard -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "git-hooks:admin-tests": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "git-hooks:admin-tests"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/configure-git-hooks.sh admin-tests",
+                "runCommand": "bun run git-hooks:admin-tests -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "git-hooks:fast": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "git-hooks:fast"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/configure-git-hooks.sh fast",
+                "runCommand": "bun run git-hooks:fast -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "git-hooks:comprehensive": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "git-hooks:comprehensive"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/configure-git-hooks.sh comprehensive",
+                "runCommand": "bun run git-hooks:comprehensive -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "git-hooks:status": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "git-hooks:status"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/configure-git-hooks.sh status",
+                "runCommand": "bun run git-hooks:status -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:memory-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:memory-check"
+              },
+              "metadata": {
+                "scriptContent": "bash libs/utilities/scripts/check-memory.sh",
+                "runCommand": "bun run dev:memory-check -- undefined"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      }
+    },
+    "dependencies": {
+      "shared-atoms": [],
+      "common-ui": [
+        {
+          "source": "common-ui",
+          "target": "contexts",
+          "type": "static"
+        },
+        {
+          "source": "common-ui",
+          "target": "hooks",
+          "type": "static"
+        },
+        {
+          "source": "common-ui",
+          "target": "types",
+          "type": "static"
+        },
+        {
+          "source": "common-ui",
+          "target": "website",
+          "type": "static"
+        },
+        {
+          "source": "common-ui",
+          "target": "utilities",
+          "type": "static"
+        }
+      ],
+      "utilities": [
+        {
+          "source": "utilities",
+          "target": "website",
+          "type": "static"
+        },
+        {
+          "source": "utilities",
+          "target": "types",
+          "type": "static"
+        }
+      ],
+      "contexts": [],
+      "database": [],
+      "website": [
+        {
+          "source": "website",
+          "target": "contexts",
+          "type": "implicit"
+        },
+        {
+          "source": "website",
+          "target": "hooks",
+          "type": "implicit"
+        },
+        {
+          "source": "website",
+          "target": "shared-atoms",
+          "type": "implicit"
+        },
+        {
+          "source": "website",
+          "target": "types",
+          "type": "implicit"
+        },
+        {
+          "source": "website",
+          "target": "common-ui",
+          "type": "implicit"
+        },
+        {
+          "source": "website",
+          "target": "utilities",
+          "type": "implicit"
+        },
+        {
+          "source": "website",
+          "target": "common-ui",
+          "type": "static"
+        },
+        {
+          "source": "website",
+          "target": "contexts",
+          "type": "static"
+        },
+        {
+          "source": "website",
+          "target": "types",
+          "type": "static"
+        },
+        {
+          "source": "website",
+          "target": "utilities",
+          "type": "static"
+        }
+      ],
+      "admin": [
+        {
+          "source": "admin",
+          "target": "common-ui",
+          "type": "static"
+        },
+        {
+          "source": "admin",
+          "target": "contexts",
+          "type": "static"
+        },
+        {
+          "source": "admin",
+          "target": "types",
+          "type": "static"
+        },
+        {
+          "source": "admin",
+          "target": "hooks",
+          "type": "static"
+        },
+        {
+          "source": "admin",
+          "target": "utilities",
+          "type": "static"
+        },
+        {
+          "source": "admin",
+          "target": "website",
+          "type": "static"
+        }
+      ],
+      "hooks": [
+        {
+          "source": "hooks",
+          "target": "shared-atoms",
+          "type": "static"
+        },
+        {
+          "source": "hooks",
+          "target": "contexts",
+          "type": "static"
+        },
+        {
+          "source": "hooks",
+          "target": "types",
+          "type": "static"
+        },
+        {
+          "source": "hooks",
+          "target": "utilities",
+          "type": "static"
+        }
+      ],
+      "types": [],
+      "auth": [],
+      "ui": [],
+      "zatona-web": [
+        {
+          "source": "zatona-web",
+          "target": "database",
+          "type": "static"
+        }
+      ]
+    }
+  }
+}

@@ -1,4 +1,6 @@
-export {
-  GET,
-  POST,
-} from "../../../../../../website/src/app/lib/network/routes/questions/unified/route";
+import {
+  questionsGetHandler as GET,
+  questionsPostHandler as POST,
+} from "@elzatona/utilities";
+
+export { GET, POST };
