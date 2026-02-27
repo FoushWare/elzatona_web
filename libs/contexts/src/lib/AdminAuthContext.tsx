@@ -17,8 +17,8 @@ const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
 const supabaseAnonKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"];
 
 const isBuildPhase =
-  process.env.NEXT_PHASE?.includes("build") ||
-  process.env.NODE_ENV === "production";
+  process.env["NEXT_PHASE"]?.includes("build") ||
+  process.env["NODE_ENV"] === "production";
 
 if (!supabaseUrl || !supabaseAnonKey) {
   if (!isBuildPhase) {
@@ -26,8 +26,8 @@ if (!supabaseUrl || !supabaseAnonKey) {
       "Missing required Supabase environment variables for AdminAuth. Supabase operations will fail.",
     );
   } else if (
-    process.env.NODE_ENV === "production" &&
-    !process.env.NEXT_PHASE?.includes("build")
+    process.env["NODE_ENV"] === "production" &&
+    !process.env["NEXT_PHASE"]?.includes("build")
   ) {
     throw new Error(
       "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set",

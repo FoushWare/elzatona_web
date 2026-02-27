@@ -14,8 +14,8 @@ const isValidConfig =
   supabaseAnonKey !== "placeholder_key";
 
 const isBuildPhase =
-  process.env.NEXT_PHASE?.includes("build") ||
-  process.env.NODE_ENV === "production";
+  process.env["NEXT_PHASE"]?.includes("build") ||
+  process.env["NODE_ENV"] === "production";
 
 // Log configuration status
 if (!isValidConfig) {
@@ -32,12 +32,12 @@ if (!isValidConfig) {
 // Create Supabase client
 export const supabaseClient = isValidConfig
   ? createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: true,
-      },
-    })
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true,
+    },
+  })
   : null;
 
 // Export a helper to check if Supabase is available
@@ -52,7 +52,7 @@ if (supabaseClient && typeof window !== "undefined" && supabaseClient.auth) {
       if (session?.access_token) {
         const expires = new Date(
           Date.now() +
-            (session.expires_in ? session.expires_in * 1000 : 7 * 86400000),
+          (session.expires_in ? session.expires_in * 1000 : 7 * 86400000),
         ).toUTCString();
         document.cookie = `sb_session=1; path=/; expires=${expires}`;
       } else {
