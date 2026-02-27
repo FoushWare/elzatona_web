@@ -73,7 +73,7 @@ export function getApiConfig(): ApiConfig {
   // CRITICAL: For test environment, ensure we're using test project
   // If APP_ENV=test but we're seeing production URL, log a warning
   if (isTest) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+    const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"] || "";
     const _isTestProject =
       supabaseUrl.includes("kiycimlsatwfqxtfprlr") ||
       supabaseUrl.includes("slfyltsmcivmqfloxpmq") ||
@@ -95,9 +95,9 @@ export function getApiConfig(): ApiConfig {
   }
 
   // Get Supabase configuration from environment
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
-  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"] || "";
+  const supabaseAnonKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"] || "";
+  const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"] || "";
 
   // Extract project reference from URL
   const projectRef =
@@ -108,13 +108,15 @@ export function getApiConfig(): ApiConfig {
   // Production: Use INITIAL_ADMIN_EMAIL
   const adminEmail =
     isTest || isDev
-      ? process.env.ADMIN_EMAIL || process.env.INITIAL_ADMIN_EMAIL || ""
-      : process.env.INITIAL_ADMIN_EMAIL || "";
+      ? process.env["ADMIN_EMAIL"] || process.env["INITIAL_ADMIN_EMAIL"] || ""
+      : process.env["INITIAL_ADMIN_EMAIL"] || "";
 
   const adminPassword =
     isTest || isDev
-      ? process.env.ADMIN_PASSWORD || process.env.INITIAL_ADMIN_PASSWORD || ""
-      : process.env.INITIAL_ADMIN_PASSWORD || "";
+      ? process.env["ADMIN_PASSWORD"] ||
+        process.env["INITIAL_ADMIN_PASSWORD"] ||
+        ""
+      : process.env["INITIAL_ADMIN_PASSWORD"] || "";
 
   // Environment-specific headers
   const headers: Record<string, string> = {
@@ -138,7 +140,7 @@ export function getApiConfig(): ApiConfig {
 
   // API configuration
   const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
+    process.env["NEXT_PUBLIC_API_URL"] ||
     (typeof window !== "undefined"
       ? window.location.origin
       : "http://localhost:3000");

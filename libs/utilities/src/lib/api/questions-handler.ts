@@ -124,46 +124,49 @@ export async function questionsGetHandler(request: NextRequest) {
     `);
 
     // Apply filters
-    if (cleanFilters.category) {
-      query = query.eq("category_id", cleanFilters.category);
+    if (cleanFilters["category"]) {
+      query = query.eq("category_id", cleanFilters["category"]);
     }
-    if (cleanFilters.topic) {
-      query = query.eq("topic_id", cleanFilters.topic);
+    if (cleanFilters["topic"]) {
+      query = query.eq("topic_id", cleanFilters["topic"]);
     }
-    if (cleanFilters.type) {
-      query = query.eq("type", cleanFilters.type);
+    if (cleanFilters["type"]) {
+      query = query.eq("type", cleanFilters["type"]);
     }
-    if (cleanFilters.difficulty) {
-      query = query.eq("difficulty", cleanFilters.difficulty);
+    if (cleanFilters["difficulty"]) {
+      query = query.eq("difficulty", cleanFilters["difficulty"]);
     }
-    if (cleanFilters.learningPath) {
-      query = query.eq("learning_card_id", cleanFilters.learningPath);
+    if (cleanFilters["learningPath"]) {
+      query = query.eq("learning_card_id", cleanFilters["learningPath"]);
     }
-    if (cleanFilters.isActive !== undefined) {
-      query = query.eq("is_active", cleanFilters.isActive);
+    if (cleanFilters["isActive"] !== undefined) {
+      query = query.eq("is_active", cleanFilters["isActive"]);
     }
 
     // Get total count with same filters
     let countQuery = supabase
       .from("questions")
       .select("*", { count: "exact", head: true });
-    if (cleanFilters.category) {
-      countQuery = countQuery.eq("category_id", cleanFilters.category);
+    if (cleanFilters["category"]) {
+      countQuery = countQuery.eq("category_id", cleanFilters["category"]);
     }
-    if (cleanFilters.topic) {
-      countQuery = countQuery.eq("topic_id", cleanFilters.topic);
+    if (cleanFilters["topic"]) {
+      countQuery = countQuery.eq("topic_id", cleanFilters["topic"]);
     }
-    if (cleanFilters.type) {
-      countQuery = countQuery.eq("type", cleanFilters.type);
+    if (cleanFilters["type"]) {
+      countQuery = countQuery.eq("type", cleanFilters["type"]);
     }
-    if (cleanFilters.difficulty) {
-      countQuery = countQuery.eq("difficulty", cleanFilters.difficulty);
+    if (cleanFilters["difficulty"]) {
+      countQuery = countQuery.eq("difficulty", cleanFilters["difficulty"]);
     }
-    if (cleanFilters.learningPath) {
-      countQuery = countQuery.eq("learning_card_id", cleanFilters.learningPath);
+    if (cleanFilters["learningPath"]) {
+      countQuery = countQuery.eq(
+        "learning_card_id",
+        cleanFilters["learningPath"],
+      );
     }
-    if (cleanFilters.isActive !== undefined) {
-      countQuery = countQuery.eq("is_active", cleanFilters.isActive);
+    if (cleanFilters["isActive"] !== undefined) {
+      countQuery = countQuery.eq("is_active", cleanFilters["isActive"]);
     }
 
     const { count, error: countError } = await countQuery;
@@ -185,9 +188,9 @@ export async function questionsGetHandler(request: NextRequest) {
       const transformed: Record<string, unknown> = { ...question };
 
       // Ensure code field preserves newlines - convert any \n escape sequences to actual newlines
-      if (transformed.code && typeof transformed.code === "string") {
+      if (transformed["code"] && typeof transformed["code"] === "string") {
         // Handle cases where newlines might be stored as escape sequences
-        transformed.code = transformed.code
+        transformed["code"] = (transformed["code"] as string)
           .replaceAll(/\\n/g, "\n") // Replace \n escape sequences with actual newlines
           .replaceAll(/\\r\\n/g, "\n") // Replace \r\n escape sequences
           .replaceAll(/\\r/g, "\n") // Replace \r escape sequences
@@ -197,80 +200,89 @@ export async function questionsGetHandler(request: NextRequest) {
 
       // Transform categories: single object -> array for display, also add category name for form
       if (
-        question.categories &&
-        typeof question.categories === "object" &&
-        !Array.isArray(question.categories)
+        question["categories"] &&
+        typeof question["categories"] === "object" &&
+        !Array.isArray(question["categories"])
       ) {
-        const categoryObj = question.categories as Record<string, unknown>;
-        transformed.categories = [question.categories];
-        transformed.category =
-          (categoryObj.name as string) || (categoryObj.title as string) || "";
+        const categoryObj = question["categories"] as Record<string, unknown>;
+        transformed["categories"] = [question["categories"]];
+        transformed["category"] =
+          (categoryObj["name"] as string) ||
+          (categoryObj["title"] as string) ||
+          "";
       } else if (
-        Array.isArray(question.categories) &&
-        question.categories.length > 0 &&
-        question.categories[0]
+        Array.isArray(question["categories"]) &&
+        question["categories"].length > 0 &&
+        question["categories"][0]
       ) {
-        const firstCategory = question.categories[0] as Record<string, unknown>;
-        transformed.category =
-          (firstCategory.name as string) ||
-          (firstCategory.title as string) ||
+        const firstCategory = question["categories"][0] as Record<
+          string,
+          unknown
+        >;
+        transformed["category"] =
+          (firstCategory["name"] as string) ||
+          (firstCategory["title"] as string) ||
           "";
       } else {
-        transformed.categories = [];
-        transformed.category = "";
+        transformed["categories"] = [];
+        transformed["category"] = "";
       }
 
       // Transform topics: single object -> array for display, also add topic name for form
       if (
-        question.topics &&
-        typeof question.topics === "object" &&
-        !Array.isArray(question.topics)
+        question["topics"] &&
+        typeof question["topics"] === "object" &&
+        !Array.isArray(question["topics"])
       ) {
-        const topicObj = question.topics as Record<string, unknown>;
-        transformed.topics = [question.topics];
-        transformed.topic =
-          (topicObj.name as string) || (topicObj.title as string) || "";
+        const topicObj = question["topics"] as Record<string, unknown>;
+        transformed["topics"] = [question["topics"]];
+        transformed["topic"] =
+          (topicObj["name"] as string) || (topicObj["title"] as string) || "";
       } else if (
-        Array.isArray(question.topics) &&
-        question.topics.length > 0 &&
-        question.topics[0]
+        Array.isArray(question["topics"]) &&
+        question["topics"].length > 0 &&
+        question["topics"][0]
       ) {
-        const firstTopic = question.topics[0] as Record<string, unknown>;
-        transformed.topic =
-          (firstTopic.name as string) || (firstTopic.title as string) || "";
+        const firstTopic = question["topics"][0] as Record<string, unknown>;
+        transformed["topic"] =
+          (firstTopic["name"] as string) ||
+          (firstTopic["title"] as string) ||
+          "";
       } else {
-        transformed.topics = [];
-        transformed.topic = "";
+        transformed["topics"] = [];
+        transformed["topic"] = "";
       }
 
       // Transform learning_cards: single object -> learning_card for display, also add learningCardId for form
       // Supabase returns null when foreign key is null, or an object when it exists
-      if (question.learning_cards && question.learning_cards !== null) {
+      if (question["learning_cards"] && question["learning_cards"] !== null) {
         if (
-          Array.isArray(question.learning_cards) &&
-          question.learning_cards.length > 0
+          Array.isArray(question["learning_cards"]) &&
+          question["learning_cards"].length > 0
         ) {
-          const firstLearningCard = question.learning_cards[0] as Record<
+          const firstLearningCard = question["learning_cards"][0] as Record<
             string,
             unknown
           >;
-          transformed.learning_card = question.learning_cards[0];
-          transformed.learningCardId = (firstLearningCard.id as string) || "";
-        } else if (typeof question.learning_cards === "object") {
-          const learningCardObj = question.learning_cards as Record<
+          transformed["learning_card"] = question["learning_cards"][0];
+          transformed["learningCardId"] =
+            (firstLearningCard["id"] as string) || "";
+        } else if (typeof question["learning_cards"] === "object") {
+          const learningCardObj = question["learning_cards"] as Record<
             string,
             unknown
           >;
-          transformed.learning_card = question.learning_cards;
-          transformed.learningCardId = (learningCardObj.id as string) || "";
+          transformed["learning_card"] = question["learning_cards"];
+          transformed["learningCardId"] =
+            (learningCardObj["id"] as string) || "";
         } else {
-          transformed.learning_card = null;
-          transformed.learningCardId = question.learning_card_id || "";
+          transformed["learning_card"] = null;
+          transformed["learningCardId"] = question["learning_card_id"] || "";
         }
       } else {
         // No learning card relationship (foreign key is null)
-        transformed.learning_card = null;
-        transformed.learningCardId = question.learning_card_id || "";
+        transformed["learning_card"] = null;
+        transformed["learningCardId"] = question["learning_card_id"] || "";
       }
 
       return transformed;
@@ -339,13 +351,13 @@ export async function questionsPostHandler(request: NextRequest) {
         // CRITICAL: Extract code field FIRST, before any processing, to ensure it's never lost
         // Store the original code value from the input data
         const originalCode =
-          questionData.code !== undefined
-            ? questionData.code
-            : normalizedData.code;
+          questionData["code"] !== undefined
+            ? questionData["code"]
+            : normalizedData["code"];
 
         // Handle isActive -> is_active
         if ("isActive" in normalizedData && !("is_active" in normalizedData)) {
-          normalizedData.is_active = normalizedData.isActive;
+          normalizedData["is_active"] = normalizedData["isActive"];
         }
 
         // Handle learningCardId -> learning_card_id
@@ -353,7 +365,7 @@ export async function questionsPostHandler(request: NextRequest) {
           "learningCardId" in normalizedData &&
           !("learning_card_id" in normalizedData)
         ) {
-          normalizedData.learning_card_id = normalizedData.learningCardId;
+          normalizedData["learning_card_id"] = normalizedData["learningCardId"];
         }
 
         // Handle timeLimit -> time_limit
@@ -361,7 +373,7 @@ export async function questionsPostHandler(request: NextRequest) {
           "timeLimit" in normalizedData &&
           !("time_limit" in normalizedData)
         ) {
-          normalizedData.time_limit = normalizedData.timeLimit;
+          normalizedData["time_limit"] = normalizedData["timeLimit"];
         }
 
         // Validate and sanitize question data
@@ -370,7 +382,7 @@ export async function questionsPostHandler(request: NextRequest) {
         // CRITICAL: Process code field BEFORE validation/sanitization to preserve newlines
         // Extract and preserve code field separately - this ensures newlines are never lost
         const codeField =
-          originalCode !== undefined ? originalCode : normalizedData.code;
+          originalCode !== undefined ? originalCode : normalizedData["code"];
         let processedCode: string | null = null;
 
         // Security: Removed debug logging to prevent information disclosure
@@ -392,7 +404,7 @@ export async function questionsPostHandler(request: NextRequest) {
           processedCode = codeContent;
 
           // Also update normalizedData for validation
-          normalizedData.code = codeContent;
+          normalizedData["code"] = codeContent;
 
           // Security: Removed debug logging to prevent information disclosure
         } else {
@@ -402,16 +414,16 @@ export async function questionsPostHandler(request: NextRequest) {
         // CRITICAL: Ensure code is in normalizedData before validation
         // If we have processedCode, use it; otherwise use originalCode
         if (processedCode !== null && processedCode !== "") {
-          normalizedData.code = processedCode;
+          normalizedData["code"] = processedCode;
         } else if (
           originalCode !== undefined &&
           originalCode !== null &&
           originalCode !== ""
         ) {
-          normalizedData.code = String(originalCode);
+          normalizedData["code"] = String(originalCode);
         } else {
           // Explicitly set to null (not undefined) so validation knows it exists
-          normalizedData.code = null;
+          normalizedData["code"] = null;
         }
 
         // Security: Removed debug logging to prevent information disclosure
@@ -445,10 +457,15 @@ export async function questionsPostHandler(request: NextRequest) {
                 originalCode !== null &&
                 originalCode !== ""
               ? String(originalCode)
-              : validationResult.data?.code !== undefined &&
-                  validationResult.data?.code !== null &&
-                  validationResult.data?.code !== ""
-                ? String(validationResult.data.code)
+              : (validationResult.data as Record<string, unknown>)["code"] !==
+                    undefined &&
+                  (validationResult.data as Record<string, unknown>)["code"] !==
+                    null &&
+                  (validationResult.data as Record<string, unknown>)["code"] !==
+                    ""
+                ? String(
+                    (validationResult.data as Record<string, unknown>)["code"],
+                  )
                 : null;
 
         // Security: Removed debug logging to prevent information disclosure
@@ -477,7 +494,7 @@ export async function questionsPostHandler(request: NextRequest) {
             codeContent = processedCode;
           }
 
-          sanitizedQuestion.code = codeContent;
+          sanitizedQuestion["code"] = codeContent;
 
           // Security: Removed debug logging to prevent information disclosure
           const _newlineCount = (codeContent.match(/\n/g) || []).length;
@@ -490,7 +507,7 @@ export async function questionsPostHandler(request: NextRequest) {
           }
         } else {
           // Explicitly set to null (not undefined) so it's included in the database insert
-          sanitizedQuestion.code = null;
+          sanitizedQuestion["code"] = null;
           // Security: Removed debug logging to prevent information disclosure
         }
 
@@ -508,30 +525,30 @@ export async function questionsPostHandler(request: NextRequest) {
             codeContent = codeContent.replaceAll(String.raw`\r`, "\n");
             codeContent = codeContent.replaceAll("\r\n", "\n");
             codeContent = codeContent.replaceAll("\r", "\n");
-            sanitizedQuestion.code = codeContent;
+            sanitizedQuestion["code"] = codeContent;
             processedCode = codeContent;
             // Security: Removed debug logging to prevent information disclosure
           } else {
-            sanitizedQuestion.code = null;
+            sanitizedQuestion["code"] = null;
             // Security: Removed debug logging to prevent information disclosure
           }
         }
 
         // Ensure is_active is set (use isActive if is_active is not set)
         if (
-          sanitizedQuestion.is_active === undefined &&
-          (sanitizedQuestion.isActive as unknown) !== undefined
+          sanitizedQuestion["is_active"] === undefined &&
+          (sanitizedQuestion["isActive"] as unknown) !== undefined
         ) {
-          sanitizedQuestion.is_active = sanitizedQuestion.isActive;
+          sanitizedQuestion["is_active"] = sanitizedQuestion["isActive"];
         }
 
         // Security: Removed debug logging to prevent information disclosure
 
         // Sanitize rich content fields (explanation, etc.)
         // NOTE: Code field is NOT sanitized - we use CSP protection instead
-        if (sanitizedQuestion.explanation) {
-          sanitizedQuestion.explanation = sanitizeRichContent(
-            sanitizedQuestion.explanation as string,
+        if (sanitizedQuestion["explanation"]) {
+          sanitizedQuestion["explanation"] = sanitizeRichContent(
+            sanitizedQuestion["explanation"] as string,
           );
         }
 
@@ -542,24 +559,26 @@ export async function questionsPostHandler(request: NextRequest) {
 
         // Sanitize options if present
         // Handle cases where options might be a string (invalid data) or not an array
-        if (sanitizedQuestion.options) {
+        if (sanitizedQuestion["options"]) {
           if (
-            Array.isArray(sanitizedQuestion.options) &&
-            sanitizedQuestion.options.length > 0
+            Array.isArray(sanitizedQuestion["options"]) &&
+            sanitizedQuestion["options"].length > 0
           ) {
-            sanitizedQuestion.options = sanitizedQuestion.options.map(
-              (option: Record<string, unknown>) => ({
-                ...option,
-                text: sanitizeRichContent((option.text as string) || ""),
-              }),
-            );
+            sanitizedQuestion["options"] = (
+              sanitizedQuestion["options"] as Array<Record<string, unknown>>
+            ).map((option: Record<string, unknown>) => ({
+              ...option,
+              text: sanitizeRichContent((option["text"] as string) || ""),
+            }));
           } else {
             // If options is not a valid array (e.g., it's a string like "multiple-select"), remove it
             // This prevents errors when trying to access options[0] later
             // Security: Sanitize values before logging
-            const sanitizedTitle = sanitizeForLogging(sanitizedQuestion.title);
+            const sanitizedTitle = sanitizeForLogging(
+              String(sanitizedQuestion["title"]),
+            );
             const sanitizedOptionsType = sanitizeForLogging(
-              typeof sanitizedQuestion.options,
+              typeof sanitizedQuestion["options"],
             );
             console.warn(
               "⚠️ Invalid options format for question:",
@@ -568,13 +587,13 @@ export async function questionsPostHandler(request: NextRequest) {
               sanitizedOptionsType,
               "Removing options.",
             );
-            delete sanitizedQuestion.options;
+            delete sanitizedQuestion["options"];
           }
         }
 
         // Map category name to category_id if needed
         let categoryId =
-          sanitizedQuestion.category_id || sanitizedQuestion.category;
+          sanitizedQuestion["category_id"] || sanitizedQuestion["category"];
         const uuidRegex =
           /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
         if (
@@ -616,7 +635,8 @@ export async function questionsPostHandler(request: NextRequest) {
         }
 
         // Map topic name to topic_id if needed
-        let topicId = sanitizedQuestion.topic_id || sanitizedQuestion.topic;
+        let topicId =
+          sanitizedQuestion["topic_id"] || sanitizedQuestion["topic"];
         if (
           topicId &&
           typeof topicId === "string" &&
@@ -663,8 +683,8 @@ export async function questionsPostHandler(request: NextRequest) {
 
         // Map learningCardId to learning_card_id
         const learningCardId =
-          sanitizedQuestion.learning_card_id ||
-          sanitizedQuestion.learningCardId;
+          sanitizedQuestion["learning_card_id"] ||
+          sanitizedQuestion["learningCardId"];
 
         // Validate and look up learningCardId if provided
         let finalLearningCardId = null;
@@ -739,7 +759,7 @@ export async function questionsPostHandler(request: NextRequest) {
         // CRITICAL: Preserve code field - extract it before destructuring to ensure it's not lost
         // Use processedCode if available (from earlier processing), otherwise use sanitizedQuestion.code
         const codeForDb =
-          processedCode !== null ? processedCode : sanitizedQuestion.code;
+          processedCode !== null ? processedCode : sanitizedQuestion["code"];
 
         const {
           category: _category,
@@ -768,65 +788,71 @@ export async function questionsPostHandler(request: NextRequest) {
 
         // Restore code field to dbQuestion if it exists
         if (codeForDb !== undefined && codeForDb !== null && codeForDb !== "") {
-          dbQuestion.code = codeForDb;
+          dbQuestion["code"] = codeForDb;
           // Security: Removed debug logging to prevent information disclosure
         }
 
         // Ensure content field exists (required by database)
-        if (!dbQuestion.content && dbQuestion.title) {
-          dbQuestion.content = dbQuestion.title;
+        if (!dbQuestion["content"] && dbQuestion["title"]) {
+          dbQuestion["content"] = dbQuestion["title"];
         }
 
         // Ensure type field exists (required by database)
         // Map 'multiple-select' to 'multiple-choice' since database doesn't support 'multiple-select'
-        if (!dbQuestion.type) {
-          dbQuestion.type = "multiple-choice"; // Default type
-        } else if (dbQuestion.type === "multiple-select") {
+        if (!dbQuestion["type"]) {
+          dbQuestion["type"] = "multiple-choice"; // Default type
+        } else if (dbQuestion["type"] === "multiple-select") {
           // Database constraint only allows: 'multiple-choice', 'open-ended', 'true-false', 'code'
           // Map 'multiple-select' to 'multiple-choice' as they're functionally the same
-          dbQuestion.type = "multiple-choice";
+          dbQuestion["type"] = "multiple-choice";
           // Security: Removed debug logging to prevent information disclosure
         }
 
         // Handle metadata if provided
         let metadata = null;
         if (
-          sanitizedQuestion.metadata &&
-          typeof sanitizedQuestion.metadata === "object"
+          sanitizedQuestion["metadata"] &&
+          typeof sanitizedQuestion["metadata"] === "object"
         ) {
-          metadata = sanitizedQuestion.metadata;
+          metadata = sanitizedQuestion["metadata"];
         }
 
         // Handle hints if provided
         let hints: string[] | null = null;
-        if (sanitizedQuestion.hints && Array.isArray(sanitizedQuestion.hints)) {
-          hints = sanitizedQuestion.hints as string[];
+        if (
+          sanitizedQuestion["hints"] &&
+          Array.isArray(sanitizedQuestion["hints"])
+        ) {
+          hints = sanitizedQuestion["hints"] as string[];
         }
 
         // Handle tags if provided
         let tags: string[] | null = null;
-        if (sanitizedQuestion.tags && Array.isArray(sanitizedQuestion.tags)) {
-          tags = sanitizedQuestion.tags as string[];
+        if (
+          sanitizedQuestion["tags"] &&
+          Array.isArray(sanitizedQuestion["tags"])
+        ) {
+          tags = sanitizedQuestion["tags"] as string[];
         }
 
         // Handle resources if provided
         let resources: Array<Record<string, unknown>> | null = null;
         if (
-          sanitizedQuestion.resources !== undefined &&
-          sanitizedQuestion.resources !== null
+          sanitizedQuestion["resources"] !== undefined &&
+          sanitizedQuestion["resources"] !== null
         ) {
-          if (Array.isArray(sanitizedQuestion.resources)) {
+          if (Array.isArray(sanitizedQuestion["resources"])) {
             // Validate each resource object
-            const validResources = sanitizedQuestion.resources.filter(
+            const validResources = sanitizedQuestion["resources"].filter(
               (resource: Record<string, unknown>) => {
                 return (
                   resource &&
                   typeof resource === "object" &&
                   ["video", "course", "article"].includes(
-                    resource.type as string,
+                    resource["type"] as string,
                   ) &&
-                  typeof resource.title === "string" &&
-                  typeof resource.url === "string"
+                  typeof resource["title"] === "string" &&
+                  typeof resource["url"] === "string"
                 );
               },
             );
@@ -850,16 +876,16 @@ export async function questionsPostHandler(request: NextRequest) {
 
         // Only add optional fields if they exist
         if (metadata !== null) {
-          questionWithTimestamps.metadata = metadata;
+          questionWithTimestamps["metadata"] = metadata;
         }
         if (hints !== null) {
-          questionWithTimestamps.hints = hints;
+          questionWithTimestamps["hints"] = hints;
         }
         if (tags !== null) {
-          questionWithTimestamps.tags = tags;
+          questionWithTimestamps["tags"] = tags;
         }
         if (resources !== null) {
-          questionWithTimestamps.resources = resources;
+          questionWithTimestamps["resources"] = resources;
         }
         // Add code field if present (always include it, even if null/undefined, to ensure it's saved)
         // CRITICAL: Ensure newlines are preserved when storing in database
@@ -875,17 +901,17 @@ export async function questionsPostHandler(request: NextRequest) {
         ) {
           codeToStore = codeForDb as string;
         } else if (
-          dbQuestion.code !== undefined &&
-          dbQuestion.code !== null &&
-          dbQuestion.code !== ""
+          dbQuestion["code"] !== undefined &&
+          dbQuestion["code"] !== null &&
+          dbQuestion["code"] !== ""
         ) {
-          codeToStore = dbQuestion.code as string;
+          codeToStore = dbQuestion["code"] as string;
         } else if (
-          sanitizedQuestion.code !== undefined &&
-          sanitizedQuestion.code !== null &&
-          sanitizedQuestion.code !== ""
+          sanitizedQuestion["code"] !== undefined &&
+          sanitizedQuestion["code"] !== null &&
+          sanitizedQuestion["code"] !== ""
         ) {
-          codeToStore = sanitizedQuestion.code as string;
+          codeToStore = sanitizedQuestion["code"] as string;
         } else if (
           originalCode !== undefined &&
           originalCode !== null &&
@@ -908,7 +934,7 @@ export async function questionsPostHandler(request: NextRequest) {
         // CRITICAL: Use processedCode as the primary source since it's already processed
         if (processedCode !== null && processedCode !== "") {
           // processedCode is already processed with newlines
-          questionWithTimestamps.code = processedCode;
+          questionWithTimestamps["code"] = processedCode;
           // Security: Removed debug logging to prevent information disclosure
           const _newlineCount = (processedCode.match(/\n/g) || []).length;
         } else if (
@@ -920,7 +946,7 @@ export async function questionsPostHandler(request: NextRequest) {
           const codeString = String(codeToStore);
           // Security: Removed debug logging to prevent information disclosure
           const _newlineCount = (codeString.match(/\n/g) || []).length;
-          questionWithTimestamps.code = codeString;
+          questionWithTimestamps["code"] = codeString;
         } else if (
           originalCode !== undefined &&
           originalCode !== null &&
@@ -933,13 +959,13 @@ export async function questionsPostHandler(request: NextRequest) {
           codeContent = codeContent.replace(/\\r/g, "\n");
           codeContent = codeContent.replace(/\r\n/g, "\n");
           codeContent = codeContent.replace(/\r/g, "\n");
-          questionWithTimestamps.code = codeContent;
+          questionWithTimestamps["code"] = codeContent;
           processedCode = codeContent; // Update for consistency
           // Security: Removed debug logging to prevent information disclosure
           const _newlineCount = (codeContent.match(/\n/g) || []).length;
         } else {
           // Explicitly set to null if not provided (to ensure the field is included in the insert)
-          questionWithTimestamps.code = null;
+          questionWithTimestamps["code"] = null;
           // Security: Removed debug logging to prevent information disclosure
         }
 
@@ -949,25 +975,27 @@ export async function questionsPostHandler(request: NextRequest) {
           console.error(
             `❌ CRITICAL: Code field missing from questionWithTimestamps! Setting to null as fallback.`,
           );
-          questionWithTimestamps.code = null;
+          questionWithTimestamps["code"] = null;
         }
 
         // Handle options - only add if present and is an array with items
         // For open-ended questions, options might be undefined or empty
         if (
-          sanitizedQuestion.options &&
-          Array.isArray(sanitizedQuestion.options) &&
-          sanitizedQuestion.options.length > 0
+          sanitizedQuestion["options"] &&
+          Array.isArray(sanitizedQuestion["options"]) &&
+          sanitizedQuestion["options"].length > 0
         ) {
-          questionWithTimestamps.options = sanitizedQuestion.options;
+          questionWithTimestamps["options"] = sanitizedQuestion["options"];
         } else if (
-          dbQuestion.type === "multiple-choice" ||
-          dbQuestion.type === "multiple-select"
+          dbQuestion["type"] === "multiple-choice" ||
+          dbQuestion["type"] === "multiple-select"
         ) {
           // For multiple-choice questions, options should exist
           // If missing, log a warning but don't fail (might be intentional)
           // Security: Sanitize title before logging
-          const sanitizedTitle = sanitizeForLogging(sanitizedQuestion.title);
+          const sanitizedTitle = sanitizeForLogging(
+            String(sanitizedQuestion["title"]),
+          );
           console.warn(
             "⚠️ Multiple-choice question:",
             sanitizedTitle,
@@ -982,21 +1010,21 @@ export async function questionsPostHandler(request: NextRequest) {
         let duplicateQuery = supabase
           .from("questions")
           .select("id, title, content, code")
-          .ilike("title", questionWithTimestamps.title as string) // Case-insensitive match
+          .ilike("title", questionWithTimestamps["title"] as string) // Case-insensitive match
           .limit(1);
 
         // If code exists, also check for same code
-        if (questionWithTimestamps.code) {
+        if (questionWithTimestamps["code"]) {
           duplicateQuery = duplicateQuery.eq(
             "code",
-            questionWithTimestamps.code,
+            questionWithTimestamps["code"],
           );
         } else {
           // If no code, check for same content
-          if (questionWithTimestamps.content) {
+          if (questionWithTimestamps["content"]) {
             duplicateQuery = duplicateQuery.eq(
               "content",
-              questionWithTimestamps.content,
+              questionWithTimestamps["content"],
             );
           }
         }
@@ -1017,7 +1045,7 @@ export async function questionsPostHandler(request: NextRequest) {
           console.log("⚠️ Duplicate question found");
           errors.push({
             question: questionData,
-            error: `Duplicate question: A question with the same title${questionWithTimestamps.code ? " and code" : questionWithTimestamps.content ? " and content" : ""} already exists (ID: ${existingQuestion.id})`,
+            error: `Duplicate question: A question with the same title${questionWithTimestamps["code"] ? " and code" : questionWithTimestamps["content"] ? " and content" : ""} already exists (ID: ${existingQuestion["id"]})`,
             index: index + 1,
           });
           continue; // Skip this question and move to next
@@ -1028,7 +1056,7 @@ export async function questionsPostHandler(request: NextRequest) {
         // Priority order: processedCode > originalCode > sanitizedQuestion.code > null
         if (
           !("code" in questionWithTimestamps) ||
-          questionWithTimestamps.code === undefined
+          questionWithTimestamps["code"] === undefined
         ) {
           console.error(
             `❌ CRITICAL: Code field missing from questionWithTimestamps! Attempting recovery...`,
@@ -1036,7 +1064,7 @@ export async function questionsPostHandler(request: NextRequest) {
 
           // Try to recover code from any available source
           if (processedCode !== null && processedCode !== "") {
-            questionWithTimestamps.code = processedCode;
+            questionWithTimestamps["code"] = processedCode;
             // Security: Removed user data from logs to prevent log injection
             console.log("✅ Code field recovered from processedCode");
           } else if (
@@ -1051,19 +1079,19 @@ export async function questionsPostHandler(request: NextRequest) {
             codeContent = codeContent.replace(/\\r/g, "\n");
             codeContent = codeContent.replace(/\r\n/g, "\n");
             codeContent = codeContent.replace(/\r/g, "\n");
-            questionWithTimestamps.code = codeContent;
+            questionWithTimestamps["code"] = codeContent;
             processedCode = codeContent; // Update for consistency
             // Security: Removed debug logging to prevent information disclosure
           } else if (
-            sanitizedQuestion.code !== undefined &&
-            sanitizedQuestion.code !== null &&
-            sanitizedQuestion.code !== ""
+            sanitizedQuestion["code"] !== undefined &&
+            sanitizedQuestion["code"] !== null &&
+            sanitizedQuestion["code"] !== ""
           ) {
-            questionWithTimestamps.code = sanitizedQuestion.code;
+            questionWithTimestamps["code"] = sanitizedQuestion["code"];
             // Security: Removed user data from logs to prevent log injection
             console.log("✅ Code field recovered from sanitizedQuestion");
           } else {
-            questionWithTimestamps.code = null;
+            questionWithTimestamps["code"] = null;
             console.log(
               "⚠️ Code field not found in any source, setting to null",
             );
@@ -1071,12 +1099,12 @@ export async function questionsPostHandler(request: NextRequest) {
         } else {
           // Code field exists, but verify it's not empty when it should have content
           if (
-            questionWithTimestamps.code === null ||
-            questionWithTimestamps.code === ""
+            questionWithTimestamps["code"] === null ||
+            questionWithTimestamps["code"] === ""
           ) {
             // If we have code from other sources, use it
             if (processedCode !== null && processedCode !== "") {
-              questionWithTimestamps.code = processedCode;
+              questionWithTimestamps["code"] = processedCode;
               // Security: Removed debug logging to prevent information disclosure
             } else if (
               originalCode !== undefined &&
@@ -1089,7 +1117,7 @@ export async function questionsPostHandler(request: NextRequest) {
               codeContent = codeContent.replace(/\\r/g, "\n");
               codeContent = codeContent.replace(/\r\n/g, "\n");
               codeContent = codeContent.replace(/\r/g, "\n");
-              questionWithTimestamps.code = codeContent;
+              questionWithTimestamps["code"] = codeContent;
               processedCode = codeContent;
               // Security: Log code length instead of content to prevent log injection
               const sanitizedCodeLength = sanitizeForLogging(
@@ -1187,7 +1215,7 @@ export async function questionsPostHandler(request: NextRequest) {
         errors: errors.map((e) => `Question ${e.index}: ${e.error}`),
         errorDetails: errors.map((e) => ({
           index: e.index,
-          title: e.question?.title || "Unknown",
+          title: e.question ? String(e.question["title"]) : "Unknown",
           error: e.error,
         })),
         results: results,
@@ -1223,21 +1251,21 @@ export async function PUT(request: NextRequest) {
     const sanitizedUpdate = sanitizeObjectServer(updateData);
 
     // Sanitize rich content fields
-    if (sanitizedUpdate.explanation) {
-      sanitizedUpdate.explanation = sanitizeRichContent(
-        sanitizedUpdate.explanation,
+    if (sanitizedUpdate["explanation"]) {
+      sanitizedUpdate["explanation"] = sanitizeRichContent(
+        sanitizedUpdate["explanation"] as string,
       );
     }
 
     // Sanitize code field if present - preserve newlines and format
     // Code should be treated as plain text, not HTML
     if (
-      sanitizedUpdate.code !== undefined &&
-      sanitizedUpdate.code !== null &&
-      sanitizedUpdate.code !== ""
+      sanitizedUpdate["code"] !== undefined &&
+      sanitizedUpdate["code"] !== null &&
+      sanitizedUpdate["code"] !== ""
     ) {
       // Convert \n escape sequences to actual newlines (in case they're stored as strings)
-      let codeContent = String(sanitizedUpdate.code)
+      let codeContent = String(sanitizedUpdate["code"])
         .replace(/\\n/g, "\n") // Replace \n escape sequences
         .replace(/\r\n/g, "\n") // Normalize Windows line breaks
         .replace(/\r/g, "\n"); // Normalize Mac line breaks
@@ -1247,18 +1275,24 @@ export async function PUT(request: NextRequest) {
         .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n, \r, \t
         .replace(/\x00/g, ""); // Remove null bytes
 
-      sanitizedUpdate.code = codeContent;
-    } else if (sanitizedUpdate.code === "" || sanitizedUpdate.code === null) {
+      sanitizedUpdate["code"] = codeContent;
+    } else if (
+      sanitizedUpdate["code"] === "" ||
+      sanitizedUpdate["code"] === null
+    ) {
       // Explicitly set to null if empty string or null is provided
-      sanitizedUpdate.code = null;
+      sanitizedUpdate["code"] = null;
     }
 
     // Sanitize options if present
-    if (sanitizedUpdate.options && Array.isArray(sanitizedUpdate.options)) {
-      sanitizedUpdate.options = sanitizedUpdate.options.map(
+    if (
+      sanitizedUpdate["options"] &&
+      Array.isArray(sanitizedUpdate["options"])
+    ) {
+      sanitizedUpdate["options"] = sanitizedUpdate["options"].map(
         (option: Record<string, unknown>) => ({
           ...option,
-          text: sanitizeRichContent((option.text as string) || ""),
+          text: sanitizeRichContent((option["text"] as string) || ""),
         }),
       );
     }
@@ -1270,7 +1304,7 @@ export async function PUT(request: NextRequest) {
     let categoryId: string | undefined = undefined;
     if (hasCategory) {
       const categoryValue =
-        sanitizedUpdate.category_id || sanitizedUpdate.category;
+        sanitizedUpdate["category_id"] || sanitizedUpdate["category"];
       if (
         categoryValue &&
         typeof categoryValue === "string" &&
@@ -1344,7 +1378,8 @@ export async function PUT(request: NextRequest) {
       "topic" in sanitizedUpdate || "topic_id" in sanitizedUpdate;
     let topicId: string | undefined = undefined;
     if (hasTopic) {
-      const topicValue = sanitizedUpdate.topic_id || sanitizedUpdate.topic;
+      const topicValue =
+        sanitizedUpdate["topic_id"] || sanitizedUpdate["topic"];
       if (
         topicValue &&
         typeof topicValue === "string" &&
@@ -1420,7 +1455,7 @@ export async function PUT(request: NextRequest) {
       "learningCardId" in sanitizedUpdate ||
       "learning_card_id" in sanitizedUpdate;
     const learningCardId =
-      sanitizedUpdate.learning_card_id || sanitizedUpdate.learningCardId;
+      sanitizedUpdate["learning_card_id"] || sanitizedUpdate["learningCardId"];
 
     // Validate learningCardId if provided (must be UUID or empty/null)
     let finalLearningCardId: string | null | undefined = undefined; // undefined means don't update this field
@@ -1478,38 +1513,39 @@ export async function PUT(request: NextRequest) {
     // Handle resources field - validate it's an array or null
     if ("resources" in sanitizedUpdate) {
       if (
-        sanitizedUpdate.resources === null ||
-        sanitizedUpdate.resources === undefined ||
-        sanitizedUpdate.resources === ""
+        sanitizedUpdate["resources"] === null ||
+        sanitizedUpdate["resources"] === undefined ||
+        sanitizedUpdate["resources"] === ""
       ) {
-        dbUpdate.resources = null;
-      } else if (Array.isArray(sanitizedUpdate.resources)) {
+        dbUpdate["resources"] = null;
+      } else if (Array.isArray(sanitizedUpdate["resources"])) {
         // Validate each resource object
-        const validResources = sanitizedUpdate.resources.filter(
+        const validResources = sanitizedUpdate["resources"].filter(
           (resource: Record<string, unknown>) => {
             return (
               resource &&
               typeof resource === "object" &&
               ["video", "course", "article"].includes(
-                resource.type as string,
+                resource["type"] as string,
               ) &&
-              typeof resource.title === "string" &&
-              typeof resource.url === "string"
+              typeof resource["title"] === "string" &&
+              typeof resource["url"] === "string"
             );
           },
         );
-        dbUpdate.resources = validResources.length > 0 ? validResources : null;
+        dbUpdate["resources"] =
+          validResources.length > 0 ? validResources : null;
       } else {
         console.warn(
           "⚠️ Invalid resources format - must be array or null. Setting to null.",
         );
-        dbUpdate.resources = null;
+        dbUpdate["resources"] = null;
       }
     }
 
     // Ensure content field exists if title is provided
-    if (!dbUpdate.content && dbUpdate.title) {
-      dbUpdate.content = dbUpdate.title;
+    if (!dbUpdate["content"] && dbUpdate["title"]) {
+      dbUpdate["content"] = dbUpdate["title"];
     }
 
     // Build update object with only the fields that should be updated
@@ -1520,21 +1556,21 @@ export async function PUT(request: NextRequest) {
 
     // Only include category_id, topic_id, learning_card_id if they were provided/mapped
     if (categoryId) {
-      updateWithTimestamps.category_id = categoryId;
+      updateWithTimestamps["category_id"] = categoryId;
     }
     if (topicId) {
-      updateWithTimestamps.topic_id = topicId;
+      updateWithTimestamps["topic_id"] = topicId;
     }
     if (finalLearningCardId !== undefined) {
-      updateWithTimestamps.learning_card_id = finalLearningCardId;
+      updateWithTimestamps["learning_card_id"] = finalLearningCardId;
     }
 
     console.log("📝 Question update data:", {
       id,
-      title: updateWithTimestamps.title,
-      category_id: updateWithTimestamps.category_id,
-      topic_id: updateWithTimestamps.topic_id,
-      learning_card_id: updateWithTimestamps.learning_card_id,
+      title: updateWithTimestamps["title"],
+      category_id: updateWithTimestamps["category_id"],
+      topic_id: updateWithTimestamps["topic_id"],
+      learning_card_id: updateWithTimestamps["learning_card_id"],
     });
 
     const { error } = await supabase

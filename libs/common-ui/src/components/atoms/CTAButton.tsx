@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { getColorClasses } from "@elzatona/utilities";
+import { getColorClasses } from "@elzatona/utilities/client";
 import type { ContentColor } from "@elzatona/types";
 
 interface CTAButtonProps {

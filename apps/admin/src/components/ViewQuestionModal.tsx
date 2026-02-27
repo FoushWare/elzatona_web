@@ -18,7 +18,7 @@ interface ViewQuestionModalProps {
   cards: Array<{ id: string; title: string }>;
   allCategories: string[];
   onUpdate: (question: Partial<AdminUnifiedQuestion>) => Promise<void>;
-  editFormRef: React.RefObject<HTMLFormElement>;
+  editFormRef: React.RefObject<HTMLFormElement | null>;
 }
 
 export const ViewQuestionModal: React.FC<ViewQuestionModalProps> = ({

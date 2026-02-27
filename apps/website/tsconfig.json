@@ -25,6 +25,7 @@
       "@elzatona/hooks": ["../../libs/hooks/src/index.ts"],
       "@elzatona/types": ["../../libs/types/src/index.ts"],
       "@elzatona/utilities": ["../../libs/utilities/src/index.ts"],
+      "@elzatona/utilities/client": ["../../libs/utilities/src/client.ts"],
       "@elzatona/shared-atoms": ["../../libs/shared-atoms/src/index.ts"],
       "@elzatona/database": ["../../libs/database/src/index.ts"],
       "@elzatona/database/repositories/interfaces/ICategoryRepository": [

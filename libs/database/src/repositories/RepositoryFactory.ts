@@ -320,9 +320,24 @@ export function createRepositoryFactoryFromEnv(): RepositoryFactory {
   };
 
   if (!config.database.url || !config.database.key) {
-    throw new Error(
-      "Database configuration missing. Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.",
-    );
+    // During build or in development, we might not have these variables set
+    // We only want to throw if we're in a real production runtime
+    const isBuildPhase =
+      process.env.NEXT_PHASE?.includes("build") ||
+      process.env.NODE_ENV === "production";
+
+    if (!isBuildPhase) {
+      console.warn(
+        "Database configuration missing. Repository operations will fail.",
+      );
+    } else if (
+      process.env.NODE_ENV === "production" &&
+      !process.env.NEXT_PHASE?.includes("build")
+    ) {
+      throw new Error(
+        "Database configuration missing. Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.",
+      );
+    }
   }
 
   return new RepositoryFactory(config);

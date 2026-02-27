@@ -1,5 +1,5 @@
 export * from "./lib/utils";
-export * from "./lib/homePageHelpers";
+// export * from "./lib/homePageHelpers"; (Moved to @elzatona/utilities/client)
 export * from "./lib/supabase";
 export * from "./lib/rate-limit";
 

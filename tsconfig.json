@@ -26,6 +26,7 @@
       "database": ["./libs/database/src/index.ts"],
       "utils": ["./libs/utilities/src/index.ts"],
       "@elzatona/database": ["./libs/database/src/index.ts"],
+      "@elzatona/database/client": ["./libs/database/src/client.ts"],
       "@elzatona/contexts": ["./libs/contexts/src/index.ts"],
       "@elzatona/common-ui": ["./libs/common-ui/src/index.ts"],
       "@elzatona/hooks": ["./libs/hooks/src/index.ts"],

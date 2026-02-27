@@ -10,25 +10,44 @@ const supabaseServiceRoleKey =
   process.env["SUPABASE_SERVICE_ROLE_KEY"] ||
   process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"];
 
+const isBuildPhase =
+  process.env.NEXT_PHASE?.includes("build") ||
+  process.env.NODE_ENV === "production";
+
 if (!supabaseUrl || !supabaseServiceRoleKey) {
-  throw new Error(
-    "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set",
-  );
+  if (!isBuildPhase) {
+    console.warn(
+      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set. Supabase operations will fail.",
+    );
+  } else if (
+    process.env.NODE_ENV === "production" &&
+    !process.env.NEXT_PHASE?.includes("build")
+  ) {
+    throw new Error(
+      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set",
+    );
+  }
 }
 
 // Initialize Supabase client (server-side with service role key)
 let supabase: ReturnType<typeof createClient> | null = null;
 
 try {
-  supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
+  supabase = createClient(
+    supabaseUrl || "https://placeholder-url.supabase.co",
+    supabaseServiceRoleKey || "placeholder-key",
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
     },
-  });
-  console.log(
-    "✅ Supabase server initialized successfully with service role key!",
   );
+  if (supabaseUrl && supabaseServiceRoleKey) {
+    console.log(
+      "✅ Supabase server initialized successfully with service role key!",
+    );
+  }
 } catch (error) {
   console.error("❌ Supabase server initialization failed:", error);
 }

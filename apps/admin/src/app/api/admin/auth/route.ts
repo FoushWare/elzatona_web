@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { getRepositoryFactory } from "@elzatona/database";
 import bcrypt from "bcryptjs";
-import { authRateLimiter } from "@elzatona/utilities";
+import { authRateLimiter } from "@elzatona/utilities/server";
 
 // Admin config - using environment variables directly
 const adminConfig = {

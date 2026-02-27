@@ -12,6 +12,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "downlevelIteration": true,
     "jsx": "preserve",
     "incremental": true,
     "plugins": [
@@ -31,7 +32,10 @@
       "@elzatona/ui": ["../../libs/ui/src/index.ts"],
       "@elzatona/auth": ["../../libs/auth/src/index.ts"],
       "@elzatona/database": ["../../libs/database/src/index.ts"],
+      "@elzatona/database/client": ["../../libs/database/src/client.ts"],
       "@elzatona/utilities": ["../../libs/utilities/src/index.ts"],
+      "@elzatona/utilities/client": ["../../libs/utilities/src/client.ts"],
+      "@elzatona/utilities/server": ["../../libs/utilities/src/server.ts"],
       "@/components/*": ["../../libs/common-ui/src/components/*"],
       "@/hooks/*": ["../../libs/hooks/src/lib/hooks/*"],
       "@/contexts/*": ["../../libs/contexts/src/lib/contexts/*"],
@@ -44,5 +48,13 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.integration.test.ts",
+    "**/*.integration.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ]
 }
