@@ -32,6 +32,8 @@
       "@elzatona/hooks": ["./libs/hooks/src/index.ts"],
       "@elzatona/types": ["./libs/types/src/index.ts"],
       "@elzatona/utilities": ["./libs/utilities/src/index.ts"],
+      "@elzatona/utilities/client": ["./libs/utilities/src/client.ts"],
+      "@elzatona/utilities/server": ["./libs/utilities/src/server.ts"],
       "@elzatona/shared-atoms": ["./libs/shared-atoms/src/index.ts"]
     }
   },

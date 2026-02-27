@@ -12,19 +12,19 @@ const supabaseServiceRoleKey =
 
 const isBuildPhase =
   process.env.NEXT_PHASE?.includes("build") ||
-  process.env.NODE_ENV === "production";
+  process.env.NODE_ENV === "production" ||
+  process.env.CI === "true" ||
+  process.env.VERCEL === "1";
 
 if (!supabaseUrl || !supabaseServiceRoleKey) {
-  if (!isBuildPhase) {
+  if (
+    !isBuildPhase ||
+    (process.env.NODE_ENV === "production" &&
+      !process.env.NEXT_PHASE?.includes("build") &&
+      !process.env.VERCEL)
+  ) {
     console.warn(
       "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set. Supabase operations will fail.",
-    );
-  } else if (
-    process.env.NODE_ENV === "production" &&
-    !process.env.NEXT_PHASE?.includes("build")
-  ) {
-    throw new Error(
-      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set",
     );
   }
 }

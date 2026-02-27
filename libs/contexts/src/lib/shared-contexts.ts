@@ -1,3 +1,5 @@
+"use client";
+
 // Export all contexts from the shared contexts library
 export * from "./AdminAuthContext";
 export * from "./AuthContext";
