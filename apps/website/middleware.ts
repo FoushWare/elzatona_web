@@ -27,8 +27,12 @@ function getAdminTargetUrl(request: NextRequest): string | null {
 export function middleware(request: NextRequest): NextResponse | Response {
   const { pathname, search } = request.nextUrl;
 
-  // Handle /admin proxying with loop detection
-  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+  // Handle /admin and /api/admin proxying with loop detection
+  if (
+    pathname === "/admin" ||
+    pathname.startsWith("/admin/") ||
+    pathname.startsWith("/api/admin/")
+  ) {
     const adminUrl = getAdminTargetUrl(request);
 
     if (!adminUrl) {
@@ -173,12 +177,12 @@ export function middleware(request: NextRequest): NextResponse | Response {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
+     * Match all request paths except for:
+     * - Most API routes (EXCEPT /api/admin which we proxy)
+     * - _next/static (static files - EXCEPT /admin/_next which we proxy)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api(?!/admin)|_next/static(?!/admin)|_next/image|favicon.ico).*)",
   ],
 };
