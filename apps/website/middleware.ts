@@ -72,7 +72,13 @@ export function middleware(request: NextRequest): NextResponse | Response {
 
     try {
       // Prepare the proxy URL
-      const url = new URL(pathname + search, adminUrl);
+      // If the request is for a static asset prefixed with /admin, we strip it
+      // so the target app receives the standard /_next path it expects.
+      const targetPath = pathname.startsWith("/admin/_next/")
+        ? pathname.replace("/admin", "")
+        : pathname;
+
+      const url = new URL(targetPath + search, adminUrl);
 
       // Prepare headers for propagation
       const requestHeaders = new Headers(request.headers);
