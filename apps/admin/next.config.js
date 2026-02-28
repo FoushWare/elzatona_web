@@ -16,6 +16,8 @@ const nextConfig = {
   experimental: {
     forceSwcTransforms: true,
   },
+  // Configure assets to be requested with /admin prefix for proxy compatibility
+  assetPrefix: "/admin",
   // Configure build to handle error pages
   generateBuildId: async () => {
     // Use a static build ID to ensure consistent builds
