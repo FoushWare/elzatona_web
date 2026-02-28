@@ -32,12 +32,30 @@ export function middleware(request: NextRequest): NextResponse | Response {
     const adminUrl = getAdminTargetUrl(request);
 
     if (!adminUrl) {
+      const hasAdminUrl = !!process.env["ADMIN_URL"];
+      const hasAdminUrlDot = !!process.env.ADMIN_URL;
+      const envKeys = Object.keys(process.env).join(", ");
+
       console.error(
-        "❌ [Middleware] ADMIN_URL is missing in production environment. Routing failed.",
+        `❌ [Middleware] ADMIN_URL is missing or invalid. hasAdminUrl: ${hasAdminUrl}, hasAdminUrlDot: ${hasAdminUrlDot}, host: ${request.headers.get("host")}`,
       );
+
       return new Response(
-        "Admin configuration error: ADMIN_URL is not set in Vercel environment variables.",
-        { status: 502 },
+        `Admin configuration error: ADMIN_URL is not set or is invalid in Vercel environment variables.\n\n` +
+          `Debug Info:\n` +
+          `- hasAdminUrl (bracket): ${hasAdminUrl}\n` +
+          `- hasAdminUrl (dot): ${hasAdminUrlDot}\n` +
+          `- ADMIN_URL_VALUE_EXISTS: ${!!process.env["ADMIN_URL"]}\n` +
+          `- Current Host: ${request.headers.get("host")}\n` +
+          `- Env Keys (count): ${Object.keys(process.env).length}\n` +
+          `- ADMIN_URL_IN_ENV: ${Object.keys(process.env).includes("ADMIN_URL")}`,
+        {
+          status: 502,
+          headers: {
+            "x-mw-debug-has-admin-url": String(hasAdminUrl),
+            "x-mw-debug-host": request.headers.get("host") || "unknown",
+          },
+        },
       );
     }
 
