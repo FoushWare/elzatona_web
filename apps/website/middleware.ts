@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Helper to dynamically determine the Admin URL based on the incoming request host
-function getAdminTargetUrl(request: NextRequest): string {
+function getAdminTargetUrl(request: NextRequest): string | null {
   // Always prioritize the environment variable, but ONLY if it is NOT configured
   // to loop back to the same website domain.
   if (
-    process.env.ADMIN_URL &&
-    !process.env.ADMIN_URL.includes("elzatona-web.com")
+    process.env["ADMIN_URL"] &&
+    !process.env["ADMIN_URL"].includes("elzatona-web.com")
   ) {
-    return process.env.ADMIN_URL.replace(/\/+$/, ""); // Trim trailing slashes
+    return process.env["ADMIN_URL"].replace(/\/+$/, ""); // Trim trailing slashes
   }
 
   const host = request.headers.get("host") || "";
@@ -19,10 +19,9 @@ function getAdminTargetUrl(request: NextRequest): string {
     return "http://localhost:3001";
   }
 
-  // Fallback if environment variable is missing on Vercel preview/production
-  // Note: For this proxy to work in production, process.env.ADMIN_URL MUST be
-  // set to the separate Vercel project's URL.
-  return "http://localhost:3001";
+  // In production, we MUST have ADMIN_URL set.
+  // Returning null here will trigger an error response instead of a private DNS leak.
+  return null;
 }
 
 export function middleware(request: NextRequest): NextResponse | Response {
@@ -31,6 +30,16 @@ export function middleware(request: NextRequest): NextResponse | Response {
   // Handle /admin proxying with loop detection
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
     const adminUrl = getAdminTargetUrl(request);
+
+    if (!adminUrl) {
+      console.error(
+        "❌ [Middleware] ADMIN_URL is missing in production environment. Routing failed.",
+      );
+      return new Response(
+        "Admin configuration error: ADMIN_URL is not set in Vercel environment variables.",
+        { status: 502 },
+      );
+    }
 
     // Check for loop-detection header
     if (request.headers.get("x-elzatona-proxied") === "true") {
