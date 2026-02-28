@@ -46,26 +46,26 @@ export type Environment = "test" | "production" | "development";
  */
 export function getEnvironment(): Environment {
   // Check APP_ENV first (NEW - simplest way to switch)
-  const appEnv = process.env.APP_ENV?.toLowerCase();
+  const appEnv = process.env["APP_ENV"]?.toLowerCase();
   if (appEnv === "test") return "test";
   if (appEnv === "production" || appEnv === "prod") return "production";
   if (appEnv === "development" || appEnv === "dev") return "development";
 
   // Check NEXT_PUBLIC_APP_ENV (alternative)
-  const nextAppEnv = process.env.NEXT_PUBLIC_APP_ENV?.toLowerCase();
+  const nextAppEnv = process.env["NEXT_PUBLIC_APP_ENV"]?.toLowerCase();
   if (nextAppEnv === "test") return "test";
   if (nextAppEnv === "production" || nextAppEnv === "prod") return "production";
   if (nextAppEnv === "development" || nextAppEnv === "dev")
     return "development";
 
   // Check NODE_ENV
-  const nodeEnv = process.env.NODE_ENV?.toLowerCase();
+  const nodeEnv = process.env["NODE_ENV"]?.toLowerCase();
   if (nodeEnv === "test") return "test";
   if (nodeEnv === "production") return "production";
   // Note: NODE_ENV='development' is common, but we'll use Supabase URL as fallback
 
   // Check Supabase URL to determine project (fallback)
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+  const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"] || "";
 
   if (
     supabaseUrl.includes(TEST_PROJECT_REF) ||
@@ -116,7 +116,7 @@ export function isDevelopmentEnvironment(): boolean {
  * @returns project reference (e.g., 'vopfdukvdhnmzzjkxpnj') or null
  */
 export function getSupabaseProjectRef(): string | null {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
   if (!supabaseUrl) return null;
 
   // Extract project reference from URL
@@ -133,7 +133,7 @@ export function getSupabaseProjectRef(): string | null {
 export function getEnvironmentInfo() {
   const env = getEnvironment();
   const projectRef = getSupabaseProjectRef();
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
 
   return {
     environment: env,
@@ -142,8 +142,8 @@ export function getEnvironmentInfo() {
     isDevelopment: isDevelopmentEnvironment(),
     projectRef,
     supabaseUrl: supabaseUrl ? `${supabaseUrl.substring(0, 30)}...` : null,
-    nodeEnv: process.env.NODE_ENV,
-    appEnv: process.env.NEXT_PUBLIC_APP_ENV,
+    nodeEnv: process.env["NODE_ENV"],
+    appEnv: process.env["NEXT_PUBLIC_APP_ENV"],
   };
 }
 
@@ -212,16 +212,16 @@ export function getEnvironmentConfig() {
     isTest,
     isProduction: isProductionEnvironment(),
     // Database configuration
-    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    supabaseUrl: process.env["NEXT_PUBLIC_SUPABASE_URL"],
+    supabaseAnonKey: process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"],
+    supabaseServiceRoleKey: process.env["SUPABASE_SERVICE_ROLE_KEY"],
     // Admin configuration
     adminEmail: isTest
-      ? process.env.ADMIN_EMAIL || process.env.INITIAL_ADMIN_EMAIL
-      : process.env.INITIAL_ADMIN_EMAIL,
+      ? process.env["ADMIN_EMAIL"] || process.env["INITIAL_ADMIN_EMAIL"]
+      : process.env["INITIAL_ADMIN_EMAIL"],
     adminPassword: isTest
-      ? process.env.ADMIN_PASSWORD || process.env.INITIAL_ADMIN_PASSWORD
-      : process.env.INITIAL_ADMIN_PASSWORD,
+      ? process.env["ADMIN_PASSWORD"] || process.env["INITIAL_ADMIN_PASSWORD"]
+      : process.env["INITIAL_ADMIN_PASSWORD"],
     // Feature flags
     enableDebugLogging: !isProductionEnvironment(),
     enableTestData: isTest,

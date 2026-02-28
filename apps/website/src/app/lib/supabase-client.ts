@@ -13,15 +13,20 @@ const isValidConfig =
   supabaseAnonKey !== "" &&
   supabaseAnonKey !== "placeholder_key";
 
+const isBuildPhase =
+  process.env["NEXT_PHASE"]?.includes("build") ||
+  process.env["NODE_ENV"] === "production";
+
 // Log configuration status
 if (!isValidConfig) {
-  console.error("❌ Supabase configuration is missing or invalid!");
-  console.error("Please check your .env.local file has:");
-  console.error("- NEXT_PUBLIC_SUPABASE_URL");
-  console.error("- NEXT_PUBLIC_SUPABASE_ANON_KEY");
-} else {
+  if (!isBuildPhase) {
+    console.warn("⚠️ Supabase configuration is missing or invalid!");
+    console.warn("Please check your .env.local file has:");
+    console.warn("- NEXT_PUBLIC_SUPABASE_URL");
+    console.warn("- NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  }
+} else if (!isBuildPhase) {
   console.log("✅ Supabase client configured successfully");
-  console.log("URL:", supabaseUrl);
 }
 
 // Create Supabase client

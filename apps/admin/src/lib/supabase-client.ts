@@ -41,18 +41,35 @@ export function getSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+  const isBuildPhase =
+    process.env.NEXT_PHASE?.includes("build") ||
+    process.env.NODE_ENV === "production";
+
   if (!supabaseUrl || !supabaseServiceRoleKey) {
-    throw new Error(
-      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set",
-    );
+    if (!isBuildPhase) {
+      console.warn(
+        "Missing required Supabase environment variables. Supabase operations will fail.",
+      );
+    } else if (
+      process.env.NODE_ENV === "production" &&
+      !process.env.NEXT_PHASE?.includes("build")
+    ) {
+      throw new Error(
+        "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set",
+      );
+    }
   }
 
-  return createClient(supabaseUrl, supabaseServiceRoleKey, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
+  return createClient(
+    supabaseUrl || "https://placeholder-url.supabase.co",
+    supabaseServiceRoleKey || "placeholder-key",
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
     },
-  });
+  );
 }
 
 // Mirror auth session to cookie for simple client persistence across reloads

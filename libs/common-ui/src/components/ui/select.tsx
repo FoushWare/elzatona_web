@@ -52,17 +52,21 @@ const Select = React.forwardRef<
 
   // Extract SelectItems from SelectContent
   const selectItems = React.Children.toArray(
-    (React.isValidElement(selectContent) && "children" in selectContent.props
-      ? (selectContent.props as { children?: React.ReactNode }).children
+    (React.isValidElement(selectContent)
+      ? (selectContent.props as any).children
       : undefined) || [],
   ).filter((child) => React.isValidElement(child) && child.type === SelectItem);
 
   // Find the selected item text
   const selectedItem = selectItems.find(
-    (item) => React.isValidElement(item) && item.props.value === selectedValue,
+    (item) =>
+      React.isValidElement(item) && (item.props as any).value === selectedValue,
   );
-  const selectedText = React.isValidElement(selectedItem)
-    ? selectedItem.props.children
+  const selectedItemElement = React.isValidElement(selectedItem)
+    ? selectedItem
+    : null;
+  const selectedText = selectedItemElement
+    ? (selectedItemElement.props as any).children
     : "Select...";
 
   return (
@@ -90,20 +94,21 @@ const Select = React.forwardRef<
           <div className="max-h-60 overflow-auto">
             {selectItems.map((item) => {
               if (React.isValidElement(item)) {
+                const itemProps = item.props as any;
                 return (
                   <button
-                    key={item.props.value}
+                    key={itemProps.value}
                     type="button"
                     className="w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer focus:bg-accent focus:outline-none"
-                    onClick={() => handleValueChange(item.props.value)}
+                    onClick={() => handleValueChange(itemProps.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
-                        handleValueChange(item.props.value);
+                        handleValueChange(itemProps.value);
                       }
                     }}
                   >
-                    {item.props.children}
+                    {itemProps.children}
                   </button>
                 );
               }

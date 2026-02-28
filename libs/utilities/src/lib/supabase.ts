@@ -4,14 +4,30 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
 const supabaseAnonKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"];
 
+const isBuildPhase =
+  process.env["NEXT_PHASE"]?.includes("build") ||
+  process.env["NODE_ENV"] === "production";
+
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set",
-  );
+  if (!isBuildPhase) {
+    console.warn(
+      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set. Supabase operations will fail.",
+    );
+  } else if (
+    process.env["NODE_ENV"] === "production" &&
+    !process.env["NEXT_PHASE"]?.includes("build")
+  ) {
+    throw new Error(
+      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set",
+    );
+  }
 }
 
 // Create Supabase client
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(
+  supabaseUrl || "https://placeholder-url.supabase.co",
+  supabaseAnonKey || "placeholder-key",
+);
 
 // Export common Supabase operations for frontend use
 export const supabaseClient = {

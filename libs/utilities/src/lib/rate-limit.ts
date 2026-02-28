@@ -56,22 +56,25 @@ export function rateLimit(options: RateLimitOptions = {}) {
     const now = Date.now();
     if (tokenBuckets.size > uniqueTokenPerInterval) {
       // Remove expired entries
-      for (const [key, bucket] of tokenBuckets.entries()) {
+      tokenBuckets.forEach((bucket, key) => {
         if (now > bucket.resetTime) {
           tokenBuckets.delete(key);
         }
-      }
+      });
       // If still over limit, remove oldest entries
       if (tokenBuckets.size > uniqueTokenPerInterval) {
-        const entries = [...tokenBuckets.entries()];
+        const entries: Array<[string, TokenBucket]> = [];
+        tokenBuckets.forEach((bucket, key) => {
+          entries.push([key, bucket]);
+        });
         entries.sort((a, b) => a[1].resetTime - b[1].resetTime);
         const toRemove = entries.slice(
           0,
           entries.length - uniqueTokenPerInterval,
         );
-        for (const [key] of toRemove) {
+        toRemove.forEach(([key]) => {
           tokenBuckets.delete(key);
-        }
+        });
       }
     }
   };

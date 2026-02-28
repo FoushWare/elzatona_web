@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useLearningType } from "../context/LearningTypeContext";
 import { HomePageLayout } from "@elzatona/common-ui";
 import { useHomePageState } from "./lib/hooks/useHomePageState";
-import { getPersonalizedContent } from "@elzatona/utilities";
+import { getPersonalizedContent } from "@elzatona/utilities/client";
 import { ROUTES } from "@elzatona/types";
 
 /**

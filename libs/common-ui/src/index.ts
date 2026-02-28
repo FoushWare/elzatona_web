@@ -1,3 +1,5 @@
+"use client";
+
 export * from "./components/ui";
 export * from "./admin/components";
 export * from "./components/common/AdvancedSearch";

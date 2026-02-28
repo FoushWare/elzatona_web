@@ -28,10 +28,33 @@ export abstract class BasePostgreSQLAdapter {
   protected serviceRoleClient?: SupabaseClient;
 
   constructor(config: PostgreSQLConfig) {
-    this.client = createClient(config.url, config.key);
+    const isBuildPhase =
+      process.env.NEXT_PHASE?.includes("build") ||
+      process.env.NODE_ENV === "production";
 
-    if (config.serviceRoleKey) {
-      this.serviceRoleClient = createClient(config.url, config.serviceRoleKey);
+    const supabaseUrl = config.url || "https://placeholder-url.supabase.co";
+    const supabaseKey = config.key || "placeholder-key";
+
+    // Validate config only if not in build phase or if in production runtime
+    if (!config.url || !config.key) {
+      if (
+        !isBuildPhase ||
+        (process.env.NODE_ENV === "production" &&
+          !process.env.NEXT_PHASE?.includes("build"))
+      ) {
+        console.warn(
+          "⚠️ Missing Supabase configuration in PostgreSQL Adapter. Operations will fail.",
+        );
+      }
+    }
+
+    this.client = createClient(supabaseUrl, supabaseKey);
+
+    if (config.serviceRoleKey || isBuildPhase) {
+      this.serviceRoleClient = createClient(
+        supabaseUrl,
+        config.serviceRoleKey || "placeholder-key",
+      );
     }
   }
 

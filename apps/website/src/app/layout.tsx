@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { JotaiProvider } from "../../providers/JotaiProvider";
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     "Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.",
   keywords:
     "frontend development, interview preparation, React, JavaScript, CSS, HTML, coding challenges, learning paths",
-  authors: [{ name: "Development Team" }],
+  authors: [{ name: "Development Team", url: "https://elzatona.com" }],
   creator: "Development Team",
   publisher: "Development Team",
   robots: "index, follow",
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
 };
