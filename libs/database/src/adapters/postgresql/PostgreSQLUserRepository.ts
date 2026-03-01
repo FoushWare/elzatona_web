@@ -88,10 +88,10 @@ export class PostgreSQLUserRepository
   async findAdminByEmail(email: string): Promise<User | null> {
     try {
       const { data, error } = await this.client
-        .from(TABLE_NAME)
+        .from("admin_users")
         .select("*")
         .eq("email", email)
-        .eq("role", "admin")
+        .or("role.eq.admin,role.eq.super_admin")
         .single();
 
       if (error) {
