@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if admin is active
-    if (!adminData.is_active) {
+    if (adminData.isActive === false) {
       return NextResponse.json(
         { success: false, error: "Admin account is deactivated" },
         { status: 401 },
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     // Verify password using bcrypt
     const isValidPassword = await bcrypt.compare(
       password,
-      adminData.password_hash,
+      adminData.passwordHash || adminData.password_hash || "",
     );
 
     if (!isValidPassword) {
@@ -117,10 +117,20 @@ export async function POST(request: NextRequest) {
     };
 
     return NextResponse.json({ success: true, admin: session });
-  } catch (error) {
-    console.error("[Admin Auth API] 💥 Error:", error);
+  } catch (error: any) {
+    console.error("[Admin Auth API] 💥 Full Error:", {
+      message: error.message,
+      stack: error.stack,
+      code: error.code,
+      details: error.details,
+    });
     return NextResponse.json(
-      { success: false, error: "Internal server error" },
+      {
+        success: false,
+        error: "Internal server error",
+        debug:
+          process.env.NODE_ENV === "development" ? error.message : undefined,
+      },
       { status: 500 },
     );
   }
