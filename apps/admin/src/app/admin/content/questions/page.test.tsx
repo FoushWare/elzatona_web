@@ -189,6 +189,7 @@ describe("QuestionManagementPage", () => {
 
   describe("Loading state", () => {
     it("should show loading spinner when loading", () => {
+      currentMockReturn.questions = [];
       currentMockReturn.loading = true;
       render(<QuestionManagementPage />);
       expect(screen.getByText("Loading questions...")).toBeInTheDocument();
@@ -197,11 +198,11 @@ describe("QuestionManagementPage", () => {
 
   describe("Error state", () => {
     it("should display error message when error occurs", () => {
-      currentMockReturn.error = { message: "Test error" };
+      currentMockReturn.questions = [];
+      currentMockReturn.error = "Test error";
       render(<QuestionManagementPage />);
-      expect(
-        screen.getByText(/Failed to load questions: Test error/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/Error loading questions:/i)).toBeInTheDocument();
+      expect(screen.getByText(/Test error/i)).toBeInTheDocument();
     });
   });
 
