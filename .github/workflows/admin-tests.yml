@@ -1,0 +1,86 @@
+name: Admin Tests
+
+on:
+  push:
+    branches: [main, develop, "release/**"]
+    paths:
+      - "apps/admin/**"
+      - "libs/database/**"
+      - "libs/contexts/**"
+      - "libs/common-ui/**"
+  pull_request:
+    branches: [main, develop, "release/**"]
+    paths:
+      - "apps/admin/**"
+      - "libs/database/**"
+      - "libs/contexts/**"
+      - "libs/common-ui/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  admin-unit-tests:
+    name: Admin Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Admin unit tests
+        run: npx nx test admin --ci --code-coverage
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+
+  admin-e2e-tests:
+    name: Admin E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Admin E2E tests
+        run: |
+          # Use the admin-specific playwright config
+          npx playwright test --config=apps/admin/tests/config/playwright.config.ts --project=chromium
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+          CI: "true"
+          APP_ENV: "test"
+          # These secrets must be configured in GitHub
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-playwright-report
+          path: apps/admin/playwright-report/
+          retention-days: 7

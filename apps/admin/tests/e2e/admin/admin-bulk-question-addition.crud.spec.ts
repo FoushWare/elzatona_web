@@ -9,7 +9,7 @@ import { test, expect } from "@playwright/test";
 import {
   setupAdminPage,
   // createQuestion,
-} from "./admin-bulk-question-addition.setup";
+} from "./admin-questions-page.setup";
 
 test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
   // Set default timeout for all tests in this suite
@@ -25,7 +25,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     // Wait for page to be ready
     await page
       .waitForLoadState("networkidle", { timeout: 10000 })
-      .catch(() => {});
+      .catch(() => { });
     await page.waitForTimeout(2000);
 
     // Wait for the main page title to ensure page is loaded
@@ -295,7 +295,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       data?: {
         success?: number;
         failed?: number;
-        results?: Array<{ id?: string; [key: string]: unknown }>;
+        results?: Array<{ id?: string;[key: string]: unknown }>;
         errors?: string[];
       };
       error?: string;
@@ -424,8 +424,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
 
       if (fetchResponse && "ok" in fetchResponse) {
         const fetchData = (await fetchResponse.json()) as {
-          data?: Array<{ id?: string; title?: string; [key: string]: unknown }>;
-          pagination?: { totalCount?: number; [key: string]: unknown };
+          data?: Array<{ id?: string; title?: string;[key: string]: unknown }>;
+          pagination?: { totalCount?: number;[key: string]: unknown };
         };
         console.log("✅ Questions fetch API response received");
 
@@ -873,14 +873,14 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       await page
         .getByText("Edit Question")
         .waitFor({ state: "hidden", timeout: 10000 })
-        .catch(() => {});
+        .catch(() => { });
       await page.waitForTimeout(2000);
 
       // Wait for loading to complete
       const loadingText = page.locator("text=/Loading questions/i");
       await loadingText
         .waitFor({ state: "hidden", timeout: 10000 })
-        .catch(() => {});
+        .catch(() => { });
 
       // Verify updated question appears
       // Note: Component refreshes current page, not necessarily page 1
@@ -989,7 +989,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     const loadingText = page.locator("text=/Loading questions/i");
     await loadingText
       .waitFor({ state: "hidden", timeout: 5000 })
-      .catch(() => {});
+      .catch(() => { });
     await page.waitForTimeout(1000);
 
     // Find delete buttons - use simpler selector
@@ -1101,14 +1101,14 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       await fetchResponsePromise;
 
       // Wait for modal to close (check for dialog to disappear)
-      await dialog.waitFor({ state: "hidden", timeout: 10000 }).catch(() => {});
+      await dialog.waitFor({ state: "hidden", timeout: 10000 }).catch(() => { });
       await page.waitForTimeout(2000);
 
       // Wait for loading to complete
       const loadingText = page.locator("text=/Loading questions/i");
       await loadingText
         .waitFor({ state: "hidden", timeout: 10000 })
-        .catch(() => {});
+        .catch(() => { });
 
       // Verify question is removed (if title was captured)
       if (questionTitle) {
@@ -1169,7 +1169,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       await cancelButton.click();
 
       // Wait for modal to close (check for dialog to disappear)
-      await dialog.waitFor({ state: "hidden", timeout: 10000 }).catch(() => {});
+      await dialog.waitFor({ state: "hidden", timeout: 10000 }).catch(() => { });
       await page.waitForTimeout(1000);
 
       // Verify question still exists

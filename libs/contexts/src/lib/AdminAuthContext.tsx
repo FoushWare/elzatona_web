@@ -72,10 +72,10 @@ interface AdminAuthProviderProps {
 
 export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Start with false for development
+  const [isLoading, setIsLoading] = useState(true); // Start with true to prevent premature redirects
   const [user, setUser] = useState<AdminSession | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isHydrated, setIsHydrated] = useState(true); // Start as hydrated for development
+  const [isHydrated, setIsHydrated] = useState(false); // Start as false until mounted
 
   const router = useRouter();
   const pathname = usePathname();
@@ -85,7 +85,6 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
     const checkSession = async () => {
       try {
         if (typeof window === "undefined") {
-          setIsLoading(false);
           return;
         }
 
@@ -130,9 +129,9 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
         }
 
         if (session?.user) {
-          // Check if user is an admin by querying the admins table
+          // Check if user is an admin by querying the admin_users table (CORRECTED TABLE NAME)
           const { data: adminData, error: adminError } = await supabase
-            .from("admins")
+            .from("admin_users")
             .select("*")
             .eq("email", session.user.email)
             .single();
@@ -178,7 +177,8 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
 
   // Handle redirects for protected admin routes (excluding /admin root and /admin/login)
   useEffect(() => {
-    if (isLoading) return;
+    // Wait for hydration and initial session check
+    if (!isHydrated || isLoading) return;
 
     const isLoginPage = pathname === "/admin/login";
     const isAdminRootPage = pathname === "/admin";
@@ -188,6 +188,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
 
     console.log("🔄 AdminAuthProvider redirect logic:", {
       isLoading,
+      isHydrated,
       isAuthenticated,
       isLoginPage,
       isAdminRootPage,

@@ -9,6 +9,8 @@
     "dev:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test NODE_ENV=development dotenv -e .env.test.local -- nx serve website",
     "dev:admin": "APP_ENV=development NEXT_PUBLIC_APP_ENV=development NODE_ENV=development dotenv -e .env.development -- nx serve admin --port=3001",
     "dev:admin:prod": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NODE_ENV=development dotenv -e .env.production -- nx serve admin --port=3001",
+    "dev:admin:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test NODE_ENV=development dotenv -e .env.test.local -- nx serve admin --port=3000",
+    "dev:light:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test NODE_ENV=development dotenv -e .env.test.local -- nx serve admin --port=3000",
     "dev:turbo": "NODE_OPTIONS=--max-old-space-size=2048 nx serve website --turbopack",
     "build": "NODE_ENV=production nx build website",
     "build:admin": "nx build admin",
@@ -249,6 +251,7 @@
     "tsx": "^4.20.5",
     "typescript": "^5",
     "vite": "^7.2.6",
+    "vite-tsconfig-paths": "^6.1.1",
     "vitest": "3.2.4"
   },
   "lint-staged": {

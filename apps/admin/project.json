@@ -47,10 +47,10 @@
       }
     },
     "test": {
-      "executor": "vite:test",
+      "executor": "@nx/vite:test",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "configFile": "../../vitest.config.ts",
+        "configFile": "{workspaceRoot}/vitest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {

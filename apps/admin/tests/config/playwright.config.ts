@@ -137,6 +137,7 @@ export default defineConfig({
     // Use dev:light:test to ensure Next.js loads .env.test.local for test database
     command: "NODE_OPTIONS=--max-old-space-size=1536 npm run dev:light:test", // Use light mode for 8GB RAM with test environment
     url: "http://localhost:3000",
+    cwd: projectRoot,
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000, // 2 minutes
     env: {
