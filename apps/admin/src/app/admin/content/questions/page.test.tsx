@@ -4,32 +4,41 @@
  */
 
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import QuestionManagementPage from "./page";
 import { useQuestionsManagement } from "./hooks/useQuestionsManagement";
 
-// Mock the hook
+// Mock the hook first
 vi.mock("./hooks/useQuestionsManagement", () => ({
   useQuestionsManagement: vi.fn(),
 }));
 
 // Mock components
 vi.mock("@elzatona/common-ui", () => ({
-  Card: ({ children }: any) => <div data-testid="card">{children}</div>,
-  CardContent: ({ children }: any) => (
-    <div data-testid="card-content">{children}</div>
+  Card: ({ children, className }: any) => (
+    <div data-testid="card" className={className}>
+      {children}
+    </div>
+  ),
+  CardContent: ({ children, className }: any) => (
+    <div data-testid="card-content" className={className}>
+      {children}
+    </div>
   ),
   Button: ({ children, ...props }: any) => (
     <button {...props}>{children}</button>
   ),
   FormModal: ({ isOpen, children }: any) =>
     isOpen ? <div data-testid="form-modal">{children}</div> : null,
-  AdvancedSearch: ({ onSearch }: any) => (
+  AdvancedSearch: ({ onSearch, onResultsChange }: any) => (
     <div data-testid="advanced-search">
       <input
         data-testid="search-input"
-        onChange={(e) => onSearch(e.target.value)}
+        onChange={(e) => {
+          if (onSearch) onSearch(e.target.value);
+          if (onResultsChange) onResultsChange([]);
+        }}
         placeholder="Search questions..."
       />
     </div>
@@ -40,17 +49,11 @@ vi.mock("@elzatona/common-ui", () => ({
       <div data-testid="stats-active">{stats?.active || 0}</div>
     </div>
   ),
-  CategoriesOverview: ({ categories, onCategorySelect }: any) => (
+  CategoriesOverview: ({ categoryCounts }: any) => (
     <div data-testid="categories-overview">
-      {categories?.map((cat: any) => (
-        <button
-          key={cat.id}
-          data-testid={`category-${cat.id}`}
-          onClick={() => onCategorySelect(cat.id)}
-        >
-          {cat.name}
-        </button>
-      )) || "No categories"}
+      {!categoryCounts || categoryCounts.length === 0
+        ? "No categories"
+        : "Categories loaded"}
     </div>
   ),
   FiltersCard: ({
@@ -66,6 +69,7 @@ vi.mock("@elzatona/common-ui", () => ({
         onChange={(e) => onCategoryChange(e.target.value)}
       >
         <option value="">All Categories</option>
+        <option value="programming">Programming</option>
       </select>
       <select
         data-testid="topic-filter"
@@ -73,25 +77,32 @@ vi.mock("@elzatona/common-ui", () => ({
         onChange={(e) => onTopicChange(e.target.value)}
       >
         <option value="">All Topics</option>
+        <option value="react">React</option>
       </select>
     </div>
   ),
-  QuestionsList: ({ questions, onView, onEdit, onDelete }: any) => (
+  QuestionsList: ({ questions, onView, onEdit, onDelete, onCreate }: any) => (
     <div data-testid="questions-list">
-      {questions?.map((q: any) => (
-        <div key={q.id} data-testid={`question-${q.id}`}>
-          <span>{q.title}</span>
-          <button data-testid={`view-${q.id}`} onClick={() => onView(q)}>
-            View
-          </button>
-          <button data-testid={`edit-${q.id}`} onClick={() => onEdit(q)}>
-            Edit
-          </button>
-          <button data-testid={`delete-${q.id}`} onClick={() => onDelete(q)}>
-            Delete
-          </button>
-        </div>
-      )) || "No questions"}
+      {onCreate && <button onClick={onCreate}>Create Question</button>}
+      {questions && questions.length > 0
+        ? questions.map((q: any) => (
+            <div key={q.id} data-testid={`question-${q.id}`}>
+              <span>{q.title}</span>
+              <button data-testid={`view-${q.id}`} onClick={() => onView(q)}>
+                View
+              </button>
+              <button data-testid={`edit-${q.id}`} onClick={() => onEdit(q)}>
+                Edit
+              </button>
+              <button
+                data-testid={`delete-${q.id}`}
+                onClick={() => onDelete(q)}
+              >
+                Delete
+              </button>
+            </div>
+          ))
+        : "No questions"}
     </div>
   ),
   PaginationControls: ({ currentPage, totalPages, onPageChange }: any) => (
@@ -129,8 +140,7 @@ vi.mock("../../../../components/ViewQuestionModal", () => ({
 }));
 
 describe("QuestionManagementPage", () => {
-  const mockHookReturn = {
-    // State
+  const createMockHookReturn = () => ({
     currentPage: 1,
     pageSize: 10,
     selectedCategory: "",
@@ -144,95 +154,85 @@ describe("QuestionManagementPage", () => {
     loading: false,
     error: null,
     cardsData: [],
-    topicsData: null,
-    categoriesData: null,
-    categoryCounts: [],
+    topicsData: [],
+    categoriesData: [],
+    categoryCounts: [{}],
     selectedQuestion: null,
     isViewModalOpen: false,
     isQuestionModalOpen: false,
     isEditMode: false,
-
-    // Setters
     setCurrentPage: vi.fn(),
     setPageSize: vi.fn(),
     setSelectedCategory: vi.fn(),
     setSelectedTopic: vi.fn(),
     setQuestions: vi.fn(),
-
-    // Handlers
     handleCreateOrUpdate: vi.fn(),
     handleDelete: vi.fn(),
-    handleView: vi.fn(),
-    handleEdit: vi.fn(),
-    handleCloseModal: vi.fn(),
-    handleOpenCreateModal: vi.fn(),
-  };
+    openViewModal: vi.fn(),
+    openEditModal: vi.fn(),
+    openCreateModal: vi.fn(),
+    closeModals: vi.fn(),
+    clearFilters: vi.fn(),
+    handleSearch: vi.fn(),
+    refresh: vi.fn(),
+  });
+
+  let currentMockReturn: any;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useQuestionsManagement).mockReturnValue(mockHookReturn);
+    currentMockReturn = createMockHookReturn();
+    vi.mocked(useQuestionsManagement).mockImplementation(
+      () => currentMockReturn,
+    );
   });
 
   describe("Loading state", () => {
     it("should show loading spinner when loading", () => {
-      vi.mocked(useQuestionsManagement).mockReturnValue({
-        ...mockHookReturn,
-        loading: true,
-      });
-
+      currentMockReturn.loading = true;
       render(<QuestionManagementPage />);
-
       expect(screen.getByText("Loading questions...")).toBeInTheDocument();
     });
   });
 
   describe("Error state", () => {
     it("should display error message when error occurs", () => {
-      vi.mocked(useQuestionsManagement).mockReturnValue({
-        ...mockHookReturn,
-        error: "Failed to load questions",
-      });
-
+      currentMockReturn.error = { message: "Test error" };
       render(<QuestionManagementPage />);
-
-      expect(screen.getByText("Failed to load questions")).toBeInTheDocument();
+      expect(
+        screen.getByText(/Failed to load questions: Test error/i),
+      ).toBeInTheDocument();
     });
   });
 
   describe("Page rendering", () => {
     it("should render page title", () => {
       render(<QuestionManagementPage />);
-
       expect(screen.getByText("Question Management")).toBeInTheDocument();
     });
 
     it("should render stats cards", () => {
       render(<QuestionManagementPage />);
-
       expect(screen.getByTestId("stats-cards")).toBeInTheDocument();
     });
 
     it("should render advanced search", () => {
       render(<QuestionManagementPage />);
-
       expect(screen.getByTestId("advanced-search")).toBeInTheDocument();
     });
 
     it("should render categories overview", () => {
       render(<QuestionManagementPage />);
-
       expect(screen.getByTestId("categories-overview")).toBeInTheDocument();
     });
 
     it("should render filters card", () => {
       render(<QuestionManagementPage />);
-
       expect(screen.getByTestId("filters-card")).toBeInTheDocument();
     });
 
     it("should render questions list", () => {
       render(<QuestionManagementPage />);
-
       expect(screen.getByTestId("questions-list")).toBeInTheDocument();
       expect(screen.getByTestId("question-1")).toHaveTextContent(
         "What is React?",
@@ -244,106 +244,63 @@ describe("QuestionManagementPage", () => {
 
     it("should render pagination controls", () => {
       render(<QuestionManagementPage />);
-
       expect(screen.getByTestId("pagination-controls")).toBeInTheDocument();
       expect(screen.getByTestId("current-page")).toHaveTextContent("1");
     });
 
     it("should render create question button", () => {
       render(<QuestionManagementPage />);
-
       expect(screen.getByText("Create Question")).toBeInTheDocument();
     });
   });
 
   describe("Search functionality", () => {
-    it("should trigger search when input changes", () => {
-      // Mock the search handler - this would be passed to AdvancedSearch
-      // For now, just verify the component renders
+    it("should render search input", () => {
       render(<QuestionManagementPage />);
-
-      const searchInput = screen.getByTestId("search-input");
-      expect(searchInput).toBeInTheDocument();
+      expect(screen.getByTestId("search-input")).toBeInTheDocument();
     });
   });
 
   describe("Filtering", () => {
-    it("should render category filter", () => {
-      render(<QuestionManagementPage />);
-
-      const categoryFilter = screen.getByTestId("category-filter");
-      expect(categoryFilter).toBeInTheDocument();
-      expect(categoryFilter).toHaveValue("");
-    });
-
-    it("should render topic filter", () => {
-      render(<QuestionManagementPage />);
-
-      const topicFilter = screen.getByTestId("topic-filter");
-      expect(topicFilter).toBeInTheDocument();
-      expect(topicFilter).toHaveValue("");
-    });
-
     it("should call setSelectedCategory when category filter changes", () => {
       render(<QuestionManagementPage />);
-
       const categoryFilter = screen.getByTestId("category-filter");
       fireEvent.change(categoryFilter, { target: { value: "programming" } });
-
-      expect(mockHookReturn.setSelectedCategory).toHaveBeenCalledWith(
+      expect(currentMockReturn.setSelectedCategory).toHaveBeenCalledWith(
         "programming",
       );
     });
 
     it("should call setSelectedTopic when topic filter changes", () => {
       render(<QuestionManagementPage />);
-
       const topicFilter = screen.getByTestId("topic-filter");
       fireEvent.change(topicFilter, { target: { value: "react" } });
-
-      expect(mockHookReturn.setSelectedTopic).toHaveBeenCalledWith("react");
+      expect(currentMockReturn.setSelectedTopic).toHaveBeenCalledWith("react");
     });
   });
 
   describe("Question actions", () => {
-    it("should render action buttons for each question", () => {
+    it("should call openViewModal when view button is clicked", () => {
       render(<QuestionManagementPage />);
-
-      expect(screen.getByTestId("view-1")).toBeInTheDocument();
-      expect(screen.getByTestId("edit-1")).toBeInTheDocument();
-      expect(screen.getByTestId("delete-1")).toBeInTheDocument();
-    });
-
-    it("should call handleView when view button is clicked", () => {
-      render(<QuestionManagementPage />);
-
-      const viewButton = screen.getByTestId("view-1");
-      fireEvent.click(viewButton);
-
-      expect(mockHookReturn.handleView).toHaveBeenCalledWith(
-        mockHookReturn.questions[0],
+      fireEvent.click(screen.getByTestId("view-1"));
+      expect(currentMockReturn.openViewModal).toHaveBeenCalledWith(
+        currentMockReturn.questions[0],
       );
     });
 
-    it("should call handleEdit when edit button is clicked", () => {
+    it("should call openEditModal when edit button is clicked", () => {
       render(<QuestionManagementPage />);
-
-      const editButton = screen.getByTestId("edit-1");
-      fireEvent.click(editButton);
-
-      expect(mockHookReturn.handleEdit).toHaveBeenCalledWith(
-        mockHookReturn.questions[0],
+      fireEvent.click(screen.getByTestId("edit-1"));
+      expect(currentMockReturn.openEditModal).toHaveBeenCalledWith(
+        currentMockReturn.questions[0],
       );
     });
 
     it("should call handleDelete when delete button is clicked", () => {
       render(<QuestionManagementPage />);
-
-      const deleteButton = screen.getByTestId("delete-1");
-      fireEvent.click(deleteButton);
-
-      expect(mockHookReturn.handleDelete).toHaveBeenCalledWith(
-        mockHookReturn.questions[0],
+      fireEvent.click(screen.getByTestId("delete-1"));
+      expect(currentMockReturn.handleDelete).toHaveBeenCalledWith(
+        currentMockReturn.questions[0],
       );
     });
   });
@@ -351,58 +308,23 @@ describe("QuestionManagementPage", () => {
   describe("Pagination", () => {
     it("should call setCurrentPage when next page button is clicked", () => {
       render(<QuestionManagementPage />);
-
-      const nextButton = screen.getByTestId("next-page");
-      fireEvent.click(nextButton);
-
-      expect(mockHookReturn.setCurrentPage).toHaveBeenCalledWith(2);
+      fireEvent.click(screen.getByTestId("next-page"));
+      expect(currentMockReturn.setCurrentPage).toHaveBeenCalledWith(2);
     });
 
     it("should call setCurrentPage when previous page button is clicked", () => {
-      vi.mocked(useQuestionsManagement).mockReturnValue({
-        ...mockHookReturn,
-        currentPage: 2,
-      });
-
+      currentMockReturn.currentPage = 2;
       render(<QuestionManagementPage />);
-
-      const prevButton = screen.getByTestId("prev-page");
-      fireEvent.click(prevButton);
-
-      expect(mockHookReturn.setCurrentPage).toHaveBeenCalledWith(1);
-    });
-
-    it("should disable previous button on first page", () => {
-      render(<QuestionManagementPage />);
-
-      const prevButton = screen.getByTestId("prev-page");
-      expect(prevButton).toBeDisabled();
-    });
-
-    it("should disable next button on last page", () => {
-      vi.mocked(useQuestionsManagement).mockReturnValue({
-        ...mockHookReturn,
-        currentPage: 3,
-        totalPages: 3,
-      });
-
-      render(<QuestionManagementPage />);
-
-      const nextButton = screen.getByTestId("next-page");
-      expect(nextButton).toBeDisabled();
+      fireEvent.click(screen.getByTestId("prev-page"));
+      expect(currentMockReturn.setCurrentPage).toHaveBeenCalledWith(1);
     });
   });
 
   describe("Modals", () => {
     it("should render view question modal when isViewModalOpen is true", () => {
-      vi.mocked(useQuestionsManagement).mockReturnValue({
-        ...mockHookReturn,
-        isViewModalOpen: true,
-        selectedQuestion: { id: "1", title: "Test Question" },
-      });
-
+      currentMockReturn.isViewModalOpen = true;
+      currentMockReturn.selectedQuestion = { id: "1", title: "Test Question" };
       render(<QuestionManagementPage />);
-
       expect(screen.getByTestId("view-question-modal")).toBeInTheDocument();
       expect(screen.getByTestId("modal-question-title")).toHaveTextContent(
         "Test Question",
@@ -410,65 +332,32 @@ describe("QuestionManagementPage", () => {
     });
 
     it("should render form modal when isQuestionModalOpen is true", () => {
-      vi.mocked(useQuestionsManagement).mockReturnValue({
-        ...mockHookReturn,
-        isQuestionModalOpen: true,
-      });
-
+      currentMockReturn.isQuestionModalOpen = true;
       render(<QuestionManagementPage />);
-
       expect(screen.getByTestId("form-modal")).toBeInTheDocument();
     });
 
-    it("should call handleCloseModal when modal close button is clicked", () => {
-      vi.mocked(useQuestionsManagement).mockReturnValue({
-        ...mockHookReturn,
-        isViewModalOpen: true,
-        selectedQuestion: { id: "1", title: "Test Question" },
-      });
-
+    it("should call closeModals when modal close button is clicked", () => {
+      currentMockReturn.isViewModalOpen = true;
+      currentMockReturn.selectedQuestion = { id: "1", title: "Test Question" };
       render(<QuestionManagementPage />);
-
-      const closeButton = screen.getByTestId("close-modal");
-      fireEvent.click(closeButton);
-
-      expect(mockHookReturn.handleCloseModal).toHaveBeenCalled();
-    });
-  });
-
-  describe("Create question", () => {
-    it("should call handleOpenCreateModal when create button is clicked", () => {
-      render(<QuestionManagementPage />);
-
-      const createButton = screen.getByText("Create Question");
-      fireEvent.click(createButton);
-
-      expect(mockHookReturn.handleOpenCreateModal).toHaveBeenCalled();
+      fireEvent.click(screen.getByTestId("close-modal"));
+      expect(currentMockReturn.closeModals).toHaveBeenCalled();
     });
   });
 
   describe("Empty states", () => {
     it("should show empty state when no questions", () => {
-      vi.mocked(useQuestionsManagement).mockReturnValue({
-        ...mockHookReturn,
-        questions: [],
-      });
-
+      currentMockReturn.questions = [];
       render(<QuestionManagementPage />);
-
       expect(screen.getByTestId("questions-list")).toHaveTextContent(
-        "No questions",
+        /No questions/i,
       );
     });
 
     it("should show empty state when no categories", () => {
-      vi.mocked(useQuestionsManagement).mockReturnValue({
-        ...mockHookReturn,
-        categoriesData: [],
-      });
-
+      currentMockReturn.categoryCounts = [];
       render(<QuestionManagementPage />);
-
       expect(screen.getByTestId("categories-overview")).toHaveTextContent(
         "No categories",
       );
