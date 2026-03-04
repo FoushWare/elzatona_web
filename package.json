@@ -249,6 +249,7 @@
     "tsx": "^4.20.5",
     "typescript": "^5",
     "vite": "^7.2.6",
+    "vite-tsconfig-paths": "^6.1.1",
     "vitest": "3.2.4"
   },
   "lint-staged": {
