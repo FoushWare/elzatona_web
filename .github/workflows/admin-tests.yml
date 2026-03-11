@@ -38,7 +38,7 @@ jobs:
         run: npm install
 
       - name: Run Admin unit tests
-        run: npx nx test admin --ci --code-coverage
+        run: npx vitest run apps/admin/src --reporter=verbose
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
 

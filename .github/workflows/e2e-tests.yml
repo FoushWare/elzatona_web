@@ -120,7 +120,7 @@ jobs:
           echo "📊 Using TEST database: ${{ secrets.TEST_SUPABASE_URL }}"
           # Build both website and admin
           npm run build
-          npm run build:admin
+          cd apps/admin && npx next build && cd ../..
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
           NEXT_TELEMETRY_DISABLED: "1"
@@ -142,15 +142,16 @@ jobs:
         run: |
           echo "🚀 Starting application servers with TEST database..."
           echo "📊 Database URL: ${{ secrets.TEST_SUPABASE_URL }}"
-          
+
           # Start website server (port 3000)
           npm run start > website.log 2>&1 &
           WEBSITE_PID=$!
-          
-          # Start admin server (port 3001)
-          npm run start:admin -- -p 3001 > admin.log 2>&1 &
+
+          # Start admin server (port 3001) - use npx next start directly to avoid bun dependency
+          cd apps/admin && npx next start -p 3001 > ../../admin.log 2>&1 &
           ADMIN_PID=$!
-          
+          cd ../..
+
           echo "WEBSITE_PID=$WEBSITE_PID" >> $GITHUB_ENV
           echo "ADMIN_PID=$ADMIN_PID" >> $GITHUB_ENV
 
