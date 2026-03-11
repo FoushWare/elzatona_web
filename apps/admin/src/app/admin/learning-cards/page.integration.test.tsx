@@ -3,6 +3,7 @@
  */
 import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import LearningCardsPage from "./page";
 import { useLearningCards } from "./hooks/useLearningCards";

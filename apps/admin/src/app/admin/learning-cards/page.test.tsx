@@ -3,6 +3,7 @@
  */
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import LearningCardsPage from "./page";
 import * as useLearningCardsModule from "./hooks/useLearningCards";
@@ -60,12 +61,9 @@ vi.mock("./components/CardFormModal", () => ({
     ) : null,
 }));
 
-// Create a dynamic mock function for the hook
-const mockUseLearningCards = vi.fn();
-
 // Mock the hook
 vi.mock("./hooks/useLearningCards", () => ({
-  useLearningCards: () => mockUseLearningCards(),
+  useLearningCards: vi.fn(),
 }));
 
 const defaultMockData = {
@@ -101,7 +99,9 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("renders the learning cards page correctly", () => {
-    mockUseLearningCards.mockReturnValue(defaultMockData);
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue(
+      defaultMockData as any,
+    );
     render(<LearningCardsPage />);
 
     expect(screen.getByTestId("admin-navbar")).toBeInTheDocument();
@@ -109,7 +109,9 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("opens create card modal when create button is clicked", () => {
-    mockUseLearningCards.mockReturnValue(defaultMockData);
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue(
+      defaultMockData as any,
+    );
     render(<LearningCardsPage />);
 
     const createButton = screen.getByTestId("create-card-btn");
@@ -119,7 +121,9 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("opens edit card modal when edit button is clicked", () => {
-    mockUseLearningCards.mockReturnValue(defaultMockData);
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue(
+      defaultMockData as any,
+    );
     render(<LearningCardsPage />);
 
     const editButton = screen.getByTestId("edit-card-btn");
@@ -129,7 +133,9 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("opens delete confirmation modal when delete button is clicked", () => {
-    mockUseLearningCards.mockReturnValue(defaultMockData);
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue(
+      defaultMockData as any,
+    );
     render(<LearningCardsPage />);
 
     const deleteButton = screen.getByTestId("delete-card-btn");
@@ -140,11 +146,11 @@ describe("Learning Cards Page - Unit", () => {
 
   it("handles form submission for creating a card", async () => {
     const mockCreateCard = vi.fn().mockResolvedValue(true);
-    mockUseLearningCards.mockReturnValue({
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
       ...defaultMockData,
       cards: [],
       createCard: mockCreateCard,
-    });
+    } as any);
 
     render(<LearningCardsPage />);
 
@@ -161,10 +167,10 @@ describe("Learning Cards Page - Unit", () => {
 
   it("handles form submission for updating a card", async () => {
     const mockUpdateCard = vi.fn().mockResolvedValue(true);
-    mockUseLearningCards.mockReturnValue({
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
       ...defaultMockData,
       updateCard: mockUpdateCard,
-    });
+    } as any);
 
     render(<LearningCardsPage />);
 
@@ -181,10 +187,10 @@ describe("Learning Cards Page - Unit", () => {
 
   it("handles card deletion", async () => {
     const mockDeleteCard = vi.fn().mockResolvedValue(true);
-    mockUseLearningCards.mockReturnValue({
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
       ...defaultMockData,
       deleteCard: mockDeleteCard,
-    });
+    } as any);
 
     render(<LearningCardsPage />);
 
@@ -200,11 +206,11 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("shows loading spinner when loading", () => {
-    mockUseLearningCards.mockReturnValue({
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
       ...defaultMockData,
       cards: [],
       loading: true,
-    });
+    } as any);
 
     render(<LearningCardsPage />);
 
@@ -214,10 +220,10 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("displays error message when there is an error", () => {
-    mockUseLearningCards.mockReturnValue({
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
       ...defaultMockData,
       error: "Test error message",
-    });
+    } as any);
 
     render(<LearningCardsPage />);
 
