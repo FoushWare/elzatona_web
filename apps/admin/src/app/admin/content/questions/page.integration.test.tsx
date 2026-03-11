@@ -1,7 +1,9 @@
 /**
  * Integration tests for Admin questions management page API interactions
  */
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import QuestionsManagementPage from "./page";
 
@@ -105,32 +107,61 @@ const mockQuestions = [
     question: "What is React?",
     category: "Frontend",
     topic: "React",
+    isActive: true,
   },
   {
     id: "q2",
     question: "What is Node.js?",
     category: "Backend",
     topic: "Node.js",
+    isActive: true,
   },
 ];
 
-vi.mock("../../hooks/useQuestionsManagement", () => ({
-  useQuestionsManagement: () => ({
-    questions: mockQuestions,
-    loading: false,
-    error: null,
-    pagination: { totalCount: 2, totalPages: 1 },
-    filters: { category: "", topic: "" },
-    searchQuery: "",
-    setFilters: vi.fn(),
-    setSearchQuery: vi.fn(),
-    refetch: vi.fn(),
-  }),
+const mockUseQuestionsManagement = vi.fn();
+vi.mock("./hooks/useQuestionsManagement", () => ({
+  useQuestionsManagement: () => mockUseQuestionsManagement(),
 }));
+
+// Default mock return value for useQuestionsManagement
+const defaultMockReturn = {
+  currentPage: 1,
+  pageSize: 10,
+  selectedCategory: "",
+  selectedTopic: "",
+  questions: mockQuestions,
+  totalCount: 20,
+  totalPages: 2,
+  loading: false,
+  error: null,
+  cardsData: { data: [] },
+  topicsData: { data: [] },
+  categoriesData: { data: [{ id: "c1", name: "Frontend" }] },
+  categoryCounts: [{ category: "Frontend", count: 1 }],
+  selectedQuestion: null,
+  isViewModalOpen: false,
+  isQuestionModalOpen: false,
+  isEditMode: false,
+
+  setCurrentPage: vi.fn(),
+  setPageSize: vi.fn(),
+  setSelectedCategory: vi.fn(),
+  setSelectedTopic: vi.fn(),
+  setQuestions: vi.fn(),
+
+  handleCreateOrUpdate: vi.fn(),
+  handleDelete: vi.fn(),
+  openViewModal: vi.fn(),
+  openEditModal: vi.fn(),
+  openCreateModal: vi.fn(),
+  closeModals: vi.fn(),
+  clearFilters: vi.fn(),
+};
 
 // Test setup
 beforeEach(() => {
   vi.clearAllMocks();
+  mockUseQuestionsManagement.mockReturnValue(defaultMockReturn);
 });
 
 describe("Admin questions management page - Integration", () => {
@@ -148,24 +179,17 @@ describe("Admin questions management page - Integration", () => {
 
   it("shows loading state initially", () => {
     // Mock loading state
-    vi.mock("../../hooks/useQuestionsManagement", () => ({
-      useQuestionsManagement: () => ({
-        questions: [],
-        loading: true,
-        error: null,
-        pagination: { totalCount: 0, totalPages: 1 },
-        filters: { category: "", topic: "" },
-        searchQuery: "",
-        setFilters: vi.fn(),
-        setSearchQuery: vi.fn(),
-        refetch: vi.fn(),
-      }),
-    }));
+    mockUseQuestionsManagement.mockReturnValue({
+      ...defaultMockReturn,
+      questions: [],
+      totalCount: 0,
+      totalPages: 1,
+      loading: true,
+    });
 
     render(<QuestionsManagementPage />);
 
-    // In a real implementation, this would show a loading indicator
-    expect(screen.getByTestId("questions-list")).toBeInTheDocument();
+    expect(screen.getByText("Loading questions...")).toBeInTheDocument();
   });
 
   it("renders filter components", () => {
@@ -180,7 +204,7 @@ describe("Admin questions management page - Integration", () => {
     render(<QuestionsManagementPage />);
 
     expect(screen.getByTestId("pagination-controls")).toBeInTheDocument();
-    expect(screen.getByTestId("page-info")).toHaveTextContent("Page 1 of 1");
+    expect(screen.getByTestId("page-info")).toHaveTextContent("Page 1 of 2");
   });
 
   it("renders search component", () => {
@@ -195,17 +219,19 @@ describe("Admin questions management page - Integration", () => {
     const viewButton = screen.getByTestId("view-q1");
     fireEvent.click(viewButton);
 
-    expect(screen.getByTestId("view-question-modal")).toBeInTheDocument();
+    // After clicking, the hook handler would be called
+    expect(defaultMockReturn.openViewModal).toHaveBeenCalledWith(
+      mockQuestions[0],
+    );
   });
 
   it("handles category filter change", () => {
     render(<QuestionsManagementPage />);
 
     const categorySelect = screen.getByTestId("category-select");
-    fireEvent.change(categorySelect, { target: { value: "Frontend" } });
+    fireEvent.change(categorySelect, { target: { value: "cat1" } });
 
-    // The mock hook would handle the filter change
-    expect(categorySelect).toHaveValue("Frontend");
+    expect(defaultMockReturn.setSelectedCategory).toHaveBeenCalledWith("cat1");
   });
 
   it("handles pagination", () => {
@@ -214,7 +240,6 @@ describe("Admin questions management page - Integration", () => {
     const nextButton = screen.getByTestId("next-page");
     fireEvent.click(nextButton);
 
-    // The mock hook would handle pagination
-    expect(nextButton).toBeInTheDocument();
+    expect(defaultMockReturn.setCurrentPage).toHaveBeenCalledWith(2);
   });
 });

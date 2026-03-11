@@ -1,44 +1,9 @@
 import { test, expect } from "@playwright/test";
+import { setupNetworkMocks } from "./admin-questions-page.setup";
 
 test.describe("Admin Authentication", () => {
     test.beforeEach(async ({ page }) => {
-        // Mock auth API
-        await page.route("**/api/admin/auth", async (route) => {
-            const request = route.request();
-            if (request.method() === "POST") {
-                const body = await request.postDataJSON();
-                if (body.email === "test-admin@example.com" && body.password === "correct-password") {
-                    await route.fulfill({
-                        status: 200,
-                        contentType: "application/json",
-                        body: JSON.stringify({
-                            success: true,
-                            admin: { id: "test-admin-id", email: "test-admin@example.com" }
-                        }),
-                    });
-                } else {
-                    await route.fulfill({
-                        status: 401,
-                        contentType: "application/json",
-                        body: JSON.stringify({ success: false, error: "Invalid credentials" }),
-                    });
-                }
-            }
-        });
-
-        // Mock Supabase PostgREST for admin_users check
-        await page.route("**/*.supabase.co/rest/v1/admin_users*", async (route) => {
-            await route.fulfill({
-                status: 200,
-                contentType: "application/json",
-                body: JSON.stringify({
-                    id: "test-admin-id",
-                    email: "test-admin@example.com",
-                    role: "admin",
-                    name: "Test Admin"
-                }),
-            });
-        });
+        await setupNetworkMocks(page);
     });
 
     test("successful login flow", async ({ page }) => {

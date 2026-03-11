@@ -1,6 +1,7 @@
 /**
  * Unit tests for Admin Learning Cards page
  */
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import LearningCardsPage from "./page";
@@ -59,35 +60,40 @@ vi.mock("./components/CardFormModal", () => ({
     ) : null,
 }));
 
+// Create a dynamic mock function for the hook
+const mockUseLearningCards = vi.fn();
+
 // Mock the hook
 vi.mock("./hooks/useLearningCards", () => ({
-  useLearningCards: () => ({
-    cards: [
-      {
-        id: "1",
-        title: "Test Card",
-        category: "test",
-        topic: "test",
-        question: "test",
-      },
-    ],
-    categories: ["test"],
-    topics: ["test"],
-    questions: ["test"],
-    stats: { total: 1, categories: 1, topics: 1 },
-    loading: false,
-    error: null,
-    expandedCards: new Set(),
-    toggleCard: vi.fn(),
-    expandedCategories: new Set(),
-    toggleCategory: vi.fn(),
-    expandedTopics: new Set(),
-    toggleTopic: vi.fn(),
-    createCard: vi.fn().mockResolvedValue(true),
-    updateCard: vi.fn().mockResolvedValue(true),
-    deleteCard: vi.fn().mockResolvedValue(true),
-  }),
+  useLearningCards: () => mockUseLearningCards(),
 }));
+
+const defaultMockData = {
+  cards: [
+    {
+      id: "1",
+      title: "Test Card",
+      category: "test",
+      topic: "test",
+      question: "test",
+    },
+  ],
+  categories: ["test"],
+  topics: ["test"],
+  questions: ["test"],
+  stats: { total: 1, categories: 1, topics: 1 },
+  loading: false,
+  error: null,
+  expandedCards: new Set(),
+  toggleCard: vi.fn(),
+  expandedCategories: new Set(),
+  toggleCategory: vi.fn(),
+  expandedTopics: new Set(),
+  toggleTopic: vi.fn(),
+  createCard: vi.fn().mockResolvedValue(true),
+  updateCard: vi.fn().mockResolvedValue(true),
+  deleteCard: vi.fn().mockResolvedValue(true),
+};
 
 describe("Learning Cards Page - Unit", () => {
   beforeEach(() => {
@@ -95,6 +101,7 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("renders the learning cards page correctly", () => {
+    mockUseLearningCards.mockReturnValue(defaultMockData);
     render(<LearningCardsPage />);
 
     expect(screen.getByTestId("admin-navbar")).toBeInTheDocument();
@@ -102,6 +109,7 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("opens create card modal when create button is clicked", () => {
+    mockUseLearningCards.mockReturnValue(defaultMockData);
     render(<LearningCardsPage />);
 
     const createButton = screen.getByTestId("create-card-btn");
@@ -111,6 +119,7 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("opens edit card modal when edit button is clicked", () => {
+    mockUseLearningCards.mockReturnValue(defaultMockData);
     render(<LearningCardsPage />);
 
     const editButton = screen.getByTestId("edit-card-btn");
@@ -120,6 +129,7 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("opens delete confirmation modal when delete button is clicked", () => {
+    mockUseLearningCards.mockReturnValue(defaultMockData);
     render(<LearningCardsPage />);
 
     const deleteButton = screen.getByTestId("delete-card-btn");
@@ -130,23 +140,10 @@ describe("Learning Cards Page - Unit", () => {
 
   it("handles form submission for creating a card", async () => {
     const mockCreateCard = vi.fn().mockResolvedValue(true);
-    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
+    mockUseLearningCards.mockReturnValue({
+      ...defaultMockData,
       cards: [],
-      categories: [],
-      topics: [],
-      questions: [],
-      stats: { total: 0, categories: 0, topics: 0 },
-      loading: false,
-      error: null,
-      expandedCards: new Set(),
-      toggleCard: vi.fn(),
-      expandedCategories: new Set(),
-      toggleCategory: vi.fn(),
-      expandedTopics: new Set(),
-      toggleTopic: vi.fn(),
       createCard: mockCreateCard,
-      updateCard: vi.fn(),
-      deleteCard: vi.fn(),
     });
 
     render(<LearningCardsPage />);
@@ -164,23 +161,9 @@ describe("Learning Cards Page - Unit", () => {
 
   it("handles form submission for updating a card", async () => {
     const mockUpdateCard = vi.fn().mockResolvedValue(true);
-    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
-      cards: [{ id: "1", title: "Test Card" }],
-      categories: [],
-      topics: [],
-      questions: [],
-      stats: { total: 1, categories: 0, topics: 0 },
-      loading: false,
-      error: null,
-      expandedCards: new Set(),
-      toggleCard: vi.fn(),
-      expandedCategories: new Set(),
-      toggleCategory: vi.fn(),
-      expandedTopics: new Set(),
-      toggleTopic: vi.fn(),
-      createCard: vi.fn(),
+    mockUseLearningCards.mockReturnValue({
+      ...defaultMockData,
       updateCard: mockUpdateCard,
-      deleteCard: vi.fn(),
     });
 
     render(<LearningCardsPage />);
@@ -198,22 +181,8 @@ describe("Learning Cards Page - Unit", () => {
 
   it("handles card deletion", async () => {
     const mockDeleteCard = vi.fn().mockResolvedValue(true);
-    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
-      cards: [{ id: "1", title: "Test Card" }],
-      categories: [],
-      topics: [],
-      questions: [],
-      stats: { total: 1, categories: 0, topics: 0 },
-      loading: false,
-      error: null,
-      expandedCards: new Set(),
-      toggleCard: vi.fn(),
-      expandedCategories: new Set(),
-      toggleCategory: vi.fn(),
-      expandedTopics: new Set(),
-      toggleTopic: vi.fn(),
-      createCard: vi.fn(),
-      updateCard: vi.fn(),
+    mockUseLearningCards.mockReturnValue({
+      ...defaultMockData,
       deleteCard: mockDeleteCard,
     });
 
@@ -231,51 +200,23 @@ describe("Learning Cards Page - Unit", () => {
   });
 
   it("shows loading spinner when loading", () => {
-    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
+    mockUseLearningCards.mockReturnValue({
+      ...defaultMockData,
       cards: [],
-      categories: [],
-      topics: [],
-      questions: [],
-      stats: { total: 0, categories: 0, topics: 0 },
       loading: true,
-      error: null,
-      expandedCards: new Set(),
-      toggleCard: vi.fn(),
-      expandedCategories: new Set(),
-      toggleCategory: vi.fn(),
-      expandedTopics: new Set(),
-      toggleTopic: vi.fn(),
-      createCard: vi.fn(),
-      updateCard: vi.fn(),
-      deleteCard: vi.fn(),
     });
 
     render(<LearningCardsPage />);
 
     expect(screen.getByTestId("admin-navbar")).toBeInTheDocument();
     // Loading spinner should be present
-    const spinner = document.querySelector(".animate-spin");
-    expect(spinner).toBeInTheDocument();
+    expect(screen.getByRole("status")).toBeInTheDocument();
   });
 
   it("displays error message when there is an error", () => {
-    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
-      cards: [],
-      categories: [],
-      topics: [],
-      questions: [],
-      stats: { total: 0, categories: 0, topics: 0 },
-      loading: false,
+    mockUseLearningCards.mockReturnValue({
+      ...defaultMockData,
       error: "Test error message",
-      expandedCards: new Set(),
-      toggleCard: vi.fn(),
-      expandedCategories: new Set(),
-      toggleCategory: vi.fn(),
-      expandedTopics: new Set(),
-      toggleTopic: vi.fn(),
-      createCard: vi.fn(),
-      updateCard: vi.fn(),
-      deleteCard: vi.fn(),
     });
 
     render(<LearningCardsPage />);

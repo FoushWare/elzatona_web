@@ -52,20 +52,24 @@ vi.mock("@elzatona/common-ui", () => ({
   ),
   LearningCardsManager: ({ cards, onCardUpdate, onCardDelete }: any) => (
     <div data-testid="cards-manager">
-      {cards?.map((card: any) => (
-        <div key={card.id} data-testid={`card-${card.id}`}>
-          {card.title}
-        </div>
-      )) || "No cards"}
+      {cards && cards.length > 0
+        ? cards.map((card: any) => (
+            <div key={card.id} data-testid={`card-${card.id}`}>
+              {card.title}
+            </div>
+          ))
+        : "No cards"}
     </div>
   ),
   PlansManager: ({ plans, onPlanUpdate, onPlanDelete }: any) => (
     <div data-testid="plans-manager">
-      {plans?.map((plan: any) => (
-        <div key={plan.id} data-testid={`plan-${plan.id}`}>
-          {plan.title}
-        </div>
-      )) || "No plans"}
+      {plans && plans.length > 0
+        ? plans.map((plan: any) => (
+            <div key={plan.id} data-testid={`plan-${plan.id}`}>
+              {plan.title}
+            </div>
+          ))
+        : "No plans"}
     </div>
   ),
   TopicsManager: ({ topics, onTopicUpdate, onTopicDelete }: any) => (
@@ -169,7 +173,7 @@ describe("ContentManagementPage", () => {
       render(<ContentManagementPage />);
 
       expect(
-        screen.getByText("Loading content management..."),
+        screen.getByText("Loading content management data..."),
       ).toBeInTheDocument();
     });
   });
@@ -183,7 +187,7 @@ describe("ContentManagementPage", () => {
 
       render(<ContentManagementPage />);
 
-      expect(screen.getByText("Failed to load content")).toBeInTheDocument();
+      expect(screen.getByText(/Failed to load content/)).toBeInTheDocument();
     });
   });
 
@@ -191,7 +195,9 @@ describe("ContentManagementPage", () => {
     it("should render page title", () => {
       render(<ContentManagementPage />);
 
-      expect(screen.getByText("Content Management")).toBeInTheDocument();
+      expect(
+        screen.getByText(/Unified Learning Management/),
+      ).toBeInTheDocument();
     });
 
     it("should render stats section", () => {

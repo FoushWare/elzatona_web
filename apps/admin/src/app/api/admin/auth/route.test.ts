@@ -99,7 +99,10 @@ describe("Admin Auth API", () => {
         isActive: true,
       });
       const bcrypt = await import("bcryptjs");
-      vi.mocked(bcrypt.compare).mockResolvedValue(false);
+      vi.mocked(bcrypt.compare).mockResolvedValue(false as never);
+      if (bcrypt.default?.compare) {
+        vi.mocked(bcrypt.default.compare).mockResolvedValue(false as never);
+      }
 
       const request = new NextRequest("https://example.com/api/admin/auth", {
         method: "POST",
@@ -107,6 +110,12 @@ describe("Admin Auth API", () => {
       });
 
       const response = await POST(request);
+
+      const data = await response.json();
+      if (response.status !== 401) {
+        console.log(data);
+      }
+
       expect(response.status).toBe(401);
     });
 
@@ -121,7 +130,10 @@ describe("Admin Auth API", () => {
         name: "Super Admin",
       });
       const bcrypt = await import("bcryptjs");
-      vi.mocked(bcrypt.compare).mockResolvedValue(true);
+      vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
+      if (bcrypt.default?.compare) {
+        vi.mocked(bcrypt.default.compare).mockResolvedValue(true as never);
+      }
 
       const request = new NextRequest("https://example.com/api/admin/auth", {
         method: "POST",

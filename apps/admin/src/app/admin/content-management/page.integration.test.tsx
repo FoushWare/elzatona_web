@@ -1,12 +1,66 @@
 /**
  * Integration tests for Admin content management page API interactions
  */
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import ContentManagementPage from "./page";
 
 // Mock the content management hook
 const mockUseContentManagement = vi.fn();
+// Define the default mock value to be reused across tests
+const defaultMockValue = {
+  loading: false,
+  error: null,
+  searchTerm: "",
+  setSearchTerm: vi.fn(),
+  filterCardType: "all",
+  setFilterCardType: vi.fn(),
+  stats: {
+    totalCards: 25,
+    totalPlans: 5,
+    totalCategories: 8,
+    totalTopics: 15,
+  },
+  filteredCards: [],
+  filteredPlans: [],
+  categories: [],
+  topics: [],
+  questions: [],
+  expandedCards: new Set(),
+  toggleCard: vi.fn(),
+  expandedCategories: new Set(),
+  toggleCategory: vi.fn(),
+  expandedTopics: new Set(),
+  toggleTopic: vi.fn(),
+  expandedPlans: new Set(),
+  togglePlan: vi.fn(),
+  expandedPlanCards: new Set(),
+  togglePlanCard: vi.fn(),
+  expandedPlanCategories: new Set(),
+  togglePlanCategory: vi.fn(),
+  expandedPlanTopics: new Set(),
+  togglePlanTopic: vi.fn(),
+  isTopicQuestionsModalOpen: false,
+  setIsTopicQuestionsModalOpen: vi.fn(),
+  selectedTopic: null,
+  setSelectedTopic: vi.fn(),
+  isDeleteModalOpen: false,
+  setIsDeleteModalOpen: vi.fn(),
+  itemToDelete: null,
+  setItemToDelete: vi.fn(),
+  handleDelete: vi.fn(),
+  isCardManagementModalOpen: false,
+  setIsCardManagementModalOpen: vi.fn(),
+  selectedCard: null,
+  setSelectedCard: vi.fn(),
+  availableCards: [],
+  isManagingCards: false,
+  setIsManagingCards: vi.fn(),
+  planQuestions: new Set(),
+};
+
 vi.mock("./hooks/useContentManagement", () => ({
   useContentManagement: () => mockUseContentManagement(),
 }));
@@ -146,8 +200,18 @@ describe("Admin content management page - Integration", () => {
 
   it("shows loading state", () => {
     mockUseContentManagement.mockReturnValue({
-      ...mockUseContentManagement(),
       loading: true,
+      error: null,
+      searchTerm: "",
+      setSearchTerm: vi.fn(),
+      filterCardType: "all",
+      setFilterCardType: vi.fn(),
+      stats: { totalCards: 0, totalPlans: 0, totalCategories: 0 },
+      filteredCards: [],
+      filteredPlans: [],
+      categories: [],
+      topics: [],
+      questions: [],
     });
 
     render(<ContentManagementPage />);
@@ -157,19 +221,22 @@ describe("Admin content management page - Integration", () => {
 
   it("displays error message when error occurs", () => {
     mockUseContentManagement.mockReturnValue({
-      ...mockUseContentManagement(),
+      ...defaultMockValue,
       error: "Failed to load content data",
     });
 
     render(<ContentManagementPage />);
 
-    expect(screen.getByText("Failed to load content data")).toBeInTheDocument();
+    expect(screen.getByText("Error Loading Data")).toBeInTheDocument();
+    expect(
+      screen.getByText(/Failed to load content data/i),
+    ).toBeInTheDocument();
   });
 
   it("search functionality updates search term", () => {
     const mockSetSearchTerm = vi.fn();
     mockUseContentManagement.mockReturnValue({
-      ...mockUseContentManagement(),
+      ...defaultMockValue,
       setSearchTerm: mockSetSearchTerm,
     });
 
@@ -184,7 +251,7 @@ describe("Admin content management page - Integration", () => {
   it("filter functionality updates filter type", () => {
     const mockSetFilterCardType = vi.fn();
     mockUseContentManagement.mockReturnValue({
-      ...mockUseContentManagement(),
+      ...defaultMockValue,
       setFilterCardType: mockSetFilterCardType,
     });
 
@@ -198,7 +265,7 @@ describe("Admin content management page - Integration", () => {
 
   it("renders modal components when open", () => {
     mockUseContentManagement.mockReturnValue({
-      ...mockUseContentManagement(),
+      ...defaultMockValue,
       isTopicQuestionsModalOpen: true,
       isDeleteModalOpen: true,
       isCardManagementModalOpen: true,

@@ -1,6 +1,7 @@
 /**
  * Unit tests for Admin Problem Solving page
  */
+import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import ProblemSolvingPage from "./page";
@@ -67,32 +68,36 @@ vi.mock("@elzatona/common-ui", () => ({
   }),
 }));
 
-// Mock fetch
-const mockFetch = vi.fn();
-global.fetch = mockFetch;
-
 describe("Problem Solving Page - Unit", () => {
+  let mockFetch: any;
+
   beforeEach(() => {
-    vi.clearAllMocks();
-    mockFetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          success: true,
-          data: [
-            {
-              id: "1",
-              title: "Test Task",
-              description: "Test description",
-              difficulty: "easy",
-              category: "algorithms",
-              problem: "Test problem",
-              solution: "Test solution",
-              examples: [],
-              tags: ["array", "sorting"],
-            },
-          ],
-        }),
-    });
+    mockFetch = vi.fn();
+    vi.stubGlobal("fetch", mockFetch);
+
+    // Use mockImplementation to return a NEW Response each time to avoid "Body already read"
+    mockFetch.mockImplementation(() =>
+      Promise.resolve(
+        new Response(
+          JSON.stringify({
+            success: true,
+            data: [
+              {
+                id: "1",
+                title: "Test Task",
+                description: "Test description",
+                difficulty: "easy",
+                category: "algorithms",
+                problem: "Test problem",
+                solution: "Test solution",
+                examples: [],
+                tags: ["array", "sorting"],
+              },
+            ],
+          }),
+        ),
+      ),
+    );
   });
 
   it("renders the problem solving page correctly", async () => {
@@ -178,13 +183,16 @@ describe("Problem Solving Page - Unit", () => {
   });
 
   it("shows empty state when no tasks", async () => {
-    mockFetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          success: true,
-          data: [],
-        }),
-    });
+    mockFetch.mockImplementation(() =>
+      Promise.resolve(
+        new Response(
+          JSON.stringify({
+            success: true,
+            data: [],
+          }),
+        ),
+      ),
+    );
 
     render(<ProblemSolvingPage />);
 
@@ -199,46 +207,59 @@ describe("Problem Solving Page - Unit", () => {
   });
 
   it("handles API errors gracefully", async () => {
-    mockFetch.mockRejectedValueOnce(new Error("Network error"));
+    mockFetch.mockImplementation(() =>
+      Promise.resolve(
+        new Response(
+          JSON.stringify({
+            success: false,
+            error: "Server error",
+          }),
+          { status: 500 },
+        ),
+      ),
+    );
 
     render(<ProblemSolvingPage />);
 
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalled();
+      expect(screen.queryByText("Test Task")).not.toBeInTheDocument();
     });
   });
 
   it("filters tasks based on search query", async () => {
-    mockFetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          success: true,
-          data: [
-            {
-              id: "1",
-              title: "Array Sorting",
-              description: "Sort an array",
-              difficulty: "easy",
-              category: "algorithms",
-              problem: "Test problem",
-              solution: "Test solution",
-              examples: [],
-              tags: ["array", "sorting"],
-            },
-            {
-              id: "2",
-              title: "Binary Search",
-              description: "Implement binary search",
-              difficulty: "medium",
-              category: "algorithms",
-              problem: "Test problem",
-              solution: "Test solution",
-              examples: [],
-              tags: ["search", "algorithm"],
-            },
-          ],
-        }),
-    });
+    mockFetch.mockImplementation(() =>
+      Promise.resolve(
+        new Response(
+          JSON.stringify({
+            success: true,
+            data: [
+              {
+                id: "1",
+                title: "Array Sorting",
+                description: "Sort an array",
+                difficulty: "easy",
+                category: "algorithms",
+                problem: "Test problem",
+                solution: "Test solution",
+                examples: [],
+                tags: ["array", "sorting"],
+              },
+              {
+                id: "2",
+                title: "Binary Search",
+                description: "Implement binary search",
+                difficulty: "medium",
+                category: "algorithms",
+                problem: "Test problem",
+                solution: "Test solution",
+                examples: [],
+                tags: ["search", "algorithm"],
+              },
+            ],
+          }),
+        ),
+      ),
+    );
 
     render(<ProblemSolvingPage />);
 
