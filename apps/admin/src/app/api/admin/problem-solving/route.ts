@@ -22,7 +22,8 @@ export async function GET(request: NextRequest) {
     // Use repository pattern: findByType for 'problem'
     const options = { page, limit };
     const tasksResult = await questionRepo.findByType("problem", options);
-    let data: any[] = tasksResult.data || [];
+    let data: ProblemSolvingTask[] =
+      (tasksResult.data as unknown as ProblemSolvingTask[]) || [];
 
     // Apply additional filters client-side if needed
     if (category) {
@@ -78,8 +79,8 @@ export async function GET(request: NextRequest) {
     };
 
     return NextResponse.json(response);
-  } catch (error) {
-    console.error("❌ API: Error fetching problem solving tasks:", error);
+  } catch (_error) {
+    console.error("❌ API: Error fetching problem solving tasks:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch problem solving tasks" },
       { status: 500 },
@@ -122,8 +123,8 @@ export async function POST(request: NextRequest) {
       data: { id: newTask.id },
     };
     return NextResponse.json(response, { status: 201 });
-  } catch (error) {
-    console.error("❌ API: Error creating problem solving task:", error);
+  } catch (_error) {
+    console.error("❌ API: Error creating problem solving task:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to create problem solving task" },
       { status: 500 },
