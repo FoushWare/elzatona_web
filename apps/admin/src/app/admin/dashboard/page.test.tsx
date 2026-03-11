@@ -7,6 +7,7 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import AdminDashboardPage from "./page";
+import "@testing-library/jest-dom";
 import { useAdminAuth } from "@elzatona/contexts";
 import { useDashboardStats } from "@elzatona/hooks";
 

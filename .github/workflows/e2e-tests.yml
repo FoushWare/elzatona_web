@@ -99,6 +99,18 @@ jobs:
           echo "✅ Test database configuration verified"
 
       # --------------------------------------------------
+      # Initialize test database schema
+      # --------------------------------------------------
+      - name: Initialize test database schema
+        if: env.RUN_E2E_TESTS == 'true'
+        run: |
+          echo "🗄️ Initializing test database schema..."
+          npm run init:db
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+
+      # --------------------------------------------------
       # Build application (required for E2E tests)
       # --------------------------------------------------
       - name: Build application

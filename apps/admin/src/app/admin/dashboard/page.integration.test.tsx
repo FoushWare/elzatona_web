@@ -3,14 +3,15 @@
  */
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import AdminDashboardPage from "./page";
 
 // Mock the admin auth context
 vi.mock("@elzatona/contexts", () => ({
-  useAdminAuth: () => ({
+  useAdminAuth: vi.fn(() => ({
     user: { id: "admin-1", email: "admin@example.com", name: "Admin User" },
-  }),
+  })),
 }));
 
 // Mock the AdminDashboard component to avoid complex API interactions

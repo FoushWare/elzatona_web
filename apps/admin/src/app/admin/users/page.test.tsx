@@ -7,6 +7,7 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import UserManagementPage from "./page";
+import "@testing-library/jest-dom";
 import * as sharedContexts from "@elzatona/contexts";
 
 // Mock shared contexts

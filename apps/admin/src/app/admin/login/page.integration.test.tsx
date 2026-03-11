@@ -5,6 +5,7 @@ import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import AdminLoginPage from "./page";
+import "@testing-library/jest-dom";
 
 // Mock Next.js router
 const mockPush = vi.fn();
