@@ -1,5 +1,6 @@
+"use client";
+
 import React from "react";
-("use client");
 
 import dynamic from "next/dynamic";
 import "swagger-ui-react/swagger-ui.css";

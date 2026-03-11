@@ -1,5 +1,6 @@
+"use client";
+
 import React from "react";
-("use client");
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
