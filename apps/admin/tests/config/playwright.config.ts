@@ -86,7 +86,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: "http://localhost:3000",
+    baseURL: process.env.ADMIN_BASE_URL || "http://localhost:3001",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
@@ -101,16 +101,26 @@ export default defineConfig({
   /* Configure projects for major browsers - CHROME and EDGE for testing */
   projects: [
     {
+      name: "setup",
+      testMatch: /auth\.setup\.ts/,
+    },
+    {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: resolve(__dirname, "../.auth/admin.json"),
+      },
+      dependencies: ["setup"],
     },
     {
       name: "msedge",
       use: {
         ...devices["Desktop Edge"],
+        storageState: resolve(__dirname, "../.auth/admin.json"),
         // Edge uses Chromium engine, so it should be compatible
         // Add any Edge-specific settings here if needed
       },
+      dependencies: ["setup"],
     },
 
     /* Other browsers disabled for faster test execution - uncomment if needed */

@@ -127,7 +127,7 @@
     "test:integration:shared-components": "NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 jest --config=apps/website/jest.config.js --testPathPatterns='(shared-components|integration)' --maxWorkers=1 --silent",
     "test:e2e:guided-flow": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/guided-flow/ --workers=1",
     "test:e2e:freestyle-flow": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/freestyle-flow/ --workers=1",
-    "test:e2e:admin": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/ --workers=1",
+    "test:e2e:admin": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=apps/admin/tests/config/playwright.config.ts --workers=1",
     "test:e2e:admin:questions:basic": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-questions-page.basic.spec.ts --workers=1",
     "test:e2e:admin:questions:crud": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-questions-page.crud.spec.ts --workers=1",
     "test:e2e:admin:questions:search": "NODE_OPTIONS=--max-old-space-size=1536 playwright test --config=tests/config/playwright.config.ts tests/e2e/admin/admin-questions-page.search.spec.ts --workers=1",
