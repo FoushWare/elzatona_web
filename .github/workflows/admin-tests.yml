@@ -75,7 +75,11 @@ jobs:
       - name: Verify build output
         run: |
           echo "🔍 Verifying build output directory..."
-          ls -la apps/admin/.next || (echo "❌ Build output apps/admin/.next NOT FOUND" && exit 1)
+          ls -la apps/admin/.next || echo "⚠️  apps/admin/.next not found directly"
+          echo "📂 Searching for all .next directories..."
+          find . -name ".next" -type d
+          # Fail if we can't find the expected output
+          ls -d apps/admin/.next || (echo "❌ Build output apps/admin/.next NOT FOUND" && exit 1)
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -83,6 +87,7 @@ jobs:
           name: admin-build
           path: apps/admin/.next
           retention-days: 1
+          if-no-files-found: error
 
   admin-e2e-tests:
     name: Admin E2E Tests (Shard ${{ matrix.shard }}/${{ strategy.job-total }})
