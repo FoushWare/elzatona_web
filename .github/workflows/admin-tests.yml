@@ -61,14 +61,61 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Build admin app
+        run: |
+          echo "🏗️ Building admin app for E2E tests..."
+          cd apps/admin && npx next build
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+          NEXT_TELEMETRY_DISABLED: "1"
+          APP_ENV: "test"
+          NEXT_PUBLIC_APP_ENV: "test"
+          NODE_ENV: "production"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Start admin server
+        run: |
+          echo "🚀 Starting admin server on port 3001..."
+          cd apps/admin && npx next start -p 3001 > ../../admin.log 2>&1 &
+          ADMIN_PID=$!
+          echo "ADMIN_PID=$ADMIN_PID" >> $GITHUB_ENV
+
+          echo "⏳ Waiting for admin server to be ready..."
+          for i in {1..60}; do
+            if curl -sf http://localhost:3001 > /dev/null 2>&1; then
+              echo "✅ Admin server is ready!"
+              break
+            fi
+            if [ $i -eq 60 ]; then
+              echo "❌ Admin server failed to start after 60 seconds"
+              cat ../../admin.log | tail -n 30
+              exit 1
+            fi
+            sleep 1
+          done
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+          APP_ENV: "test"
+          NEXT_PUBLIC_APP_ENV: "test"
+          NODE_ENV: "production"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
       - name: Run Admin E2E tests
         run: |
           # Use the admin-specific playwright config
+          # ADMIN_BASE_URL tells playwright the server is already running
           npx playwright test --config=apps/admin/tests/config/playwright.config.ts --project=chromium
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
           CI: "true"
           APP_ENV: "test"
+          ADMIN_BASE_URL: "http://localhost:3001"
           # These secrets must be configured in GitHub
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
@@ -77,6 +124,14 @@ jobs:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
+      - name: Stop admin server
+        if: always()
+        run: |
+          if [ -n "$ADMIN_PID" ]; then
+            kill $ADMIN_PID 2>/dev/null || true
+          fi
+          pkill -f "next-server" || true
+
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
@@ -84,3 +139,4 @@ jobs:
           name: admin-playwright-report
           path: apps/admin/playwright-report/
           retention-days: 7
+

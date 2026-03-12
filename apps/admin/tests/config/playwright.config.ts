@@ -144,18 +144,19 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    // Use dev:light:test to ensure Next.js loads .env.test.local for test database
-    command:
-      "NODE_OPTIONS=--max-old-space-size=1536 APP_ENV=test NEXT_PUBLIC_APP_ENV=test npx next dev -p 3001", // Start admin dev server on port 3001
-    url: "http://localhost:3001",
-    cwd: resolve(projectRoot, "apps/admin"), // Must run from apps/admin so Next.js finds the app directory
-    reuseExistingServer: !process.env.CI,
+    // In CI, we pre-start the server in the workflow for speed and reliability.
+    // Locally, we can use dev or start.
+    command: process.env.CI
+      ? "npx next start -p 3001"
+      : "NODE_OPTIONS=--max-old-space-size=1536 APP_ENV=test NEXT_PUBLIC_APP_ENV=test npx next dev -p 3001",
+    url: process.env.ADMIN_BASE_URL || "http://localhost:3001",
+    cwd: resolve(projectRoot, "apps/admin"),
+    reuseExistingServer: true, // Always reuse if already running
     timeout: 120 * 1000, // 2 minutes
     env: {
-      // Ensure test environment is set for the dev server
       APP_ENV: "test",
       NEXT_PUBLIC_APP_ENV: "test",
-      NODE_ENV: "test",
+      NODE_ENV: process.env.CI ? "production" : "test",
     },
   },
 
