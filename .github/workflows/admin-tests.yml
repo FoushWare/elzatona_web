@@ -60,7 +60,7 @@ jobs:
       - name: Build admin app
         run: |
           echo "🏗️ Building admin app for E2E tests..."
-          cd apps/admin && npx next build
+          npx nx build admin
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
           NEXT_TELEMETRY_DISABLED: "1"
@@ -71,6 +71,11 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Verify build output
+        run: |
+          echo "🔍 Verifying build output directory..."
+          ls -la apps/admin/.next || (echo "❌ Build output apps/admin/.next NOT FOUND" && exit 1)
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
