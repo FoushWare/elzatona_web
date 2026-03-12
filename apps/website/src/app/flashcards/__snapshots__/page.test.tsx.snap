@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`F-UT-SNAPSHOT: Flashcards Snapshot Tests should match flashcards page snapshot (list mode) 1`] = `
+<div
+  class="min-h-screen p-8"
+>
+  <h1
+    class="text-2xl font-bold"
+  >
+    flashcards
+  </h1>
+  <p>
+    Page component - needs implementation
+  </p>
+</div>
+`;
+
+exports[`F-UT-SNAPSHOT: Flashcards Snapshot Tests should match flashcards page snapshot (with flashcards) 1`] = `
+<div
+  class="min-h-screen p-8"
+>
+  <h1
+    class="text-2xl font-bold"
+  >
+    flashcards
+  </h1>
+  <p>
+    Page component - needs implementation
+  </p>
+</div>
+`;

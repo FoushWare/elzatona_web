@@ -145,8 +145,9 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     // Use dev:light:test to ensure Next.js loads .env.test.local for test database
-    command: "NODE_OPTIONS=--max-old-space-size=1536 npm run dev:light:test", // Use light mode for 8GB RAM with test environment
-    url: "http://localhost:3000",
+    command:
+      "NODE_OPTIONS=--max-old-space-size=1536 APP_ENV=test NEXT_PUBLIC_APP_ENV=test npx next dev -p 3001", // Start admin dev server on port 3001
+    url: "http://localhost:3001",
     cwd: projectRoot,
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000, // 2 minutes

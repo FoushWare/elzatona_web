@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`F-UT-SNAPSHOT: Custom Roadmap Creation Snapshot Tests should match custom roadmap page snapshot (unauthenticated) 1`] = `
+<div
+  class="min-h-screen p-8"
+>
+  <h1
+    class="text-2xl font-bold"
+  >
+    custom-roadmap
+  </h1>
+  <p>
+    Page component - needs implementation
+  </p>
+</div>
+`;
+
+exports[`F-UT-SNAPSHOT: Custom Roadmap Creation Snapshot Tests should match custom roadmap page snapshot 1`] = `
+<div
+  class="min-h-screen p-8"
+>
+  <h1
+    class="text-2xl font-bold"
+  >
+    custom-roadmap
+  </h1>
+  <p>
+    Page component - needs implementation
+  </p>
+</div>
+`;
