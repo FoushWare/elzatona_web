@@ -476,10 +476,10 @@ export async function bulkDeleteQuestions(
  */
 async function waitForServerReady(
   page: Page,
-  maxRetries = 10,
-  retryDelay = 1000,
+  maxRetries = 15, // Increased retries for CI stability
+  retryDelay = 2000, // Increased delay
 ): Promise<void> {
-  const baseURL = "http://localhost:3000";
+  const baseURL = process.env.ADMIN_BASE_URL || "http://localhost:3001";
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -495,7 +495,7 @@ async function waitForServerReady(
       const _err = error instanceof Error ? error : new Error(String(error));
       if (attempt < maxRetries) {
         console.log(
-          `⏳ Waiting for server to be ready (attempt ${attempt}/${maxRetries})...`,
+          `⏳ Waiting for server to be ready at ${baseURL} (attempt ${attempt}/${maxRetries})...`,
         );
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
       } else {

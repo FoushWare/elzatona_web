@@ -139,4 +139,3 @@ jobs:
           name: admin-playwright-report
           path: apps/admin/playwright-report/
           retention-days: 7
-
