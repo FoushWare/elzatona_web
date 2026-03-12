@@ -462,7 +462,7 @@ export async function bulkDeleteQuestions(
           // Wait for modal to close - check for dialog to disappear
           await dialog
             .waitFor({ state: "hidden", timeout: 10000 })
-            .catch(() => { });
+            .catch(() => {});
           await page.waitForTimeout(2000);
         }
       }
@@ -501,8 +501,8 @@ async function waitForServerReady(
       } else {
         throw new Error(
           `Dev server is not ready after ${maxRetries} attempts. ` +
-          `Please ensure the dev server is running at ${baseURL} or check Playwright's webServer configuration. ` +
-          `Error: ${_err.message}`,
+            `Please ensure the dev server is running at ${baseURL} or check Playwright's webServer configuration. ` +
+            `Error: ${_err.message}`,
         );
       }
     }
@@ -582,20 +582,23 @@ export async function setupNetworkMocks(page: Page): Promise<void> {
   });
 
   // Prevent ANY other Supabase or external API call from leaving the browser
-  await page.route((url) => {
-    const urlStr = url.toString();
-    return (
-      urlStr.includes("supabase.co") ||
-      (urlStr.includes("/api/") && !urlStr.includes("localhost"))
-    );
-  }, async (route) => {
-    console.log(`[Mock] 🚫 Blocking external call: ${route.request().url()}`);
-    await route.fulfill({
-      status: 404,
-      contentType: "application/json",
-      body: JSON.stringify({ error: "Network isolated for E2E testing" }),
-    });
-  });
+  await page.route(
+    (url) => {
+      const urlStr = url.toString();
+      return (
+        urlStr.includes("supabase.co") ||
+        (urlStr.includes("/api/") && !urlStr.includes("localhost"))
+      );
+    },
+    async (route) => {
+      console.log(`[Mock] 🚫 Blocking external call: ${route.request().url()}`);
+      await route.fulfill({
+        status: 404,
+        contentType: "application/json",
+        body: JSON.stringify({ error: "Network isolated for E2E testing" }),
+      });
+    },
+  );
 }
 
 export async function setupAdminPage(
@@ -1023,8 +1026,8 @@ export async function setupAdminPage(
         if (errorMsg.includes("Invalid email or password")) {
           throw new Error(
             `Login failed: ${errorMsg}\n\n` +
-            `Test credentials (${adminEmail}) do not exist in the database.\n` +
-            `Check ADMIN_EMAIL and ADMIN_PASSWORD in .env.test.local`,
+              `Test credentials (${adminEmail}) do not exist in the database.\n` +
+              `Check ADMIN_EMAIL and ADMIN_PASSWORD in .env.test.local`,
           );
         }
         throw new Error(
@@ -1081,10 +1084,10 @@ export async function setupAdminPage(
         if (currentURL.includes("/admin/login")) {
           throw new Error(
             `Login API succeeded but navigation failed - still on login page.\n` +
-            `This may indicate:\n` +
-            `1. Redirect logic is not working after successful login\n` +
-            `2. Client-side navigation is blocked\n` +
-            `3. Session/token storage issue`,
+              `This may indicate:\n` +
+              `1. Redirect logic is not working after successful login\n` +
+              `2. Client-side navigation is blocked\n` +
+              `3. Session/token storage issue`,
           );
         }
         const navErr =
@@ -1187,11 +1190,11 @@ export async function setupAdminPage(
         ) {
           throw new Error(
             `Dev server is not running or not ready. ` +
-            `Please ensure:\n` +
-            `1. The dev server is running at http://localhost:3000\n` +
-            `2. Playwright's webServer configuration is working correctly\n` +
-            `3. Try running: npm run dev:light:test\n` +
-            `Original error: ${navErr.message}`,
+              `Please ensure:\n` +
+              `1. The dev server is running at http://localhost:3000\n` +
+              `2. Playwright's webServer configuration is working correctly\n` +
+              `3. Try running: npm run dev:light:test\n` +
+              `Original error: ${navErr.message}`,
           );
         }
 
@@ -1215,8 +1218,8 @@ export async function setupAdminPage(
                     : new Error(String(retryError));
                 throw new Error(
                   `Failed to navigate to questions page after retry. ` +
-                  `Original error: ${navErr.message}. ` +
-                  `Retry error: ${retryErr.message}`,
+                    `Original error: ${navErr.message}. ` +
+                    `Retry error: ${retryErr.message}`,
                 );
               });
           }

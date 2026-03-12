@@ -148,7 +148,7 @@ export default defineConfig({
     command:
       "NODE_OPTIONS=--max-old-space-size=1536 APP_ENV=test NEXT_PUBLIC_APP_ENV=test npx next dev -p 3001", // Start admin dev server on port 3001
     url: "http://localhost:3001",
-    cwd: projectRoot,
+    cwd: resolve(projectRoot, "apps/admin"), // Must run from apps/admin so Next.js finds the app directory
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000, // 2 minutes
     env: {

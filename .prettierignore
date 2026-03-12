@@ -96,3 +96,7 @@ tools/
 
 # Logs directories (matches gitignore pattern)
 **/logs/
+
+# Agent skills and configurations (not project source)
+.agents/
+.agent/
