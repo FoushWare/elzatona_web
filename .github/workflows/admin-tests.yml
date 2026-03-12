@@ -43,9 +43,13 @@ jobs:
           NODE_OPTIONS: "--max-old-space-size=2048"
 
   admin-e2e-tests:
-    name: Admin E2E Tests
+    name: Admin E2E Tests (Shard ${{ matrix.shard }}/${{ strategy.job-total }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -54,6 +58,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm install
@@ -110,7 +115,8 @@ jobs:
         run: |
           # Use the admin-specific playwright config
           # ADMIN_BASE_URL tells playwright the server is already running
-          npx playwright test --config=apps/admin/tests/config/playwright.config.ts --project=chromium
+          # Using sharding to parallelize tests across multiple runners
+          npx playwright test --config=apps/admin/tests/config/playwright.config.ts --project=chromium --shard=${{ matrix.shard }}/${{ strategy.job-total }}
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
           CI: "true"
@@ -136,6 +142,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: admin-playwright-report
+          name: admin-playwright-report-shard-${{ matrix.shard }}
           path: apps/admin/playwright-report/
           retention-days: 7

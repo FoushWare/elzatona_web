@@ -69,14 +69,14 @@ if (loadedFiles.length > 0 && process.env.DEBUG_TEST_ENV === "true") {
  */
 export default defineConfig({
   testDir: "../e2e",
-  /* Run tests in files in parallel - DISABLED for 8GB RAM */
-  fullyParallel: false, // Disabled for 8GB RAM Mac
+  /* Run tests in files in parallel - ENABLED for faster CI */
+  fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Use 1 worker for 8GB RAM Mac - prevents OOM errors */
-  workers: process.env.CI ? 1 : 1, // Always use 1 worker for memory efficiency
+  /* Use 2 workers for CI to utilize 2 vCPUs on GitHub runners */
+  workers: process.env.CI ? 2 : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ["html"],
