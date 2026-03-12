@@ -7,27 +7,41 @@ const authFile = path.join(__dirname, "../.auth/admin.json");
 setup("authenticate as admin", async ({ page }) => {
   console.log("🔐 Starting admin authentication setup...");
 
-  // Use the admin login page
-  // Note: baseURL should be set to the admin app URL (e.g., http://localhost:3001)
-  await page.goto("/admin/login");
-
   const email = process.env.ADMIN_EMAIL;
-  // Fallback to 'password' which matches our seeded hash in init-test-db.mjs
-  const password = process.env.ADMIN_PASSWORD || "password";
+  const password = process.env.ADMIN_PASSWORD;
 
-  if (!email) {
-    throw new Error("ADMIN_EMAIL must be set for E2E tests");
+  if (!email || !password) {
+    throw new Error(
+      "❌ ADMIN_EMAIL and ADMIN_PASSWORD must be set for E2E tests. " +
+      "Please check your GitHub Secrets or .env.test.local file."
+    );
   }
+
+  // Use the admin login page
+  console.log("🌐 Navigating to /admin/login...");
+  await page.goto("/admin/login", { waitUntil: "networkidle" });
+
+  // Handle the initial "Loading..." state of the Admin Auth Provider
+  console.log("⏳ Waiting for login form to be ready...");
+  const emailInput = page.locator('input[type="email"]');
+  const passwordInput = page.locator('input[type="password"]');
+
+  // Wait for inputs to be visible (handles the spinner state)
+  await emailInput.waitFor({ state: "visible", timeout: 15000 });
+  await passwordInput.waitFor({ state: "visible", timeout: 15000 });
 
   console.log(`🔐 Attempting login for: ${email.substring(0, 10)}...`);
 
-  await page.fill('input[type="email"]', email);
-  await page.fill('input[type="password"]', password);
-  await page.click('button[type="submit"]');
+  await emailInput.fill(email);
+  await passwordInput.fill(password);
+
+  const submitButton = page.locator('button[type="submit"]');
+  await submitButton.click();
 
   // Wait for navigation to dashboard
   console.log("⏳ Waiting for dashboard navigation...");
-  await page.waitForURL("**/admin/dashboard", { timeout: 30000 });
+  // Use a more flexible URL match to handle trailing slashes or query params
+  await page.waitForURL(/.*\/admin\/dashboard/, { timeout: 30000 });
 
   // Verify we are indeed on the dashboard
   await expect(page).toHaveURL(/.*\/admin\/dashboard/);
