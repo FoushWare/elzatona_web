@@ -14,7 +14,7 @@ setup("authenticate as admin", async ({ page }) => {
   if (!email || !password) {
     throw new Error(
       "❌ ADMIN_EMAIL and ADMIN_PASSWORD must be set for E2E tests. " +
-      "Please check your GitHub Secrets or .env.test.local file."
+        "Please check your GitHub Secrets or .env.test.local file.",
     );
   }
 
