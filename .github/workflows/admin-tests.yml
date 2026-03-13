@@ -57,6 +57,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Verify pre-build state
+        run: |
+          echo "🧹 Checking for existing build artifacts..."
+          ls -d apps/admin/.next || echo "✅ No pre-existing apps/admin/.next found"
+
       - name: Build admin app
         run: |
           echo "🏗️ Building admin app for E2E tests..."
@@ -72,22 +77,21 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
-      - name: Verify build output
+      - name: Package build artifacts
         run: |
           echo "🔍 Verifying build output directory..."
-          ls -la apps/admin/.next || echo "⚠️  apps/admin/.next not found directly"
-          echo "📂 Recursive listing of apps/admin/.next (Full)..."
-          ls -R apps/admin/.next
-          echo "📂 Searching for all .next directories..."
-          find . -name ".next" -type d
-          # Fail if we can't find the expected output
           ls -d apps/admin/.next || (echo "❌ Build output apps/admin/.next NOT FOUND" && exit 1)
+          echo "📂 Recursive listing of apps/admin/.next (Partial)..."
+          ls -R apps/admin/.next | head -n 50
+          echo "📦 Zipping .next directory for reliable upload..."
+          cd apps/admin && zip -r admin-build.zip .next
+          ls -lh apps/admin/admin-build.zip
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: admin-build
-          path: apps/admin/.next
+          name: admin-build-zip
+          path: apps/admin/admin-build.zip
           retention-days: 1
           if-no-files-found: error
 
@@ -115,8 +119,14 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: admin-build
-          path: apps/admin/.next
+          name: admin-build-zip
+          path: apps/admin/
+
+      - name: Unzip build artifacts
+        run: |
+          echo "📂 Unzipping build artifacts..."
+          cd apps/admin && unzip admin-build.zip && rm admin-build.zip
+          ls -la .next
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
