@@ -76,8 +76,8 @@ jobs:
         run: |
           echo "🔍 Verifying build output directory..."
           ls -la apps/admin/.next || echo "⚠️  apps/admin/.next not found directly"
-          echo "📂 Recursive listing (first 50 files)..."
-          ls -R apps/admin/.next | head -n 50
+          echo "📂 Recursive listing of apps/admin/.next (Full)..."
+          ls -R apps/admin/.next
           echo "📂 Searching for all .next directories..."
           find . -name ".next" -type d
           # Fail if we can't find the expected output
@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: admin-build
-          path: apps/admin/.next/
+          path: apps/admin/.next
           retention-days: 1
           if-no-files-found: error
 
