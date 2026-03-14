@@ -684,24 +684,24 @@ export async function setupAdminPage(
   // We use a small timeout to allow for the client-side redirect to happen
   await page.waitForTimeout(2000);
 
-  let currentURL = "";
+  let settledURL = "";
   try {
-    currentURL = page.url();
+    settledURL = page.url();
   } catch (_e) {
     // Ignore error if page is navigating
   }
 
-  console.log(`📍 Current URL: ${currentURL}`);
+  console.log(`📍 Current URL: ${settledURL}`);
 
   if (
-    currentURL.includes("/admin/content/questions") ||
-    currentURL.includes("/admin/dashboard")
+    settledURL.includes("/admin/content/questions") ||
+    settledURL.includes("/admin/dashboard")
   ) {
     console.log(
       "✅ Already authenticated via storageState. Skipping login flow.",
     );
     // Ensure we are actually on the questions page for the test
-    if (!currentURL.includes("/admin/content/questions")) {
+    if (!settledURL.includes("/admin/content/questions")) {
       console.log("➡️ Navigating from dashboard to questions page...");
       await page.goto("/admin/content/questions", { waitUntil: "domcontentloaded" });
     }
@@ -711,7 +711,7 @@ export async function setupAdminPage(
   // If we are on the login page, we need to fill out the form
   console.log("🔑 Not authenticated, proceeding with login...");
 
-  if (!currentURL.includes("/admin/login")) {
+  if (!settledURL.includes("/admin/login")) {
     console.log("➡️ Forced navigation to /admin/login...");
     await page.goto("/admin/login", {
       waitUntil: isEdge ? "networkidle" : "domcontentloaded",
