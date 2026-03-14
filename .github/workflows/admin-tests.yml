@@ -84,7 +84,7 @@ jobs:
           echo "📂 Recursive listing of apps/admin/.next (Partial)..."
           ls -R apps/admin/.next | head -n 50
           echo "📦 Zipping .next directory for reliable upload..."
-          cd apps/admin && zip -r admin-build.zip .next
+          (cd apps/admin && zip -r admin-build.zip .next)
           ls -lh apps/admin/admin-build.zip
 
       - name: Upload build artifact
