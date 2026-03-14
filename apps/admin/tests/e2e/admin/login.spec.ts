@@ -23,23 +23,27 @@ test.describe("Admin Authentication", () => {
     await expect(page.locator("h1")).toContainText("Admin Dashboard");
   });
 
-  test("failed login shows error", async ({ page }) => {
-    await page.goto("/admin/login");
+  test.describe("Unauthenticated tests", () => {
+    // Override storage state to start fresh
+    test.use({ storageState: { cookies: [], origins: [] } });
 
-    await page.fill('input[type="email"]', "wrong@example.com");
-    await page.fill('input[type="password"]', "wrongpassword");
+    test("failed login shows error", async ({ page }) => {
+      await page.goto("/admin/login");
 
-    await page.click('button[type="submit"]');
+      await page.fill('input[type="email"]', "wrong@example.com");
+      await page.fill('input[type="password"]', "wrongpassword");
 
-    // Should show error message (sonner toast or inline error)
-    // Adjust selector based on actual implementation
-    await expect(page.getByText(/Invalid/)).toBeVisible();
-  });
+      await page.click('button[type="submit"]');
 
-  test("protected routes redirect to login", async ({ page }) => {
-    await page.goto("/admin/dashboard");
+      // Should show error message (sonner toast or inline error)
+      await expect(page.getByText(/Invalid/)).toBeVisible();
+    });
 
-    // Should be redirected back to login if not authenticated
-    await expect(page).toHaveURL(/\/admin\/login/);
+    test("protected routes redirect to login", async ({ page }) => {
+      await page.goto("/admin/dashboard");
+
+      // Should be redirected back to login if not authenticated
+      await expect(page).toHaveURL(/\/admin\/login/);
+    });
   });
 });

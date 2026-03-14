@@ -462,7 +462,7 @@ export async function bulkDeleteQuestions(
           // Wait for modal to close - check for dialog to disappear
           await dialog
             .waitFor({ state: "hidden", timeout: 10000 })
-            .catch(() => {});
+            .catch(() => { });
           await page.waitForTimeout(2000);
         }
       }
@@ -501,8 +501,8 @@ async function waitForServerReady(
       } else {
         throw new Error(
           `Dev server is not ready after ${maxRetries} attempts. ` +
-            `Please ensure the dev server is running at ${baseURL} or check Playwright's webServer configuration. ` +
-            `Error: ${_err.message}`,
+          `Please ensure the dev server is running at ${baseURL} or check Playwright's webServer configuration. ` +
+          `Error: ${_err.message}`,
         );
       }
     }
@@ -669,13 +669,33 @@ export async function setupAdminPage(
     `🌐 Running test in browser: ${browserName}${isEdge ? " (Edge)" : ""}`,
   );
 
-  // Login as admin first
+  // Navigate to login page
   await page.goto("/admin/login", {
     waitUntil: isEdge ? "networkidle" : "domcontentloaded",
     timeout: isEdge ? 30000 : 20000,
   });
 
-  // Wait for login form to be ready - check for heading first
+  // Check if we were instantly redirected to the dashboard (meaning we're already logged in via storageState)
+  let initialURL = "";
+  try {
+    initialURL = page.url();
+  } catch (_e) {
+    // Ignore error if page is navigating
+  }
+
+  if (
+    initialURL.includes("/admin/dashboard") ||
+    initialURL.includes("/admin/content")
+  ) {
+    console.log(
+      "✅ Already authenticated via storageState. Skipping login form.",
+    );
+    // Already logged in, no need to fill out the form! Wait for page load and return.
+    await page.waitForLoadState("domcontentloaded", { timeout: 10000 });
+    return;
+  }
+
+  // If we are still on the login page or navigating there, wait for the form to be ready
   await page
     .getByRole("heading", { name: /Admin Login/i })
     .waitFor({ timeout: 15000 });
@@ -1026,8 +1046,8 @@ export async function setupAdminPage(
         if (errorMsg.includes("Invalid email or password")) {
           throw new Error(
             `Login failed: ${errorMsg}\n\n` +
-              `Test credentials (${adminEmail}) do not exist in the database.\n` +
-              `Check ADMIN_EMAIL and ADMIN_PASSWORD in .env.test.local`,
+            `Test credentials (${adminEmail}) do not exist in the database.\n` +
+            `Check ADMIN_EMAIL and ADMIN_PASSWORD in .env.test.local`,
           );
         }
         throw new Error(
@@ -1084,10 +1104,10 @@ export async function setupAdminPage(
         if (currentURL.includes("/admin/login")) {
           throw new Error(
             `Login API succeeded but navigation failed - still on login page.\n` +
-              `This may indicate:\n` +
-              `1. Redirect logic is not working after successful login\n` +
-              `2. Client-side navigation is blocked\n` +
-              `3. Session/token storage issue`,
+            `This may indicate:\n` +
+            `1. Redirect logic is not working after successful login\n` +
+            `2. Client-side navigation is blocked\n` +
+            `3. Session/token storage issue`,
           );
         }
         const navErr =
@@ -1190,11 +1210,11 @@ export async function setupAdminPage(
         ) {
           throw new Error(
             `Dev server is not running or not ready. ` +
-              `Please ensure:\n` +
-              `1. The dev server is running at http://localhost:3000\n` +
-              `2. Playwright's webServer configuration is working correctly\n` +
-              `3. Try running: npm run dev:light:test\n` +
-              `Original error: ${navErr.message}`,
+            `Please ensure:\n` +
+            `1. The dev server is running at http://localhost:3000\n` +
+            `2. Playwright's webServer configuration is working correctly\n` +
+            `3. Try running: npm run dev:light:test\n` +
+            `Original error: ${navErr.message}`,
           );
         }
 
@@ -1218,8 +1238,8 @@ export async function setupAdminPage(
                     : new Error(String(retryError));
                 throw new Error(
                   `Failed to navigate to questions page after retry. ` +
-                    `Original error: ${navErr.message}. ` +
-                    `Retry error: ${retryErr.message}`,
+                  `Original error: ${navErr.message}. ` +
+                  `Retry error: ${retryErr.message}`,
                 );
               });
           }
