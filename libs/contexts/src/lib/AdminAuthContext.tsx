@@ -29,7 +29,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
     process.env["NODE_ENV"] === "production" &&
     !process.env["NEXT_PHASE"]?.includes("build")
   ) {
-    throw new Error(
+    console.error(
       "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set",
     );
   }
@@ -151,7 +151,10 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
             email: session.user.email || "",
             role: adminData.role || "admin",
             name: adminData.name || adminData.email,
-            expiresAt: new Date(session.expires_at! * 1000).toISOString(),
+            expiresAt:
+              session.expires_at !== undefined
+                ? new Date(session.expires_at * 1000).toISOString()
+                : new Date(Date.now() + 3600 * 1000).toISOString(), // Default to 1 hour if missing
             created_at: adminData.created_at,
             updated_at: adminData.updated_at,
           };
