@@ -186,10 +186,26 @@ jobs:
           fi
           pkill -f "next-server" || true
 
+      - name: Debug - List files for report location
+        if: always()
+        run: |
+          echo "🔍 Searching for Playwright reports and test results..."
+          find . -name "playwright-report" -type d
+          find . -name "test-results" -type d
+          echo "📂 Top level directory contents:"
+          ls -F
+          echo "📂 apps/admin/tests/config contents:"
+          ls -F apps/admin/tests/config/ || true
+
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: admin-playwright-report-shard-${{ matrix.shard }}
-          path: playwright-report/
+          path: |
+            playwright-report/
+            apps/admin/tests/config/playwright-report/
+            apps/admin/tests/config/test-results/
+            test-results/
+          if-no-files-found: warn
           retention-days: 7

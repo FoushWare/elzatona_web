@@ -669,40 +669,62 @@ export async function setupAdminPage(
     `🌐 Running test in browser: ${browserName}${isEdge ? " (Edge)" : ""}`,
   );
 
-  // Navigate to login page
-  await page.goto("/admin/login", {
+  // Navigate to the questions page directly - this is a protected route
+  // If we have a valid session in storageState, we'll stay here
+  // If not, the application will redirect us to /admin/login
+  console.log("🌐 Navigating to /admin/content/questions...");
+  await page.goto("/admin/content/questions", {
     waitUntil: isEdge ? "networkidle" : "domcontentloaded",
     timeout: isEdge ? 30000 : 20000,
+  }).catch(e => {
+    console.log(`⚠️ Initial navigation failed: ${e.message}. Continuing...`);
   });
 
-  // Check if we were instantly redirected to the dashboard (meaning we're already logged in via storageState)
-  let initialURL = "";
+  // Wait for the URL to settle (either stayed on questions or redirected to login)
+  // We use a small timeout to allow for the client-side redirect to happen
+  await page.waitForTimeout(2000);
+
+  let currentURL = "";
   try {
-    initialURL = page.url();
+    currentURL = page.url();
   } catch (_e) {
     // Ignore error if page is navigating
   }
 
+  console.log(`📍 Current URL: ${currentURL}`);
+
   if (
-    initialURL.includes("/admin/dashboard") ||
-    initialURL.includes("/admin/content")
+    currentURL.includes("/admin/content/questions") ||
+    currentURL.includes("/admin/dashboard")
   ) {
     console.log(
-      "✅ Already authenticated via storageState. Skipping login form.",
+      "✅ Already authenticated via storageState. Skipping login flow.",
     );
-    // Already logged in, no need to fill out the form! Wait for page load and return.
-    await page.waitForLoadState("domcontentloaded", { timeout: 10000 });
+    // Ensure we are actually on the questions page for the test
+    if (!currentURL.includes("/admin/content/questions")) {
+      console.log("➡️ Navigating from dashboard to questions page...");
+      await page.goto("/admin/content/questions", { waitUntil: "domcontentloaded" });
+    }
     return;
   }
 
-  // If we are still on the login page or navigating there, wait for the form to be ready
+  // If we are on the login page, we need to fill out the form
+  console.log("🔑 Not authenticated, proceeding with login...");
+
+  if (!currentURL.includes("/admin/login")) {
+    console.log("➡️ Forced navigation to /admin/login...");
+    await page.goto("/admin/login", {
+      waitUntil: isEdge ? "networkidle" : "domcontentloaded",
+      timeout: isEdge ? 30000 : 20000,
+    });
+  }
+
+  // Wait for the login form to be ready
   await page
     .getByRole("heading", { name: /Admin Login/i })
     .waitFor({ timeout: 15000 });
 
   // Wait for the form to be fully rendered (not in loading state)
-  // The login page shows a loading spinner when isLoading is true
-  // Wait for the form inputs to appear, which means loading is complete
   await page.waitForSelector('input[type="email"]', {
     state: "visible",
     timeout: 15000,
