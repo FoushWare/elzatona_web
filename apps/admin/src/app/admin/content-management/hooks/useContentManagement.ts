@@ -17,7 +17,7 @@ import {
   usePlanRepository,
   useCategoryRepository,
   useTopicRepository,
-} from "@elzatona/database/client";
+} from "@elzatona/database";
 import type { Topic as DatabaseTopic } from "@elzatona/database";
 
 export function useContentManagement() {

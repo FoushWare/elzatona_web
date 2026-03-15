@@ -1,23 +1,25 @@
 /**
  * Integration tests for Admin dashboard page API interactions
  */
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import AdminDashboardPage from "./page";
 
 // Mock the admin auth context
 vi.mock("@elzatona/contexts", () => ({
-  useAdminAuth: vi.fn(() => ({
+  useAdminAuth: () => ({
     user: { id: "admin-1", email: "admin@example.com", name: "Admin User" },
-  })),
+  }),
 }));
 
 // Mock the AdminDashboard component to avoid complex API interactions
-vi.mock("@elzatona/common-ui", () => {
+vi.mock("../../components/AdminDashboard", () => {
   return {
-    AdminDashboard: function MockAdminDashboard({ onRefetch }: any) {
+    default: function MockAdminDashboard({
+      onRefetch,
+    }: {
+      onRefetch?: () => void;
+    }) {
       return (
         <div data-testid="admin-dashboard">
           <h1>Admin Dashboard</h1>
@@ -27,7 +29,6 @@ vi.mock("@elzatona/common-ui", () => {
         </div>
       );
     },
-    // Mock other things from common-ui if needed, but the page only uses AdminDashboard
   };
 });
 

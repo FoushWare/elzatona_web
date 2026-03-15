@@ -30,26 +30,31 @@ if (!supabaseUrl || !supabaseServiceRoleKey) {
 }
 
 // Initialize Supabase client (server-side with service role key)
-let supabase: ReturnType<typeof createClient> | null = null;
-try {
-  supabase = createClient(
-    supabaseUrl || "https://placeholder-url.supabase.co",
-    supabaseServiceRoleKey || "placeholder-key",
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
+const supabase: ReturnType<typeof createClient> | null = (() => {
+  try {
+    const client = createClient(
+      supabaseUrl || "https://placeholder-url.supabase.co",
+      supabaseServiceRoleKey || "placeholder-key",
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
       },
-    },
-  );
-  if (supabaseUrl && supabaseServiceRoleKey) {
-    console.log(
-      "✅ Supabase server initialized successfully with service role key!",
     );
+
+    if (supabaseUrl && supabaseServiceRoleKey) {
+      console.log(
+        "✅ Supabase server initialized successfully with service role key!",
+      );
+    }
+
+    return client;
+  } catch (error) {
+    console.error("❌ Supabase server initialization failed:", error);
+    return null;
   }
-} catch (error) {
-  console.error("❌ Supabase server initialization failed:", error);
-}
+})();
 console.log(
   "✅ Supabase server initialized successfully with service role key!",
 );

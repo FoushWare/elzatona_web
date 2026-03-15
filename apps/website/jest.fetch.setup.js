@@ -28,7 +28,7 @@ try {
           const exports = typeof factory === "function" ? factory() : factory;
 
           if (resolved) {
-            const m = new Module.Module(resolved, module.parent);
+            const m = new Module.Module(resolved);
             m.filename = resolved;
             m.exports = exports;
             require.cache[resolved] = m;
@@ -95,7 +95,7 @@ try {
       try {
         const resolved = Module._resolveFilename(spec, module);
         if (resolved && !require.cache[resolved]) {
-          const m = new Module.Module(resolved, module.parent);
+          const m = new Module.Module(resolved);
           m.filename = resolved;
           m.exports = require("./test-utils/mocks/next-server.js");
           require.cache[resolved] = m;

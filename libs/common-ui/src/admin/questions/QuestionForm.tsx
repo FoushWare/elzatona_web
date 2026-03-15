@@ -295,7 +295,7 @@ export const AdminQuestionForm = React.forwardRef<
 
     const handlers = createFormHandlers(setFormData);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!readOnly) {
         onSubmit(formData);

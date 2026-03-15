@@ -5,26 +5,26 @@
 
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import UserManagementPage from "./page";
 import "@testing-library/jest-dom";
+import UserManagementPage from "./page";
 import * as sharedContexts from "@elzatona/contexts";
 
 // Mock shared contexts
-vi.mock("@elzatona/contexts", async (importOriginal) => {
-  const actual = await importOriginal<typeof sharedContexts>();
+jest.mock("@elzatona/contexts", () => {
+  const actual = jest.requireActual(
+    "../../../test-utils/mocks/shared-contexts",
+  );
   return {
     ...actual,
-    useAuth: vi.fn(),
-    useAdminAuth: vi.fn(),
+    useAuth: jest.fn(),
+    useAdminAuth: jest.fn(),
   };
 });
 
 // Mock fetch
-const mockFetch = vi.fn();
-vi.stubGlobal("fetch", mockFetch);
+globalThis.fetch = jest.fn();
 
-vi.mock("lucide-react", () => ({
+jest.mock("lucide-react", () => ({
   Users: () => <span>👥</span>,
   UserPlus: () => <span>➕</span>,
   Shield: () => <span>🛡️</span>,
@@ -44,66 +44,68 @@ vi.mock("lucide-react", () => ({
 
 describe("A-UT-018: Component Renders", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
 
-    vi.mocked(sharedContexts.useAuth).mockReturnValue({
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
       user: { id: "1", email: "admin@example.com" },
-    } as any);
+    });
 
-    vi.mocked(sharedContexts.useAdminAuth).mockReturnValue({
+    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: true,
-    } as any);
+    });
 
-    mockFetch.mockResolvedValue({
+    (globalThis.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => ({
         success: true,
         users: [],
       }),
-    } as any);
+    });
   });
 
   it("should render without errors", async () => {
     const { container } = render(<UserManagementPage />);
-    expect(container).toBeInTheDocument();
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
   });
 
-  it.todo("should display access denied for non-admin users", () => {
-    vi.mocked(sharedContexts.useAdminAuth).mockReturnValue({
+  it("should display access denied for non-admin users", () => {
+    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
-    } as any);
+    });
 
     render(<UserManagementPage />);
     expect(screen.getByText(/Access Denied/i)).toBeInTheDocument();
   });
 
-  it.todo("should fetch users on mount", async () => {
+  it("should fetch users on mount", async () => {
     render(<UserManagementPage />);
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith("/api/users");
+      expect(globalThis.fetch).toHaveBeenCalledWith("/api/users");
     });
   });
 });
 
 describe("A-UT-SNAPSHOT: Admin User Management Snapshot Tests", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
 
-    vi.mocked(sharedContexts.useAuth).mockReturnValue({
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
       user: { id: "1", email: "admin@example.com" },
-    } as any);
+    });
 
-    vi.mocked(sharedContexts.useAdminAuth).mockReturnValue({
+    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: true,
-    } as any);
+    });
 
-    mockFetch.mockResolvedValue({
+    (globalThis.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => ({
         success: true,
         users: [],
       }),
-    } as any);
+    });
   });
 
   it("should match admin user management page snapshot", async () => {
@@ -114,7 +116,7 @@ describe("A-UT-SNAPSHOT: Admin User Management Snapshot Tests", () => {
   });
 
   it("should match admin user management page snapshot (with users)", async () => {
-    mockFetch.mockResolvedValue({
+    (globalThis.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => ({
         success: true,
@@ -137,7 +139,7 @@ describe("A-UT-SNAPSHOT: Admin User Management Snapshot Tests", () => {
           },
         ],
       }),
-    } as any);
+    });
 
     const { container } = render(<UserManagementPage />);
     await waitFor(() => {

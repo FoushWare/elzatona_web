@@ -96,8 +96,8 @@ describe("Frontend Tasks Page - Integration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     globalThis.fetch = fetchSpy as any;
-    if (typeof window !== "undefined") {
-      (window as any).fetch = fetchSpy;
+    if (globalThis.window !== undefined) {
+      globalThis.window.fetch = fetchSpy as any;
     }
   });
 

@@ -2,10 +2,24 @@
 // This file uses 'any' types for error metadata which can contain various dynamic properties
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
+const supabaseUrl =
+  process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
+  "https://placeholder-url.supabase.co";
+const supabaseServiceRoleKey =
+  process.env["SUPABASE_SERVICE_ROLE_KEY"] || "placeholder-key";
 
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+if (
+  !process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
+  !process.env["SUPABASE_SERVICE_ROLE_KEY"]
+) {
+  if (globalThis.window !== undefined) {
+    console.warn(
+      "⚠️ Supabase credentials missing in error-logging-service.ts. Using placeholders to prevent crash.",
+    );
+  }
+}
 
 export interface ErrorLog {
   id: string;
@@ -424,7 +438,7 @@ export class ErrorLoggingService {
         (allLogs.filter((log) => log.success).length / totalOperations) * 100;
 
       const slowestOperations = allLogs
-        .sort((a, b) => b.duration - a.duration)
+        .toSorted((a, b) => b.duration - a.duration)
         .slice(0, 10)
         .map((log) => ({
           operation: log.operation,

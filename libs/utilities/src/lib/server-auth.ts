@@ -5,9 +5,23 @@
 import { createClient } from "@supabase/supabase-js";
 import jwt from "jsonwebtoken";
 
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
+const supabaseUrl =
+  process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
+  "https://placeholder-url.supabase.co";
+const supabaseServiceRoleKey =
+  process.env["SUPABASE_SERVICE_ROLE_KEY"] || "placeholder-key";
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+if (
+  !process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
+  !process.env["SUPABASE_SERVICE_ROLE_KEY"]
+) {
+  if (globalThis.window !== undefined) {
+    console.warn(
+      "⚠️ Supabase credentials missing in server-auth.ts. Using placeholders to prevent crash.",
+    );
+  }
+}
 
 // JWT secret for admin tokens
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
@@ -76,7 +90,7 @@ export function verifyAdminToken(token: string): AdminUser | null {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const decoded = jwt.verify(token, JWT_SECRET) as any;
 
-    if (!decoded || !decoded.id || !decoded.email) {
+    if (!decoded?.id || !decoded?.email) {
       return null;
     }
 
@@ -119,7 +133,7 @@ export async function getUserFromRequest(
   try {
     const authHeader = request.headers.get("authorization");
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!authHeader?.startsWith("Bearer ")) {
       return null;
     }
 

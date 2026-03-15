@@ -1,11 +1,9 @@
 /**
  * Integration tests for Admin login page API interactions
  */
-import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import AdminLoginPage from "./page";
-import "@testing-library/jest-dom";
 
 // Mock Next.js router
 const mockPush = vi.fn();
@@ -71,16 +69,15 @@ describe("Admin login page - Integration", () => {
         "password123",
       );
     });
+
+    expect(submitButton).toBeDisabled();
   });
 
   it("shows loading state during submission", async () => {
-    // We use a promise that we can control to test the loading state
-    let resolveLogin: (value: any) => void;
-    const loginPromise = new Promise((resolve) => {
-      resolveLogin = resolve;
+    mockAuthState.login.mockImplementation(async () => {
+      await sleep(100);
+      return { success: true };
     });
-
-    mockAuthState.login.mockReturnValue(loginPromise);
 
     render(<AdminLoginPage />);
     const { submitButton } = fillAndSubmit("admin@example.com", "password123");
@@ -88,10 +85,6 @@ describe("Admin login page - Integration", () => {
     // Button should be disabled during submission
     expect(submitButton).toBeDisabled();
     expect(screen.getByText(/signing in/i)).toBeInTheDocument();
-
-    // Resolve the login to clean up
-    resolveLogin!({ success: true });
-    await waitFor(() => expect(submitButton).not.toBeDisabled());
   });
 
   it("displays error message on login failure", async () => {

@@ -152,9 +152,9 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
             role: adminData.role || "admin",
             name: adminData.name || adminData.email,
             expiresAt:
-              session.expires_at !== undefined
-                ? new Date(session.expires_at * 1000).toISOString()
-                : new Date(Date.now() + 3600 * 1000).toISOString(), // Default to 1 hour if missing
+              session.expires_at === undefined
+                ? new Date(Date.now() + 3600 * 1000).toISOString()
+                : new Date(session.expires_at * 1000).toISOString(), // Default to 1 hour if missing
             created_at: adminData.created_at,
             updated_at: adminData.updated_at,
           };
