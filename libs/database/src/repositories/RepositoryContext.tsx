@@ -52,7 +52,7 @@ interface RepositoryProviderProps {
 export function RepositoryProvider({
   children,
   factory: customFactory,
-}: Readonly<RepositoryProviderProps>): JSX.Element {
+}: Readonly<RepositoryProviderProps>): React.JSX.Element {
   const factory = customFactory || getRepositoryFactory();
 
   const value = useMemo<RepositoryContextValue>(

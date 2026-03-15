@@ -52,17 +52,25 @@ const Select = React.forwardRef<
 
   // Extract SelectItems from SelectContent
   const selectItems = React.Children.toArray(
-    (React.isValidElement(selectContent) && "children" in selectContent.props
-      ? (selectContent.props as { children?: React.ReactNode }).children
+    (React.isValidElement(selectContent) &&
+    "children" in
+      (selectContent as React.ReactElement<{ children?: React.ReactNode }>)
+        .props
+      ? (selectContent as React.ReactElement<{ children?: React.ReactNode }>)
+          .props.children
       : undefined) || [],
   ).filter((child) => React.isValidElement(child) && child.type === SelectItem);
 
   // Find the selected item text
   const selectedItem = selectItems.find(
-    (item) => React.isValidElement(item) && item.props.value === selectedValue,
+    (item) =>
+      React.isValidElement(item) &&
+      (item as React.ReactElement<{ value: string }>).props.value ===
+        selectedValue,
   );
   const selectedText = React.isValidElement(selectedItem)
-    ? selectedItem.props.children
+    ? (selectedItem as React.ReactElement<{ children?: React.ReactNode }>).props
+        .children
     : "Select...";
 
   return (
@@ -90,20 +98,24 @@ const Select = React.forwardRef<
           <div className="max-h-60 overflow-auto">
             {selectItems.map((item) => {
               if (React.isValidElement(item)) {
+                const itemEl = item as React.ReactElement<{
+                  value: string;
+                  children?: React.ReactNode;
+                }>;
                 return (
                   <button
-                    key={item.props.value}
+                    key={itemEl.props.value}
                     type="button"
                     className="w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer focus:bg-accent focus:outline-none"
-                    onClick={() => handleValueChange(item.props.value)}
+                    onClick={() => handleValueChange(itemEl.props.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
-                        handleValueChange(item.props.value);
+                        handleValueChange(itemEl.props.value);
                       }
                     }}
                   >
-                    {item.props.children}
+                    {itemEl.props.children}
                   </button>
                 );
               }

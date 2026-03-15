@@ -64,7 +64,8 @@ export async function PUT(
       ...body,
       updatedAt: new Date(),
     };
-    await questionRepo.update(id, updateData);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await questionRepo.update(id, updateData as any);
     const response: ApiResponse<{ id: string }> = {
       success: true,
       data: { id },
