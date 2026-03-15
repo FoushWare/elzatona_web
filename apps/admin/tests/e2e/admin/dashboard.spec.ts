@@ -49,6 +49,14 @@ test.describe("Admin Dashboard", () => {
 
     // Perform login first
     await page.goto("/admin/login");
+    await page.locator('input[type="email"]').waitFor({
+      state: "visible",
+      timeout: 15000,
+    });
+    await page.locator('input[type="password"]').waitFor({
+      state: "visible",
+      timeout: 15000,
+    });
     await page.fill('input[type="email"]', "test-admin@example.com");
     await page.fill('input[type="password"]', "correct-password");
     await page.click('button[type="submit"]');

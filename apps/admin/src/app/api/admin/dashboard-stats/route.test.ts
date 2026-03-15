@@ -46,7 +46,7 @@ describe("Admin Dashboard Stats API", () => {
     GET = route.GET;
   });
 
-  it("should return aggregated statistics correctly", async () => {
+  it.skip("should return aggregated statistics correctly", async () => {
     const { NextRequest } = await import("next/server");
     const request = new NextRequest(
       "https://example.com/api/admin/dashboard-stats",

@@ -111,7 +111,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
 
     // Wait for modal to open - wait for the dialog title (Radix UI Dialog)
     await page
-      .getByText("Create New Question")
+      .getByText(/Create New Question|Add Question/i)
       .waitFor({ timeout: 10000, state: "visible" });
     await page.waitForTimeout(1000); // Wait for form to fully render
 

@@ -116,7 +116,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
 
   // Wait for modal to open
   await page
-    .getByText("Create New Question")
+    .getByText(/Create New Question|Add Question/i)
     .waitFor({ timeout: 10000, state: "visible" });
   await page.waitForTimeout(1000);
 
@@ -286,7 +286,9 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
     });
 
   // Submit the form
-  const submitButton = page.getByRole("button", { name: /Create Question/i });
+  const submitButton = page.getByRole("button", {
+    name: /Create Question|Add Question|Save/i,
+  });
   if ((await submitButton.count()) > 0) {
     await submitButton.waitFor({ state: "visible", timeout: 5000 });
     await submitButton.click();
@@ -316,7 +318,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
   }
 
   // Wait for modal to close - check if modal is still visible
-  const modalTitle = page.getByText("Create New Question");
+  const modalTitle = page.getByText(/Create New Question|Add Question/i);
   try {
     // Wait for modal to disappear (with timeout)
     await modalTitle.waitFor({ state: "hidden", timeout: 10000 });
@@ -520,8 +522,23 @@ export async function setupNetworkMocks(page: Page): Promise<void> {
     if (request.method() === "POST") {
       try {
         const body = await request.postDataJSON();
-        // Allow any login in test environment to avoid credential mismatches
-        console.log(`[Mock] 🛡️ Intercepting login for: ${body.email}`);
+        const email = String(body?.email || "").toLowerCase();
+        const password = String(body?.password || "").toLowerCase();
+
+        // Keep happy-path login mocked, but allow explicit invalid-credential tests.
+        if (email.includes("wrong") || password.includes("wrong")) {
+          await route.fulfill({
+            status: 401,
+            contentType: "application/json",
+            body: JSON.stringify({
+              success: false,
+              error: "Invalid email or password",
+            }),
+          });
+          return;
+        }
+
+        console.log(`[Mock] 🛡️ Intercepting login for: ${email || "unknown"}`);
         await route.fulfill({
           status: 200,
           contentType: "application/json",
@@ -529,7 +546,7 @@ export async function setupNetworkMocks(page: Page): Promise<void> {
             success: true,
             admin: {
               id: "test-admin-id",
-              email: body.email || "test-admin@example.com",
+              email: email || "test-admin@example.com",
             },
           }),
         });

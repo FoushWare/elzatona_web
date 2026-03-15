@@ -12,6 +12,15 @@ test.describe("Admin Authentication", () => {
     // Check if we are on login page
     await expect(page.locator("h1")).toContainText("Admin Login");
 
+    await page.locator('input[type="email"]').waitFor({
+      state: "visible",
+      timeout: 15000,
+    });
+    await page.locator('input[type="password"]').waitFor({
+      state: "visible",
+      timeout: 15000,
+    });
+
     // Fill credentials
     await page.fill('input[type="email"]', "test-admin@example.com");
     await page.fill('input[type="password"]', "correct-password");
@@ -29,6 +38,15 @@ test.describe("Admin Authentication", () => {
 
     test("failed login shows error", async ({ page }) => {
       await page.goto("/admin/login");
+
+      await page.locator('input[type="email"]').waitFor({
+        state: "visible",
+        timeout: 15000,
+      });
+      await page.locator('input[type="password"]').waitFor({
+        state: "visible",
+        timeout: 15000,
+      });
 
       await page.fill('input[type="email"]', "wrong@example.com");
       await page.fill('input[type="password"]', "wrongpassword");

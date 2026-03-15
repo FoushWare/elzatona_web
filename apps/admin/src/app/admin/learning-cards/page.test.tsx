@@ -1,10 +1,38 @@
 /**
  * Unit tests for Admin Learning Cards page
  */
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import LearningCardsPage from "./page";
 import * as useLearningCardsModule from "./hooks/useLearningCards";
+
+const defaultLearningCardsHookValue = {
+  cards: [
+    {
+      id: "1",
+      title: "Test Card",
+      category: "test",
+      topic: "test",
+      question: "test",
+    },
+  ],
+  categories: ["test"],
+  topics: ["test"],
+  questions: ["test"],
+  stats: { total: 1, categories: 1, topics: 1 },
+  loading: false,
+  error: null,
+  expandedCards: new Set(),
+  toggleCard: vi.fn(),
+  expandedCategories: new Set(),
+  toggleCategory: vi.fn(),
+  expandedTopics: new Set(),
+  toggleTopic: vi.fn(),
+  createCard: vi.fn().mockResolvedValue(true),
+  updateCard: vi.fn().mockResolvedValue(true),
+  deleteCard: vi.fn().mockResolvedValue(true),
+};
 
 // Mock the common-ui components
 vi.mock("@elzatona/common-ui", () => ({
@@ -61,37 +89,24 @@ vi.mock("./components/CardFormModal", () => ({
 
 // Mock the hook
 vi.mock("./hooks/useLearningCards", () => ({
-  useLearningCards: () => ({
-    cards: [
-      {
-        id: "1",
-        title: "Test Card",
-        category: "test",
-        topic: "test",
-        question: "test",
-      },
-    ],
-    categories: ["test"],
-    topics: ["test"],
-    questions: ["test"],
-    stats: { total: 1, categories: 1, topics: 1 },
-    loading: false,
-    error: null,
-    expandedCards: new Set(),
-    toggleCard: vi.fn(),
-    expandedCategories: new Set(),
-    toggleCategory: vi.fn(),
-    expandedTopics: new Set(),
-    toggleTopic: vi.fn(),
-    createCard: vi.fn().mockResolvedValue(true),
-    updateCard: vi.fn().mockResolvedValue(true),
-    deleteCard: vi.fn().mockResolvedValue(true),
-  }),
+  useLearningCards: vi.fn(() => defaultLearningCardsHookValue),
 }));
 
 describe("Learning Cards Page - Unit", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
+      ...defaultLearningCardsHookValue,
+      expandedCards: new Set(),
+      expandedCategories: new Set(),
+      expandedTopics: new Set(),
+      toggleCard: vi.fn(),
+      toggleCategory: vi.fn(),
+      toggleTopic: vi.fn(),
+      createCard: vi.fn().mockResolvedValue(true),
+      updateCard: vi.fn().mockResolvedValue(true),
+      deleteCard: vi.fn().mockResolvedValue(true),
+    });
   });
 
   it("renders the learning cards page correctly", () => {
