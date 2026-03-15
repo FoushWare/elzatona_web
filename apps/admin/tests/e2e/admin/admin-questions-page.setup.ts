@@ -116,7 +116,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
 
   // Wait for modal to open
   await page
-    .getByText("Create New Question")
+    .getByText(/Create New Question|Add Question/i)
     .waitFor({ timeout: 10000, state: "visible" });
   await page.waitForTimeout(1000);
 
@@ -286,7 +286,9 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
     });
 
   // Submit the form
-  const submitButton = page.getByRole("button", { name: /Create Question/i });
+  const submitButton = page.getByRole("button", {
+    name: /Create Question|Add Question|Save/i,
+  });
   if ((await submitButton.count()) > 0) {
     await submitButton.waitFor({ state: "visible", timeout: 5000 });
     await submitButton.click();
@@ -316,7 +318,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
   }
 
   // Wait for modal to close - check if modal is still visible
-  const modalTitle = page.getByText("Create New Question");
+  const modalTitle = page.getByText(/Create New Question|Add Question/i);
   try {
     // Wait for modal to disappear (with timeout)
     await modalTitle.waitFor({ state: "hidden", timeout: 10000 });
@@ -462,7 +464,7 @@ export async function bulkDeleteQuestions(
           // Wait for modal to close - check for dialog to disappear
           await dialog
             .waitFor({ state: "hidden", timeout: 10000 })
-            .catch(() => {});
+            .catch(() => { });
           await page.waitForTimeout(2000);
         }
       }
@@ -476,10 +478,10 @@ export async function bulkDeleteQuestions(
  */
 async function waitForServerReady(
   page: Page,
-  maxRetries = 10,
-  retryDelay = 1000,
+  maxRetries = 15, // Increased retries for CI stability
+  retryDelay = 2000, // Increased delay
 ): Promise<void> {
-  const baseURL = "http://localhost:3000";
+  const baseURL = process.env.ADMIN_BASE_URL || "http://localhost:3001";
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -495,24 +497,134 @@ async function waitForServerReady(
       const _err = error instanceof Error ? error : new Error(String(error));
       if (attempt < maxRetries) {
         console.log(
-          `⏳ Waiting for server to be ready (attempt ${attempt}/${maxRetries})...`,
+          `⏳ Waiting for server to be ready at ${baseURL} (attempt ${attempt}/${maxRetries})...`,
         );
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
       } else {
         throw new Error(
           `Dev server is not ready after ${maxRetries} attempts. ` +
-            `Please ensure the dev server is running at ${baseURL} or check Playwright's webServer configuration. ` +
-            `Error: ${_err.message}`,
+          `Please ensure the dev server is running at ${baseURL} or check Playwright's webServer configuration. ` +
+          `Error: ${_err.message}`,
         );
       }
     }
   }
 }
 
+/**
+ * Set up network mocks for the Admin section
+ * This ensures tests are isolated and don't depend on external network state
+ */
+export async function setupNetworkMocks(page: Page): Promise<void> {
+  // Mock the auth API
+  await page.route("**/api/admin/auth", async (route) => {
+    const request = route.request();
+    if (request.method() === "POST") {
+      try {
+        const body = await request.postDataJSON();
+        const email = String(body?.email || "").toLowerCase();
+        const password = String(body?.password || "").toLowerCase();
+
+        // Keep happy-path login mocked, but allow explicit invalid-credential tests.
+        if (email.includes("wrong") || password.includes("wrong")) {
+          await route.fulfill({
+            status: 401,
+            contentType: "application/json",
+            body: JSON.stringify({
+              success: false,
+              error: "Invalid email or password",
+            }),
+          });
+          return;
+        }
+
+        console.log(`[Mock] 🛡️ Intercepting login for: ${email || "unknown"}`);
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            success: true,
+            admin: {
+              id: "test-admin-id",
+              email: email || "test-admin@example.com",
+            },
+          }),
+        });
+      } catch (e) {
+        console.error(`[Mock] ❌ Error in auth mock: ${e}`);
+        await route.fulfill({
+          status: 500,
+          contentType: "application/json",
+          body: JSON.stringify({ success: false, error: "Mock error" }),
+        });
+      }
+    } else {
+      await route.continue();
+    }
+  });
+
+  // Mock Supabase PostgREST for any admin_users check
+  await page.route("**/*.supabase.co/rest/v1/admin_users*", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify([
+        {
+          id: "test-admin-id",
+          email: "test-admin@example.com",
+          role: "admin",
+          name: "Test Admin",
+        },
+      ]), // PostgREST returns an array for select calls
+    });
+  });
+
+  // Mock stats API
+  await page.route("**/api/admin/dashboard-stats", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        success: true,
+        data: {
+          totalQuestions: 150,
+          activeQuestions: 120,
+          totalLearningCards: 85,
+          totalLearningPlans: 12,
+          totalCategories: 8,
+          totalTopics: 24,
+        },
+      }),
+    });
+  });
+
+  // Prevent ANY other Supabase or external API call from leaving the browser
+  await page.route(
+    (url) => {
+      const urlStr = url.toString();
+      return (
+        urlStr.includes("supabase.co") ||
+        (urlStr.includes("/api/") && !urlStr.includes("localhost"))
+      );
+    },
+    async (route) => {
+      console.log(`[Mock] 🚫 Blocking external call: ${route.request().url()}`);
+      await route.fulfill({
+        status: 404,
+        contentType: "application/json",
+        body: JSON.stringify({ error: "Network isolated for E2E testing" }),
+      });
+    },
+  );
+}
+
 export async function setupAdminPage(
   page: Page,
   browserName: string,
 ): Promise<void> {
+  // Set up network isolation
+  await setupNetworkMocks(page);
+
   // Debug: Log which env files were loaded and what credentials we have
   console.log(`[Config] 🔍 Checking credentials...`);
   const emailStatus = process.env.ADMIN_EMAIL
@@ -574,20 +686,62 @@ export async function setupAdminPage(
     `🌐 Running test in browser: ${browserName}${isEdge ? " (Edge)" : ""}`,
   );
 
-  // Login as admin first
-  await page.goto("/admin/login", {
+  // Navigate to the questions page directly - this is a protected route
+  // If we have a valid session in storageState, we'll stay here
+  // If not, the application will redirect us to /admin/login
+  console.log("🌐 Navigating to /admin/content/questions...");
+  await page.goto("/admin/content/questions", {
     waitUntil: isEdge ? "networkidle" : "domcontentloaded",
     timeout: isEdge ? 30000 : 20000,
+  }).catch(e => {
+    console.log(`⚠️ Initial navigation failed: ${e.message}. Continuing...`);
   });
 
-  // Wait for login form to be ready - check for heading first
+  // Wait for the URL to settle (either stayed on questions or redirected to login)
+  // We use a small timeout to allow for the client-side redirect to happen
+  await page.waitForTimeout(2000);
+
+  let settledURL = "";
+  try {
+    settledURL = page.url();
+  } catch (_e) {
+    // Ignore error if page is navigating
+  }
+
+  console.log(`📍 Current URL: ${settledURL}`);
+
+  if (
+    settledURL.includes("/admin/content/questions") ||
+    settledURL.includes("/admin/dashboard")
+  ) {
+    console.log(
+      "✅ Already authenticated via storageState. Skipping login flow.",
+    );
+    // Ensure we are actually on the questions page for the test
+    if (!settledURL.includes("/admin/content/questions")) {
+      console.log("➡️ Navigating from dashboard to questions page...");
+      await page.goto("/admin/content/questions", { waitUntil: "domcontentloaded" });
+    }
+    return;
+  }
+
+  // If we are on the login page, we need to fill out the form
+  console.log("🔑 Not authenticated, proceeding with login...");
+
+  if (!settledURL.includes("/admin/login")) {
+    console.log("➡️ Forced navigation to /admin/login...");
+    await page.goto("/admin/login", {
+      waitUntil: isEdge ? "networkidle" : "domcontentloaded",
+      timeout: isEdge ? 30000 : 20000,
+    });
+  }
+
+  // Wait for the login form to be ready
   await page
     .getByRole("heading", { name: /Admin Login/i })
     .waitFor({ timeout: 15000 });
 
   // Wait for the form to be fully rendered (not in loading state)
-  // The login page shows a loading spinner when isLoading is true
-  // Wait for the form inputs to appear, which means loading is complete
   await page.waitForSelector('input[type="email"]', {
     state: "visible",
     timeout: 15000,
@@ -931,8 +1085,8 @@ export async function setupAdminPage(
         if (errorMsg.includes("Invalid email or password")) {
           throw new Error(
             `Login failed: ${errorMsg}\n\n` +
-              `Test credentials (${adminEmail}) do not exist in the database.\n` +
-              `Check ADMIN_EMAIL and ADMIN_PASSWORD in .env.test.local`,
+            `Test credentials (${adminEmail}) do not exist in the database.\n` +
+            `Check ADMIN_EMAIL and ADMIN_PASSWORD in .env.test.local`,
           );
         }
         throw new Error(
@@ -989,10 +1143,10 @@ export async function setupAdminPage(
         if (currentURL.includes("/admin/login")) {
           throw new Error(
             `Login API succeeded but navigation failed - still on login page.\n` +
-              `This may indicate:\n` +
-              `1. Redirect logic is not working after successful login\n` +
-              `2. Client-side navigation is blocked\n` +
-              `3. Session/token storage issue`,
+            `This may indicate:\n` +
+            `1. Redirect logic is not working after successful login\n` +
+            `2. Client-side navigation is blocked\n` +
+            `3. Session/token storage issue`,
           );
         }
         const navErr =
@@ -1095,11 +1249,11 @@ export async function setupAdminPage(
         ) {
           throw new Error(
             `Dev server is not running or not ready. ` +
-              `Please ensure:\n` +
-              `1. The dev server is running at http://localhost:3000\n` +
-              `2. Playwright's webServer configuration is working correctly\n` +
-              `3. Try running: npm run dev:light:test\n` +
-              `Original error: ${navErr.message}`,
+            `Please ensure:\n` +
+            `1. The dev server is running at http://localhost:3000\n` +
+            `2. Playwright's webServer configuration is working correctly\n` +
+            `3. Try running: npm run dev:light:test\n` +
+            `Original error: ${navErr.message}`,
           );
         }
 
@@ -1123,8 +1277,8 @@ export async function setupAdminPage(
                     : new Error(String(retryError));
                 throw new Error(
                   `Failed to navigate to questions page after retry. ` +
-                    `Original error: ${navErr.message}. ` +
-                    `Retry error: ${retryErr.message}`,
+                  `Original error: ${navErr.message}. ` +
+                  `Retry error: ${retryErr.message}`,
                 );
               });
           }

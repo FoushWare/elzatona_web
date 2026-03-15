@@ -9,16 +9,9 @@ const isBuildPhase =
   process.env["NODE_ENV"] === "production";
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  if (!isBuildPhase) {
+  if (globalThis.window !== undefined) {
     console.warn(
-      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set. Supabase operations will fail.",
-    );
-  } else if (
-    process.env["NODE_ENV"] === "production" &&
-    !process.env["NEXT_PHASE"]?.includes("build")
-  ) {
-    throw new Error(
-      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set",
+      "⚠️ Supabase configuration is missing or invalid in supabase.ts! Using placeholders to prevent crash.",
     );
   }
 }

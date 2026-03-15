@@ -1,9 +1,22 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-
+const supabaseUrl =
+  process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
+  "https://placeholder-url.supabase.co";
+const supabaseServiceRoleKey =
+  process.env["SUPABASE_SERVICE_ROLE_KEY"] || "placeholder-key";
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+if (
+  !process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
+  !process.env["SUPABASE_SERVICE_ROLE_KEY"]
+) {
+  if (globalThis.window !== undefined) {
+    console.warn(
+      "⚠️ Supabase credentials missing in audio-upload.ts. Using placeholders to prevent crash.",
+    );
+  }
+}
 
 export interface AudioUploadResult {
   success: boolean;
@@ -231,6 +244,8 @@ export class AudioUploadService {
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    return (
+      Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
+    );
   }
 }

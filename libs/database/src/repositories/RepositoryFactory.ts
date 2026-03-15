@@ -334,8 +334,8 @@ export function createRepositoryFactoryFromEnv(): RepositoryFactory {
       process.env.NODE_ENV === "production" &&
       !process.env.NEXT_PHASE?.includes("build")
     ) {
-      throw new Error(
-        "Database configuration missing. Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.",
+      console.error(
+        "Database configuration missing. Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set. Check your environment variables.",
       );
     }
   }

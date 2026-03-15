@@ -23,34 +23,42 @@ if (!supabaseUrl || !supabaseServiceRoleKey) {
       !process.env.NEXT_PHASE?.includes("build") &&
       !process.env.VERCEL)
   ) {
-    console.warn(
-      "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set. Supabase operations will fail.",
-    );
+    if (globalThis.window === undefined) {
+      console.error(
+        "❌ Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and (SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY) must be set for server-side operations.",
+      );
+    } else {
+      console.warn(
+        "⚠️ Supabase credentials missing in supabase-server.ts. Using placeholders to prevent crash.",
+      );
+    }
   }
 }
 
 // Initialize Supabase client (server-side with service role key)
-let supabase: ReturnType<typeof createClient> | null = null;
-
-try {
-  supabase = createClient(
-    supabaseUrl || "https://placeholder-url.supabase.co",
-    supabaseServiceRoleKey || "placeholder-key",
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
+const supabase = (() => {
+  try {
+    const client = createClient(
+      supabaseUrl || "https://placeholder-url.supabase.co",
+      supabaseServiceRoleKey || "placeholder-key",
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
       },
-    },
-  );
-  if (supabaseUrl && supabaseServiceRoleKey) {
-    console.log(
-      "✅ Supabase server initialized successfully with service role key!",
     );
+    if (supabaseUrl && supabaseServiceRoleKey) {
+      console.log(
+        "✅ Supabase server initialized successfully with service role key!",
+      );
+    }
+    return client;
+  } catch (error) {
+    console.error("❌ Supabase server initialization failed:", error);
+    return null;
   }
-} catch (error) {
-  console.error("❌ Supabase server initialization failed:", error);
-}
+})();
 
 // Export Supabase client for server-side use
 export { supabase };
@@ -182,11 +190,11 @@ export const supabaseOperations = {
       ...categoryData,
       slug:
         categoryData.slug ||
-        categoryData.name.toLowerCase().replace(/\s+/g, "-"),
+        categoryData.name.toLowerCase().replaceAll(/\s+/g, "-"),
       card_type:
         categoryData.card_type ||
         categoryData.slug ||
-        categoryData.name.toLowerCase().replace(/\s+/g, "-"),
+        categoryData.name.toLowerCase().replaceAll(/\s+/g, "-"),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       is_active: categoryData.is_active !== false,
@@ -237,7 +245,8 @@ export const supabaseOperations = {
 
     const data = {
       ...topicData,
-      slug: topicData.slug || topicData.name.toLowerCase().replace(/\s+/g, "-"),
+      slug:
+        topicData.slug || topicData.name.toLowerCase().replaceAll(/\s+/g, "-"),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       is_active: topicData.is_active !== false,

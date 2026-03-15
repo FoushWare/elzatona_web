@@ -4,10 +4,24 @@
 
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"]!;
+const supabaseUrl =
+  process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
+  "https://placeholder-url.supabase.co";
+const supabaseKey =
+  process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"] || "placeholder-key";
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+if (
+  !process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
+  !process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"]
+) {
+  if (globalThis.window !== undefined) {
+    console.warn(
+      "⚠️ Supabase credentials missing in auth-utils.ts. Using placeholders to prevent crash.",
+    );
+  }
+}
 
 // Check if user session is still valid
 export const isSessionValid = async (): Promise<boolean> => {
@@ -21,7 +35,7 @@ export const isSessionValid = async (): Promise<boolean> => {
     }
 
     // Check if session is expired
-    const now = new Date().getTime() / 1000;
+    const now = Date.now() / 1000;
     if (session.expires_at && session.expires_at < now) {
       return false;
     }
@@ -90,7 +104,7 @@ export const clearAuthData = async () => {
     // Sign out from Supabase
     await supabase.auth.signOut();
 
-    if (typeof window !== "undefined") {
+    if (globalThis.window !== undefined) {
       // Clear localStorage
       Object.keys(localStorage).forEach((key) => {
         if (
@@ -123,7 +137,7 @@ export const clearAuthData = async () => {
 
 // Set up automatic token refresh
 export const setupTokenRefresh = () => {
-  if (typeof window === "undefined") return;
+  if (globalThis.window === undefined) return;
 
   // Supabase handles token refresh automatically
   // We just need to listen for auth state changes

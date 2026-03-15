@@ -377,11 +377,11 @@ function createResponseClass() {
 if (globalThis.Request === undefined) {
   try {
     let fetchAPI;
-    if (globalThis && globalThis.fetch && globalThis.fetch.Request) {
+    if (globalThis.fetch?.Request) {
       fetchAPI = globalThis.fetch;
     }
 
-    if (fetchAPI && fetchAPI.Request) {
+    if (fetchAPI?.Request) {
       // Ensure `fetch` is available globally. Prefer existing global fetch, otherwise try node-fetch.
       if (globalThis.fetch === undefined) {
         try {
@@ -398,7 +398,7 @@ if (globalThis.Request === undefined) {
             error_,
           );
           globalThis.fetch = async (input, init = {}) => {
-            const body = init && init.body ? init.body : null;
+            const body = init?.body ?? null;
             return new (globalThis.Response || createResponseClass())(
               body || null,
               { status: 200 },

@@ -6,21 +6,22 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import QuestionsRedirectPage from "./page";
 
 // Mock next/navigation
-const mockReplace = jest.fn();
-jest.mock("next/navigation", () => ({
+const mockReplace = vi.fn();
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
     replace: mockReplace,
-    push: jest.fn(),
-    prefetch: jest.fn(),
+    push: vi.fn(),
+    prefetch: vi.fn(),
   }),
 }));
 
 describe("QuestionsRedirectPage", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should render without errors", () => {

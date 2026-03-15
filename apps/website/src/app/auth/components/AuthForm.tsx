@@ -40,7 +40,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     name: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!supabase) {
       setError("Authentication is not configured. Please try again later.");

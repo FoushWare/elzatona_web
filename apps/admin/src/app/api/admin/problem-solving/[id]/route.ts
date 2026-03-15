@@ -28,13 +28,13 @@ export async function GET(
         { status: 404 },
       );
     }
-    const response: ApiResponse<any> = {
+    const response: ApiResponse<ProblemSolvingTask> = {
       success: true,
-      data: task,
+      data: task as unknown as ProblemSolvingTask,
     };
     return NextResponse.json(response);
-  } catch (error) {
-    console.error("❌ API: Error fetching problem solving task:", error);
+  } catch (_error) {
+    console.error("❌ API: Error fetching problem solving task:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch problem solving task" },
       { status: 500 },
@@ -64,8 +64,8 @@ export async function PUT(
       data: { id },
     };
     return NextResponse.json(response);
-  } catch (error) {
-    console.error("❌ API: Error updating problem solving task:", error);
+  } catch (_error) {
+    console.error("❌ API: Error updating problem solving task:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to update problem solving task" },
       { status: 500 },
@@ -94,8 +94,8 @@ export async function DELETE(
       data: { id },
     };
     return NextResponse.json(response);
-  } catch (error) {
-    console.error("❌ API: Error deleting problem solving task:", error);
+  } catch (_error) {
+    console.error("❌ API: Error deleting problem solving task:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to delete problem solving task" },
       { status: 500 },

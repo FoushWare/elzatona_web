@@ -1,19 +1,19 @@
-import { setupWorker } from "msw/browser";
+import { setupServer } from "msw/node";
 import handlers from "./msw-handlers";
 import { beforeAll, afterAll, afterEach } from "vitest";
 
-export const worker = setupWorker(...handlers);
+export const server = setupServer(...handlers);
 
 beforeAll(async () => {
-  await worker.start({ onUnhandledRequest: "warn" });
+  server.listen({ onUnhandledRequest: "warn" });
 });
 
 afterEach(() => {
-  worker.resetHandlers();
+  server.resetHandlers();
 });
 
 afterAll(() => {
-  worker.stop();
+  server.close();
 });
 
-export default worker;
+export default server;

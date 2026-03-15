@@ -1,7 +1,9 @@
 /**
  * Integration tests for Admin Problem Solving page
  */
+import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import ProblemSolvingPage from "./page";
 
@@ -15,85 +17,109 @@ vi.mock("lucide-react", () => ({
 }));
 
 // Mock the common-ui components
-vi.mock("@elzatona/common-ui", () => ({
-  ProblemSolvingEditor: ({ onSave, onCancel, isEditing, task }: any) => (
-    <div data-testid="problem-solving-editor">
-      <h2>{isEditing ? "Edit Task" : "Create Task"}</h2>
-      {task && <p>Editing: {task.title}</p>}
-      <button onClick={onCancel} data-testid="cancel-editor">
-        Cancel
-      </button>
-      <button
-        onClick={() =>
-          onSave({
-            title: isEditing ? "Updated Task" : "New Task",
-            description: "Test description",
-            difficulty: "easy",
-            category: "algorithms",
-            problem: "Test problem",
-            solution: "Test solution",
-            examples: [{ input: "test", output: "result" }],
-            tags: ["test"],
-          })
-        }
-        data-testid="save-editor"
-      >
-        {isEditing ? "Update" : "Create"}
-      </button>
-    </div>
-  ),
-  Button: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  ),
-  Input: ({ value, onChange, placeholder }: any) => (
-    <input
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      data-testid="search-input"
-    />
-  ),
-  Card: ({ children }: any) => <div data-testid="card">{children}</div>,
-  CardContent: ({ children }: any) => <div>{children}</div>,
-  CardHeader: ({ children }: any) => <div>{children}</div>,
-  CardTitle: ({ children }: any) => <h3>{children}</h3>,
-  Badge: ({ children, variant }: any) => (
-    <span data-testid={`badge-${variant || "default"}`}>{children}</span>
-  ),
-  useToast: () => ({
+vi.mock("@elzatona/common-ui", () => {
+  const mockToast = {
     showSuccess: vi.fn(),
     showError: vi.fn(),
-  }),
-}));
+  };
 
-// Mock fetch
-const mockFetch = vi.fn();
-global.fetch = mockFetch;
-
-describe("Problem Solving Page - Integration", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    mockFetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          success: true,
-          data: [
-            {
-              id: "1",
-              title: "Test Task",
+  return {
+    ProblemSolvingEditor: ({ onSave, onCancel, isEditing, task }: any) => (
+      <div data-testid="problem-solving-editor">
+        <h2>{isEditing ? "Edit Task" : "Create Task"}</h2>
+        {task && <p>Editing: {task.title}</p>}
+        <button onClick={onCancel} data-testid="cancel-editor">
+          Cancel
+        </button>
+        <button
+          onClick={() =>
+            onSave({
+              title: isEditing ? "Updated Task" : "New Task",
               description: "Test description",
               difficulty: "easy",
               category: "algorithms",
               problem: "Test problem",
               solution: "Test solution",
               examples: [{ input: "test", output: "result" }],
-              tags: ["array", "sorting"],
-            },
-          ],
-        }),
-    });
+              tags: ["test"],
+            })
+          }
+          data-testid="save-editor"
+        >
+          {isEditing ? "Update" : "Create"}
+        </button>
+      </div>
+    ),
+    Button: ({ children, onClick, ...props }: any) => (
+      <button onClick={onClick} {...props}>
+        {children}
+      </button>
+    ),
+    Input: ({ value, onChange, placeholder }: any) => (
+      <input
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        data-testid="search-input"
+      />
+    ),
+    Card: ({ children }: any) => <div data-testid="card">{children}</div>,
+    CardContent: ({ children }: any) => <div>{children}</div>,
+    CardHeader: ({ children }: any) => <div>{children}</div>,
+    CardTitle: ({ children }: any) => <h3>{children}</h3>,
+    Badge: ({ children, variant }: any) => (
+      <span data-testid={`badge-${variant || "default"}`}>{children}</span>
+    ),
+    useToast: () => mockToast,
+  };
+});
+
+// Use global fetch spy
+const fetchSpy = vi.spyOn(globalThis, "fetch").mockImplementation((async (
+  url: any,
+  options: any,
+) => {
+  const finalUrl =
+    typeof url === "string" && url.startsWith("/")
+      ? `http://localhost:3000${url}`
+      : url;
+
+  console.log(`[Fetch Spy] URL: ${url} -> ${finalUrl}`);
+
+  // Default mock behavior
+  return new Response(
+    JSON.stringify({
+      success: true,
+      data: [
+        {
+          id: "1",
+          title: "Test Task",
+          description: "Test description",
+          difficulty: "easy",
+          category: "algorithms",
+          problem: "Test problem",
+          solution: "Test solution",
+          examples: [{ input: "test", output: "result" }],
+          tags: ["array", "sorting"],
+        },
+      ],
+    }),
+    {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+}) as any);
+
+vi.stubGlobal("fetch", fetchSpy);
+
+describe("Problem Solving Page - Integration", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    globalThis.fetch = fetchSpy as any;
+    if (typeof window !== "undefined") {
+      (window as any).fetch = fetchSpy;
+    }
   });
 
   it("renders the problem solving page and loads tasks", async () => {
@@ -121,20 +147,24 @@ describe("Problem Solving Page - Integration", () => {
   });
 
   it("handles task creation flow", async () => {
-    mockFetch
-      .mockResolvedValueOnce({
-        json: () =>
-          Promise.resolve({
+    fetchSpy
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
             success: true,
             data: [],
           }),
-      })
-      .mockResolvedValueOnce({
-        json: () =>
-          Promise.resolve({
+          { status: 200 },
+        ),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
             success: true,
           }),
-      });
+          { status: 200 },
+        ),
+      );
 
     render(<ProblemSolvingPage />);
 
@@ -151,7 +181,7 @@ describe("Problem Solving Page - Integration", () => {
     fireEvent.click(saveButton);
 
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith(
+      expect(fetchSpy).toHaveBeenCalledWith(
         "/api/admin/problem-solving",
         expect.objectContaining({
           method: "POST",
@@ -181,7 +211,7 @@ describe("Problem Solving Page - Integration", () => {
     fireEvent.click(saveButton);
 
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith(
+      expect(fetchSpy).toHaveBeenCalledWith(
         "/api/admin/problem-solving/1",
         expect.objectContaining({
           method: "PUT",
@@ -191,9 +221,9 @@ describe("Problem Solving Page - Integration", () => {
   });
 
   it("handles search functionality", async () => {
-    mockFetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
+    fetchSpy.mockResolvedValue(
+      new Response(
+        JSON.stringify({
           success: true,
           data: [
             {
@@ -220,7 +250,9 @@ describe("Problem Solving Page - Integration", () => {
             },
           ],
         }),
-    });
+        { status: 200 },
+      ),
+    );
 
     render(<ProblemSolvingPage />);
 
@@ -241,7 +273,7 @@ describe("Problem Solving Page - Integration", () => {
 
   it("shows loading state initially", () => {
     // Mock pending fetch
-    mockFetch.mockImplementation(() => new Promise(() => {}));
+    fetchSpy.mockImplementation(() => new Promise(() => {}));
 
     render(<ProblemSolvingPage />);
 
@@ -250,13 +282,15 @@ describe("Problem Solving Page - Integration", () => {
   });
 
   it("shows empty state when no tasks found", async () => {
-    mockFetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
+    fetchSpy.mockResolvedValue(
+      new Response(
+        JSON.stringify({
           success: true,
           data: [],
         }),
-    });
+        { status: 200 },
+      ),
+    );
 
     render(<ProblemSolvingPage />);
 
@@ -267,12 +301,12 @@ describe("Problem Solving Page - Integration", () => {
   });
 
   it("handles API errors gracefully", async () => {
-    mockFetch.mockRejectedValueOnce(new Error("Network error"));
+    fetchSpy.mockRejectedValueOnce(new Error("Network error"));
 
     render(<ProblemSolvingPage />);
 
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalled();
+      expect(fetchSpy).toHaveBeenCalled();
     });
   });
 
@@ -289,15 +323,17 @@ describe("Problem Solving Page - Integration", () => {
     const cancelButton = screen.getByTestId("cancel-editor");
     fireEvent.click(cancelButton);
 
-    expect(
-      screen.queryByTestId("problem-solving-editor"),
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId("problem-solving-editor"),
+      ).not.toBeInTheDocument();
+    });
   });
 
   it("displays different difficulty badges", async () => {
-    mockFetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
+    fetchSpy.mockResolvedValue(
+      new Response(
+        JSON.stringify({
           success: true,
           data: [
             {
@@ -335,7 +371,9 @@ describe("Problem Solving Page - Integration", () => {
             },
           ],
         }),
-    });
+        { status: 200 },
+      ),
+    );
 
     render(<ProblemSolvingPage />);
 
@@ -347,9 +385,9 @@ describe("Problem Solving Page - Integration", () => {
   });
 
   it("limits tag display to 3 tags", async () => {
-    mockFetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
+    fetchSpy.mockResolvedValue(
+      new Response(
+        JSON.stringify({
           success: true,
           data: [
             {
@@ -365,7 +403,9 @@ describe("Problem Solving Page - Integration", () => {
             },
           ],
         }),
-    });
+        { status: 200 },
+      ),
+    );
 
     render(<ProblemSolvingPage />);
 

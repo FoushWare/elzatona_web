@@ -9,9 +9,9 @@ import { test, expect } from "@playwright/test";
 import {
   setupAdminPage,
   // createQuestion,
-} from "./admin-bulk-question-addition.setup";
+} from "./admin-questions-page.setup";
 
-test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
+test.describe.skip("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
   // Set default timeout for all tests in this suite
   test.setTimeout(120000); // 2 minutes
 

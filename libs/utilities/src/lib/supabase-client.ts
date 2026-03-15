@@ -45,7 +45,7 @@ export const isSupabaseAvailable = () => supabaseClient !== null;
 
 // Mirror auth session to cookie for simple client persistence across reloads
 // Only set up on client side to avoid SSR issues
-if (supabaseClient && typeof window !== "undefined" && supabaseClient.auth) {
+if (supabaseClient && globalThis.window !== undefined && supabaseClient.auth) {
   supabaseClient.auth.onAuthStateChange((event, session) => {
     try {
       if (typeof document === "undefined") return;
@@ -59,8 +59,8 @@ if (supabaseClient && typeof window !== "undefined" && supabaseClient.auth) {
         document.cookie =
           "sb_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       }
-    } catch (_e) {
-      // no-op
+    } catch (e) {
+      console.warn("supabase-client: auth state change failed", e);
     }
   });
 }

@@ -25,9 +25,15 @@ export const seniorInterviewQuestions: SeniorInterviewQuestion[] = [
 import React from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"] || "https://placeholder-url.supabase.co";
+const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"] || "placeholder-key";
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+if (!process.env["NEXT_PUBLIC_SUPABASE_URL"] || !process.env["SUPABASE_SERVICE_ROLE_KEY"]) {
+  if (globalThis.window !== undefined) {
+    console.warn("⚠️ Supabase credentials missing in seniorInterviewQA.ts. Using placeholders to prevent crash.");
+  }
+}
 
 import './styles.css';
 import logo from './logo.png';
@@ -344,12 +350,12 @@ observer.observe({ entryTypes: ['paint'] });`,
       "Loaders transform files before they're added to the bundle. For example, babel-loader transforms ES6+ JavaScript to ES5, and css-loader processes CSS files.",
     explanation:
       "Webpack loaders are transformations that are applied to the source code of a module. They allow you to preprocess files as you import or load them. Loaders can transform files from a different language (like TypeScript) to JavaScript, or inline images as data URLs. They work in a chain, from right to left.",
-    codeExample: `// webpack.config.js
+    codeExample: String.raw`// webpack.config.js
 module.exports = {
   module: {
     rules: [
       {
-        test: /\\.js$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -359,11 +365,11 @@ module.exports = {
         }
       },
       {
-        test: /\\.css$/,
+        test: /\.css$/,
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\\.(png|jpg|gif)$/,
+        test: /\.(png|jpg|gif)$/,
         use: 'file-loader'
       }
     ]

@@ -6,25 +6,24 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import { vi, describe, it, expect, beforeEach, type Mock } from "vitest";
 import UserManagementPage from "./page";
 import * as sharedContexts from "@elzatona/contexts";
 
 // Mock shared contexts
-jest.mock("@elzatona/contexts", () => {
-  const actual = jest.requireActual(
-    "../../../test-utils/mocks/shared-contexts",
-  );
+vi.mock("@elzatona/contexts", async () => {
+  const actual = await import("../../../test-utils/mocks/shared-contexts");
   return {
     ...actual,
-    useAuth: jest.fn(),
-    useAdminAuth: jest.fn(),
+    useAuth: vi.fn(),
+    useAdminAuth: vi.fn(),
   };
 });
 
 // Mock fetch
-globalThis.fetch = jest.fn();
+globalThis.fetch = vi.fn() as unknown as typeof fetch;
 
-jest.mock("lucide-react", () => ({
+vi.mock("lucide-react", () => ({
   Users: () => <span>👥</span>,
   UserPlus: () => <span>➕</span>,
   Shield: () => <span>🛡️</span>,
@@ -44,17 +43,17 @@ jest.mock("lucide-react", () => ({
 
 describe("A-UT-018: Component Renders", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
-    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+    (sharedContexts.useAuth as unknown as Mock).mockReturnValue({
       user: { id: "1", email: "admin@example.com" },
     });
 
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (sharedContexts.useAdminAuth as unknown as Mock).mockReturnValue({
       isAuthenticated: true,
     });
 
-    (globalThis.fetch as jest.Mock).mockResolvedValue({
+    (globalThis.fetch as unknown as Mock).mockResolvedValue({
       ok: true,
       json: async () => ({
         success: true,
@@ -71,7 +70,7 @@ describe("A-UT-018: Component Renders", () => {
   });
 
   it("should display access denied for non-admin users", () => {
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (sharedContexts.useAdminAuth as unknown as Mock).mockReturnValue({
       isAuthenticated: false,
     });
 
@@ -89,17 +88,17 @@ describe("A-UT-018: Component Renders", () => {
 
 describe("A-UT-SNAPSHOT: Admin User Management Snapshot Tests", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
-    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+    (sharedContexts.useAuth as unknown as Mock).mockReturnValue({
       user: { id: "1", email: "admin@example.com" },
     });
 
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (sharedContexts.useAdminAuth as unknown as Mock).mockReturnValue({
       isAuthenticated: true,
     });
 
-    (globalThis.fetch as jest.Mock).mockResolvedValue({
+    (globalThis.fetch as unknown as Mock).mockResolvedValue({
       ok: true,
       json: async () => ({
         success: true,
@@ -116,7 +115,7 @@ describe("A-UT-SNAPSHOT: Admin User Management Snapshot Tests", () => {
   });
 
   it("should match admin user management page snapshot (with users)", async () => {
-    (globalThis.fetch as jest.Mock).mockResolvedValue({
+    (globalThis.fetch as unknown as Mock).mockResolvedValue({
       ok: true,
       json: async () => ({
         success: true,

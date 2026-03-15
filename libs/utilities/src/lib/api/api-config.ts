@@ -101,7 +101,7 @@ export function getApiConfig(): ApiConfig {
 
   // Extract project reference from URL
   const projectRef =
-    supabaseUrl.match(/https?:\/\/([^.]+)\.supabase\.co/)?.[1] || "unknown";
+    /https?:\/\/([^.]+)\.supabase\.co/.exec(supabaseUrl)?.[1] || "unknown";
 
   // Get admin credentials
   // Test/Development: Use ADMIN_EMAIL (or fallback to INITIAL_ADMIN_EMAIL)
@@ -141,9 +141,9 @@ export function getApiConfig(): ApiConfig {
   // API configuration
   const apiBaseUrl =
     process.env["NEXT_PUBLIC_API_URL"] ||
-    (typeof window !== "undefined"
-      ? window.location.origin
-      : "http://localhost:3000");
+    (globalThis.window === undefined
+      ? "http://localhost:3000"
+      : globalThis.window.location.origin);
 
   // Timeouts and retries (more lenient in test and development)
   const requestTimeout = isTest || isDev ? 30000 : 10000; // 30s for test/dev, 10s for prod

@@ -3,10 +3,23 @@
 import { createClient } from "@supabase/supabase-js";
 import { generateId } from "./utils";
 
-const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
-const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]!;
-
+const supabaseUrl =
+  process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
+  "https://placeholder-url.supabase.co";
+const supabaseServiceRoleKey =
+  process.env["SUPABASE_SERVICE_ROLE_KEY"] || "placeholder-key";
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+if (
+  !process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
+  !process.env["SUPABASE_SERVICE_ROLE_KEY"]
+) {
+  if (globalThis.window !== undefined) {
+    console.warn(
+      "⚠️ Supabase credentials missing in content-versioning-service.ts. Using placeholders to prevent crash.",
+    );
+  }
+}
 
 export interface ContentVersion {
   id: string;

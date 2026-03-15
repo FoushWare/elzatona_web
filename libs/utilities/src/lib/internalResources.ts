@@ -807,7 +807,7 @@ function SafeComponent({ userInput }) {
   {
     id: "tsd-02-6",
     question: "Can you explain how a CDN works? What are pros and cons?",
-    code: `// Example of CDN usage in HTML
+    code: String.raw`// Example of CDN usage in HTML
 <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css">
 
@@ -816,7 +816,7 @@ module.exports = {
   output: {
     publicPath: process.env['NODE_ENV'] === 'production' 
         ? 'https://cdn.example.com/' 
-  : '\\/'
+  : '\/'
   }
 };`,
     options: {
@@ -845,9 +845,15 @@ module.exports = {
 import React from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"] || "https://placeholder-url.supabase.co";
+const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"] || "placeholder-key";
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+if (!process.env["NEXT_PUBLIC_SUPABASE_URL"] || !process.env["SUPABASE_SERVICE_ROLE_KEY"]) {
+  if (globalThis.window !== undefined) {
+    console.warn("⚠️ Supabase credentials missing in internalResources.ts. Using placeholders to prevent crash.");
+  }
+}
 
 
 // Load micro-frontends dynamically
@@ -895,7 +901,7 @@ export const generalFrontendPhase3Questions: InternalQuestion[] = [
   {
     id: "tsd-03-1",
     question: "Can you explain how a CDN works? What are pros and cons?",
-    code: `// Example of CDN usage in HTML
+    code: String.raw`// Example of CDN usage in HTML
 <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css">
 
@@ -904,7 +910,7 @@ module.exports = {
   output: {
     publicPath: process.env['NODE_ENV'] === 'production' 
         ? 'https://cdn.example.com/' 
-  : '\\/'
+  : '\/'
   }
 };`,
     options: {

@@ -41,8 +41,8 @@ const makeMockTask = (id: string): FrontendTask => ({
 
 type Props = { params: Promise<{ id: string }> };
 
-export default function Page({ params }: Props) {
-  const [task, setTask] = React.useState(null as any);
+export default function Page({ params }: Readonly<Props>) {
+  const [task, setTask] = React.useState<FrontendTask | null>(null);
   React.useEffect(() => {
     params.then(({ id }) => {
       setTask(makeMockTask(id));

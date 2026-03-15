@@ -169,7 +169,9 @@ export default function FrontendTasksPage() {
     if (isLoading) {
       return (
         <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <output aria-live="polite" className="inline-flex">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+          </output>
         </div>
       );
     }
