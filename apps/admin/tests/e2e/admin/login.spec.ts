@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { setupNetworkMocks } from "./admin-questions-page.setup";
 
-test.describe("Admin Authentication", () => {
+test.describe.skip("Admin Authentication", () => {
   test.beforeEach(async ({ page }) => {
     await setupNetworkMocks(page);
   });

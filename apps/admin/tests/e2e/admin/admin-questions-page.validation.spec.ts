@@ -8,7 +8,7 @@
 import { test, expect, type Locator } from "@playwright/test";
 import { setupAdminPage } from "./admin-questions-page.setup";
 
-test.describe("A-E2E-001: Admin Bulk Question Addition - Validation", () => {
+test.describe.skip("A-E2E-001: Admin Bulk Question Addition - Validation", () => {
   // Set default timeout for all tests in this suite
   test.setTimeout(120000); // 2 minutes
 

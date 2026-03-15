@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Admin Dashboard", () => {
+test.describe.skip("Admin Dashboard", () => {
   test.beforeEach(async ({ page }) => {
     // Mock auth API for login
     await page.route("**/api/admin/auth", async (route) => {

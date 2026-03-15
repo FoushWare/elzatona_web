@@ -1,10 +1,12 @@
 /**
  * Integration tests for Admin Learning Cards page
  */
+import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import LearningCardsPage from "./page";
-import * as useLearningCardsModule from "./hooks/useLearningCards";
+
+const mockUseLearningCards = vi.fn();
 
 // Mock the common-ui components
 vi.mock("@elzatona/common-ui", () => ({
@@ -80,44 +82,45 @@ vi.mock("./components/CardFormModal", () => ({
 
 // Mock the hook
 vi.mock("./hooks/useLearningCards", () => ({
-  useLearningCards: () => ({
-    cards: [
-      {
-        id: "1",
-        title: "Test Card 1",
-        category: "test",
-        topic: "test",
-        question: "test",
-      },
-      {
-        id: "2",
-        title: "Test Card 2",
-        category: "test",
-        topic: "test",
-        question: "test",
-      },
-    ],
-    categories: ["test"],
-    topics: ["test"],
-    questions: ["test"],
-    stats: { total: 2, categories: 1, topics: 1 },
-    loading: false,
-    error: null,
-    expandedCards: new Set(),
-    toggleCard: vi.fn(),
-    expandedCategories: new Set(),
-    toggleCategory: vi.fn(),
-    expandedTopics: new Set(),
-    toggleTopic: vi.fn(),
-    createCard: vi.fn().mockResolvedValue(true),
-    updateCard: vi.fn().mockResolvedValue(true),
-    deleteCard: vi.fn().mockResolvedValue(true),
-  }),
+  useLearningCards: () => mockUseLearningCards(),
 }));
 
 describe("Learning Cards Page - Integration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUseLearningCards.mockReturnValue({
+      cards: [
+        {
+          id: "1",
+          title: "Test Card 1",
+          category: "test",
+          topic: "test",
+          question: "test",
+        },
+        {
+          id: "2",
+          title: "Test Card 2",
+          category: "test",
+          topic: "test",
+          question: "test",
+        },
+      ],
+      categories: ["test"],
+      topics: ["test"],
+      questions: ["test"],
+      stats: { total: 2, categories: 1, topics: 1 },
+      loading: false,
+      error: null,
+      expandedCards: new Set(),
+      toggleCard: vi.fn(),
+      expandedCategories: new Set(),
+      toggleCategory: vi.fn(),
+      expandedTopics: new Set(),
+      toggleTopic: vi.fn(),
+      createCard: vi.fn().mockResolvedValue(true),
+      updateCard: vi.fn().mockResolvedValue(true),
+      deleteCard: vi.fn().mockResolvedValue(true),
+    });
   });
 
   it("renders the learning cards page with cards", () => {
@@ -141,7 +144,7 @@ describe("Learning Cards Page - Integration", () => {
 
   it("handles card creation flow", async () => {
     const mockCreateCard = vi.fn().mockResolvedValue(true);
-    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
+    mockUseLearningCards.mockReturnValue({
       cards: [],
       categories: [],
       topics: [],
@@ -186,7 +189,7 @@ describe("Learning Cards Page - Integration", () => {
 
   it("handles card editing flow", async () => {
     const mockUpdateCard = vi.fn().mockResolvedValue(true);
-    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
+    mockUseLearningCards.mockReturnValue({
       cards: [
         {
           id: "1",
@@ -239,7 +242,7 @@ describe("Learning Cards Page - Integration", () => {
 
   it("handles card deletion flow", async () => {
     const mockDeleteCard = vi.fn().mockResolvedValue(true);
-    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
+    mockUseLearningCards.mockReturnValue({
       cards: [
         {
           id: "1",
@@ -310,7 +313,7 @@ describe("Learning Cards Page - Integration", () => {
   });
 
   it("shows loading state", () => {
-    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
+    mockUseLearningCards.mockReturnValue({
       cards: [],
       categories: [],
       topics: [],
@@ -336,7 +339,7 @@ describe("Learning Cards Page - Integration", () => {
   });
 
   it("displays error messages", () => {
-    vi.mocked(useLearningCardsModule.useLearningCards).mockReturnValue({
+    mockUseLearningCards.mockReturnValue({
       cards: [],
       categories: [],
       topics: [],
