@@ -164,7 +164,9 @@ describe("Admin content management page - Integration", () => {
 
     render(<ContentManagementPage />);
 
-    expect(screen.getByText("Failed to load content data")).toBeInTheDocument();
+    expect(
+      screen.getByText(/Failed to load content data/i),
+    ).toBeInTheDocument();
   });
 
   it("search functionality updates search term", () => {

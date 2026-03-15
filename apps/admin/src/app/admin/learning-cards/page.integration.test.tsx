@@ -171,7 +171,9 @@ describe("Learning Cards Page - Integration", () => {
 
     // Modal should open
     expect(screen.getByTestId("card-form-modal")).toBeInTheDocument();
-    expect(screen.getByText("Create Card")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Create Card" }),
+    ).toBeInTheDocument();
 
     // Submit form
     const submitButton = screen.getByTestId("submit-form");

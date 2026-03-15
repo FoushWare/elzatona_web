@@ -1,6 +1,7 @@
 /**
  * Integration tests for Admin dashboard page API interactions
  */
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import AdminDashboardPage from "./page";
