@@ -45,7 +45,7 @@ jobs:
           languages: ${{ matrix.language }}
           # Use custom config to reduce scanning scope and exclude PolynomialReDoS
           # The config file specifies the security query suite
-          config-file: .github/workflows/codeql-config.yml
+          config-file: .github/codeql/codeql-config.yml
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

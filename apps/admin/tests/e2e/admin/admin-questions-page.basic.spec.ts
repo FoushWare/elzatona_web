@@ -30,13 +30,11 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Basic", () => {
   });
 
   test("should have Add New Question button", async ({ page }) => {
-    // There are multiple "Add New Question" buttons (header and empty state)
-    // Use getAllByRole and check the first one (header button)
-    const addButtons = page.getByRole("button", { name: /Add New Question/i });
-    const count = await addButtons.count();
-    expect(count).toBeGreaterThan(0);
-    // Verify the first button (header button) is visible
-    await expect(addButtons.first()).toBeVisible({ timeout: 5000 });
+    await waitForQuestionManagementReady(page);
+
+    // Use a stable selector introduced for E2E reliability.
+    const createButton = page.getByTestId("question-create-button");
+    await expect(createButton).toBeVisible({ timeout: 5000 });
   });
 
   test("should display search functionality", async ({ page }) => {
