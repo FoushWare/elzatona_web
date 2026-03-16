@@ -38,15 +38,16 @@ jobs:
       - name: Run Prettier formatting check
         run: |
           echo "🎨 Running Prettier formatting check..."
-          # Check only real files (no symlinks) to avoid false failures.
-          FILES=$(find . -type f \( -name '*.js' -o -name '*.jsx' -o -name '*.ts' -o -name '*.tsx' -o -name '*.json' -o -name '*.md' -o -name '*.yml' -o -name '*.yaml' -o -name '*.css' -o -name '*.scss' -o -name '*.html' \) \
-            -not -path './node_modules/*' \
-            -not -path './.git/*')
+          # Use git ls-files so we only check committed/tracked files.
+          # Skip symlinks (git tracks them but prettier can't process them).
+          FILES=$(git ls-files | grep -E '\.(js|jsx|ts|tsx|json|md|yml|yaml|css|scss|html)$' | while IFS= read -r f; do
+            [ -f "$f" ] && [ ! -L "$f" ] && printf '%s\n' "$f"
+          done)
           if [ -z "$FILES" ]; then
             echo "No tracked files found for Prettier check."
             exit 0
           fi
-          echo "$FILES" | xargs npx prettier --check --ignore-path .prettierignore || (echo "⚠️  Prettier found formatting issues. Run 'npm run format' to fix them." && exit 1)
+          echo "$FILES" | xargs npx prettier --check || (echo "⚠️  Prettier found formatting issues. Run 'npm run format' to fix them." && exit 1)
         continue-on-error: false
 
       - name: Run ESLint with auto-fix

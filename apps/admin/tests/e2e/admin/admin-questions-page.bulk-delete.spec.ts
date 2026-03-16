@@ -162,7 +162,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Bulk Deletion", () => {
       const deletedQuestionHeading = page.getByRole("heading", {
         name: firstQuestionTitle.trim(),
       });
-      const isVisible = await deletedQuestionHeading.isVisible().catch(() => false);
+      const isVisible = await deletedQuestionHeading
+        .isVisible()
+        .catch(() => false);
       expect(isVisible).toBe(false);
 
       const deletedQuestionHeading2 = page.getByRole("heading", {

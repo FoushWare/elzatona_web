@@ -14,7 +14,8 @@ import {
   testPrefix,
 } from "./admin-questions-page.setup";
 
-test.describe.skip("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
+test.describe
+  .skip("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
   // Set default timeout for all tests in this suite
   test.setTimeout(120000); // 2 minutes
 
