@@ -7,7 +7,7 @@
 // Priority: .env.test.local > .env.test > .env.local (fallback)
 import { config } from "dotenv";
 import { resolve } from "path";
-import { Page, Response } from "@playwright/test";
+import { Locator, Page, Response } from "@playwright/test";
 import { existsSync } from "fs";
 
 const projectRoot = process.cwd();
@@ -78,19 +78,111 @@ if (process.env.ADMIN_PASSWORD) {
 // Module-level variables to share state across tests
 export const createdQuestionTitles: string[] = [];
 export const testPrefix = `E2E-${Date.now()}`;
+const QUESTIONS_API_PATH = "/api/questions/unified";
+
+export function getQuestionManagementLocators(page: Page): {
+  readonly root: Locator;
+  readonly title: Locator;
+  readonly loading: Locator;
+  readonly searchLoading: Locator;
+  readonly search: Locator;
+  readonly list: Locator;
+  readonly createButton: Locator;
+} {
+  return {
+    root: page.getByTestId("question-management-page"),
+    title: page.getByTestId("question-management-title"),
+    loading: page.getByTestId("question-management-loading"),
+    searchLoading: page.getByTestId("question-management-search-loading"),
+    search: page.getByTestId("question-management-search"),
+    list: page.getByTestId("questions-list"),
+    createButton: page.getByTestId("question-create-button"),
+  };
+}
+
+async function waitForOptionalHidden(
+  locator: Locator,
+  timeout = 10000,
+): Promise<void> {
+  if ((await locator.count()) === 0) {
+    return;
+  }
+
+  await locator.first().waitFor({ state: "hidden", timeout }).catch(() => {});
+}
+
+export async function waitForQuestionManagementReady(
+  page: Page,
+): Promise<ReturnType<typeof getQuestionManagementLocators>> {
+  const locators = getQuestionManagementLocators(page);
+
+  await locators.title.waitFor({ state: "visible", timeout: 15000 });
+  await waitForOptionalHidden(locators.loading);
+  await waitForOptionalHidden(locators.searchLoading);
+
+  if ((await locators.search.count()) > 0) {
+    await locators.search.first().waitFor({ state: "visible", timeout: 15000 });
+  }
+
+  if ((await locators.list.count()) > 0) {
+    await locators.list.first().waitFor({ state: "visible", timeout: 15000 });
+  }
+
+  return locators;
+}
+
+export async function waitForQuestionApiResponse(
+  page: Page,
+  method: "GET" | "POST" | "PUT" | "DELETE",
+  timeout = 20000,
+): Promise<Response | null> {
+  return page
+    .waitForResponse(
+      (response) =>
+        response.url().includes(QUESTIONS_API_PATH) &&
+        response.request().method() === method,
+      { timeout },
+    )
+    .catch(() => null);
+}
+
+export async function runAndWaitForQuestionApi(
+  page: Page,
+  method: "GET" | "POST" | "PUT" | "DELETE",
+  action: () => Promise<void>,
+): Promise<Response | null> {
+  const responsePromise = waitForQuestionApiResponse(page, method);
+  await action();
+  const response = await responsePromise;
+  await waitForQuestionManagementReady(page);
+  return response;
+}
+
+export async function openDialog(
+  page: Page,
+  headingName: RegExp,
+): Promise<Locator> {
+  const dialog = page.locator('[role="dialog"]');
+  await dialog.waitFor({ state: "visible", timeout: 10000 });
+  await dialog
+    .getByRole("heading", { name: headingName })
+    .waitFor({ state: "visible", timeout: 5000 });
+  return dialog;
+}
+
+export async function waitForDialogToClose(dialog: Locator): Promise<void> {
+  await dialog.waitFor({ state: "hidden", timeout: 10000 }).catch(() => {});
+}
+
+export function getQuestionSelectionCheckboxes(page: Page): Locator {
+  return page.locator('input[type="checkbox"]');
+}
 
 /**
  * Helper function to create a question
  */
 export async function createQuestion(page: Page, title: string): Promise<void> {
-  // Wait for page to be ready
-  await page.waitForTimeout(1000);
-
-  // Wait for the questions page content to be visible
-  await page
-    .locator("h1, h2, h3")
-    .filter({ hasText: /^Question Management$/i })
-    .waitFor({ state: "visible", timeout: 10000 });
+  await waitForQuestionManagementReady(page);
 
   // Click "Add New Question" button - use a more robust selector
   const addButton = page
@@ -107,7 +199,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
     // Wait for button to become enabled by polling
     let attempts = 0;
     while (attempts < 10 && (await addButton.isDisabled().catch(() => true))) {
-      await page.waitForTimeout(500);
+      await page.waitForLoadState("networkidle").catch(() => {});
       attempts++;
     }
   }
@@ -118,7 +210,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
   await page
     .getByText(/Create New Question|Add Question/i)
     .waitFor({ timeout: 10000, state: "visible" });
-  await page.waitForTimeout(1000);
 
   // Fill in the form
   const titleInput = page.getByLabel(/Title/i);
@@ -137,7 +228,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
       .first();
     if ((await categorySelect.count()) > 0) {
       await categorySelect.click();
-      await page.waitForTimeout(500);
       // Wait for enabled options to appear (filter out disabled ones)
       await page.waitForSelector(
         '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
@@ -151,7 +241,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
       if ((await categoryOption.count()) > 0) {
         await categoryOption.waitFor({ state: "visible", timeout: 5000 });
         await categoryOption.click();
-        await page.waitForTimeout(500);
       } else {
         console.log(
           "⚠️ No enabled category options found, skipping category selection",
@@ -163,7 +252,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
   // Select Type (default is multiple-choice, but ensure it's set)
   const typeLabel = page.getByText(/Type/i);
   if ((await typeLabel.count()) > 0) {
-    await page.waitForTimeout(300);
     const typeSelect = page
       .locator("label")
       .filter({ hasText: /Type/i })
@@ -172,7 +260,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
       .first();
     if ((await typeSelect.count()) > 0) {
       await typeSelect.click();
-      await page.waitForTimeout(500);
       // Wait for enabled options to appear
       await page.waitForSelector(
         '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
@@ -187,7 +274,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
       if ((await multipleChoiceOption.count()) > 0) {
         await multipleChoiceOption.waitFor({ state: "visible", timeout: 5000 });
         await multipleChoiceOption.click();
-        await page.waitForTimeout(500);
       } else {
         const firstOption = page
           .locator(
@@ -197,7 +283,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
         if ((await firstOption.count()) > 0) {
           await firstOption.waitFor({ state: "visible", timeout: 5000 });
           await firstOption.click();
-          await page.waitForTimeout(500);
         }
       }
     }
@@ -206,7 +291,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
   // Select Difficulty
   const difficultyLabel = page.getByText(/Difficulty/i);
   if ((await difficultyLabel.count()) > 0) {
-    await page.waitForTimeout(300);
     const difficultySelect = page
       .locator("label")
       .filter({ hasText: /Difficulty/i })
@@ -215,7 +299,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
       .first();
     if ((await difficultySelect.count()) > 0) {
       await difficultySelect.click();
-      await page.waitForTimeout(500);
       // Wait for enabled options to appear
       await page.waitForSelector(
         '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
@@ -230,7 +313,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
       if ((await beginnerOption.count()) > 0) {
         await beginnerOption.waitFor({ state: "visible", timeout: 5000 });
         await beginnerOption.click();
-        await page.waitForTimeout(500);
       } else {
         const firstOption = page
           .locator(
@@ -240,7 +322,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
         if ((await firstOption.count()) > 0) {
           await firstOption.waitFor({ state: "visible", timeout: 5000 });
           await firstOption.click();
-          await page.waitForTimeout(500);
         }
       }
     }
@@ -250,7 +331,6 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
   const addOptionButton = page.getByRole("button", { name: /Add Option/i });
   if ((await addOptionButton.count()) > 0) {
     await addOptionButton.click();
-    await page.waitForTimeout(500);
     await page.waitForSelector(
       'input[placeholder*="Option"], input[placeholder*="option"]',
       { timeout: 5000 },
@@ -260,14 +340,12 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
     );
     if ((await optionInputs.count()) > 0) {
       await optionInputs.first().fill("Option A");
-      await page.waitForTimeout(300);
       const optionContainer = optionInputs.first().locator("..").locator("..");
       const correctCheckbox = optionContainer
         .locator('input[type="checkbox"]')
         .first();
       if ((await correctCheckbox.count()) > 0) {
         await correctCheckbox.check();
-        await page.waitForTimeout(200);
       }
     }
   }
@@ -329,33 +407,20 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
     const closeButton = page.getByRole("button", { name: /Close|Cancel/i });
     if ((await closeButton.count()) > 0) {
       await closeButton.first().click();
-      await page.waitForTimeout(500);
     }
     // Also try pressing Escape
     await page.keyboard.press("Escape");
-    await page.waitForTimeout(500);
   }
 
   // Wait for page header to be visible (indicates we're back on the questions page)
   try {
-    await page
-      .locator("h1")
-      .filter({ hasText: /^Question Management$/i })
-      .waitFor({ state: "visible", timeout: 10000 });
+    await waitForQuestionManagementReady(page);
     console.log("✅ Back on questions page");
   } catch (_error) {
     console.log("⚠️ Page header not found, but continuing...");
-    // Fallback: just wait a bit and continue
-    await page.waitForTimeout(2000);
   }
 
-  // Wait for any loading states to complete
-  const loadingText = page.locator("text=/Loading questions/i");
-  await loadingText.waitFor({ state: "hidden", timeout: 5000 }).catch(() => {
-    console.log("Loading text not found or already hidden");
-  });
-
-  await page.waitForTimeout(1000);
+  await waitForQuestionManagementReady(page);
   console.log("✅ Question creation helper completed");
 }
 
@@ -372,7 +437,7 @@ export async function bulkDeleteQuestions(
   const searchInput = page.locator('input[placeholder*="Search questions"]');
   if ((await searchInput.count()) > 0) {
     await searchInput.clear();
-    await page.waitForTimeout(1000);
+    await waitForQuestionManagementReady(page);
   }
 
   // Navigate to page 1 to ensure we can find all questions
@@ -384,7 +449,7 @@ export async function bulkDeleteQuestions(
     !(await page1Button.first().isDisabled())
   ) {
     await page1Button.first().click();
-    await page.waitForTimeout(2000);
+    await waitForQuestionManagementReady(page);
   }
 
   // Select all questions that match our test prefix
@@ -394,7 +459,7 @@ export async function bulkDeleteQuestions(
     const isChecked = await selectAllCheckbox.isChecked();
     if (isChecked) {
       await selectAllCheckbox.click();
-      await page.waitForTimeout(500);
+      await waitForQuestionManagementReady(page);
     }
 
     // Select questions one by one that match our test prefix
@@ -407,7 +472,6 @@ export async function bulkDeleteQuestions(
         if ((await checkbox.count()) > 0) {
           await checkbox.check();
           selectedCount++;
-          await page.waitForTimeout(200);
         }
       }
     }
@@ -419,7 +483,6 @@ export async function bulkDeleteQuestions(
       });
       if ((await deleteSelectedButton.count()) > 0) {
         await deleteSelectedButton.click();
-        await page.waitForTimeout(500);
 
         // Confirm deletion - wait for dialog first
         const dialog = page.locator('[role="dialog"]');
@@ -464,8 +527,8 @@ export async function bulkDeleteQuestions(
           // Wait for modal to close - check for dialog to disappear
           await dialog
             .waitFor({ state: "hidden", timeout: 10000 })
-            .catch(() => { });
-          await page.waitForTimeout(2000);
+            .catch(() => {});
+          await waitForQuestionManagementReady(page);
         }
       }
     }
@@ -699,8 +762,6 @@ export async function setupAdminPage(
 
   // Wait for the URL to settle (either stayed on questions or redirected to login)
   // We use a small timeout to allow for the client-side redirect to happen
-  await page.waitForTimeout(2000);
-
   let settledURL = "";
   try {
     settledURL = page.url();
@@ -751,8 +812,6 @@ export async function setupAdminPage(
     timeout: 15000,
   });
 
-  await page.waitForTimeout(isEdge ? 1000 : 500);
-
   // Fill in login form - use more specific selectors
   const emailInput = page.getByLabel(/Email Address/i);
   const passwordInput = page.getByLabel(/Password/i);
@@ -776,13 +835,11 @@ export async function setupAdminPage(
   await emailInput.clear();
   await passwordInput.focus();
   await passwordInput.clear();
-  await page.waitForTimeout(isEdge ? 400 : 200);
+  await page.waitForLoadState("domcontentloaded").catch(() => {});
 
   // Fill inputs
   await emailInput.fill(adminEmail);
-  await page.waitForTimeout(isEdge ? 200 : 100);
   await passwordInput.fill(adminPassword);
-  await page.waitForTimeout(isEdge ? 500 : 300);
 
   // Verify inputs are filled
   const emailValue = await emailInput.inputValue();
@@ -929,7 +986,6 @@ export async function setupAdminPage(
       if (isEdge) {
         await signInButton.scrollIntoViewIfNeeded();
         await signInButton.focus();
-        await page.waitForTimeout(200);
       }
       await signInButton.click({ timeout: 5000 });
       console.log("✅ Sign in button clicked");
@@ -938,7 +994,6 @@ export async function setupAdminPage(
       console.log("⚠️ Button click failed, trying Enter key...");
       if (isEdge) {
         await passwordInput.focus();
-        await page.waitForTimeout(200);
       }
       await passwordInput.press("Enter");
       console.log("✅ Enter key pressed");
@@ -1097,7 +1152,7 @@ export async function setupAdminPage(
     } catch (e: unknown) {
       const error = e instanceof Error ? e : new Error(String(e));
       console.log("⚠️ Error parsing login response:", error.message);
-      await page.waitForTimeout(1000);
+      await page.waitForLoadState("networkidle").catch(() => {});
       const errorBox = page.locator(".bg-red-50, .bg-red-900\\/20");
       const errorBoxCount = await errorBox.count();
       if (errorBoxCount > 0) {
@@ -1301,14 +1356,7 @@ export async function setupAdminPage(
     if (page.isClosed()) {
       throw new Error("Page was closed during network idle wait");
     }
-    console.log("Network idle timeout in beforeEach, waiting 2 seconds...");
-    try {
-      await page.waitForTimeout(2000);
-    } catch (_timeoutError) {
-      if (page.isClosed()) {
-        throw new Error("Page was closed during timeout wait");
-      }
-    }
+    console.log("Network idle timeout in beforeEach, continuing with DOM readiness checks...");
   }
 
   // Verify we're on the questions page
@@ -1332,7 +1380,7 @@ export async function setupAdminPage(
 
     urlCheckRetries++;
     if (urlCheckRetries < maxUrlCheckRetries) {
-      await page.waitForTimeout(500);
+      await page.waitForLoadState("domcontentloaded").catch(() => {});
     }
   }
 
@@ -1351,7 +1399,7 @@ export async function setupAdminPage(
   }
 
   if (!questionsPageURL && !page.isClosed()) {
-    await page.waitForTimeout(1000);
+    await page.waitForLoadState("domcontentloaded").catch(() => {});
     try {
       questionsPageURL = page.url();
       if (
@@ -1391,12 +1439,6 @@ export async function setupAdminPage(
   if (page.isClosed()) {
     throw new Error("Page was closed before completing beforeEach");
   }
-  try {
-    await page.waitForTimeout(1000);
-  } catch (_timeoutError) {
-    if (page.isClosed()) {
-      throw new Error("Page was closed during final wait");
-    }
-  }
+  await waitForQuestionManagementReady(page);
   console.log("beforeEach completed - questions page should be ready");
 }

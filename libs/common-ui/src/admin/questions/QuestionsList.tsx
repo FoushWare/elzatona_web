@@ -41,11 +41,17 @@ export const QuestionsList: React.FC<QuestionsListProps> = ({
   onCreate,
 }) => {
   return (
-    <Card>
-      <CardHeader>
+    <Card data-testid="questions-list">
+      <CardHeader data-testid="questions-list-header">
         <CardTitle className="flex items-center justify-between">
-          <span>Questions ({questions.length})</span>
-          <Button className="flex items-center space-x-2" onClick={onCreate}>
+          <span data-testid="questions-list-title">
+            Questions ({questions.length})
+          </span>
+          <Button
+            className="flex items-center space-x-2"
+            data-testid="question-create-button"
+            onClick={onCreate}
+          >
             <Plus className="w-4 h-4" />
             <span>Add New Question</span>
           </Button>
@@ -54,7 +60,10 @@ export const QuestionsList: React.FC<QuestionsListProps> = ({
 
       {/* Pagination Before Questions List */}
       {totalCount > 0 && (
-        <div className="px-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+        <div
+          className="px-6 pb-4 border-b border-gray-200 dark:border-gray-700"
+          data-testid="questions-list-pagination-top"
+        >
           <PaginationControls
             currentPage={currentPage}
             totalPages={totalPages}
@@ -67,9 +76,15 @@ export const QuestionsList: React.FC<QuestionsListProps> = ({
       )}
 
       <CardContent className="p-0">
-        <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800">
+        <div
+          className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800"
+          data-testid="questions-list-content"
+        >
           {questions.length === 0 ? (
-            <div className="text-center py-12">
+            <div
+              className="text-center py-12"
+              data-testid="questions-empty-state"
+            >
               <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                 No questions found
@@ -79,7 +94,7 @@ export const QuestionsList: React.FC<QuestionsListProps> = ({
               </p>
             </div>
           ) : (
-            <div className="space-y-1">
+            <div className="space-y-1" data-testid="questions-list-items">
               {questions.map((question) => (
                 <QuestionItem
                   key={question.id}
