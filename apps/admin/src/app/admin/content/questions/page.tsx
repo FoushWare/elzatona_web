@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, Suspense } from "react";
+import React, { useRef, Suspense, useCallback, useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -59,12 +59,23 @@ function QuestionManagementContent() {
   const questionFormRef = useRef<HTMLFormElement>(null);
 
   // Supplemental Data helpers
-  const allTopics = (topicsData?.data || []).map((t: any) => ({
-    id: t.id,
-    name: t.name,
-    categoryId: "",
-  }));
-  const allCategories = categoriesData?.data || [];
+  const allTopics = useMemo(
+    () =>
+      (topicsData?.data || []).map((t: any) => ({
+        id: t.id,
+        name: t.name,
+        categoryId: "",
+      })),
+    [topicsData],
+  );
+  const allCategories = useMemo(() => categoriesData?.data || [], [categoriesData]);
+
+  const handleSearchResultsChange = useCallback(
+    (results: unknown[]) => {
+      setQuestions(results as any);
+    },
+    [setQuestions],
+  );
 
   if (loading && questions.length === 0) {
     return (
@@ -91,7 +102,7 @@ function QuestionManagementContent() {
         <div className="text-center p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg">
           <p className="font-semibold mb-2">Error loading questions:</p>
           <p>{error}</p>
-          <Button onClick={() => window.location.reload()} className="mt-4">
+          <Button onClick={() => globalThis.location.reload()} className="mt-4">
             Retry
           </Button>
         </div>
@@ -135,7 +146,7 @@ function QuestionManagementContent() {
       {categoriesData && topicsData ? (
         <div data-testid="question-management-search">
           <AdvancedSearch
-            onResultsChange={(results) => setQuestions(results as any)}
+            onResultsChange={handleSearchResultsChange}
             placeholder="Search questions by title, content, tags..."
             showFilters={true}
             showFacets={false}

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getRepositoryFactory } from "@elzatona/database";
 
 export async function GET() {
@@ -13,12 +13,20 @@ export async function GET() {
     const categoriesWithCounts = await Promise.all(
       categories.map(async (category) => {
         try {
-          const questions = await questionRepo.findByCategory(category.id);
+          const result = await questionRepo.findByCategory(category.id, {
+            limit: 1,
+            offset: 0,
+          });
+
+          // Repository returns paginated data; count is in meta.total.
+          const questionCount =
+            result?.meta?.total ?? result?.data?.length ?? 0;
+
           return {
             id: category.id,
             name: category.name,
             description: category.description,
-            questionCount: questions?.length || 0,
+            questionCount,
           };
         } catch (error) {
           console.error(

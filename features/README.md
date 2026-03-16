@@ -28,6 +28,7 @@ Each feature directory contains four key documents:
 | [Dashboard](./dashboard/feature-spec.md)                                 | User progress and stats dashboard     | `apps/website/src/app/dashboard`              |
 | [Settings](./settings/feature-spec.md)                                   | User account & preference settings    | `apps/website/src/app/settings`               |
 | [Admin – Content Management](./admin-content-management/feature-spec.md) | Admin CRUD for content                | `apps/admin/src/app/admin/content-management` |
+| [Admin – Content Questions](./admin-content-questions/feature-spec.md)   | Admin question operations and search  | `apps/admin/src/app/admin/content/questions`  |
 | [Admin – Learning Cards](./admin-learning-cards/feature-spec.md)         | Admin learning card management        | `apps/admin/src/app/admin/learning-cards`     |
 | [Admin – Users](./admin-users/feature-spec.md)                           | Admin user management                 | `apps/admin/src/app/admin/users`              |
 
