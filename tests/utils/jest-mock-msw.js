@@ -7,12 +7,12 @@ const originalFetch =
 function getRequestMeta(input, init = {}) {
   const url = typeof input === "string" ? input : input?.url || "";
   const pathname = new URL(url, "http://localhost").pathname;
-  const method = (init && init.method) || (input && input.method) || "GET";
+  const method = init?.method || input?.method || "GET";
   return { pathname, method };
 }
 
 function parseRequestBody(init) {
-  if (!init || !init.body) return {};
+  if (!init?.body) return {};
 
   try {
     return typeof init.body === "string" ? JSON.parse(init.body) : init.body;
@@ -23,7 +23,7 @@ function parseRequestBody(init) {
 }
 
 function createLoginResponse(body) {
-  const email = (body && body.email) || "test@example.com";
+  const email = body?.email || "test@example.com";
   return {
     status: 200,
     ok: true,

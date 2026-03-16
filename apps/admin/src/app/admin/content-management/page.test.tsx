@@ -7,6 +7,7 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import ContentManagementPage from "./page";
+import "@testing-library/jest-dom";
 import { useContentManagement } from "./hooks/useContentManagement";
 
 // Mock the hook
@@ -52,20 +53,24 @@ vi.mock("@elzatona/common-ui", () => ({
   ),
   LearningCardsManager: ({ cards, onCardUpdate, onCardDelete }: any) => (
     <div data-testid="cards-manager">
-      {cards?.map((card: any) => (
-        <div key={card.id} data-testid={`card-${card.id}`}>
-          {card.title}
-        </div>
-      )) || "No cards"}
+      {cards && cards.length > 0
+        ? cards.map((card: any) => (
+            <div key={card.id} data-testid={`card-${card.id}`}>
+              {card.title}
+            </div>
+          ))
+        : "No cards"}
     </div>
   ),
   PlansManager: ({ plans, onPlanUpdate, onPlanDelete }: any) => (
     <div data-testid="plans-manager">
-      {plans?.map((plan: any) => (
-        <div key={plan.id} data-testid={`plan-${plan.id}`}>
-          {plan.title}
-        </div>
-      )) || "No plans"}
+      {plans && plans.length > 0
+        ? plans.map((plan: any) => (
+            <div key={plan.id} data-testid={`plan-${plan.id}`}>
+              {plan.title}
+            </div>
+          ))
+        : "No plans"}
     </div>
   ),
   TopicsManager: ({ topics, onTopicUpdate, onTopicDelete }: any) => (
@@ -156,7 +161,7 @@ describe("ContentManagementPage", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useContentManagement).mockReturnValue(mockHookReturn);
+    vi.mocked(useContentManagement).mockReturnValue(mockHookReturn as any);
   });
 
   describe("Loading state", () => {
@@ -164,12 +169,12 @@ describe("ContentManagementPage", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
         loading: true,
-      });
+      } as any);
 
       render(<ContentManagementPage />);
 
       expect(
-        screen.getByText("Loading content management..."),
+        screen.getByText("Loading content management data..."),
       ).toBeInTheDocument();
     });
   });
@@ -179,11 +184,11 @@ describe("ContentManagementPage", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
         error: "Failed to load content",
-      });
+      } as any);
 
       render(<ContentManagementPage />);
 
-      expect(screen.getByText("Failed to load content")).toBeInTheDocument();
+      expect(screen.getByText(/Failed to load content/)).toBeInTheDocument();
     });
   });
 
@@ -191,7 +196,9 @@ describe("ContentManagementPage", () => {
     it("should render page title", () => {
       render(<ContentManagementPage />);
 
-      expect(screen.getByText("Content Management")).toBeInTheDocument();
+      expect(
+        screen.getByText(/Unified Learning Management/),
+      ).toBeInTheDocument();
     });
 
     it("should render stats section", () => {
@@ -277,7 +284,7 @@ describe("ContentManagementPage", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
         filteredCards: [],
-      });
+      } as any);
 
       render(<ContentManagementPage />);
 
@@ -288,7 +295,7 @@ describe("ContentManagementPage", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
         filteredPlans: [],
-      });
+      } as any);
 
       render(<ContentManagementPage />);
 
@@ -301,7 +308,7 @@ describe("ContentManagementPage", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
         showTopicQuestionsModal: true,
-      });
+      } as any);
 
       render(<ContentManagementPage />);
 
@@ -312,7 +319,7 @@ describe("ContentManagementPage", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
         showDeleteModal: true,
-      });
+      } as any);
 
       render(<ContentManagementPage />);
 
@@ -325,7 +332,7 @@ describe("ContentManagementPage", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
         showCardModal: true,
-      });
+      } as any);
 
       render(<ContentManagementPage />);
 

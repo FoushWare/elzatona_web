@@ -370,7 +370,7 @@ export default function BulkQuestionUploader({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     await submitQuestions();
   };

@@ -68,7 +68,10 @@ function QuestionManagementContent() {
 
   if (loading && questions.length === 0) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div
+        className="flex items-center justify-center h-64"
+        data-testid="question-management-loading"
+      >
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
           <p className="text-gray-600 dark:text-gray-400">
@@ -81,7 +84,10 @@ function QuestionManagementContent() {
 
   if (error && questions.length === 0) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div
+        className="flex items-center justify-center h-64"
+        data-testid="question-management-error"
+      >
         <div className="text-center p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg">
           <p className="font-semibold mb-2">Error loading questions:</p>
           <p>{error}</p>
@@ -95,50 +101,58 @@ function QuestionManagementContent() {
 
   return (
     <>
-      <StatsCards
-        totalCount={totalCount}
-        categoryCount={categoryCounts.length}
-        activeQuestionsCount={questions.filter((q) => q.isActive).length}
-        filteredResultsCount={questions.length}
-      />
+      <div data-testid="question-management-stats">
+        <StatsCards
+          totalCount={totalCount}
+          categoryCount={categoryCounts.length}
+          activeQuestionsCount={questions.filter((q) => q.isActive).length}
+          filteredResultsCount={questions.length}
+        />
+      </div>
 
-      <CategoriesOverview categoryCounts={categoryCounts} />
+      <div data-testid="question-management-categories-overview">
+        <CategoriesOverview categoryCounts={categoryCounts} />
+      </div>
 
-      <FiltersCard
-        selectedCategory={selectedCategory}
-        selectedTopic={selectedTopic}
-        categoriesData={categoriesData}
-        topicsData={topicsData}
-        onCategoryChange={(v) => {
-          setSelectedCategory(v);
-          setCurrentPage(1);
-        }}
-        onTopicChange={(v) => {
-          setSelectedTopic(v);
-          setCurrentPage(1);
-        }}
-        onClearFilters={clearFilters}
-      />
+      <div data-testid="question-management-filters">
+        <FiltersCard
+          selectedCategory={selectedCategory}
+          selectedTopic={selectedTopic}
+          categoriesData={categoriesData}
+          topicsData={topicsData}
+          onCategoryChange={(v) => {
+            setSelectedCategory(v);
+            setCurrentPage(1);
+          }}
+          onTopicChange={(v) => {
+            setSelectedTopic(v);
+            setCurrentPage(1);
+          }}
+          onClearFilters={clearFilters}
+        />
+      </div>
 
       {categoriesData && topicsData ? (
-        <AdvancedSearch
-          onResultsChange={(results) => setQuestions(results as any)}
-          placeholder="Search questions by title, content, tags..."
-          showFilters={true}
-          showFacets={false}
-          showSuggestions={false}
-          showAnalytics={true}
-          allCategories={allCategories}
-          allTopics={allTopics}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalCount={totalCount}
-          pageSize={pageSize}
-          onPageChange={setCurrentPage}
-          onPageSizeChange={setPageSize}
-        />
+        <div data-testid="question-management-search">
+          <AdvancedSearch
+            onResultsChange={(results) => setQuestions(results as any)}
+            placeholder="Search questions by title, content, tags..."
+            showFilters={true}
+            showFacets={false}
+            showSuggestions={false}
+            showAnalytics={true}
+            allCategories={allCategories}
+            allTopics={allTopics}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalCount={totalCount}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={setPageSize}
+          />
+        </div>
       ) : (
-        <Card className="mb-6">
+        <Card className="mb-6" data-testid="question-management-search-loading">
           <CardContent className="p-6">
             <div className="flex items-center justify-center">
               <Loader2 className="w-6 h-6 animate-spin mr-2 text-blue-600" />
@@ -150,22 +164,24 @@ function QuestionManagementContent() {
         </Card>
       )}
 
-      <QuestionsList
-        questions={questions}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        totalCount={totalCount}
-        pageSize={pageSize}
-        onPageChange={setCurrentPage}
-        onPageSizeChange={setPageSize}
-        onView={openViewModal}
-        onEdit={openEditModal}
-        onDelete={handleDelete}
-        onCreate={openCreateModal}
-      />
+      <div data-testid="question-management-questions-list">
+        <QuestionsList
+          questions={questions}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalCount={totalCount}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+          onPageSizeChange={setPageSize}
+          onView={openViewModal}
+          onEdit={openEditModal}
+          onDelete={handleDelete}
+          onCreate={openCreateModal}
+        />
+      </div>
 
       {totalCount > 0 && (
-        <div className="mt-6">
+        <div className="mt-6" data-testid="question-management-pagination">
           <PaginationControls
             currentPage={currentPage}
             totalPages={totalPages}
@@ -219,14 +235,23 @@ function QuestionManagementContent() {
 
 export default function AdminContentQuestionsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div
+      className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
+      data-testid="question-management-page"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">
+        <h1
+          className="text-4xl font-bold text-gray-900 dark:text-white mb-8"
+          data-testid="question-management-title"
+        >
           Question Management
         </h1>
         <Suspense
           fallback={
-            <div className="flex items-center justify-center h-64">
+            <div
+              className="flex items-center justify-center h-64"
+              data-testid="question-management-ui-loading"
+            >
               <div className="text-center">
                 <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
                 <p className="text-gray-600 dark:text-gray-400">

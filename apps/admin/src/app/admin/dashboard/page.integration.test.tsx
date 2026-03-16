@@ -1,6 +1,7 @@
 /**
  * Integration tests for Admin dashboard page API interactions
  */
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import AdminDashboardPage from "./page";
@@ -12,25 +13,17 @@ vi.mock("@elzatona/contexts", () => ({
   }),
 }));
 
-// Mock the AdminDashboard component to avoid complex API interactions
-vi.mock("../../components/AdminDashboard", () => {
-  return {
-    default: function MockAdminDashboard({
-      onRefetch,
-    }: {
-      onRefetch?: () => void;
-    }) {
-      return (
-        <div data-testid="admin-dashboard">
-          <h1>Admin Dashboard</h1>
-          <button onClick={onRefetch} data-testid="refetch-button">
-            Refresh
-          </button>
-        </div>
-      );
-    },
-  };
-});
+// Mock common-ui dashboard to avoid real API/repository calls during integration tests
+vi.mock("@elzatona/common-ui", () => ({
+  AdminDashboard: function MockAdminDashboard() {
+    return (
+      <div data-testid="admin-dashboard">
+        <h1>Admin Dashboard</h1>
+        <button data-testid="refetch-button">Refresh</button>
+      </div>
+    );
+  },
+}));
 
 // Test setup
 beforeEach(() => {

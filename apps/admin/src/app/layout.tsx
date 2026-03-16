@@ -1,3 +1,4 @@
+import React from "react";
 import type { Metadata } from "next";
 import { AdminAuthProvider, ThemeProvider } from "@elzatona/contexts";
 import { RepositoryProvider } from "@elzatona/database/client";

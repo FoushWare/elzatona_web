@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 export default function adminusersPage() {
   return (
     <div className="min-h-screen p-8">

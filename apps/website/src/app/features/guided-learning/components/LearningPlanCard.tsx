@@ -35,7 +35,7 @@ export function LearningPlanCard({
   return (
     <div
       className={`relative bg-white dark:bg-gray-800 rounded-2xl border-2 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden ${
-        isCompleted && grade
+        isCompleted && grade !== undefined
           ? getGradeColor(grade)
           : "border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600"
       }`}
@@ -49,7 +49,7 @@ export function LearningPlanCard({
       )}
 
       {/* Completed Badge */}
-      {isCompleted && grade && (
+      {isCompleted && grade !== undefined && (
         <div className="absolute top-4 left-4 flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold rounded-full shadow-md">
           <Trophy className="w-3 h-3" />
           {getGradeText(grade)}

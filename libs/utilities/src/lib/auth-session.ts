@@ -4,7 +4,7 @@ import type { Session } from "@supabase/supabase-js";
 
 export function persistSession(session: Session) {
   try {
-    if (typeof window !== "undefined") {
+    if (globalThis.window !== undefined) {
       localStorage.setItem("sb_session_present", "1");
     }
     if (typeof document !== "undefined") {
@@ -14,21 +14,21 @@ export function persistSession(session: Session) {
       ).toUTCString();
       document.cookie = `sb_session=1; path=/; expires=${expires}`;
     }
-  } catch (_) {
-    // no-op
+  } catch (e) {
+    console.warn("persistSession: failed to write storage", e);
   }
 }
 
 export function clearSession() {
   try {
-    if (typeof window !== "undefined") {
+    if (globalThis.window !== undefined) {
       localStorage.removeItem("sb_session_present");
     }
     if (typeof document !== "undefined") {
       document.cookie =
         "sb_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
-  } catch (_) {
-    // no-op
+  } catch (e) {
+    console.warn("clearSession: failed to clear storage", e);
   }
 }

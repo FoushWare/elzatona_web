@@ -19,10 +19,17 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
   onDelete,
 }) => {
   return (
-    <div className="p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+    <div
+      className="p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+      data-question-title={question.title}
+      data-testid={`question-item-${question.id}`}
+    >
       <div className="flex items-start justify-between">
         <div className="flex-1 pr-4">
-          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+          <h4
+            className="text-lg font-semibold text-gray-900 dark:text-white mb-1"
+            data-testid={`question-item-title-${question.id}`}
+          >
             {question.title}
           </h4>
           <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
@@ -114,15 +121,26 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
           </div>
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline" size="sm" onClick={() => onView(question)}>
+          <Button
+            variant="outline"
+            size="sm"
+            data-testid={`question-view-button-${question.id}`}
+            onClick={() => onView(question)}
+          >
             <Eye className="w-4 h-4" />
           </Button>
-          <Button variant="outline" size="sm" onClick={() => onEdit(question)}>
+          <Button
+            variant="outline"
+            size="sm"
+            data-testid={`question-edit-button-${question.id}`}
+            onClick={() => onEdit(question)}
+          >
             <Edit className="w-4 h-4" />
           </Button>
           <Button
             variant="destructive"
             size="sm"
+            data-testid={`question-delete-button-${question.id}`}
             onClick={() => onDelete(question.id)}
           >
             <Trash2 className="w-4 h-4" />

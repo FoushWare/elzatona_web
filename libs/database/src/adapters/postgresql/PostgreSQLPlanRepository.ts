@@ -19,7 +19,7 @@ import {
   PostgreSQLConfig,
 } from "./BasePostgreSQLAdapter";
 
-const TABLE_NAME = "plans";
+const TABLE_NAME = "plan_cards";
 const ENROLLMENT_TABLE = "plan_enrollments";
 
 /**

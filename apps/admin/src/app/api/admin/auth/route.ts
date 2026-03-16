@@ -128,8 +128,7 @@ export async function POST(request: NextRequest) {
       {
         success: false,
         error: "Internal server error",
-        debug:
-          process.env.NODE_ENV === "development" ? error.message : undefined,
+        debug: process.env.NODE_ENV === "production" ? undefined : error.stack,
       },
       { status: 500 },
     );

@@ -79,18 +79,6 @@ npx sonar-scanner
 - See `refactoring-plans/specs/database-abstraction-testing-tasks.md` for full test plan
 - Coverage badge and summary are updated automatically after CI runs
 
-## ✨ Features
-
-Each feature is documented with its user flow, code locations, API endpoints, and test scenarios:
-
-- **[Feature Index](features/README.md)** — Overview of all features
-- [Authentication](features/authentication.md) · [Guided Practice](features/guided-practice.md) · [Flashcards](features/flashcards.md)
-- [Learning Paths](features/learning-paths.md) · [Custom Roadmap](features/custom-roadmap.md) · [Free-Style Practice](features/free-style-practice.md)
-- [Problem Solving](features/problem-solving.md) · [Frontend Tasks](features/frontend-tasks.md) · [Dashboard](features/dashboard.md)
-- [Settings](features/settings.md) · [Admin Content](features/admin-content-management.md) · [Admin Learning Cards](features/admin-learning-cards.md) · [Admin Users](features/admin-users.md)
-
----
-
 ## 📚 Documentation
 
 ### Getting Started
@@ -105,9 +93,16 @@ Each feature is documented with its user flow, code locations, API endpoints, an
 - **[CI/CD Pipeline](docs/flows/ci-cd-pipeline.md)** - Continuous integration and deployment
 - **[Environment Setup](docs/flows/environment-setup.md)** - Environment configuration guide
 
+### Application-Specific Docs
+
+- **[Website Documentation](docs/website/)** - Website application documentation
+- **[Admin Documentation](docs/admin/)** - Admin panel documentation
+- **[Libraries Documentation](docs/libs/)** - Shared libraries documentation
+
 ### General Documentation
 
 - **[Security Guide](docs/SECURITY.md)** - Security best practices and pipeline
+- **[Testing Guide](docs/TESTING_SUMMARY.md)** - Testing strategy and coverage
 - **[Database Schema](docs/database/questions-schema.md)** - Database structure
 
 ## 🔌 API Documentation
@@ -446,18 +441,17 @@ See [docs/SECURITY.md](docs/SECURITY.md) for complete security guide.
 - **[CI/CD Pipeline](docs/flows/ci-cd-pipeline.md)**
 - **[Project Structure](docs/structure.md)**
 - **[Security Guide](docs/SECURITY.md)**
-- **[Feature Documentation](features/README.md)**
-- **[Branching Strategy](docs/GIT_BRANCHING_STRATEGY.md)**
+- **[Testing Guide](docs/TESTING_SUMMARY.md)**
+- **[Database Abstraction Layer](docs/DATABASE_ABSTRACTION_MIGRATION_COMPLETED.md)**
+- **[Code Review Report](docs/DATABASE_ABSTRACTION_CODE_REVIEW.md)**
 
 ## 🤝 Contributing
 
-We welcome contributions! Please read **[CONTRIBUTING.md](CONTRIBUTING.md)** for:
-
-- Development environment setup
-- Branching strategy and PR process
-- Coding conventions and import paths
-- Testing requirements
-- Feature ownership (linked to `features/`)
+1. Create a feature branch
+2. Make your changes
+3. Run tests and linting
+4. Commit and push
+5. Create a pull request
 
 ## 📝 License
 
@@ -470,3 +464,5 @@ For issues and questions:
 - Check [documentation](docs/)
 - Review [troubleshooting guide](docs/flows/local-development.md#troubleshooting)
 - Open an issue on GitHub
+
+# test change

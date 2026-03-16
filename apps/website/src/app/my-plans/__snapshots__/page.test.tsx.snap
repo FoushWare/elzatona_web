@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`F-UT-SNAPSHOT: My Plans Page Snapshot Tests should match my plans page snapshot (empty state) 1`] = `
+<div
+  class="min-h-screen p-8"
+>
+  <h1
+    class="text-2xl font-bold"
+  >
+    my-plans
+  </h1>
+  <p>
+    Page component - needs implementation
+  </p>
+</div>
+`;
+
+exports[`F-UT-SNAPSHOT: My Plans Page Snapshot Tests should match my plans page snapshot (with plans) 1`] = `
+<div
+  class="min-h-screen p-8"
+>
+  <h1
+    class="text-2xl font-bold"
+  >
+    my-plans
+  </h1>
+  <p>
+    Page component - needs implementation
+  </p>
+</div>
+`;

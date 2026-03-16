@@ -680,8 +680,20 @@ export async function GET( // NOSONAR
           /^get\s+\w+\s*\(/.test(value) ||
           /^set\s+\w+\s*\(/.test(value);
 
-        const countMatches = (value: string, pattern: RegExp): number =>
-          (value.match(pattern) || []).length;
+        const countMatches = (value: string, pattern: RegExp): number => {
+          const safePattern =
+            pattern.global || pattern.sticky
+              ? pattern
+              : new RegExp(pattern.source, `${pattern.flags}g`);
+          safePattern.lastIndex = 0;
+
+          let count = 0;
+          while (safePattern.exec(value) !== null) {
+            count += 1;
+          }
+
+          return count;
+        };
 
         const shouldResetClassState = (nextLine?: string): boolean =>
           !nextLine ||
@@ -707,7 +719,7 @@ export async function GET( // NOSONAR
           if (inClass && isClassMethodDeclaration(trimmed)) {
             inMethod = true;
             const indent = "  ".repeat(indentLevel);
-            if (trimmed.match(/[{[(]\s*$/)) {
+            if (/[{[(]\s*$/.test(trimmed)) {
               indentLevel++;
             }
             return indent + trimmed;
@@ -740,14 +752,14 @@ export async function GET( // NOSONAR
             }
           };
 
-          if (trimmed.match(/^[}\])]/)) {
+          if (/^[}\])]/.test(trimmed)) {
             handleClosingTokens();
           }
 
           const indent = "  ".repeat(indentLevel);
           const result = indent + trimmed;
 
-          if (trimmed.match(/[{[(]\s*$/)) {
+          if (/[{[(]\s*$/.test(trimmed)) {
             indentLevel++;
           } else if (netBraces > 0 || netBrackets > 0 || netParens > 0) {
             indentLevel += Math.max(netBraces, netBrackets, netParens);
@@ -756,14 +768,18 @@ export async function GET( // NOSONAR
           return result;
         };
 
-        formatted = lines.map(inferLineIndentation).join("\n");
+        formatted = lines
+          .map((line, index) => inferLineIndentation(line, index))
+          .join("\n");
       } else {
         // Code already has indentation - normalize it to 2 spaces
         const indentations = lines
           .filter((line) => line.trim().length > 0)
           .map((line) => {
-            const match = line.match(/^(\s*)/);
-            return match ? match[1].length : 0;
+            const leadingWhitespaceMatch = /^(\s*)/.exec(line);
+            return leadingWhitespaceMatch
+              ? leadingWhitespaceMatch[1].length
+              : 0;
           });
 
         if (indentations.length > 0) {
@@ -775,7 +791,7 @@ export async function GET( // NOSONAR
               if (line.trim().length === 0) return "";
 
               // Count leading whitespace (tabs and spaces)
-              const leadingWhitespace = line.match(/^(\s*)/)?.[1] || "";
+              const leadingWhitespace = /^(\s*)/.exec(line)?.[1] || "";
               const indentCount = leadingWhitespace
                 .split("")
                 .reduce((count, char) => count + (char === "\t" ? 2 : 1), 0);
@@ -868,7 +884,7 @@ export async function GET( // NOSONAR
         // Fix bold with extra underscores: ____text____ -> __text__
         .replaceAll(/_+([^_]+)_+/g, (match, text) => {
           // Only fix if it's 4+ underscores (likely malformed bold)
-          if (match.match(/^_{4,}/)) {
+          if (/^_{4,}/.test(match)) {
             return `__${text}__`;
           }
           return match;
@@ -1385,7 +1401,7 @@ export async function GET( // NOSONAR
 
       (questions || []).forEach((question) => {
         try {
-          if (!question || !question.id) {
+          if (!question?.id) {
             console.warn("⚠️ Skipping invalid question:", question);
             return;
           }

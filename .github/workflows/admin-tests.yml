@@ -1,0 +1,231 @@
+name: Admin Tests
+
+on:
+  push:
+    branches: [main, develop, "release/**"]
+    paths:
+      - "apps/admin/**"
+      - "libs/database/**"
+      - "libs/contexts/**"
+      - "libs/common-ui/**"
+  pull_request:
+    branches: [main, develop, "release/**"]
+    paths:
+      - "apps/admin/**"
+      - "libs/database/**"
+      - "libs/contexts/**"
+      - "libs/common-ui/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  admin-unit-tests:
+    name: Admin Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: |
+            package-lock.json
+            apps/admin/package-lock.json
+
+      - name: Install dependencies
+        run: npm install --prefer-offline --no-audit
+
+      - name: Run Admin unit tests
+        run: npx vitest run apps/admin/src --reporter=verbose
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+
+  build-admin:
+    name: Build Admin App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: |
+            package-lock.json
+            apps/admin/package-lock.json
+
+      - name: Install dependencies
+        run: npm install --prefer-offline --no-audit
+
+      - name: Verify pre-build state
+        run: |
+          echo "🧹 Checking for existing build artifacts..."
+          ls -d apps/admin/.next || echo "✅ No pre-existing apps/admin/.next found"
+
+      - name: Build admin app
+        run: |
+          echo "🏗️ Building admin app for E2E tests..."
+          npx nx build admin --skip-nx-cache
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+          NEXT_TELEMETRY_DISABLED: "1"
+          APP_ENV: "test"
+          NEXT_PUBLIC_APP_ENV: "test"
+          NODE_ENV: "production"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Package build artifacts
+        run: |
+          echo "🔍 Verifying build output directory..."
+          ls -d apps/admin/.next || (echo "❌ Build output apps/admin/.next NOT FOUND" && exit 1)
+          echo "📂 Recursive listing of apps/admin/.next (Partial)..."
+          ls -R apps/admin/.next | head -n 50
+          echo "📦 Zipping .next directory for reliable upload..."
+          (cd apps/admin && zip -r admin-build.zip .next)
+          ls -lh apps/admin/admin-build.zip
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-build-zip
+          path: apps/admin/admin-build.zip
+          retention-days: 1
+          if-no-files-found: error
+
+  admin-e2e-tests:
+    name: Admin E2E Tests (Shard ${{ matrix.shard }}/${{ strategy.job-total }})
+    needs: build-admin
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: |
+            package-lock.json
+            apps/admin/package-lock.json
+
+      - name: Install dependencies
+        run: npm install --prefer-offline --no-audit
+
+      - name: Restore Playwright browser cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json', 'apps/admin/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: admin-build-zip
+          path: apps/admin/
+
+      - name: Unzip build artifacts
+        run: |
+          echo "📂 Unzipping build artifacts..."
+          cd apps/admin && unzip admin-build.zip && rm admin-build.zip
+          ls -la .next
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Start admin server
+        run: |
+          echo "🚀 Starting admin server on port 3001..."
+          cd apps/admin && npx next start -p 3001 > ../../admin.log 2>&1 &
+          ADMIN_PID=$!
+          echo "ADMIN_PID=$ADMIN_PID" >> $GITHUB_ENV
+
+          echo "⏳ Waiting for admin server to be ready..."
+          for i in {1..90}; do
+            if curl -sf http://localhost:3001 > /dev/null 2>&1; then
+              echo "✅ Admin server is ready!"
+              break
+            fi
+            if [ $i -eq 90 ]; then
+              echo "❌ Admin server failed to start after 90 seconds"
+              cat ../../admin.log | tail -n 50
+              exit 1
+            fi
+            sleep 1
+          done
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+          APP_ENV: "test"
+          NEXT_PUBLIC_APP_ENV: "test"
+          NODE_ENV: "production"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Run Admin E2E tests
+        run: |
+          # Use the admin-specific playwright config
+          # Sharding parallelizes tests across multiple runners
+          npx playwright test --config=apps/admin/tests/config/playwright.config.ts --project=chromium --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+        env:
+          NODE_OPTIONS: "--max-old-space-size=2048"
+          CI: "true"
+          APP_ENV: "test"
+          ADMIN_BASE_URL: "http://localhost:3001"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Stop admin server
+        if: always()
+        run: |
+          if [ -n "$ADMIN_PID" ]; then
+            kill $ADMIN_PID 2>/dev/null || true
+          fi
+          pkill -f "next-server" || true
+
+      - name: Debug - List files for report location
+        if: always()
+        run: |
+          echo "🔍 Searching for Playwright reports and test results..."
+          find . -name "playwright-report" -type d
+          find . -name "test-results" -type d
+          echo "📂 Top level directory contents:"
+          ls -F
+          echo "📂 apps/admin/tests/config contents:"
+          ls -F apps/admin/tests/config/ || true
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-playwright-report-shard-${{ matrix.shard }}
+          path: |
+            playwright-report/
+            apps/admin/tests/config/playwright-report/
+            apps/admin/tests/config/test-results/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 7

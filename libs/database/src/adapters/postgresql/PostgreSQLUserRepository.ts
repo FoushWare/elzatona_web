@@ -148,8 +148,13 @@ export class PostgreSQLUserRepository
     options?: QueryOptions,
   ): Promise<PaginatedResult<User>> {
     try {
-      let query = this.client
-        .from(TABLE_NAME)
+      const isAdminRole = role === "admin" || role === "super_admin";
+      const table = isAdminRole ? "admin_users" : TABLE_NAME;
+      // Use service role for admin lookups to bypass RLS
+      const client = isAdminRole ? this.getClient(true) : this.client;
+
+      let query = client
+        .from(table)
         .select("*", { count: "exact" })
         .eq("role", role);
 
