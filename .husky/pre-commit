@@ -1,2 +1,5 @@
-echo "🔍 Running pre-commit hooks..."
-npx lint-staged
+#!/usr/bin/env sh
+
+set -e
+
+npm run check:staged

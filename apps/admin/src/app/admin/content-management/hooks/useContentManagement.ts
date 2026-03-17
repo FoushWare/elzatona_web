@@ -121,9 +121,19 @@ export function useContentManagement() {
           topicRepository.getAllTopics(),
         ]);
 
-      setCards((cardsData?.items as any) || []);
-      setPlans((plansData?.items as any) || []);
-      setQuestions((questionsData?.items as any) || []);
+      const cardsItems = Array.isArray((cardsData as any)?.data)
+        ? (cardsData as any).data
+        : [];
+      const plansItems = Array.isArray((plansData as any)?.data)
+        ? (plansData as any).data
+        : [];
+      const questionsItems = Array.isArray((questionsData as any)?.data)
+        ? (questionsData as any).data
+        : [];
+
+      setCards(cardsItems);
+      setPlans(plansItems);
+      setQuestions(questionsItems);
       // categoryRepository.getAllCategories returns a plain array
       setCategories((categoriesData as any) || []);
       setTopics((topicsData || []).map(transformTopicToAdmin));

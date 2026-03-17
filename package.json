@@ -29,6 +29,12 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "type-check": "npx tsc --noEmit",
+    "format:check:tracked": "bash scripts/ci-quality-gate.sh format",
+    "lint:ci": "bash scripts/ci-quality-gate.sh lint",
+    "type-check:ci": "bash scripts/ci-quality-gate.sh typecheck",
+    "build:ci": "bash scripts/ci-quality-gate.sh build",
+    "verify:ci": "bash scripts/ci-quality-gate.sh all",
+    "check:staged": "lint-staged",
     "check:schema": "node libs/utilities/scripts/check-supabase-schema.js",
     "init:db": "node libs/utilities/scripts/init-test-db.mjs",
     "configure:sonarqube-mcp": "bash libs/utilities/scripts/configure-sonarqube-mcp.sh",
@@ -37,7 +43,7 @@
     "setup:github-test-secrets": "bash libs/utilities/scripts/setup-github-test-secrets.sh",
     "check:all": "node libs/utilities/scripts/run-all-checks.js",
     "check:all:quick": "node libs/utilities/scripts/run-all-checks.js --skip-sonar",
-    "check:pre-push": "npm run lint && npm run type-check && npm run sonar:quick",
+    "check:pre-push": "npm run verify:ci",
     "fix:issues": "node libs/utilities/scripts/fix-issues-interactive.js",
     "fix:all": "npm run format && npm run lint:fix",
     "fix:all:auto": "node libs/utilities/scripts/fix-all-automatically.js",
@@ -63,8 +69,8 @@
     "format": "prettier --write .",
     "cleanup:playwright-videos": "bash libs/utilities/scripts/cleanup-playwright-videos.sh",
     "prepare": "husky",
-    "pre-commit:switch": "bash libs/utilities/scripts/switch-pre-commit.sh",
-    "pre-push:switch": "bash libs/utilities/scripts/switch-pre-push.sh",
+    "pre-commit:switch": "npm run setup:hooks",
+    "pre-push:switch": "npm run setup:hooks",
     "pre-push:with-sonar": "cp Rest/other/.husky/pre-push-with-sonar Rest/other/.husky/pre-push && cp Rest/other/.husky/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push && echo '✅ Switched to pre-push with optional SonarQube (enable with: export SONAR_ENABLE_PRE_PUSH=true)'",
     "pre-commit:fast": "cp Rest/other/.husky/pre-commit-fast Rest/other/.husky/pre-commit && cp Rest/other/.husky/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo '✅ Switched to FAST pre-commit checks (no tests)'",
     "pre-commit:fast-tests": "cp Rest/other/.husky/pre-commit-fast-tests Rest/other/.husky/pre-commit && cp Rest/other/.husky/pre-commit-fast-tests .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo '✅ Switched to FAST pre-commit with tests (unit tests only)'",
@@ -260,7 +266,7 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{css,json,md,html}": [
+    "*.{css,json,md,html,yml,yaml}": [
       "prettier --write"
     ]
   },

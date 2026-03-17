@@ -5,34 +5,35 @@ This project includes git hooks that automatically run code quality checks befor
 ## 🚀 Quick Setup
 
 ```bash
-# Install the hooks (one-time setup)
+# Hooks are installed automatically after npm install
+npm install
+
+# Reinstall them manually if needed
 npm run setup:hooks
 ```
 
-This installs:
+This enables:
 
-- **Pre-commit hook**: Runs Prettier, ESLint, and TypeScript checks
-- **Pre-push hook**: Runs all checks + Build + SonarQube (if token is set)
+- **Pre-commit hook**: Runs `lint-staged` on staged files only
+- **Pre-push hook**: Runs the same format, lint, type-check, and build checks as CI
 
 ## 📋 What Gets Checked
 
 ### Pre-Commit Hook
 
-Before each commit, automatically runs:
+Before each commit, automatically runs staged-file checks only:
 
-1. ✅ **Prettier** - Code formatting
-2. ✅ **ESLint** - Code quality and style
-3. ✅ **TypeScript** - Type checking
+1. ✅ **ESLint** with `--fix` on staged JS/TS files
+2. ✅ **Prettier** on staged source and markup files
 
 ### Pre-Push Hook
 
 Before each push, automatically runs:
 
-1. ✅ **Prettier** - Code formatting
-2. ✅ **ESLint** - Code quality and style
-3. ✅ **TypeScript** - Type checking
-4. ✅ **Build** - Ensures code compiles
-5. ✅ **SonarQube** - Security and quality analysis (if token is set)
+1. ✅ **Prettier** on tracked files
+2. ✅ **ESLint** for the repository
+3. ✅ **TypeScript** type checking
+4. ✅ **Build** validation
 
 ## 💡 Helpful Feedback
 
@@ -112,17 +113,17 @@ tail -f .code-quality-check.log  # Watch in real-time
 You can also run checks manually:
 
 ```bash
-# Run all checks
-npm run check:all
+# Run the same checks CI uses
+npm run verify:ci
 
-# Quick check (skip SonarQube)
-npm run check:all:quick
+# Run only staged-file checks
+npm run check:staged
 
 # Individual checks
-npm run lint
-npm run type-check
-npm run format
-npm run sonar
+npm run format:check:tracked
+npm run lint:ci
+npm run type-check:ci
+npm run build:ci
 ```
 
 ## 🔄 Reinstalling Hooks

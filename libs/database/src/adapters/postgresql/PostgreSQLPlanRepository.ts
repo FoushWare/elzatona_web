@@ -19,7 +19,7 @@ import {
   PostgreSQLConfig,
 } from "./BasePostgreSQLAdapter";
 
-const TABLE_NAME = "plan_cards";
+const TABLE_NAME = "learning_plans";
 const ENROLLMENT_TABLE = "plan_enrollments";
 
 /**
@@ -539,7 +539,7 @@ export class PostgreSQLPlanRepository
   async isUserEnrolled(planId: string, userId: string): Promise<boolean> {
     try {
       const enrollment = await this.getUserEnrollment(planId, userId);
-      return enrollment !== null && enrollment.isActive;
+      return enrollment?.isActive ?? false;
     } catch (error) {
       this.handleError(error, "PostgreSQLPlanRepository.isUserEnrolled");
     }
