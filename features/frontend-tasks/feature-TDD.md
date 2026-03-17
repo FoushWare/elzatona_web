@@ -17,4 +17,3 @@
 1. User and admin pages can read the same seeded records.
 2. Empty states render gracefully when no data is seeded.
 3. Type filtering prevents cross-feature data leakage.
-

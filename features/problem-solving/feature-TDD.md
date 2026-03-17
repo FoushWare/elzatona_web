@@ -16,4 +16,3 @@
 1. Admin CRUD updates are visible on user pages.
 2. Type filter isolates problem records from other question families.
 3. Error handling surfaces API failures without blank-screen states.
-

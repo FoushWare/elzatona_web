@@ -18,4 +18,3 @@
 1. Admin visits /admin/learning-cards and sees populated list.
 2. Admin can create, edit, and delete card in one session.
 3. Validation and server-error messages appear correctly.
-

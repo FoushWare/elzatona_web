@@ -17,4 +17,3 @@
 1. User can open task, run code, and submit.
 2. Admin can open /admin/frontend-tasks and see task records.
 3. Admin creates task and user can see it in frontend list.
-

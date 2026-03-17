@@ -15,23 +15,23 @@ The Admin Content Questions page at /admin/content/questions is the operational 
 
 ## Key Files
 
-| File | Purpose |
-| --- | --- |
-| apps/admin/src/app/admin/content/questions/page.tsx | Questions admin page UI |
-| apps/admin/src/app/admin/content/questions/hooks/useQuestionsManagement.ts | Page state and data fetching |
-| apps/admin/src/app/api/questions/unified/route.ts | Unified questions list/create API |
-| apps/admin/src/app/api/questions/unified/[id]/route.ts | Update/delete API |
-| apps/admin/src/app/api/categories/question-counts/route.ts | Category question counts for overview cards |
+| File                                                                       | Purpose                                     |
+| -------------------------------------------------------------------------- | ------------------------------------------- |
+| apps/admin/src/app/admin/content/questions/page.tsx                        | Questions admin page UI                     |
+| apps/admin/src/app/admin/content/questions/hooks/useQuestionsManagement.ts | Page state and data fetching                |
+| apps/admin/src/app/api/questions/unified/route.ts                          | Unified questions list/create API           |
+| apps/admin/src/app/api/questions/unified/[id]/route.ts                     | Update/delete API                           |
+| apps/admin/src/app/api/categories/question-counts/route.ts                 | Category question counts for overview cards |
 
 ## API Endpoints
 
-| Method | Route | Purpose |
-| --- | --- | --- |
-| GET | /api/questions/unified | List with pagination and filters |
-| POST | /api/questions/unified | Create question |
-| PUT | /api/questions/unified/[id] | Update question |
-| DELETE | /api/questions/unified/[id] | Delete question |
-| GET | /api/categories/question-counts | Category counts |
+| Method | Route                           | Purpose                          |
+| ------ | ------------------------------- | -------------------------------- |
+| GET    | /api/questions/unified          | List with pagination and filters |
+| POST   | /api/questions/unified          | Create question                  |
+| PUT    | /api/questions/unified/[id]     | Update question                  |
+| DELETE | /api/questions/unified/[id]     | Delete question                  |
+| GET    | /api/categories/question-counts | Category counts                  |
 
 ## Test Scenarios
 

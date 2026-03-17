@@ -23,4 +23,3 @@
 1. CRUD operations maintain list consistency without manual refresh.
 2. Search/filter state is preserved while opening and closing modals.
 3. Error responses do not lose unsaved user input in open forms.
-

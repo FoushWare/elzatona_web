@@ -22,4 +22,3 @@
 1. Initial load succeeds without unexpected database errors.
 2. Cards/plans/questions arrays are populated from paginated responses.
 3. Search/filter and destructive actions trigger refresh with consistent state.
-

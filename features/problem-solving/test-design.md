@@ -17,4 +17,3 @@
 1. Admin creates a new problem on /admin/problem-solving.
 2. User sees same problem on /problem-solving.
 3. User submits solution and receives deterministic feedback.
-

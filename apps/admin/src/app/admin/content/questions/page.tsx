@@ -68,7 +68,10 @@ function QuestionManagementContent() {
       })),
     [topicsData],
   );
-  const allCategories = useMemo(() => categoriesData?.data || [], [categoriesData]);
+  const allCategories = useMemo(
+    () => categoriesData?.data || [],
+    [categoriesData],
+  );
 
   const handleSearchResultsChange = useCallback(
     (results: unknown[]) => {

@@ -36,46 +36,16 @@ jobs:
         run: npm install --prefer-offline --no-audit
 
       - name: Run Prettier formatting check
-        run: |
-          echo "🎨 Running Prettier formatting check..."
-          # Use git ls-files so we only check committed/tracked files.
-          # Skip symlinks (git tracks them but prettier can't process them).
-          FILES=$(git ls-files | grep -E '\.(js|jsx|ts|tsx|json|md|yml|yaml|css|scss|html)$' | while IFS= read -r f; do
-            [ -f "$f" ] && [ ! -L "$f" ] && printf '%s\n' "$f"
-          done)
-          if [ -z "$FILES" ]; then
-            echo "No tracked files found for Prettier check."
-            exit 0
-          fi
-          echo "$FILES" | xargs npx prettier --check || (echo "⚠️  Prettier found formatting issues. Run 'npm run format' to fix them." && exit 1)
+        run: npm run format:check:tracked
         continue-on-error: false
-
-      - name: Run ESLint with auto-fix
-        run: |
-          echo "🔍 Running ESLint with auto-fix..."
-          npm run lint:fix || true
-        continue-on-error: true
-        # Auto-fix doesn't need to fail the workflow
 
       - name: Run ESLint check
-        run: |
-          echo "🔍 Running ESLint check..."
-          npm run lint
+        run: npm run lint:ci
         continue-on-error: false
-        env:
-          NODE_OPTIONS: "--max-old-space-size=2048"
 
       - name: TypeScript type checking
-        run: |
-          echo "📘 Running TypeScript type checking..."
-          npm run type-check
+        run: npm run type-check:ci
         continue-on-error: false
-        env:
-          NODE_OPTIONS: "--max-old-space-size=2048"
-          # Provide minimal env vars for type checking (to avoid type errors)
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
 
       - name: Run unit tests for admin login components
         run: |
@@ -103,17 +73,8 @@ jobs:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'test-password' }}
 
       - name: Build validation
-        run: |
-          echo "🏗️ Running build validation..."
-          npm run build
+        run: npm run build:ci
         continue-on-error: false
-        env:
-          NODE_OPTIONS: "--max-old-space-size=2048"
-          NEXT_TELEMETRY_DISABLED: "1"
-          # Provide minimal env vars for build (to avoid build errors)
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
 
       - name: Cleanup build artifacts
         if: always()

@@ -22,4 +22,3 @@
 
 - plan repository table mismatch (plan_cards vs learning_plans)
 - empty UI caused by reading items instead of data from paginated response
-
