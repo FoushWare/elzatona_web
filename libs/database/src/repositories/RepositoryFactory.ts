@@ -310,11 +310,22 @@ export function createRepositoryFactoryFromEnv(): RepositoryFactory {
     | "postgresql"
     | "mongodb"
     | "mysql";
+
+  // Support both public and server-only Supabase env vars.
+  // Public vars are needed for browser usage; server routes may only have server vars.
+  const resolvedSupabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "";
+  const resolvedSupabaseKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    "";
+
   const config: RepositoryFactoryConfig = {
     database: {
       type: dbType,
-      url: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-      key: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+      url: resolvedSupabaseUrl,
+      key: resolvedSupabaseKey,
       serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
     },
   };
@@ -335,7 +346,7 @@ export function createRepositoryFactoryFromEnv(): RepositoryFactory {
       !process.env.NEXT_PHASE?.includes("build")
     ) {
       console.error(
-        "Database configuration missing. Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set. Check your environment variables.",
+        "Database configuration missing. Ensure Supabase URL/key env variables are set. Check NEXT_PUBLIC_SUPABASE_URL/NEXT_PUBLIC_SUPABASE_ANON_KEY or SUPABASE_URL/SUPABASE_ANON_KEY.",
       );
     }
   }

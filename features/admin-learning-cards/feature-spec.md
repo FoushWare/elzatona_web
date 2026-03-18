@@ -69,3 +69,9 @@ Full Swagger docs: `http://localhost:3001/api-docs` → Learning Cards section.
 11. **Create API fails** — Error toast shown; modal stays open with data intact.
 12. **Delete API fails** — Confirmation dialog stays open; card remains in list.
 13. **Non-admin access** — Returns 403 or redirects to admin login.
+
+### Resilience Scenarios
+
+14. **Initial load network failure** — Page shows clear error feedback and does not crash on `TypeError: Failed to fetch`.
+15. **Partial endpoint failure** — Cards list still renders if another dataset (topics/questions) fails.
+16. **Reload recovery** — Manual refresh recovers state once endpoint is reachable.

@@ -29,3 +29,16 @@ Then card is removed and total count updates
 Given missing required fields
 When submit is clicked
 Then submission is blocked with validation feedback
+
+## Scenario: Initial data loads from internal APIs
+
+Given authenticated admin user
+When they open /admin/learning-cards
+Then cards, categories, topics, and questions are loaded from internal admin API endpoints
+
+## Scenario: Failed fetch is handled gracefully
+
+Given one or more data endpoints are unreachable
+When learning cards page initializes
+Then page shows a user-facing error toast
+And app remains responsive without full page crash
