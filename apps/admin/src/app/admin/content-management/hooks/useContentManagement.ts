@@ -44,6 +44,23 @@ type DatabasePlanRecord = {
   updatedAt?: string | Date | null;
 };
 
+type DatabaseLearningCardRecord = {
+  id: string;
+  title: string;
+  description?: string | null;
+  content?: string | null;
+  color?: string | null;
+  icon?: string | null;
+  order_index?: number | null;
+  order?: number | null;
+  is_active?: boolean | null;
+  isPublished?: boolean | null;
+  created_at?: string | Date | null;
+  updated_at?: string | Date | null;
+  createdAt?: string | Date | null;
+  updatedAt?: string | Date | null;
+};
+
 function toIsoDate(value?: string | Date | null): string {
   if (!value) return "";
   if (value instanceof Date) return value.toISOString();
@@ -60,6 +77,22 @@ function normalizePlan(plan: DatabasePlanRecord): LearningPlan {
     is_active: plan.is_active ?? plan.status !== "archived",
     created_at: toIsoDate(plan.created_at ?? plan.createdAt),
     updated_at: toIsoDate(plan.updated_at ?? plan.updatedAt),
+  };
+}
+
+function normalizeLearningCard(
+  card: DatabaseLearningCardRecord,
+): AdminLearningCard {
+  return {
+    id: card.id,
+    title: card.title,
+    description: card.description ?? card.content ?? "",
+    color: card.color ?? "#3B82F6",
+    icon: card.icon ?? "BookOpen",
+    order_index: card.order_index ?? card.order ?? 0,
+    is_active: card.is_active ?? card.isPublished ?? true,
+    created_at: toIsoDate(card.created_at ?? card.createdAt),
+    updated_at: toIsoDate(card.updated_at ?? card.updatedAt),
   };
 }
 
@@ -531,7 +564,11 @@ export function useContentManagement() {
         const current: any = [];
         const all = await cardRepository.findAll();
         setPlanCards(current || []);
-        setAvailableCards((all?.data as AdminLearningCard[] | undefined) || []);
+        setAvailableCards(
+          (all?.data ?? []).map((card) =>
+            normalizeLearningCard(card as DatabaseLearningCardRecord),
+          ),
+        );
       } catch (err) {
         console.error("Failed to load cards:", err);
         toast.error(
