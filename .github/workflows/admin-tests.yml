@@ -39,7 +39,7 @@ jobs:
             apps/admin/package-lock.json
 
       - name: Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: npm ci --no-audit
 
       - name: Run Admin unit tests
         run: npx vitest run apps/admin/src --reporter=verbose
@@ -63,7 +63,7 @@ jobs:
             apps/admin/package-lock.json
 
       - name: Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: npm ci --no-audit
 
       - name: Verify pre-build state
         run: |
@@ -127,7 +127,7 @@ jobs:
             apps/admin/package-lock.json
 
       - name: Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: npm ci --no-audit
 
       - name: Restore Playwright browser cache
         uses: actions/cache@v4
@@ -150,7 +150,7 @@ jobs:
           ls -la .next
 
       - name: Install Playwright browsers
-        run: npx playwright install chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Start admin server
         run: |

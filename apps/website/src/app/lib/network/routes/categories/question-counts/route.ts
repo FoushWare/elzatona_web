@@ -1,7 +1,7 @@
 // Category Question Counts API Route
 // Returns question counts for all categories
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createRepositoryFactoryFromEnv } from "@elzatona/database";
 
 export async function GET() {
