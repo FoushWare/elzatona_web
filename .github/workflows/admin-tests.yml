@@ -39,7 +39,7 @@ jobs:
             apps/admin/package-lock.json
 
       - name: Install dependencies
-        run: npm install --prefer-offline --no-audit
+        run: npm install --no-audit
 
       - name: Run Admin unit tests
         run: npx vitest run apps/admin/src --reporter=verbose
@@ -63,7 +63,7 @@ jobs:
             apps/admin/package-lock.json
 
       - name: Install dependencies
-        run: npm install --prefer-offline --no-audit
+        run: npm install --no-audit
 
       - name: Verify pre-build state
         run: |
@@ -100,6 +100,7 @@ jobs:
         with:
           name: admin-build-zip
           path: apps/admin/admin-build.zip
+          compression-level: 0
           retention-days: 1
           if-no-files-found: error
 
@@ -111,7 +112,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
+        shard: [1, 2, 3, 4]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -126,7 +127,7 @@ jobs:
             apps/admin/package-lock.json
 
       - name: Install dependencies
-        run: npm install --prefer-offline --no-audit
+        run: npm install --no-audit
 
       - name: Restore Playwright browser cache
         uses: actions/cache@v4
@@ -188,6 +189,7 @@ jobs:
           npx playwright test --config=apps/admin/tests/config/playwright.config.ts --project=chromium --shard=${{ matrix.shard }}/${{ strategy.job-total }}
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
+          PLAYWRIGHT_WORKERS: "2"
           CI: "true"
           APP_ENV: "test"
           ADMIN_BASE_URL: "http://localhost:3001"

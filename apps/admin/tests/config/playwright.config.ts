@@ -1,6 +1,18 @@
 import { defineConfig, devices } from "@playwright/test";
 import { config } from "dotenv";
-import { resolve } from "path";
+import { resolve } from "node:path";
+
+const isCI = process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true";
+const defaultCiWorkers = 2;
+const envWorkersRaw = process.env.PLAYWRIGHT_WORKERS;
+const parsedWorkers =
+  envWorkersRaw !== undefined && envWorkersRaw.trim() !== ""
+    ? Number.parseInt(envWorkersRaw, 10)
+    : Number.NaN;
+const ciWorkers =
+  Number.isFinite(parsedWorkers) && parsedWorkers > 0
+    ? parsedWorkers
+    : defaultCiWorkers;
 
 // Load test-specific environment variables for E2E tests
 // Priority: .env.test.local > .env.test > .env.local (fallback)
@@ -19,13 +31,11 @@ for (const envFile of envFiles) {
     if (!result.error) {
       loadedFiles.push(envFile);
     }
-  } catch (_error) {
+  } catch {
     // File doesn't exist, that's okay
   }
 }
 
-// FORCE TEST ENVIRONMENT for all E2E tests
-// This ensures E2E tests ALWAYS use test database, regardless of other settings
 process.env.APP_ENV = "test";
 process.env.NEXT_PUBLIC_APP_ENV = "test";
 // Only set NODE_ENV if not in build context
@@ -73,29 +83,32 @@ export default defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
-  /* Use 2 workers for CI to utilize 2 vCPUs on GitHub runners */
-  workers: process.env.CI ? 2 : 1,
+  /* Keep retries conservative on CI to reduce wall-clock time growth as suite size increases */
+  retries: isCI ? 1 : 0,
+  /* Allow workflow-level worker tuning while preserving a stable default */
+  workers: isCI ? ciWorkers : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ["html"],
-    ["json", { outputFile: "test-results/e2e-results.json" }],
-    ["junit", { outputFile: "test-results/e2e-results.xml" }],
-  ],
+  reporter: isCI
+    ? [["dot"], ["junit", { outputFile: "test-results/e2e-results.xml" }]]
+    : [
+        ["html"],
+        ["json", { outputFile: "test-results/e2e-results.json" }],
+        ["junit", { outputFile: "test-results/e2e-results.xml" }],
+      ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: process.env.ADMIN_BASE_URL || "http://localhost:3001",
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
+    /* On CI keep artifacts focused on failures to reduce test runtime overhead */
+    trace: isCI ? "retain-on-failure" : "on-first-retry",
 
     /* Take screenshot on failure */
     screenshot: "only-on-failure",
 
-    /* Record video on failure - kept only for failed tests, auto-removed on success */
-    video: "retain-on-failure", // Record videos for failed tests only, auto-cleanup on success
+    /* CI video capture is disabled by default for speed; enable with PW_VIDEO=true when investigating */
+    video:
+      isCI && process.env.PW_VIDEO !== "true" ? "off" : "retain-on-failure",
   },
 
   /* Configure projects for major browsers - CHROME and EDGE for testing */

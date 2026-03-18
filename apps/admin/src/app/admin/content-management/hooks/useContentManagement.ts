@@ -4,6 +4,7 @@
 
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { toast } from "sonner";
+import { supabase } from "@elzatona/utilities";
 import {
   AdminLearningCard,
   LearningPlan,
@@ -12,32 +13,168 @@ import {
   Topic as AdminTopic,
 } from "@elzatona/types";
 import {
-  useQuestionRepository,
   useLearningCardRepository,
   usePlanRepository,
-  useCategoryRepository,
-  useTopicRepository,
 } from "@elzatona/database/client";
 import type { Topic as DatabaseTopic } from "@elzatona/database";
 
+type DatabaseTopicRecord = DatabaseTopic & {
+  category_id?: string;
+  order_index?: number;
+};
+
+type LoadResult<T> = {
+  data: T[];
+  error: string | null;
+};
+
+type DatabasePlanRecord = {
+  id: string;
+  name?: string | null;
+  title?: string | null;
+  description?: string | null;
+  estimated_duration?: number | null;
+  estimated_hours?: number | null;
+  is_public?: boolean | null;
+  is_active?: boolean | null;
+  status?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  createdAt?: string | Date | null;
+  updatedAt?: string | Date | null;
+};
+
+type DatabaseLearningCardRecord = {
+  id: string;
+  title: string;
+  description?: string | null;
+  content?: string | null;
+  color?: string | null;
+  icon?: string | null;
+  order_index?: number | null;
+  order?: number | null;
+  is_active?: boolean | null;
+  isPublished?: boolean | null;
+  created_at?: string | Date | null;
+  updated_at?: string | Date | null;
+  createdAt?: string | Date | null;
+  updatedAt?: string | Date | null;
+};
+
+function toIsoDate(value?: string | Date | null): string {
+  if (!value) return "";
+  if (value instanceof Date) return value.toISOString();
+  return value;
+}
+
+function normalizePlan(plan: DatabasePlanRecord): LearningPlan {
+  return {
+    id: plan.id,
+    name: plan.name ?? plan.title ?? "Untitled Plan",
+    description: plan.description ?? "",
+    estimated_duration: plan.estimated_duration ?? plan.estimated_hours ?? 0,
+    is_public: plan.is_public ?? true,
+    is_active: plan.is_active ?? plan.status !== "archived",
+    created_at: toIsoDate(plan.created_at ?? plan.createdAt),
+    updated_at: toIsoDate(plan.updated_at ?? plan.updatedAt),
+  };
+}
+
+function normalizeLearningCard(
+  card: DatabaseLearningCardRecord,
+): AdminLearningCard {
+  return {
+    id: card.id,
+    title: card.title,
+    description: card.description ?? card.content ?? "",
+    color: card.color ?? "#3B82F6",
+    icon: card.icon ?? "BookOpen",
+    order_index: card.order_index ?? card.order ?? 0,
+    is_active: card.is_active ?? card.isPublished ?? true,
+    created_at: toIsoDate(card.created_at ?? card.createdAt),
+    updated_at: toIsoDate(card.updated_at ?? card.updatedAt),
+  };
+}
+
+async function fetchLearningPlans(): Promise<LearningPlan[]> {
+  const primaryResponse = await supabase
+    .from("learning_plans")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (!primaryResponse.error) {
+    return ((primaryResponse.data ?? []) as DatabasePlanRecord[]).map(
+      normalizePlan,
+    );
+  }
+
+  const fallbackResponse = await supabase
+    .from("learningplantemplates")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (fallbackResponse.error) {
+    throw primaryResponse.error;
+  }
+
+  return ((fallbackResponse.data ?? []) as DatabasePlanRecord[]).map(
+    normalizePlan,
+  );
+}
+
+function getErrorMessage(error: unknown, fallbackMessage: string): string {
+  return error instanceof Error ? error.message : fallbackMessage;
+}
+
+async function loadSupabaseCollection<T>(
+  query: PromiseLike<{ data: T[] | null; error: { message: string } | null }>,
+  fallbackMessage: string,
+): Promise<LoadResult<T>> {
+  try {
+    const result = await query;
+
+    if (result.error) {
+      return { data: [], error: result.error.message };
+    }
+
+    return { data: result.data ?? [], error: null };
+  } catch (error) {
+    return {
+      data: [],
+      error: getErrorMessage(error, fallbackMessage),
+    };
+  }
+}
+
+async function loadLearningPlans(): Promise<LoadResult<LearningPlan>> {
+  try {
+    return {
+      data: await fetchLearningPlans(),
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: [],
+      error: getErrorMessage(error, "Failed to fetch learning plans"),
+    };
+  }
+}
+
 export function useContentManagement() {
   // Inject repositories
-  const questionRepository = useQuestionRepository();
   const cardRepository = useLearningCardRepository();
   const planRepository = usePlanRepository();
-  const categoryRepository = useCategoryRepository();
-  const topicRepository = useTopicRepository();
 
   // Transform database Topic to admin Topic
-  const transformTopicToAdmin = (topic: DatabaseTopic): AdminTopic => ({
+  const transformTopicToAdmin = (topic: DatabaseTopicRecord): AdminTopic => ({
     id: topic.id,
     name: topic.name,
     slug: "", // Database doesn't store slug, default to empty
     description: topic.description || "",
     difficulty: "beginner", // Database doesn't store difficulty, default to beginner
     estimated_questions: 0, // Database doesn't store this, default to 0
-    order_index: topic.orderIndex || 0,
-    category_id: topic.categoryId,
+    order_index: topic.orderIndex ?? topic.order_index ?? 0,
+    category_id: topic.categoryId ?? topic.category_id ?? "",
     is_active: topic.is_active ?? true,
     created_at: topic.created_at || "",
     updated_at: topic.updated_at || "",
@@ -105,38 +242,60 @@ export function useContentManagement() {
   // Plan questions state
   const [planQuestions, setPlanQuestions] = useState<Set<string>>(new Set());
 
-  // Fetch data using repositories
+  // Fetch data for the unified management view.
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // Fetch all data in parallel using repositories
-      const [cardsData, plansData, questionsData, categoriesData, topicsData] =
-        await Promise.all([
-          cardRepository.findAll(),
-          planRepository.findAll(),
-          questionRepository.findAll(),
-          categoryRepository.getAllCategories(),
-          topicRepository.getAllTopics(),
-        ]);
+      const [
+        cardsResult,
+        plansResult,
+        questionsResult,
+        categoriesResult,
+        topicsResult,
+      ] = await Promise.all([
+        loadSupabaseCollection<AdminLearningCard>(
+          supabase.from("learning_cards").select("*").order("order_index"),
+          "Failed to fetch learning cards",
+        ),
+        loadLearningPlans(),
+        loadSupabaseCollection<AdminQuestion>(
+          supabase
+            .from("questions")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(2000),
+          "Failed to fetch questions",
+        ),
+        loadSupabaseCollection<AdminCategory>(
+          supabase.from("categories").select("*").order("created_at"),
+          "Failed to fetch categories",
+        ),
+        loadSupabaseCollection<DatabaseTopicRecord>(
+          supabase.from("topics").select("*").order("order_index"),
+          "Failed to fetch topics",
+        ),
+      ]);
 
-      const cardsItems = Array.isArray((cardsData as any)?.data)
-        ? (cardsData as any).data
-        : [];
-      const plansItems = Array.isArray((plansData as any)?.data)
-        ? (plansData as any).data
-        : [];
-      const questionsItems = Array.isArray((questionsData as any)?.data)
-        ? (questionsData as any).data
-        : [];
+      const dataErrors = [
+        cardsResult.error,
+        plansResult.error,
+        questionsResult.error,
+        categoriesResult.error,
+        topicsResult.error,
+      ].filter((message): message is string => Boolean(message));
 
-      setCards(cardsItems);
-      setPlans(plansItems);
-      setQuestions(questionsItems);
-      // categoryRepository.getAllCategories returns a plain array
-      setCategories((categoriesData as any) || []);
-      setTopics((topicsData || []).map(transformTopicToAdmin));
+      setCards(cardsResult.data);
+      setPlans(plansResult.data);
+      setQuestions(questionsResult.data);
+      setCategories(categoriesResult.data);
+      setTopics(topicsResult.data.map(transformTopicToAdmin));
+
+      if (dataErrors.length > 0) {
+        console.error("❌ Content management partial load errors:", dataErrors);
+        toast.error("Some content management data could not be loaded");
+      }
 
       // ARCHITECTURAL: Fetch plan-question associations from planRepository.getPlanQuestions()
       // Requires implementing new repository method for plan-question relationships
@@ -147,13 +306,7 @@ export function useContentManagement() {
     } finally {
       setLoading(false);
     }
-  }, [
-    questionRepository,
-    cardRepository,
-    planRepository,
-    categoryRepository,
-    topicRepository,
-  ]);
+  }, [cardRepository, planRepository]);
 
   useEffect(() => {
     fetchData();
@@ -411,7 +564,11 @@ export function useContentManagement() {
         const current: any = [];
         const all = await cardRepository.findAll();
         setPlanCards(current || []);
-        setAvailableCards((all?.items as any) || []);
+        setAvailableCards(
+          (all?.data ?? []).map((card) =>
+            normalizeLearningCard(card as DatabaseLearningCardRecord),
+          ),
+        );
       } catch (err) {
         console.error("Failed to load cards:", err);
         toast.error(
