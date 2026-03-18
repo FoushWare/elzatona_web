@@ -2,8 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 import { config } from "dotenv";
 import { resolve } from "node:path";
 
-const isCI =
-  process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true";
+const isCI = process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true";
 const defaultCiWorkers = 2;
 const envWorkersRaw = process.env.PLAYWRIGHT_WORKERS;
 const parsedWorkers =

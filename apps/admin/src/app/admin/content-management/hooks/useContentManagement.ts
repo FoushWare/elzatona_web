@@ -55,8 +55,7 @@ function normalizePlan(plan: DatabasePlanRecord): LearningPlan {
     id: plan.id,
     name: plan.name ?? plan.title ?? "Untitled Plan",
     description: plan.description ?? "",
-    estimated_duration:
-      plan.estimated_duration ?? plan.estimated_hours ?? 0,
+    estimated_duration: plan.estimated_duration ?? plan.estimated_hours ?? 0,
     is_public: plan.is_public ?? true,
     is_active: plan.is_active ?? plan.status !== "archived",
     created_at: toIsoDate(plan.created_at ?? plan.createdAt),
@@ -216,30 +215,35 @@ export function useContentManagement() {
       setLoading(true);
       setError(null);
 
-      const [cardsResult, plansResult, questionsResult, categoriesResult, topicsResult] =
-        await Promise.all([
-          loadSupabaseCollection<AdminLearningCard>(
-            supabase.from("learning_cards").select("*").order("order_index"),
-            "Failed to fetch learning cards",
-          ),
-          loadLearningPlans(),
-          loadSupabaseCollection<AdminQuestion>(
-            supabase
-              .from("questions")
-              .select("*")
-              .order("created_at", { ascending: false })
-              .limit(2000),
-            "Failed to fetch questions",
-          ),
-          loadSupabaseCollection<AdminCategory>(
-            supabase.from("categories").select("*").order("created_at"),
-            "Failed to fetch categories",
-          ),
-          loadSupabaseCollection<DatabaseTopicRecord>(
-            supabase.from("topics").select("*").order("order_index"),
-            "Failed to fetch topics",
-          ),
-        ]);
+      const [
+        cardsResult,
+        plansResult,
+        questionsResult,
+        categoriesResult,
+        topicsResult,
+      ] = await Promise.all([
+        loadSupabaseCollection<AdminLearningCard>(
+          supabase.from("learning_cards").select("*").order("order_index"),
+          "Failed to fetch learning cards",
+        ),
+        loadLearningPlans(),
+        loadSupabaseCollection<AdminQuestion>(
+          supabase
+            .from("questions")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(2000),
+          "Failed to fetch questions",
+        ),
+        loadSupabaseCollection<AdminCategory>(
+          supabase.from("categories").select("*").order("created_at"),
+          "Failed to fetch categories",
+        ),
+        loadSupabaseCollection<DatabaseTopicRecord>(
+          supabase.from("topics").select("*").order("order_index"),
+          "Failed to fetch topics",
+        ),
+      ]);
 
       const dataErrors = [
         cardsResult.error,
@@ -269,10 +273,7 @@ export function useContentManagement() {
     } finally {
       setLoading(false);
     }
-  }, [
-    cardRepository,
-    planRepository,
-  ]);
+  }, [cardRepository, planRepository]);
 
   useEffect(() => {
     fetchData();
