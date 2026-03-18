@@ -2,7 +2,18 @@ import { defineConfig, devices } from "@playwright/test";
 import { config } from "dotenv";
 import { resolve } from "node:path";
 
-const isCI = Boolean(process.env.CI);
+const isCI =
+  process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true";
+const defaultCiWorkers = 2;
+const envWorkersRaw = process.env.PLAYWRIGHT_WORKERS;
+const parsedWorkers =
+  envWorkersRaw !== undefined && envWorkersRaw.trim() !== ""
+    ? Number.parseInt(envWorkersRaw, 10)
+    : Number.NaN;
+const ciWorkers =
+  Number.isFinite(parsedWorkers) && parsedWorkers > 0
+    ? parsedWorkers
+    : defaultCiWorkers;
 
 // Load test-specific environment variables for E2E tests
 // Priority: .env.test.local > .env.test > .env.local (fallback)
@@ -76,7 +87,7 @@ export default defineConfig({
   /* Keep retries conservative on CI to reduce wall-clock time growth as suite size increases */
   retries: isCI ? 1 : 0,
   /* Allow workflow-level worker tuning while preserving a stable default */
-  workers: isCI ? Number(process.env.PLAYWRIGHT_WORKERS || 2) : 1,
+  workers: isCI ? ciWorkers : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: isCI
     ? [["dot"], ["junit", { outputFile: "test-results/e2e-results.xml" }]]
