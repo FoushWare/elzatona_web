@@ -39,7 +39,7 @@ jobs:
           sarif_file: "gitleaks-results.sarif"
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@v0.29.0
+        uses: aquasecurity/trivy-action@v0.35.0
         with:
           scan-type: "fs"
           scan-ref: "."
