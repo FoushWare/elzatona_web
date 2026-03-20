@@ -87,6 +87,7 @@
     "seed:testing-to-main": "node libs/utilities/scripts/seed-from-testing-to-main.mjs",
     "clear:main-db": "node libs/utilities/scripts/clear-main-database.mjs",
     "seed:clean": "bun run clear:main-db && bun run seed:testing-to-main",
+    "seed": "node tools/seed/seed-all.mjs",
     "verify:env": "node libs/utilities/scripts/verify-env-setup.mjs",
     "github:delete-failed-actions": "node libs/utilities/scripts/delete-failed-github-actions.mjs",
     "github:delete-failed-actions:dry-run": "node libs/utilities/scripts/delete-failed-github-actions.mjs --dry-run",

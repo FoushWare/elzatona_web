@@ -30,6 +30,7 @@ Each feature directory contains four key documents:
 | [Admin – Content Management](./admin-content-management/feature-spec.md) | Admin CRUD for content                | `apps/admin/src/app/admin/content-management` |
 | [Admin – Content Questions](./admin-content-questions/feature-spec.md)   | Admin question operations and search  | `apps/admin/src/app/admin/content/questions`  |
 | [Admin – Learning Cards](./admin-learning-cards/feature-spec.md)         | Admin learning card management        | `apps/admin/src/app/admin/learning-cards`     |
+| [Admin – Content Seeding](./admin-content-seeding/feature-spec.md)       | Schema + NotebookLM seeding workflow  | `docs/database`, `tools/seed`, `apps/admin`   |
 | [Admin – Users](./admin-users/feature-spec.md)                           | Admin user management                 | `apps/admin/src/app/admin/users`              |
 
 ---
