@@ -42,6 +42,8 @@ Content Management in the Admin panel allows administrators to create, update, a
 | `DELETE`              | `/api/questions/[id]` | Delete a question           |
 | `GET/POST/PUT/DELETE` | `/api/categories`     | Category CRUD               |
 | `GET/POST/PUT/DELETE` | `/api/topics`         | Topic CRUD                  |
+| `GET`                 | `/api/cards`          | List learning cards         |
+| `GET`                 | `/api/plans`          | List learning plans         |
 
 Full Swagger docs: `http://localhost:3001/api-docs` → Questions / Categories & Topics section.
 
@@ -89,3 +91,9 @@ Notes:
 
 1. This supports fast seeded startup and long-term dashboard-driven plan management.
 2. Existing plan detection prevents duplicate sequence creation when the 4-plan set already exists.
+
+### Resilience Scenarios
+
+14. **Partial backend outage** — If one dataset endpoint fails (for example topics), other datasets still render and admin can continue read-only tasks.
+15. **Network retry state** — If initial page load fails, refresh action should recover without forcing full app reload.
+16. **Plans route unavailable** — Cards/categories/topics/questions still render and page shows non-blocking warning instead of full-page crash.
