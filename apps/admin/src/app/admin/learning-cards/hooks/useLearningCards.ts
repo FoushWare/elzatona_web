@@ -26,6 +26,70 @@ export function useLearningCards() {
   );
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set());
 
+  const extractArray = <T>(payload: unknown): T[] => {
+    if (!payload || typeof payload !== "object") return [];
+
+    const data = (payload as { data?: unknown }).data;
+    if (Array.isArray(data)) return data as T[];
+
+    if (data && typeof data === "object") {
+      const nestedData = (data as { data?: unknown }).data;
+      if (Array.isArray(nestedData)) return nestedData as T[];
+      const nestedItems = (data as { items?: unknown }).items;
+      if (Array.isArray(nestedItems)) return nestedItems as T[];
+    }
+
+    const items = (payload as { items?: unknown }).items;
+    return Array.isArray(items) ? (items as T[]) : [];
+  };
+
+  const loadApiCollection = useCallback(
+    async <T>(endpoint: string, fallbackMessage: string) => {
+      try {
+        const response = await fetch(endpoint, {
+          method: "GET",
+          credentials: "same-origin",
+          cache: "no-store",
+          headers: {
+            Accept: "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          return {
+            data: [] as T[],
+            error: `${fallbackMessage} (HTTP ${response.status})`,
+          };
+        }
+
+        const payload = (await response.json()) as {
+          success?: boolean;
+          error?: string;
+          message?: string;
+          data?: unknown;
+        };
+
+        if (payload.success === false) {
+          return {
+            data: [] as T[],
+            error: payload.error ?? payload.message ?? fallbackMessage,
+          };
+        }
+
+        return {
+          data: extractArray<T>(payload),
+          error: null as string | null,
+        };
+      } catch (error) {
+        return {
+          data: [] as T[],
+          error: error instanceof Error ? error.message : fallbackMessage,
+        };
+      }
+    },
+    [],
+  );
+
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
@@ -33,25 +97,38 @@ export function useLearningCards() {
 
       const [cardsRes, categoriesRes, topicsRes, questionsRes] =
         await Promise.all([
-          supabase.from("learning_cards").select("*").order("order_index"),
-          supabase.from("categories").select("*").order("created_at"),
-          supabase.from("topics").select("*").order("order_index"),
-          supabase
-            .from("questions")
-            .select("*")
-            .order("created_at")
-            .limit(2000),
+          loadApiCollection<AdminLearningCard>(
+            "/api/cards",
+            "Failed to fetch learning cards",
+          ),
+          loadApiCollection<AdminCategory>(
+            "/api/categories",
+            "Failed to fetch categories",
+          ),
+          loadApiCollection<Topic>("/api/topics", "Failed to fetch topics"),
+          loadApiCollection<AdminQuestion>(
+            "/api/questions/unified?page=1&pageSize=2000&includePagination=false",
+            "Failed to fetch questions",
+          ),
         ]);
 
-      if (cardsRes.error) throw cardsRes.error;
-      if (categoriesRes.error) throw categoriesRes.error;
-      if (topicsRes.error) throw topicsRes.error;
-      if (questionsRes.error) throw questionsRes.error;
+      const dataErrors = [
+        cardsRes.error,
+        categoriesRes.error,
+        topicsRes.error,
+        questionsRes.error,
+      ].filter((msg): msg is string => Boolean(msg));
 
-      setCards(cardsRes.data || []);
-      setCategories(categoriesRes.data || []);
-      setTopics(topicsRes.data || []);
-      setQuestions(questionsRes.data || []);
+      setCards(cardsRes.data);
+      setCategories(categoriesRes.data);
+      setTopics(topicsRes.data);
+      setQuestions(questionsRes.data);
+
+      if (dataErrors.length > 0) {
+        console.error("❌ Learning cards partial load errors:", dataErrors);
+        setError(dataErrors[0]);
+        toast.error("Failed to load learning cards data");
+      }
     } catch (err: unknown) {
       const errorObj = err as Error;
       console.error("Error fetching learning cards data:", errorObj);
@@ -60,7 +137,7 @@ export function useLearningCards() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [loadApiCollection]);
 
   useEffect(() => {
     fetchData();
@@ -151,6 +228,7 @@ export function useLearningCards() {
         .delete()
         .eq("id", id);
       if (error) throw error;
+
       setCards((prev) => prev.filter((c) => c.id !== id));
       toast.success("Learning card deleted successfully");
       return true;

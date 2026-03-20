@@ -42,6 +42,8 @@ Content Management in the Admin panel allows administrators to create, update, a
 | `DELETE`              | `/api/questions/[id]` | Delete a question           |
 | `GET/POST/PUT/DELETE` | `/api/categories`     | Category CRUD               |
 | `GET/POST/PUT/DELETE` | `/api/topics`         | Topic CRUD                  |
+| `GET`                 | `/api/cards`          | List learning cards         |
+| `GET`                 | `/api/plans`          | List learning plans         |
 
 Full Swagger docs: `http://localhost:3001/api-docs` → Questions / Categories & Topics section.
 
@@ -70,3 +72,9 @@ Full Swagger docs: `http://localhost:3001/api-docs` → Questions / Categories &
 11. **Save fails** — Error toast shown; form stays open with entered data intact.
 12. **Delete fails** — Confirmation dialog stays open; item remains in list.
 13. **Non-admin access** — Returns 403 or redirects to admin login.
+
+### Resilience Scenarios
+
+14. **Partial backend outage** — If one dataset endpoint fails (for example topics), other datasets still render and admin can continue read-only tasks.
+15. **Network retry state** — If initial page load fails, refresh action should recover without forcing full app reload.
+16. **Plans route unavailable** — Cards/categories/topics/questions still render and page shows non-blocking warning instead of full-page crash.

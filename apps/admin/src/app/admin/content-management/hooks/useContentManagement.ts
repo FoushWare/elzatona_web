@@ -4,7 +4,6 @@
 
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { toast } from "sonner";
-import { supabase } from "@elzatona/utilities";
 import {
   AdminLearningCard,
   LearningPlan,
@@ -96,48 +95,79 @@ function normalizeLearningCard(
   };
 }
 
-async function fetchLearningPlans(): Promise<LearningPlan[]> {
-  const primaryResponse = await supabase
-    .from("learning_plans")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (!primaryResponse.error) {
-    return ((primaryResponse.data ?? []) as DatabasePlanRecord[]).map(
-      normalizePlan,
-    );
-  }
-
-  const fallbackResponse = await supabase
-    .from("learningplantemplates")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (fallbackResponse.error) {
-    throw primaryResponse.error;
-  }
-
-  return ((fallbackResponse.data ?? []) as DatabasePlanRecord[]).map(
-    normalizePlan,
-  );
-}
-
 function getErrorMessage(error: unknown, fallbackMessage: string): string {
   return error instanceof Error ? error.message : fallbackMessage;
 }
 
-async function loadSupabaseCollection<T>(
-  query: PromiseLike<{ data: T[] | null; error: { message: string } | null }>,
+function extractApiArray<T>(payload: unknown): T[] {
+  if (!payload || typeof payload !== "object") {
+    return [];
+  }
+
+  const candidate = (payload as { data?: unknown }).data;
+  if (Array.isArray(candidate)) {
+    return candidate as T[];
+  }
+
+  if (candidate && typeof candidate === "object") {
+    const nestedData = (candidate as { data?: unknown }).data;
+    if (Array.isArray(nestedData)) {
+      return nestedData as T[];
+    }
+
+    const nestedItems = (candidate as { items?: unknown }).items;
+    if (Array.isArray(nestedItems)) {
+      return nestedItems as T[];
+    }
+  }
+
+  const items = (payload as { items?: unknown }).items;
+  if (Array.isArray(items)) {
+    return items as T[];
+  }
+
+  return [];
+}
+
+async function loadApiCollection<T>(
+  endpoint: string,
   fallbackMessage: string,
 ): Promise<LoadResult<T>> {
   try {
-    const result = await query;
+    const response = await fetch(endpoint, {
+      method: "GET",
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
-    if (result.error) {
-      return { data: [], error: result.error.message };
+    if (!response.ok) {
+      return {
+        data: [],
+        error: `${fallbackMessage} (HTTP ${response.status})`,
+      };
     }
 
-    return { data: result.data ?? [], error: null };
+    const result = (await response.json()) as {
+      success?: boolean;
+      error?: string;
+      message?: string;
+      data?: unknown;
+    };
+
+    if (result.success === false) {
+      return {
+        data: [],
+        error: result.error ?? result.message ?? fallbackMessage,
+      };
+    }
+
+    return {
+      data: extractApiArray<T>(result),
+      error: null,
+    };
   } catch (error) {
     return {
       data: [],
@@ -148,8 +178,17 @@ async function loadSupabaseCollection<T>(
 
 async function loadLearningPlans(): Promise<LoadResult<LearningPlan>> {
   try {
+    const plansResponse = await loadApiCollection<DatabasePlanRecord>(
+      "/api/plans",
+      "Failed to fetch learning plans",
+    );
+
+    if (plansResponse.error) {
+      return { data: [], error: plansResponse.error };
+    }
+
     return {
-      data: await fetchLearningPlans(),
+      data: plansResponse.data.map(normalizePlan),
       error: null,
     };
   } catch (error) {
@@ -255,25 +294,21 @@ export function useContentManagement() {
         categoriesResult,
         topicsResult,
       ] = await Promise.all([
-        loadSupabaseCollection<AdminLearningCard>(
-          supabase.from("learning_cards").select("*").order("order_index"),
+        loadApiCollection<AdminLearningCard>(
+          "/api/cards",
           "Failed to fetch learning cards",
         ),
         loadLearningPlans(),
-        loadSupabaseCollection<AdminQuestion>(
-          supabase
-            .from("questions")
-            .select("*")
-            .order("created_at", { ascending: false })
-            .limit(2000),
+        loadApiCollection<AdminQuestion>(
+          "/api/questions/unified?page=1&pageSize=2000&includePagination=false",
           "Failed to fetch questions",
         ),
-        loadSupabaseCollection<AdminCategory>(
-          supabase.from("categories").select("*").order("created_at"),
+        loadApiCollection<AdminCategory>(
+          "/api/categories",
           "Failed to fetch categories",
         ),
-        loadSupabaseCollection<DatabaseTopicRecord>(
-          supabase.from("topics").select("*").order("order_index"),
+        loadApiCollection<DatabaseTopicRecord>(
+          "/api/topics",
           "Failed to fetch topics",
         ),
       ]);
@@ -562,13 +597,8 @@ export function useContentManagement() {
         // ARCHITECTURAL: Fetch current plan cards using planRepository.getPlanCards(selectedPlanId) and available cards
         // Requires implementing new repository methods for plan-card relationships
         const current: any = [];
-        const all = await cardRepository.findAll();
         setPlanCards(current || []);
-        setAvailableCards(
-          (all?.data ?? []).map((card) =>
-            normalizeLearningCard(card as DatabaseLearningCardRecord),
-          ),
-        );
+        setAvailableCards(cards);
       } catch (err) {
         console.error("Failed to load cards:", err);
         toast.error(
@@ -578,7 +608,7 @@ export function useContentManagement() {
         setIsManagingCards(false);
       }
     },
-    [cardRepository],
+    [cards],
   );
 
   const closeCardManagementModal = useCallback(() => {
