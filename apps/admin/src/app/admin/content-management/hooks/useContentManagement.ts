@@ -15,6 +15,7 @@ import {
   useLearningCardRepository,
   usePlanRepository,
 } from "@elzatona/database/client";
+import { supabase } from "@elzatona/utilities";
 import type { Topic as DatabaseTopic } from "@elzatona/database";
 
 type DatabaseTopicRecord = DatabaseTopic & {
@@ -59,6 +60,282 @@ type DatabaseLearningCardRecord = {
   createdAt?: string | Date | null;
   updatedAt?: string | Date | null;
 };
+
+type PlanGenerationMetadata = {
+  title: string;
+  description: string;
+  plan_type: "initial" | "reinforcement" | "advanced" | "maintenance";
+  sequence_index: number;
+  new_question_count: number;
+  review_question_count: number;
+};
+
+type PlanQuestionInsertRow = {
+  plan_id: string;
+  question_id: string;
+  order_index: number;
+  is_review: boolean;
+  parent_plan_id: string | null;
+  difficulty_tier: "easy" | "medium" | "hard";
+  is_active: boolean;
+};
+
+const PLAN_DISTRIBUTION = [
+  { newPerCard: 2, reviewPerCard: 0 },
+  { newPerCard: 2, reviewPerCard: 1 },
+  { newPerCard: 1, reviewPerCard: 2 },
+  { newPerCard: 1, reviewPerCard: 3 },
+] as const;
+
+function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
+  switch (sequence) {
+    case 1:
+      return {
+        title: "Foundations",
+        description:
+          "Day 1 kickoff with all cards available and 1-2 new questions per card.",
+        plan_type: "initial",
+        sequence_index: 1,
+        new_question_count: 0,
+        review_question_count: 0,
+      };
+    case 2:
+      return {
+        title: "Review & Deepen",
+        description: "Day 2 adds new questions and starts lightweight review.",
+        plan_type: "reinforcement",
+        sequence_index: 2,
+        new_question_count: 0,
+        review_question_count: 0,
+      };
+    case 3:
+      return {
+        title: "Advanced Mastery",
+        description:
+          "Day 3 emphasizes harder review while still introducing new items.",
+        plan_type: "advanced",
+        sequence_index: 3,
+        new_question_count: 0,
+        review_question_count: 0,
+      };
+    default:
+      return {
+        title: "Weekly Check-in",
+        description:
+          "Maintenance day with mostly review and a small amount of new content.",
+        plan_type: "maintenance",
+        sequence_index: 4,
+        new_question_count: 0,
+        review_question_count: 0,
+      };
+  }
+}
+
+function getDisplayLabel(newCount: number, reviewCount: number): string {
+  if (reviewCount === 0) {
+    return `${newCount} New Questions`;
+  }
+  return `${newCount} New + ${reviewCount} Review`;
+}
+
+function hasExistingSpacedPlans(plans: LearningPlan[]): boolean {
+  const matches = plans.filter((plan) => {
+    const lowered = `${plan.name} ${plan.description}`.toLowerCase();
+    return (
+      lowered.includes("foundations") ||
+      lowered.includes("review & deepen") ||
+      lowered.includes("advanced mastery") ||
+      lowered.includes("weekly check-in")
+    );
+  });
+
+  return matches.length >= 4;
+}
+
+function buildQuestionsByCard(
+  cards: AdminLearningCard[],
+  questions: AdminQuestion[],
+): Map<string, string[]> {
+  const questionsByCard = new Map<string, string[]>();
+  cards.forEach((card) => {
+    questionsByCard.set(card.id, []);
+  });
+
+  questions.forEach((question) => {
+    if (!question.learning_card_id) return;
+    const cardQuestions = questionsByCard.get(question.learning_card_id);
+    if (!cardQuestions) return;
+    cardQuestions.push(question.id);
+  });
+
+  return questionsByCard;
+}
+
+function buildPlanQuestionRows(
+  sequence: number,
+  cards: AdminLearningCard[],
+  questionsByCard: Map<string, string[]>,
+  introducedByCard: Map<string, string[]>,
+  parentPlanId: string | null,
+): PlanQuestionInsertRow[] {
+  const distribution = PLAN_DISTRIBUTION[sequence - 1];
+  const rows: PlanQuestionInsertRow[] = [];
+
+  cards.forEach((card) => {
+    const cardQuestions = questionsByCard.get(card.id) ?? [];
+    if (cardQuestions.length === 0) return;
+
+    const introduced = introducedByCard.get(card.id) ?? [];
+    const remaining = cardQuestions.filter((questionId) => {
+      return !introduced.includes(questionId);
+    });
+
+    const newQuestions = remaining.slice(0, distribution.newPerCard);
+    const reviewQuestions = introduced.slice(-distribution.reviewPerCard);
+
+    newQuestions.forEach((questionId) => {
+      rows.push({
+        plan_id: "",
+        question_id: questionId,
+        order_index: rows.length,
+        is_review: false,
+        parent_plan_id: null,
+        difficulty_tier: "easy",
+        is_active: true,
+      });
+    });
+
+    reviewQuestions.forEach((questionId) => {
+      rows.push({
+        plan_id: "",
+        question_id: questionId,
+        order_index: rows.length,
+        is_review: true,
+        parent_plan_id: parentPlanId,
+        difficulty_tier: sequence >= 3 ? "hard" : "medium",
+        is_active: true,
+      });
+    });
+
+    introducedByCard.set(card.id, [...introduced, ...newQuestions]);
+  });
+
+  return rows;
+}
+
+async function insertPlanQuestionRows(
+  planId: string,
+  rows: PlanQuestionInsertRow[],
+): Promise<void> {
+  for (const [index, row] of rows.entries()) {
+    const payload = {
+      ...row,
+      plan_id: planId,
+      order_index: index,
+    };
+
+    const { error: planQuestionError } = await supabase
+      .from("plan_questions")
+      .insert(payload);
+
+    if (planQuestionError) {
+      const { error: fallbackError } = await supabase
+        .from("plan_questions")
+        .insert({
+          plan_id: payload.plan_id,
+          question_id: payload.question_id,
+          order_index: payload.order_index,
+          is_review: payload.is_review,
+        });
+
+      if (fallbackError) {
+        throw fallbackError;
+      }
+    }
+  }
+}
+
+async function generateDashboardSpacedPlans(
+  cards: AdminLearningCard[],
+  questions: AdminQuestion[],
+): Promise<void> {
+  const questionsByCard = buildQuestionsByCard(cards, questions);
+  const introducedByCard = new Map<string, string[]>();
+  const createdPlans: Array<{ id: string; sequence: number }> = [];
+
+  for (let sequence = 1; sequence <= 4; sequence += 1) {
+    const metadata = generatePlanMetadata(sequence);
+    const parentPlanId =
+      sequence > 1 ? (createdPlans.at(-1)?.id ?? null) : null;
+    const planQuestionRows = buildPlanQuestionRows(
+      sequence,
+      cards,
+      questionsByCard,
+      introducedByCard,
+      parentPlanId,
+    );
+
+    metadata.new_question_count = planQuestionRows.filter(
+      (row) => !row.is_review,
+    ).length;
+    metadata.review_question_count = planQuestionRows.filter(
+      (row) => row.is_review,
+    ).length;
+
+    const displayLabel = getDisplayLabel(
+      metadata.new_question_count,
+      metadata.review_question_count,
+    );
+
+    const planPayload = {
+      title: metadata.title,
+      name: metadata.title,
+      description: metadata.description,
+      estimated_duration: sequence * 5,
+      plan_type: metadata.plan_type,
+      sequence_index: metadata.sequence_index,
+      new_question_count: metadata.new_question_count,
+      review_question_count: metadata.review_question_count,
+      display_label: displayLabel,
+      status: "published",
+      is_public: true,
+      is_active: true,
+    };
+
+    const { data: createdPlan, error: createPlanError } = await supabase
+      .from("learning_plans")
+      .insert(planPayload)
+      .select("id")
+      .single();
+
+    if (createPlanError || !createdPlan?.id) {
+      throw createPlanError ?? new Error("Failed to create learning plan");
+    }
+
+    createdPlans.push({ id: createdPlan.id, sequence });
+
+    const planCardsPayload = cards.map((card, index) => ({
+      plan_id: createdPlan.id,
+      card_id: card.id,
+      order_index: index,
+      is_active: true,
+    }));
+
+    if (planCardsPayload.length > 0) {
+      const { error: planCardsError } = await supabase
+        .from("plan_cards")
+        .insert(planCardsPayload);
+
+      if (planCardsError) {
+        throw planCardsError;
+      }
+    }
+
+    if (planQuestionRows.length > 0) {
+      await insertPlanQuestionRows(createdPlan.id, planQuestionRows);
+    }
+  }
+}
 
 function toIsoDate(value?: string | Date | null): string {
   if (!value) return "";
@@ -691,6 +968,32 @@ export function useContentManagement() {
     [selectedPlanForCards, planRepository],
   );
 
+  const createSpacedRepetitionPlans = useCallback(async () => {
+    if (hasExistingSpacedPlans(plans)) {
+      toast.info("Spaced-repetition plans already exist.");
+      return;
+    }
+
+    if (cards.length === 0 || questions.length === 0) {
+      toast.error("Need existing cards and questions before generating plans.");
+      return;
+    }
+
+    try {
+      await generateDashboardSpacedPlans(cards, questions);
+
+      toast.success("Created dashboard-based spaced-repetition plans.");
+      await fetchData();
+    } catch (err) {
+      console.error("Failed to generate spaced-repetition plans:", err);
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : "Failed to generate spaced-repetition plans",
+      );
+    }
+  }, [cards, fetchData, plans, questions]);
+
   return {
     cards,
     plans,
@@ -751,5 +1054,6 @@ export function useContentManagement() {
     removeCardFromPlan,
     toggleCardActiveStatus,
     openTopicQuestionsModal,
+    createSpacedRepetitionPlans,
   };
 }

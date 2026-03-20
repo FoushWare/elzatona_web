@@ -73,6 +73,25 @@ Full Swagger docs: `http://localhost:3001/api-docs` → Questions / Categories &
 12. **Delete fails** — Confirmation dialog stays open; item remains in list.
 13. **Non-admin access** — Returns 403 or redirects to admin login.
 
+---
+
+## Dashboard-Based Plan Generation
+
+The **Create Plan** action in Admin Content Management now generates a spaced-repetition plan sequence directly from dashboard data, not from seeding scripts.
+
+Behavior:
+
+1. Creates 4 plans in order: Foundations, Review & Deepen, Advanced Mastery, Weekly Check-in.
+2. Includes all learning cards in every generated plan.
+3. Starts with low question load per card on Day 1 (1-2 new questions per card).
+4. Gradually increases review intensity in later plans while still introducing some new questions.
+5. Persists `plan_cards` and `plan_questions` links from current dashboard datasets.
+
+Notes:
+
+1. This supports fast seeded startup and long-term dashboard-driven plan management.
+2. Existing plan detection prevents duplicate sequence creation when the 4-plan set already exists.
+
 ### Resilience Scenarios
 
 14. **Partial backend outage** — If one dataset endpoint fails (for example topics), other datasets still render and admin can continue read-only tasks.

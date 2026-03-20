@@ -74,6 +74,7 @@ export default function ContentManagementPage() {
     removeCardFromPlan,
     toggleCardActiveStatus,
     openTopicQuestionsModal,
+    createSpacedRepetitionPlans,
   } = useContentManagement();
 
   if (loading) {
@@ -206,7 +207,7 @@ export default function ContentManagementPage() {
           togglePlanTopic={togglePlanTopic}
           onEditPlan={(plan) => console.log("Edit plan", plan)}
           onDeletePlan={(plan) => console.log("Delete plan", plan)}
-          onCreatePlan={() => console.log("Create plan")}
+          onCreatePlan={createSpacedRepetitionPlans}
           onManageCards={openCardManagementModal}
           openTopicQuestionsModal={openTopicQuestionsModal}
         />

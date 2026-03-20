@@ -31,6 +31,16 @@ Given a repository call fails
 When content-management page initializes
 Then a user-friendly error state is shown with refresh option
 
+## Scenario: Generate spaced-repetition plans from dashboard
+
+Given an authenticated admin on /admin/content-management
+And cards and questions are already loaded
+When the admin clicks Create Plan
+Then the system should create four ordered plans
+And each plan should include all cards
+And Day 1 should start with lower per-card question counts
+And subsequent plans should increase review coverage
+
 ## Scenario: Load from internal API routes
 
 Given content management page loads
