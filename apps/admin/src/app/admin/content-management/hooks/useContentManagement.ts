@@ -15,6 +15,7 @@ import {
   useLearningCardRepository,
   usePlanRepository,
 } from "@elzatona/database/client";
+import { supabase } from "@elzatona/utilities";
 import type { Topic as DatabaseTopic } from "@elzatona/database";
 
 type DatabaseTopicRecord = DatabaseTopic & {
