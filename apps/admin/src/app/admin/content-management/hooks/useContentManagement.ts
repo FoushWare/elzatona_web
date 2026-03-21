@@ -23,6 +23,10 @@ type DatabaseTopicRecord = DatabaseTopic & {
   order_index?: number;
 };
 
+type DatabaseCategoryRecord = AdminCategory & {
+  card_type?: string | null;
+};
+
 type LoadResult<T> = {
   data: T[];
   error: string | null;
@@ -80,6 +84,8 @@ type PlanQuestionInsertRow = {
   is_active: boolean;
 };
 
+type CanonicalCardKey = "core" | "framework" | "problem" | "system";
+
 const PLAN_DISTRIBUTION = [
   { newPerCard: 2, reviewPerCard: 0 },
   { newPerCard: 2, reviewPerCard: 1 },
@@ -87,13 +93,124 @@ const PLAN_DISTRIBUTION = [
   { newPerCard: 1, reviewPerCard: 3 },
 ] as const;
 
+const CANONICAL_CARDS: Array<{
+  key: CanonicalCardKey;
+  title: string;
+  description: string;
+  color: string;
+  icon: string;
+  order: number;
+}> = [
+  {
+    key: "core",
+    title: "Core Technologies",
+    description: "HTML, CSS, JavaScript, TypeScript",
+    color: "#3B82F6",
+    icon: "Layers",
+    order: 0,
+  },
+  {
+    key: "framework",
+    title: "Framework Questions",
+    description: "React, Next.js, Vue, Angular, Svelte",
+    color: "#10B981",
+    icon: "Layers",
+    order: 1,
+  },
+  {
+    key: "problem",
+    title: "Problem Solving",
+    description: "Frontend coding challenges and algorithms",
+    color: "#F59E0B",
+    icon: "Layers",
+    order: 2,
+  },
+  {
+    key: "system",
+    title: "System Design",
+    description: "Frontend architecture patterns",
+    color: "#EF4444",
+    icon: "Layers",
+    order: 3,
+  },
+];
+
+function inferCardKeyFromCategory(
+  category: DatabaseCategoryRecord,
+): CanonicalCardKey {
+  const hint =
+    `${category.card_type ?? ""} ${category.name ?? ""}`.toLowerCase();
+
+  if (
+    hint.includes("framework") ||
+    hint.includes("react") ||
+    hint.includes("next") ||
+    hint.includes("vue") ||
+    hint.includes("angular") ||
+    hint.includes("svelte")
+  ) {
+    return "framework";
+  }
+
+  if (
+    hint.includes("problem") ||
+    hint.includes("algorithm") ||
+    hint.includes("coding") ||
+    hint.includes("challenge")
+  ) {
+    return "problem";
+  }
+
+  if (
+    hint.includes("system") ||
+    hint.includes("architecture") ||
+    hint.includes("design")
+  ) {
+    return "system";
+  }
+
+  return "core";
+}
+
+function buildCanonicalCards(cards: AdminLearningCard[]): {
+  cards: AdminLearningCard[];
+  idsByKey: Record<CanonicalCardKey, string>;
+} {
+  const idsByKey = {
+    core: "",
+    framework: "",
+    problem: "",
+    system: "",
+  } as Record<CanonicalCardKey, string>;
+
+  const canonicalCards = CANONICAL_CARDS.map((meta) => {
+    const existing = cards.find((card) => card.title === meta.title);
+    const normalized: AdminLearningCard = existing ?? {
+      id: `virtual-${meta.key}`,
+      title: meta.title,
+      description: meta.description,
+      color: meta.color,
+      icon: meta.icon,
+      order_index: meta.order,
+      is_active: true,
+      created_at: "",
+      updated_at: "",
+    };
+
+    idsByKey[meta.key] = normalized.id;
+    return normalized;
+  });
+
+  return { cards: canonicalCards, idsByKey };
+}
+
 function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
   switch (sequence) {
     case 1:
       return {
-        title: "Foundations",
+        title: "Initial",
         description:
-          "Day 1 kickoff with all cards available and 1-2 new questions per card.",
+          "Initial plan with new questions across all four learning cards.",
         plan_type: "initial",
         sequence_index: 1,
         new_question_count: 0,
@@ -101,8 +218,8 @@ function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
       };
     case 2:
       return {
-        title: "Review & Deepen",
-        description: "Day 2 adds new questions and starts lightweight review.",
+        title: "Review",
+        description: "Review plan that mixes new and review questions.",
         plan_type: "reinforcement",
         sequence_index: 2,
         new_question_count: 0,
@@ -110,9 +227,9 @@ function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
       };
     case 3:
       return {
-        title: "Advanced Mastery",
+        title: "Advanced",
         description:
-          "Day 3 emphasizes harder review while still introducing new items.",
+          "Advanced plan emphasizing harder review while introducing new items.",
         plan_type: "advanced",
         sequence_index: 3,
         new_question_count: 0,
@@ -120,9 +237,9 @@ function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
       };
     default:
       return {
-        title: "Weekly Check-in",
+        title: "Maintenance",
         description:
-          "Maintenance day with mostly review and a small amount of new content.",
+          "Maintenance plan with mostly review and a small amount of new content.",
         plan_type: "maintenance",
         sequence_index: 4,
         new_question_count: 0,
@@ -142,6 +259,10 @@ function hasExistingSpacedPlans(plans: LearningPlan[]): boolean {
   const matches = plans.filter((plan) => {
     const lowered = `${plan.name} ${plan.description}`.toLowerCase();
     return (
+      lowered.includes("initial") ||
+      lowered.includes("review") ||
+      lowered.includes("advanced") ||
+      lowered.includes("maintenance") ||
       lowered.includes("foundations") ||
       lowered.includes("review & deepen") ||
       lowered.includes("advanced mastery") ||
@@ -580,7 +701,7 @@ export function useContentManagement() {
           "/api/questions/unified?page=1&pageSize=2000&includePagination=false",
           "Failed to fetch questions",
         ),
-        loadApiCollection<AdminCategory>(
+        loadApiCollection<DatabaseCategoryRecord>(
           "/api/categories",
           "Failed to fetch categories",
         ),
@@ -598,10 +719,19 @@ export function useContentManagement() {
         topicsResult.error,
       ].filter((message): message is string => Boolean(message));
 
-      setCards(cardsResult.data);
+      const canonicalCardsResult = buildCanonicalCards(cardsResult.data);
+      const mappedCategories = categoriesResult.data.map((category) => {
+        const inferred = inferCardKeyFromCategory(category);
+        return {
+          ...category,
+          learning_card_id: canonicalCardsResult.idsByKey[inferred],
+        };
+      });
+
+      setCards(canonicalCardsResult.cards);
       setPlans(plansResult.data);
       setQuestions(questionsResult.data);
-      setCategories(categoriesResult.data);
+      setCategories(mappedCategories);
       setTopics(topicsResult.data.map(transformTopicToAdmin));
 
       if (dataErrors.length > 0) {

@@ -1,0 +1,57 @@
+{
+  "categories": [
+    {
+      "name": "JavaScript",
+      "slug": "javascript",
+      "description": "Core language concepts",
+      "card_type": "concept",
+      "icon": "code",
+      "color": "#f7df1e",
+      "order_index": 1
+    }
+  ],
+  "topics": [
+    {
+      "name": "Closures",
+      "slug": "closures",
+      "cat_slug": "javascript"
+    }
+  ],
+  "questions": [
+    {
+      "title": "What is a closure?",
+      "content": "Explain closure with one practical example.",
+      "type": "multiple-choice",
+      "difficulty": "beginner",
+      "points": 1,
+      "options": [
+        {
+          "id": "A",
+          "text": "A function with lexical scope access",
+          "isCorrect": true
+        },
+        {
+          "id": "B",
+          "text": "A CSS layout pattern",
+          "isCorrect": false
+        }
+      ],
+      "correct_answer": "A",
+      "explanation": "Closures keep references to outer-scope variables.",
+      "cat_slug": "javascript",
+      "topic_slug": "closures",
+      "tags": ["javascript", "guided", "free-style", "custom"],
+      "metadata": {
+        "learning_modes": ["guided", "free-style", "custom"],
+        "source": "NotebookLM"
+      },
+      "resources": [
+        {
+          "type": "article",
+          "title": "MDN Closures",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures"
+        }
+      ]
+    }
+  ]
+}

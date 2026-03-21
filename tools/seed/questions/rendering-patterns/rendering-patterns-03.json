@@ -1,0 +1,208 @@
+{
+  "categories": [
+    {
+      "slug": "web-architecture",
+      "name": "Web Architecture",
+      "description": "Core strategies and patterns for building and delivering web applications."
+    }
+  ],
+  "topics": [
+    {
+      "slug": "static-and-server-patterns",
+      "name": "Static and Server Rendering",
+      "category_slug": "web-architecture",
+      "description": "Strategies involving pre-built files and server-side generation."
+    },
+    {
+      "slug": "performance-and-hydration",
+      "name": "Performance and Hydration",
+      "category_slug": "web-architecture",
+      "description": "Optimizing user experience through efficient JavaScript execution and loading."
+    }
+  ],
+  "questions": [
+    {
+      "external_ref": "fireship-jamstack-ssg-1",
+      "question_text": "What are the primary benefits of the Jamstack (SSG) approach compared to standard SSR?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "Jamstack/SSG offers the low-cost hosting and simplicity of a static site because files are pre-rendered, while still providing an app-like experience via hydration.",
+      "hint": "Focus on hosting costs and simplicity.",
+      "tags": ["jamstack", "ssg", "hosting"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["static-and-server-patterns"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "SSG",
+        "timestamp": "05:15"
+      },
+      "choices": [
+        { "key": "A", "text": "It eliminates the need for any client-side JavaScript.", "is_correct": false },
+        { "key": "B", "text": "It provides low-cost hosting and simplicity while maintaining an app-like experience.", "is_correct": true },
+        { "key": "C", "text": "It allows for real-time data updates without any redeployments.", "is_correct": false },
+        { "key": "D", "text": "It is faster than standard static sites because it skips the storage bucket.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-isr-hosting-complexity",
+      "question_text": "What is considered a significant barrier or drawback to implementing Incremental Static Regeneration (ISR)?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "ISR is complex to set up manually, often requiring a specific host like Vercel that supports the pattern out of the box.",
+      "hint": "Think about the effort required for self-hosting.",
+      "tags": ["isr", "devops"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["static-and-server-patterns"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "ISR",
+        "timestamp": "06:10"
+      },
+      "choices": [
+        { "key": "A", "text": "It makes the website significantly slower than a standard MPA.", "is_correct": false },
+        { "key": "B", "text": "It is more complex to set up and typically requires specialized hosting support.", "is_correct": true },
+        { "key": "C", "text": "It cannot handle any dynamic data or cache invalidation.", "is_correct": false },
+        { "key": "D", "text": "It requires a full site redeploy for every small change in data.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-partial-hydration-trigger",
+      "question_text": "In the context of partial hydration, what is a common strategy used to make a component like a 'highly interactive footer' interactive?",
+      "question_type": "short_answer",
+      "difficulty": "intermediate",
+      "explanation": "Partial hydration allows developers to wait until a user scrolls down to a component before making it interactive, reducing the initial JavaScript execution load.",
+      "hint": "Consider the user's physical interaction with the page.",
+      "tags": ["performance", "lazy-loading"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["performance-and-hydration"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Partial Hydration",
+        "timestamp": "06:55"
+      },
+      "choices": [],
+      "answer_text": "Waiting until the user scrolls down to the component before making it interactive.",
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-spa-routing-mechanism",
+      "question_text": "How do routes function in a Single Page Application (SPA) compared to a Multi-Page Application (MPA)?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "In an SPA, routes do not point to a server; they are updated locally by JavaScript in the browser to make the transition feel instantaneous.",
+      "hint": "Does the browser ask the server for a new page on every route change?",
+      "tags": ["spa", "routing"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["performance-and-hydration"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Single Page Application",
+        "timestamp": "03:35"
+      },
+      "choices": [
+        { "key": "A", "text": "Each route points to a unique dynamically generated HTML file on the server.", "is_correct": false },
+        { "key": "B", "text": "Routes are purely cosmetic and cannot fetch additional data.", "is_correct": false },
+        { "key": "C", "text": "Routes are updated by JavaScript in the browser and do not point to a server.", "is_correct": true },
+        { "key": "D", "text": "SPAs only support a single URL and cannot have multiple routes.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-meta-framework-role",
+      "question_text": "Which type of framework is responsible for implementing the 'Best of Both Worlds' approach by handling both server-side rendering and client-side hydration?",
+      "question_type": "short_answer",
+      "difficulty": "beginner",
+      "explanation": "Meta-frameworks like Next.js, Nuxt, and SvelteKit handle the initial server-side request and then hydrate to client-side JavaScript.",
+      "hint": "Examples include Next.js and Nuxt.",
+      "tags": ["frameworks", "ssr"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["static-and-server-patterns"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "SSR",
+        "timestamp": "04:35"
+      },
+      "choices": [],
+      "answer_text": "Meta-frameworks (e.g., Next.js, Nuxt, SvelteKit).",
+      "validation_notes": []
+    }
+  ],
+  "learning_cards": [
+    {
+      "external_ref": "fireship-card-rendering-def",
+      "title": "Rendering Definition",
+      "front": "What is the core definition of 'rendering' in web development?",
+      "back": "The process of turning data and code into HTML that can be seen by the end user.",
+      "difficulty": "beginner",
+      "topic_slugs": ["rendering-fundamentals"],
+      "category_slugs": ["web-architecture"],
+      "learning_modes": ["guided"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "What is a rendering pattern",
+        "timestamp": "00:48"
+      },
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-card-island-static",
+      "title": "Islands: Zero JS",
+      "front": "What happens in an Islands Architecture if a page has no interactive components?",
+      "back": "No JavaScript is ever shipped to the client, even if the UI was built with a framework like React.",
+      "difficulty": "intermediate",
+      "topic_slugs": ["performance-and-hydration"],
+      "category_slugs": ["web-architecture"],
+      "learning_modes": ["guided"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Islands Architecture",
+        "timestamp": "07:35"
+      },
+      "validation_notes": []
+    }
+  ],
+  "relations": {
+    "questions_topics": [
+      { "question_external_ref": "fireship-jamstack-ssg-1", "topic_slug": "static-and-server-patterns" },
+      { "question_external_ref": "fireship-isr-hosting-complexity", "topic_slug": "static-and-server-patterns" },
+      { "question_external_ref": "fireship-partial-hydration-trigger", "topic_slug": "performance-and-hydration" },
+      { "question_external_ref": "fireship-spa-routing-mechanism", "topic_slug": "performance-and-hydration" },
+      { "question_external_ref": "fireship-meta-framework-role", "topic_slug": "static-and-server-patterns" }
+    ],
+    "card_categories": [
+      { "card_external_ref": "fireship-card-rendering-def", "category_slug": "web-architecture" },
+      { "card_external_ref": "fireship-card-island-static", "category_slug": "web-architecture" }
+    ],
+    "plan_questions": []
+  },
+  "quality_report": {
+    "total_sources_used": 1,
+    "total_questions_extracted": 5,
+    "duplicates_removed": 0,
+    "low_confidence_items": []
+  }
+}

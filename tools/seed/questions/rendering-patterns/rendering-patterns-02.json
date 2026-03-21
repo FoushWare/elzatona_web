@@ -1,0 +1,195 @@
+{
+  "categories": [
+    {
+      "slug": "web-architecture",
+      "name": "Web Architecture",
+      "description": "Core strategies and patterns for building and delivering web applications."
+    }
+  ],
+  "topics": [
+    {
+      "slug": "rendering-fundamentals",
+      "name": "Rendering Fundamentals",
+      "category_slug": "web-architecture",
+      "description": "The basic process of converting code and data into viewable HTML."
+    },
+    {
+      "slug": "static-and-server-patterns",
+      "name": "Static and Server Rendering",
+      "category_slug": "web-architecture",
+      "description": "Strategies involving pre-built files and server-side generation."
+    },
+    {
+      "slug": "performance-and-hydration",
+      "name": "Performance and Hydration",
+      "category_slug": "web-architecture",
+      "description": "Optimizing user experience through efficient JavaScript execution and loading."
+    }
+  ],
+  "questions": [
+    {
+      "external_ref": "fireship-mpa-benefit-1",
+      "question_text": "What was the primary reason web development moved from static websites to Multi-Page Applications (MPAs)?",
+      "question_type": "mcq",
+      "difficulty": "beginner",
+      "explanation": "Multi-Page Applications were developed because websites needed to be more dynamic, allowing the appearance to change whenever the underlying data changes on the server.",
+      "hint": "Think about the need for dynamic data.",
+      "tags": ["mpa", "history"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["static-and-server-patterns"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Multi-page applications",
+        "timestamp": "02:10"
+      },
+      "choices": [
+        { "key": "A", "text": "To eliminate the need for server-side code.", "is_correct": false },
+        { "key": "B", "text": "To allow the website to change dynamically when underlying data changes.", "is_correct": true },
+        { "key": "C", "text": "To provide an app-like experience with zero page reloads.", "is_correct": false },
+        { "key": "D", "text": "To make websites compatible with the first iPhone.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-spa-mechanism-1",
+      "question_text": "In the Single Page Application (SPA) paradigm, how is the user interface typically rendered after the initial shell is loaded?",
+      "question_type": "short_answer",
+      "difficulty": "intermediate",
+      "explanation": "An SPA starts with one HTML page as a shell, then executes JavaScript in the browser to render the UI and fetch data with additional HTTP requests.",
+      "hint": "What executes in the browser to build the page?",
+      "tags": ["spa", "client-side-rendering"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["performance-and-hydration"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Single Page Application",
+        "timestamp": "03:20"
+      },
+      "choices": [],
+      "answer_text": "By executing JavaScript in the browser to render the UI and fetching data via additional HTTP requests.",
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-ssr-definition-1",
+      "question_text": "What defines the 'Best of Both Worlds' approach in modern Server-Side Rendering (SSR)?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "Modern SSR renders the initial page load dynamically on the server for speed and SEO, then 'hydrates' to client-side JavaScript to provide a smooth SPA experience.",
+      "hint": "It combines server-side initial load with client-side interactivity.",
+      "tags": ["ssr", "hydration"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["static-and-server-patterns"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "SSR",
+        "timestamp": "04:30"
+      },
+      "choices": [
+        { "key": "A", "text": "Rendering everything in the browser first, then backing it up to a server.", "is_correct": false },
+        { "key": "B", "text": "Using only static HTML with no JavaScript allowed.", "is_correct": false },
+        { "key": "C", "text": "Server-side rendering for the initial load, followed by client-side hydration for an app-like experience.", "is_correct": true },
+        { "key": "D", "text": "Generating thousands of static files and never using a server again.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-hydration-problem-1",
+      "question_text": "What user experience issue can occur during the 'hydration' process on a large website?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "During hydration, the app might feel 'frozen' because the JavaScript is busy executing to take over the rendering process, making the page non-interactive for a short time.",
+      "hint": "Think about the app's responsiveness while JavaScript is loading.",
+      "tags": ["performance", "hydration"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["performance-and-hydration"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Partial Hydration",
+        "timestamp": "06:30"
+      },
+      "choices": [
+        { "key": "A", "text": "The page colors might revert to black and white.", "is_correct": false },
+        { "key": "B", "text": "The website might feel frozen while JavaScript executes to take over the rendering.", "is_correct": true },
+        { "key": "C", "text": "Search engines will be unable to find the homepage.", "is_correct": false },
+        { "key": "D", "text": "The server will crash due to too many requests.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-streaming-ssr-1",
+      "question_text": "How does Streaming SSR improve performance compared to traditional SSR?",
+      "question_type": "short_answer",
+      "difficulty": "advanced",
+      "explanation": "Streaming SSR allows the server to render and send content concurrently in multiple chunks rather than waiting to send everything all at once, making the UI interactive faster.",
+      "hint": "It involves breaking the response into chunks.",
+      "tags": ["streaming", "ssr", "react-server-components"],
+      "learning_modes": ["guided", "custom"],
+      "topic_slugs": ["performance-and-hydration"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Streaming SSR",
+        "timestamp": "07:55"
+      },
+      "choices": [],
+      "answer_text": "It renders server-side content concurrently in multiple chunks instead of all at once, allowing the UI to become interactive faster.",
+      "validation_notes": []
+    }
+  ],
+  "learning_cards": [
+    {
+      "external_ref": "fireship-card-resumability-v2",
+      "title": "Resumability Mechanism",
+      "front": "How does 'Resumability' in the Quick framework avoid the hydration problem?",
+      "back": "It serializes the website, data, and event listeners directly into the HTML. JavaScript is broken into tiny chunks that are lazy-loaded only when needed, meaning no hydration phase is required.",
+      "difficulty": "advanced",
+      "topic_slugs": ["performance-and-hydration"],
+      "category_slugs": ["web-architecture"],
+      "learning_modes": ["custom"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Resumability",
+        "timestamp": "08:25"
+      },
+      "validation_notes": []
+    }
+  ],
+  "relations": {
+    "questions_topics": [
+      { "question_external_ref": "fireship-mpa-benefit-1", "topic_slug": "static-and-server-patterns" },
+      { "question_external_ref": "fireship-spa-mechanism-1", "topic_slug": "performance-and-hydration" },
+      { "question_external_ref": "fireship-ssr-definition-1", "topic_slug": "static-and-server-patterns" },
+      { "question_external_ref": "fireship-hydration-problem-1", "topic_slug": "performance-and-hydration" },
+      { "question_external_ref": "fireship-streaming-ssr-1", "topic_slug": "performance-and-hydration" }
+    ],
+    "card_categories": [
+      { "card_external_ref": "fireship-card-resumability-v2", "category_slug": "web-architecture" }
+    ],
+    "plan_questions": []
+  },
+  "quality_report": {
+    "total_sources_used": 1,
+    "total_questions_extracted": 5,
+    "duplicates_removed": 0,
+    "low_confidence_items": []
+  }
+}

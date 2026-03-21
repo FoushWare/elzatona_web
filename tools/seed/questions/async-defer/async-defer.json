@@ -1,0 +1,202 @@
+{
+  "categories": [
+    {
+      "slug": "web-performance",
+      "name": "Web Performance",
+      "description": "Strategies for optimizing browser loading sequences and resource execution."
+    }
+  ],
+  "topics": [
+    {
+      "slug": "script-loading-strategies",
+      "name": "Script Loading Strategies",
+      "category_slug": "web-performance",
+      "description": "Techniques for managing external JavaScript via async, defer, and traditional tag placement."
+    }
+  ],
+  "questions": [
+    {
+      "external_ref": "mathew-traditional-script-block",
+      "question_text": "What is the primary performance disadvantage of placing traditional <script> tags in the <head> section of an HTML document?",
+      "question_type": "mcq",
+      "difficulty": "beginner",
+      "explanation": "Placing scripts in the head section blocks HTML parsing until the JavaScript file is both fetched and executed, which slows down the overall page load time.",
+      "hint": "Think about what happens to the HTML parser while the script is being handled.",
+      "tags": ["performance", "parsing"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["script-loading-strategies"],
+      "category_slugs": ["web-performance"],
+      "source": {
+        "kind": "website",
+        "title": "Async vs Defer in JavaScript: Which is Better?🤔",
+        "url": null,
+        "section": "Default Behaviour",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "The script will fail to download in most browsers.", "is_correct": false },
+        { "key": "B", "text": "The browser blocks HTML parsing until the script is fetched and executed.", "is_correct": true },
+        { "key": "C", "text": "The script executes before the CSS is loaded.", "is_correct": false },
+        { "key": "D", "text": "It forces the script to execute twice.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "mathew-async-execution-order",
+      "question_text": "How does the 'async' attribute determine the execution order of multiple scripts?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "Scripts with the 'async' attribute execute as soon as they finish downloading, regardless of their order in the HTML document.",
+      "hint": "Does it respect the order in the code or the order of completion?",
+      "tags": ["async", "execution-order"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["script-loading-strategies"],
+      "category_slugs": ["web-performance"],
+      "source": {
+        "kind": "website",
+        "title": "Async vs Defer in JavaScript: Which is Better?🤔",
+        "url": null,
+        "section": "Async",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "They execute in the exact order they appear in the document.", "is_correct": false },
+        { "key": "B", "text": "They execute only after the entire DOM is parsed.", "is_correct": false },
+        { "key": "C", "text": "They execute as soon as they finish downloading.", "is_correct": true },
+        { "key": "D", "text": "They execute simultaneously using multi-threading.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "mathew-defer-lifecycle-timing",
+      "question_text": "At what specific point in the page lifecycle do scripts with the 'defer' attribute execute?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "Scripts with the 'defer' attribute execute after the HTML document has been fully parsed, but before the DOMContentLoaded event fires.",
+      "hint": "It happens after parsing but before a major DOM event.",
+      "tags": ["defer", "lifecycle"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["script-loading-strategies"],
+      "category_slugs": ["web-performance"],
+      "source": {
+        "kind": "website",
+        "title": "Async vs Defer in JavaScript: Which is Better?🤔",
+        "url": null,
+        "section": "Conclusion",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "Immediately after the script finishes downloading.", "is_correct": false },
+        { "key": "B", "text": "After the window.onload event has fired.", "is_correct": false },
+        { "key": "C", "text": "After HTML parsing is finished but before DOMContentLoaded.", "is_correct": true },
+        { "key": "D", "text": "Directly before the HTML starts parsing.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "mathew-async-vs-defer-decision",
+      "question_text": "What is the recommended criteria for choosing the 'async' attribute over 'defer' for a script?",
+      "question_type": "short_answer",
+      "difficulty": "intermediate",
+      "explanation": "Async should be used for scripts that can run independently, do not rely on the DOM structure, and do not depend on other scripts.",
+      "hint": "Consider the script's dependencies.",
+      "tags": ["best-practices", "decision-making"],
+      "learning_modes": ["guided", "custom"],
+      "topic_slugs": ["script-loading-strategies"],
+      "category_slugs": ["web-performance"],
+      "source": {
+        "kind": "website",
+        "title": "Async vs Defer in JavaScript: Which is Better?🤔",
+        "url": null,
+        "section": "Conclusion",
+        "timestamp": null
+      },
+      "choices": [],
+      "answer_text": "Use async when scripts are independent, do not rely on the DOM structure, and do not have execution order dependencies with other scripts.",
+      "validation_notes": []
+    },
+    {
+      "external_ref": "engelman-web-component-loading",
+      "question_text": "According to the discussion on Web Components, why might using 'async' or 'defer' be problematic for native connectedCallback execution?",
+      "question_type": "short_answer",
+      "difficulty": "advanced",
+      "explanation": "In native Web Components, the connectedCallback fires on the opening tag. Using async or defer can delay the definition of the component until after the tag is encountered, which may lead to issues if the component needs to be defined before parsing.",
+      "hint": "Focus on the timing of custom element definition versus DOM parsing.",
+      "tags": ["web-components", "advanced"],
+      "learning_modes": ["custom"],
+      "topic_slugs": ["script-loading-strategies"],
+      "category_slugs": ["web-performance"],
+      "source": {
+        "kind": "website",
+        "title": "Async vs Defer in JavaScript: Which is Better?🤔",
+        "url": null,
+        "section": "Top comments",
+        "timestamp": null
+      },
+      "choices": [],
+      "answer_text": "Because the native connectedCallback fires on the opening tag, and delaying script execution via async/defer may prevent the component from being defined before the browser parses that tag.",
+      "validation_notes": []
+    }
+  ],
+  "learning_cards": [
+    {
+      "external_ref": "mathew-card-defer-order",
+      "title": "Defer Execution Order",
+      "front": "How is execution order handled for multiple scripts using the 'defer' attribute?",
+      "back": "Scripts with the defer attribute are guaranteed to execute in the exact order they appear in the HTML document.",
+      "difficulty": "beginner",
+      "topic_slugs": ["script-loading-strategies"],
+      "category_slugs": ["web-performance"],
+      "learning_modes": ["guided"],
+      "source": {
+        "kind": "website",
+        "title": "Async vs Defer in JavaScript: Which is Better?🤔",
+        "url": null,
+        "section": "Defer",
+        "timestamp": null
+      },
+      "validation_notes": []
+    },
+    {
+      "external_ref": "mathew-card-async-parsing",
+      "title": "Async and Parsing",
+      "front": "Does a script with the 'async' attribute block HTML parsing during its download?",
+      "back": "No. The script is downloaded in the background asynchronously without blocking the HTML parsing process.",
+      "difficulty": "beginner",
+      "topic_slugs": ["script-loading-strategies"],
+      "category_slugs": ["web-performance"],
+      "learning_modes": ["guided"],
+      "source": {
+        "kind": "website",
+        "title": "Async vs Defer in JavaScript: Which is Better?🤔",
+        "url": null,
+        "section": "Async",
+        "timestamp": null
+      },
+      "validation_notes": []
+    }
+  ],
+  "relations": {
+    "questions_topics": [
+      { "question_external_ref": "mathew-traditional-script-block", "topic_slug": "script-loading-strategies" },
+      { "question_external_ref": "mathew-async-execution-order", "topic_slug": "script-loading-strategies" },
+      { "question_external_ref": "mathew-defer-lifecycle-timing", "topic_slug": "script-loading-strategies" },
+      { "question_external_ref": "mathew-async-vs-defer-decision", "topic_slug": "script-loading-strategies" },
+      { "question_external_ref": "engelman-web-component-loading", "topic_slug": "script-loading-strategies" }
+    ],
+    "card_categories": [
+      { "card_external_ref": "mathew-card-defer-order", "category_slug": "web-performance" },
+      { "card_external_ref": "mathew-card-async-parsing", "category_slug": "web-performance" }
+    ],
+    "plan_questions": []
+  },
+  "quality_report": {
+    "total_sources_used": 1,
+    "total_questions_extracted": 5,
+    "duplicates_removed": 0,
+    "low_confidence_items": []
+  }
+}

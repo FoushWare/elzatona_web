@@ -1,0 +1,233 @@
+{
+  "categories": [
+    {
+      "slug": "javascript-programming",
+      "name": "JavaScript Programming",
+      "description": "Language specifics, object management, and syntax rules."
+    }
+  ],
+  "topics": [
+    {
+      "slug": "object-property-access",
+      "name": "Object Property Access",
+      "category_slug": "javascript-programming",
+      "description": "Methods for retrieving data from JavaScript objects, including dot, bracket, and destructuring patterns."
+    }
+  ],
+  "questions": [
+    {
+      "external_ref": "pavlutin-identifier-rules-1",
+      "question_text": "Which of the following is a restriction for a property name to be used as a valid identifier with the dot property accessor?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "An identifier in JavaScript can contain Unicode letters, $, _, and digits 0..9, but it cannot start with a digit.",
+      "hint": "Think about what character cannot be at the very beginning.",
+      "tags": ["syntax", "identifiers"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["object-property-access"],
+      "category_slugs": ["javascript-programming"],
+      "source": {
+        "kind": "website",
+        "title": "3 Ways To Access Object Properties in JavaScript",
+        "url": null,
+        "section": "1.1 Dot property accessor requires identifiers",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "It cannot contain the underscore (_) character.", "is_correct": false },
+        { "key": "B", "text": "It cannot start with a digit (0..9).", "is_correct": true },
+        { "key": "C", "text": "It cannot contain Unicode letters.", "is_correct": false },
+        { "key": "D", "text": "It must be at least 3 characters long.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "pavlutin-dot-accessor-failure-analysis",
+      "question_text": "Why does the expression 'weirdObject.prop-3' evaluate to NaN instead of retrieving the property value 'three'?",
+      "question_type": "short_answer",
+      "difficulty": "advanced",
+      "explanation": "Because 'prop-3' is an invalid identifier for dot access, JavaScript interprets the dot as property access to 'prop' (which is undefined) and then attempts to subtract 3 from it, resulting in Not-a-Number (NaN).",
+      "hint": "Consider how JavaScript interprets the hyphen (-) character in this context.",
+      "tags": ["troubleshooting", "syntax"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["object-property-access"],
+      "category_slugs": ["javascript-programming"],
+      "source": {
+        "kind": "website",
+        "title": "3 Ways To Access Object Properties in JavaScript",
+        "url": null,
+        "section": "1.1 Dot property accessor requires identifiers",
+        "timestamp": null
+      },
+      "choices": [],
+      "answer_text": "JavaScript interprets the expression as a subtraction operation (object.prop minus 3) because the hyphen makes it an invalid identifier.",
+      "validation_notes": []
+    },
+    {
+      "external_ref": "pavlutin-bracket-syntax-rule",
+      "question_text": "In the square brackets property accessor syntax 'expression[expression]', what must the second expression evaluate to?",
+      "question_type": "mcq",
+      "difficulty": "beginner",
+      "explanation": "The first expression evaluates to the object, and the second expression must evaluate to a string that denotes the property name.",
+      "hint": "Property names are ultimately treated as what data type?",
+      "tags": ["syntax", "basics"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["object-property-access"],
+      "category_slugs": ["javascript-programming"],
+      "source": {
+        "kind": "website",
+        "title": "3 Ways To Access Object Properties in JavaScript",
+        "url": null,
+        "section": "2. Square brackets property accessor",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "A boolean value.", "is_correct": false },
+        { "key": "B", "text": "A string denoting the property name.", "is_correct": true },
+        { "key": "C", "text": "A mathematical formula.", "is_correct": false },
+        { "key": "D", "text": "A reference to the window object.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "pavlutin-destructuring-alias-syntax",
+      "question_text": "What is the correct syntax to extract a property into a variable with a different name (aliasing) using destructuring?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "The syntax 'const { identifier: aliasIdentifier } = expression' allows you to map the property name to a new variable name.",
+      "hint": "The colon separates the property name from the new variable name.",
+      "tags": ["destructuring", "aliasing"],
+      "learning_modes": ["guided", "custom"],
+      "topic_slugs": ["object-property-access"],
+      "category_slugs": ["javascript-programming"],
+      "source": {
+        "kind": "website",
+        "title": "3 Ways To Access Object Properties in JavaScript",
+        "url": null,
+        "section": "3.1 Alias variable",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "const { property as alias } = object", "is_correct": false },
+        { "key": "B", "text": "const { property: alias } = object", "is_correct": true },
+        { "key": "C", "text": "const { alias = property } = object", "is_correct": false },
+        { "key": "D", "text": "const { property -> alias } = object", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "pavlutin-dynamic-destructuring-syntax",
+      "question_text": "Which syntax is used to perform object destructuring when the property name is dynamic and determined at runtime?",
+      "question_type": "mcq",
+      "difficulty": "advanced",
+      "explanation": "To destructure a dynamic property, you must wrap the expression in square brackets inside the destructuring pattern: { [expression]: identifier }.",
+      "hint": "It combines square bracket logic inside the destructuring braces.",
+      "tags": ["destructuring", "dynamic-programming"],
+      "learning_modes": ["guided", "custom"],
+      "topic_slugs": ["object-property-access"],
+      "category_slugs": ["javascript-programming"],
+      "source": {
+        "kind": "website",
+        "title": "3 Ways To Access Object Properties in JavaScript",
+        "url": null,
+        "section": "3.2 Dynamic property name",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "const { property } = object", "is_correct": false },
+        { "key": "B", "text": "const { [property]: variable } = object", "is_correct": true },
+        { "key": "C", "text": "const { .property: variable } = object", "is_correct": false },
+        { "key": "D", "text": "const { property(variable) } = object", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "pavlutin-missing-property-result",
+      "question_text": "True or False: In JavaScript, if you attempt to access a property that does not exist using any of the three accessor syntaxes, the code will throw a ReferenceError.",
+      "question_type": "true_false",
+      "difficulty": "beginner",
+      "explanation": "If the accessed property doesn't exist, all 3 accessor syntaxes (dot, brackets, and destructuring) simply evaluate to 'undefined', they do not throw an error.",
+      "hint": "Think about the standard value for 'nothing found' in an object.",
+      "tags": ["error-handling", "fundamentals"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["object-property-access"],
+      "category_slugs": ["javascript-programming"],
+      "source": {
+        "kind": "website",
+        "title": "3 Ways To Access Object Properties in JavaScript",
+        "url": null,
+        "section": "4. When the property doesn't exist",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "True", "is_correct": false },
+        { "key": "B", "text": "False", "is_correct": true }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    }
+  ],
+  "learning_cards": [
+    {
+      "external_ref": "pavlutin-card-dot-vs-bracket",
+      "title": "Dot vs Bracket Access",
+      "front": "When should you choose square brackets over the dot property accessor?",
+      "back": "When the property name is dynamic (determined at runtime) or when the property name is not a valid identifier (e.g., starts with a digit or contains a hyphen).",
+      "difficulty": "beginner",
+      "topic_slugs": ["object-property-access"],
+      "category_slugs": ["javascript-programming"],
+      "learning_modes": ["guided"],
+      "source": {
+        "kind": "website",
+        "title": "3 Ways To Access Object Properties in JavaScript",
+        "url": null,
+        "section": "5. Conclusion",
+        "timestamp": null
+      },
+      "validation_notes": []
+    },
+    {
+      "external_ref": "pavlutin-card-destructuring-use",
+      "title": "Purpose of Destructuring",
+      "front": "When is it most appropriate to use object destructuring for property access?",
+      "back": "When you want to extract a property value directly into a standalone variable.",
+      "difficulty": "beginner",
+      "topic_slugs": ["object-property-access"],
+      "category_slugs": ["javascript-programming"],
+      "learning_modes": ["guided"],
+      "source": {
+        "kind": "website",
+        "title": "3 Ways To Access Object Properties in JavaScript",
+        "url": null,
+        "section": "3. Object destructuring",
+        "timestamp": null
+      },
+      "validation_notes": []
+    }
+  ],
+  "relations": {
+    "questions_topics": [
+      { "question_external_ref": "pavlutin-identifier-rules-1", "topic_slug": "object-property-access" },
+      { "question_external_ref": "pavlutin-dot-accessor-failure-analysis", "topic_slug": "object-property-access" },
+      { "question_external_ref": "pavlutin-bracket-syntax-rule", "topic_slug": "object-property-access" },
+      { "question_external_ref": "pavlutin-destructuring-alias-syntax", "topic_slug": "object-property-access" },
+      { "question_external_ref": "pavlutin-dynamic-destructuring-syntax", "topic_slug": "object-property-access" },
+      { "question_external_ref": "pavlutin-missing-property-result", "topic_slug": "object-property-access" }
+    ],
+    "card_categories": [
+      { "card_external_ref": "pavlutin-card-dot-vs-bracket", "category_slug": "javascript-programming" },
+      { "card_external_ref": "pavlutin-card-destructuring-use", "category_slug": "javascript-programming" }
+    ],
+    "plan_questions": []
+  },
+  "quality_report": {
+    "total_sources_used": 1,
+    "total_questions_extracted": 6,
+    "duplicates_removed": 1,
+    "low_confidence_items": []
+  }
+}
