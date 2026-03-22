@@ -23,6 +23,10 @@ type DatabaseTopicRecord = DatabaseTopic & {
   order_index?: number;
 };
 
+type DatabaseCategoryRecord = AdminCategory & {
+  card_type?: string | null;
+};
+
 type LoadResult<T> = {
   data: T[];
   error: string | null;
@@ -80,6 +84,8 @@ type PlanQuestionInsertRow = {
   is_active: boolean;
 };
 
+type CanonicalCardKey = "core" | "framework" | "problem" | "system";
+
 const PLAN_DISTRIBUTION = [
   { newPerCard: 2, reviewPerCard: 0 },
   { newPerCard: 2, reviewPerCard: 1 },
@@ -87,13 +93,133 @@ const PLAN_DISTRIBUTION = [
   { newPerCard: 1, reviewPerCard: 3 },
 ] as const;
 
+const CANONICAL_CARDS: Array<{
+  key: CanonicalCardKey;
+  title: string;
+  description: string;
+  color: string;
+  icon: string;
+  order: number;
+}> = [
+  {
+    key: "core",
+    title: "Core Technologies",
+    description: "HTML, CSS, JavaScript, TypeScript",
+    color: "#3B82F6",
+    icon: "Layers",
+    order: 0,
+  },
+  {
+    key: "framework",
+    title: "Framework Questions",
+    description: "React, Next.js, Vue, Angular, Svelte",
+    color: "#10B981",
+    icon: "Layers",
+    order: 1,
+  },
+  {
+    key: "problem",
+    title: "Problem Solving",
+    description: "Frontend coding challenges and algorithms",
+    color: "#F59E0B",
+    icon: "Layers",
+    order: 2,
+  },
+  {
+    key: "system",
+    title: "System Design",
+    description: "Frontend architecture patterns",
+    color: "#EF4444",
+    icon: "Layers",
+    order: 3,
+  },
+];
+
+function inferCardKeyFromCategory(
+  category: DatabaseCategoryRecord,
+): CanonicalCardKey {
+  const hint =
+    `${category.card_type ?? ""} ${category.name ?? ""}`.toLowerCase();
+
+  if (
+    hint.includes("framework") ||
+    hint.includes("react") ||
+    hint.includes("next") ||
+    hint.includes("vue") ||
+    hint.includes("angular") ||
+    hint.includes("svelte")
+  ) {
+    return "framework";
+  }
+
+  if (
+    hint.includes("problem") ||
+    hint.includes("algorithm") ||
+    hint.includes("coding") ||
+    hint.includes("challenge")
+  ) {
+    return "problem";
+  }
+
+  if (
+    hint.includes("system") ||
+    hint.includes("architecture") ||
+    hint.includes("design")
+  ) {
+    return "system";
+  }
+
+  return "core";
+}
+
+function buildCanonicalCards(cards: AdminLearningCard[]): {
+  cards: AdminLearningCard[];
+  idsByKey: Record<CanonicalCardKey, string>;
+} {
+  const idsByKey = {
+    core: "",
+    framework: "",
+    problem: "",
+    system: "",
+  } as Record<CanonicalCardKey, string>;
+
+  const canonicalCards = CANONICAL_CARDS.map((meta) => {
+    const existing = cards.find((card) => card.title === meta.title);
+    const normalized: AdminLearningCard = existing ?? {
+      id: `virtual-${meta.key}`,
+      title: meta.title,
+      description: meta.description,
+      color: meta.color,
+      icon: meta.icon,
+      order_index: meta.order,
+      is_active: true,
+      created_at: "",
+      updated_at: "",
+    };
+
+    idsByKey[meta.key] = normalized.id;
+    return normalized;
+  });
+
+  return { cards: canonicalCards, idsByKey };
+}
+
+function toSlug(input: string): string {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
 function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
   switch (sequence) {
     case 1:
       return {
-        title: "Foundations",
+        title: "Initial",
         description:
-          "Day 1 kickoff with all cards available and 1-2 new questions per card.",
+          "Initial plan with new questions across all four learning cards.",
         plan_type: "initial",
         sequence_index: 1,
         new_question_count: 0,
@@ -101,8 +227,8 @@ function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
       };
     case 2:
       return {
-        title: "Review & Deepen",
-        description: "Day 2 adds new questions and starts lightweight review.",
+        title: "Review",
+        description: "Review plan that mixes new and review questions.",
         plan_type: "reinforcement",
         sequence_index: 2,
         new_question_count: 0,
@@ -110,9 +236,9 @@ function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
       };
     case 3:
       return {
-        title: "Advanced Mastery",
+        title: "Advanced",
         description:
-          "Day 3 emphasizes harder review while still introducing new items.",
+          "Advanced plan emphasizing harder review while introducing new items.",
         plan_type: "advanced",
         sequence_index: 3,
         new_question_count: 0,
@@ -120,9 +246,9 @@ function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
       };
     default:
       return {
-        title: "Weekly Check-in",
+        title: "Maintenance",
         description:
-          "Maintenance day with mostly review and a small amount of new content.",
+          "Maintenance plan with mostly review and a small amount of new content.",
         plan_type: "maintenance",
         sequence_index: 4,
         new_question_count: 0,
@@ -142,6 +268,10 @@ function hasExistingSpacedPlans(plans: LearningPlan[]): boolean {
   const matches = plans.filter((plan) => {
     const lowered = `${plan.name} ${plan.description}`.toLowerCase();
     return (
+      lowered.includes("initial") ||
+      lowered.includes("review") ||
+      lowered.includes("advanced") ||
+      lowered.includes("maintenance") ||
       lowered.includes("foundations") ||
       lowered.includes("review & deepen") ||
       lowered.includes("advanced mastery") ||
@@ -580,7 +710,7 @@ export function useContentManagement() {
           "/api/questions/unified?page=1&pageSize=2000&includePagination=false",
           "Failed to fetch questions",
         ),
-        loadApiCollection<AdminCategory>(
+        loadApiCollection<DatabaseCategoryRecord>(
           "/api/categories",
           "Failed to fetch categories",
         ),
@@ -598,20 +728,53 @@ export function useContentManagement() {
         topicsResult.error,
       ].filter((message): message is string => Boolean(message));
 
-      setCards(cardsResult.data);
+      const normalizedCards = cardsResult.data;
+      const canonicalCardsResult = buildCanonicalCards(normalizedCards);
+
+      const mappedCategories = categoriesResult.data.map((category) => {
+        // Preserve DB relationship first. Only infer a fallback when missing.
+        if ((category as AdminCategory).learning_card_id) {
+          return category as AdminCategory;
+        }
+
+        const inferred = inferCardKeyFromCategory(category);
+        return {
+          ...category,
+          learning_card_id: canonicalCardsResult.idsByKey[inferred],
+        } as AdminCategory;
+      });
+
+      setCards(normalizedCards);
       setPlans(plansResult.data);
       setQuestions(questionsResult.data);
-      setCategories(categoriesResult.data);
+      setCategories(mappedCategories);
       setTopics(topicsResult.data.map(transformTopicToAdmin));
+
+      const { data: existingPlanQuestions, error: planQuestionsError } =
+        await supabase.from("plan_questions").select("plan_id, question_id");
+
+      if (planQuestionsError) {
+        console.error(
+          "❌ Failed to fetch plan-question links:",
+          planQuestionsError,
+        );
+      } else {
+        const planQuestionKeys = new Set(
+          (existingPlanQuestions ?? []).map(
+            (row) => `${row.plan_id}-${row.question_id}`,
+          ),
+        );
+        setPlanQuestions(planQuestionKeys);
+      }
 
       if (dataErrors.length > 0) {
         console.error("❌ Content management partial load errors:", dataErrors);
         toast.error("Some content management data could not be loaded");
       }
 
-      // ARCHITECTURAL: Fetch plan-question associations from planRepository.getPlanQuestions()
-      // Requires implementing new repository method for plan-question relationships
-      setPlanQuestions(new Set());
+      if (!existingPlanQuestions || existingPlanQuestions.length === 0) {
+        setPlanQuestions(new Set());
+      }
     } catch (err) {
       console.error("❌ Error fetching data:", err);
       setError(err instanceof Error ? err.message : "Failed to fetch data");
@@ -994,6 +1157,188 @@ export function useContentManagement() {
     }
   }, [cards, fetchData, plans, questions]);
 
+  const createCategory = useCallback(async () => {
+    const name = globalThis.prompt("Category name");
+    if (!name || !name.trim()) {
+      return;
+    }
+
+    const description =
+      globalThis.prompt("Category description (optional)") || "";
+
+    const defaultCardId = cards[0]?.id;
+    const payload: Record<string, unknown> = {
+      name: name.trim(),
+      description,
+      slug: toSlug(name),
+      is_active: true,
+    };
+
+    if (defaultCardId) {
+      payload.learning_card_id = defaultCardId;
+    }
+
+    const { error: createError } = await supabase
+      .from("categories")
+      .insert(payload);
+
+    if (createError) {
+      toast.error(createError.message || "Failed to create category");
+      return;
+    }
+
+    toast.success("Category created");
+    await fetchData();
+  }, [cards, fetchData]);
+
+  const editCategory = useCallback(
+    async (category: AdminCategory) => {
+      const nextName = globalThis.prompt("Category name", category.name ?? "");
+      if (!nextName || !nextName.trim()) {
+        return;
+      }
+
+      const nextDescription =
+        globalThis.prompt("Category description", category.description ?? "") ??
+        "";
+
+      const { error: updateError } = await supabase
+        .from("categories")
+        .update({
+          name: nextName.trim(),
+          description: nextDescription,
+          slug: toSlug(nextName),
+        })
+        .eq("id", category.id);
+
+      if (updateError) {
+        toast.error(updateError.message || "Failed to update category");
+        return;
+      }
+
+      toast.success("Category updated");
+      await fetchData();
+    },
+    [fetchData],
+  );
+
+  const removeCategory = useCallback(
+    async (category: AdminCategory) => {
+      const confirmed = globalThis.confirm(
+        `Delete category \"${category.name}\"?`,
+      );
+      if (!confirmed) {
+        return;
+      }
+
+      const { error: deleteError } = await supabase
+        .from("categories")
+        .delete()
+        .eq("id", category.id);
+
+      if (deleteError) {
+        toast.error(deleteError.message || "Failed to delete category");
+        return;
+      }
+
+      toast.success("Category deleted");
+      await fetchData();
+    },
+    [fetchData],
+  );
+
+  const createTopic = useCallback(async () => {
+    if (categories.length === 0) {
+      toast.error("Create a category first");
+      return;
+    }
+
+    const name = globalThis.prompt("Topic name");
+    if (!name || !name.trim()) {
+      return;
+    }
+
+    const description = globalThis.prompt("Topic description (optional)") || "";
+    const categoryId = categories[0]?.id;
+
+    if (!categoryId) {
+      toast.error("No category available for topic assignment");
+      return;
+    }
+
+    const payload = {
+      name: name.trim(),
+      description,
+      category_id: categoryId,
+      is_active: true,
+      order_index: 0,
+    };
+
+    const { error: createError } = await supabase
+      .from("topics")
+      .insert(payload);
+
+    if (createError) {
+      toast.error(createError.message || "Failed to create topic");
+      return;
+    }
+
+    toast.success("Topic created");
+    await fetchData();
+  }, [categories, fetchData]);
+
+  const editTopic = useCallback(
+    async (topic: AdminTopic) => {
+      const nextName = globalThis.prompt("Topic name", topic.name ?? "");
+      if (!nextName || !nextName.trim()) {
+        return;
+      }
+
+      const nextDescription =
+        globalThis.prompt("Topic description", topic.description ?? "") ?? "";
+
+      const { error: updateError } = await supabase
+        .from("topics")
+        .update({
+          name: nextName.trim(),
+          description: nextDescription,
+        })
+        .eq("id", topic.id);
+
+      if (updateError) {
+        toast.error(updateError.message || "Failed to update topic");
+        return;
+      }
+
+      toast.success("Topic updated");
+      await fetchData();
+    },
+    [fetchData],
+  );
+
+  const removeTopic = useCallback(
+    async (topic: AdminTopic) => {
+      const confirmed = globalThis.confirm(`Delete topic \"${topic.name}\"?`);
+      if (!confirmed) {
+        return;
+      }
+
+      const { error: deleteError } = await supabase
+        .from("topics")
+        .delete()
+        .eq("id", topic.id);
+
+      if (deleteError) {
+        toast.error(deleteError.message || "Failed to delete topic");
+        return;
+      }
+
+      toast.success("Topic deleted");
+      await fetchData();
+    },
+    [fetchData],
+  );
+
   return {
     cards,
     plans,
@@ -1055,5 +1400,11 @@ export function useContentManagement() {
     toggleCardActiveStatus,
     openTopicQuestionsModal,
     createSpacedRepetitionPlans,
+    createCategory,
+    editCategory,
+    removeCategory,
+    createTopic,
+    editTopic,
+    removeTopic,
   };
 }

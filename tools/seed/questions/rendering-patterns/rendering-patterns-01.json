@@ -1,0 +1,283 @@
+{
+  "categories": [
+    {
+      "slug": "web-architecture",
+      "name": "Web Architecture",
+      "description": "Core strategies and patterns for building and delivering web applications."
+    }
+  ],
+  "topics": [
+    {
+      "slug": "rendering-fundamentals",
+      "name": "Rendering Fundamentals",
+      "category_slug": "web-architecture",
+      "description": "The basic process of converting code and data into viewable HTML."
+    },
+    {
+      "slug": "static-and-server-patterns",
+      "name": "Static and Server Rendering",
+      "category_slug": "web-architecture",
+      "description": "Strategies involving pre-built files and server-side generation."
+    },
+    {
+      "slug": "performance-and-hydration",
+      "name": "Performance and Hydration",
+      "category_slug": "web-architecture",
+      "description": "Optimizing user experience through efficient JavaScript execution and loading."
+    }
+  ],
+  "questions": [
+    {
+      "external_ref": "fireship-rendering-def-1",
+      "question_text": "What is the technical definition of 'rendering' in the context of web development?",
+      "question_type": "mcq",
+      "difficulty": "beginner",
+      "explanation": "According to the source, rendering is the specific process of turning data and code into HTML that the end user can see.",
+      "hint": "Think about the transformation from code to what the user sees.",
+      "tags": ["basics", "rendering"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["rendering-fundamentals"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "What is a rendering pattern",
+        "timestamp": "00:48"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "text": "The process of uploading files to a storage bucket.",
+          "is_correct": false
+        },
+        {
+          "key": "B",
+          "text": "Turning data and code into HTML for the end user.",
+          "is_correct": true
+        },
+        {
+          "key": "C",
+          "text": "The execution of JavaScript within the browser console.",
+          "is_correct": false
+        },
+        {
+          "key": "D",
+          "text": "Pointing a domain name to a server IP address.",
+          "is_correct": false
+        }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-static-drawback-1",
+      "question_text": "What is the primary drawback of using a traditional static website rendering paradigm?",
+      "question_type": "mcq",
+      "difficulty": "beginner",
+      "explanation": "Static sites are not suitable for websites where data changes often because they lack the ability to handle dynamic data without full rebuilds.",
+      "hint": "Consider sites with frequently updated information.",
+      "tags": ["static-sites"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["static-and-server-patterns"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Static Website",
+        "timestamp": "01:25"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "text": "They are expensive to host in storage buckets.",
+          "is_correct": false
+        },
+        {
+          "key": "B",
+          "text": "They cannot be programmatically built using frameworks.",
+          "is_correct": false
+        },
+        {
+          "key": "C",
+          "text": "They are not ideal for websites where data changes frequently.",
+          "is_correct": true
+        },
+        {
+          "key": "D",
+          "text": "They require a full server-side runtime like Django.",
+          "is_correct": false
+        }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-spa-disadvantages-1",
+      "question_text": "Which two factors are identified as significant disadvantages of the Single Page Application (SPA) paradigm?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "SPAs require a large JavaScript bundle that slows initial loads and can cause SEO issues because search engines struggle with dynamic content routes.",
+      "hint": "Think about bundle size and search engine visibility.",
+      "tags": ["spa", "performance", "seo"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["performance-and-hydration"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Single Page Application",
+        "timestamp": "03:55"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "text": "High server costs and lack of routing support.",
+          "is_correct": false
+        },
+        {
+          "key": "B",
+          "text": "Slow initial page loads and difficulty with SEO.",
+          "is_correct": true
+        },
+        {
+          "key": "C",
+          "text": "Requirement for full page reloads and clunky UI.",
+          "is_correct": false
+        },
+        {
+          "key": "D",
+          "text": "Inability to fetch data via HTTP requests.",
+          "is_correct": false
+        }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-isr-concept-1",
+      "question_text": "How does Incremental Static Regeneration (ISR) handle dynamic data differently than a standard static site?",
+      "question_type": "short_answer",
+      "difficulty": "advanced",
+      "explanation": "ISR allows developers to deploy a static site but rebuild individual pages on the fly on the server when a cache is invalidated based on specific rules (like time).",
+      "hint": "Focus on the 'incremental' and 'on the fly' aspects.",
+      "tags": ["isr", "nextjs"],
+      "learning_modes": ["guided", "free-style", "custom"],
+      "topic_slugs": ["static-and-server-patterns"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "ISR",
+        "timestamp": "05:40"
+      },
+      "choices": [],
+      "answer_text": "ISR allows for rebuilding individual static pages on the fly when the cache is invalidated, enabling dynamic data updates without a full site redeploy.",
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-islands-architecture-1",
+      "question_text": "What is the key advantage of the Islands Architecture, as used by frameworks like Astro?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "Islands architecture starts with static HTML and only hydrates specific interactive components, which means it may ship zero JavaScript to the client for non-interactive pages.",
+      "hint": "Consider what happens if a page has no interactive parts.",
+      "tags": ["islands-architecture", "performance"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["performance-and-hydration"],
+      "category_slugs": ["web-architecture"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Islands Architecture",
+        "timestamp": "07:15"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "text": "It requires the entire page to be hydrated at once.",
+          "is_correct": false
+        },
+        {
+          "key": "B",
+          "text": "It can ship zero JavaScript to the client for purely static pages.",
+          "is_correct": true
+        },
+        {
+          "key": "C",
+          "text": "It eliminates the need for any HTML on the server.",
+          "is_correct": false
+        },
+        {
+          "key": "D",
+          "text": "It forces all components to be interactive by default.",
+          "is_correct": false
+        }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    }
+  ],
+  "learning_cards": [
+    {
+      "external_ref": "fireship-card-jamstack",
+      "title": "Jamstack & SSG",
+      "front": "What defines a 'Jamstack' site in the context of Static Site Generation (SSG)?",
+      "back": "HTML is rendered in advance and uploaded to a static host, but it hydrates to JavaScript after the initial page load to provide an app-like experience.",
+      "difficulty": "intermediate",
+      "topic_slugs": ["static-and-server-patterns"],
+      "category_slugs": ["web-architecture"],
+      "learning_modes": ["guided"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "SSG",
+        "timestamp": "05:10"
+      },
+      "validation_notes": []
+    },
+    {
+      "external_ref": "fireship-card-resumability",
+      "title": "Resumability (Quick)",
+      "front": "How does the Resumability paradigm (Quick framework) differ from traditional hydration?",
+      "back": "It serializes the website, data, and event listeners into HTML. JavaScript is broken into tiny chunks and lazy-loaded, avoiding the standard hydration process entirely.",
+      "difficulty": "advanced",
+      "topic_slugs": ["performance-and-hydration"],
+      "category_slugs": ["web-architecture"],
+      "learning_modes": ["guided", "custom"],
+      "source": {
+        "kind": "video",
+        "title": "10 Rendering Patterns for Web Apps",
+        "url": null,
+        "section": "Resumability",
+        "timestamp": "08:15"
+      },
+      "validation_notes": []
+    }
+  ],
+  "relations": {
+    "questions_topics": [
+      { "question_external_ref": "fireship-rendering-def-1", "topic_slug": "rendering-fundamentals" },
+      { "question_external_ref": "fireship-static-drawback-1", "topic_slug": "static-and-server-patterns" },
+      { "question_external_ref": "fireship-spa-disadvantages-1", "topic_slug": "performance-and-hydration" },
+      { "question_external_ref": "fireship-isr-concept-1", "topic_slug": "static-and-server-patterns" },
+      { "question_external_ref": "fireship-islands-architecture-1", "topic_slug": "performance-and-hydration" }
+    ],
+    "card_categories": [
+      { "card_external_ref": "fireship-card-jamstack", "category_slug": "web-architecture" },
+      { "card_external_ref": "fireship-card-resumability", "category_slug": "web-architecture" }
+    ],
+    "plan_questions": []
+  },
+  "quality_report": {
+    "total_sources_used": 1,
+    "total_questions_extracted": 5,
+    "duplicates_removed": 0,
+    "low_confidence_items": []
+  }
+}

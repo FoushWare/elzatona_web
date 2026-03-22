@@ -1,0 +1,264 @@
+{
+  "categories": [
+    {
+      "slug": "react-development",
+      "name": "React Development",
+      "description": "Building interactive user interfaces using React hooks and ecosystem tools."
+    }
+  ],
+  "topics": [
+    {
+      "slug": "swr-fundamentals",
+      "name": "SWR Fundamentals",
+      "category_slug": "react-development",
+      "description": "Core concepts of the stale-while-revalidate fetching strategy."
+    },
+    {
+      "slug": "data-fetching-patterns",
+      "name": "Data Fetching Patterns",
+      "category_slug": "react-development",
+      "description": "Strategies for remote data retrieval, caching, and synchronization."
+    },
+    {
+      "slug": "advanced-swr-features",
+      "name": "Advanced SWR Features",
+      "category_slug": "react-development",
+      "description": "Pagination, dependent fetching, and local mutations."
+    }
+  ],
+  "questions": [
+    {
+      "external_ref": "smashing-swr-definition",
+      "question_text": "What does the initialism 'SWR' stand for in the context of the Vercel React Hooks library?",
+      "question_type": "mcq",
+      "difficulty": "beginner",
+      "explanation": "SWR stands for stale-while-revalidate, a strategy that first returns data from the cache (stale), then sends the fetch request (revalidate), and finally provides up-to-date data.",
+      "hint": "It describes a three-step caching strategy.",
+      "tags": ["basics", "caching"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["swr-fundamentals"],
+      "category_slugs": ["react-development"],
+      "source": {
+        "kind": "website",
+        "title": "An Introduction To SWR: React Hooks For Remote Data Fetching",
+        "url": null,
+        "section": "What Is SWR?",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "Static-Web-Rendering", "is_correct": false },
+        { "key": "B", "text": "Stale-While-Revalidate", "is_correct": true },
+        { "key": "C", "text": "Standard-Web-Request", "is_correct": false },
+        { "key": "D", "text": "Sync-With-Remote", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "smashing-swr-vs-axios",
+      "question_text": "What is the primary advantage of using SWR over standard HTTP clients like Axios or the Fetch API?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "While Axios and Fetch handle requests and responses, SWR provides built-in features like caching, pagination, scroll position recovery, and dependent fetching out of the box.",
+      "hint": "Think about features that go beyond simple request/response handling.",
+      "tags": ["comparison", "features"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["data-fetching-patterns"],
+      "category_slugs": ["react-development"],
+      "source": {
+        "kind": "website",
+        "title": "An Introduction To SWR: React Hooks For Remote Data Fetching",
+        "url": null,
+        "section": "Comparison With Fetch And Axios",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "SWR is faster at the initial TCP handshake.", "is_correct": false },
+        { "key": "B", "text": "SWR replaces the need for an API backend.", "is_correct": false },
+        { "key": "C", "text": "SWR provides automatic caching and revalidation features.", "is_correct": true },
+        { "key": "D", "text": "SWR is the only library that supports JSON transformation.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "smashing-swr-config-global",
+      "question_text": "Which component is used to configure SWR globally so that a 'fetcher' function can be shared across the entire application?",
+      "question_type": "short_answer",
+      "difficulty": "beginner",
+      "explanation": "SWRConfig is a provider component that allows child components to inherit global configuration, such as a common fetcher function.",
+      "hint": "It is a provider wrapper mentioned for 'Configuring SWR Globally'.",
+      "tags": ["configuration", "hooks"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["swr-fundamentals"],
+      "category_slugs": ["react-development"],
+      "source": {
+        "kind": "website",
+        "title": "An Introduction To SWR: React Hooks For Remote Data Fetching",
+        "url": null,
+        "section": "Configuring SWR Globally",
+        "timestamp": null
+      },
+      "choices": [],
+      "answer_text": "SWRConfig",
+      "validation_notes": []
+    },
+    {
+      "external_ref": "smashing-swr-dependent-fetching",
+      "question_text": "What performance issue does SWR's 'Dependent Fetching' feature help avoid when dealing with relational data?",
+      "question_type": "mcq",
+      "difficulty": "advanced",
+      "explanation": "Dependent fetching allows SWR to fetch data that depends on another request while specifically avoiding 'waterfalls' (unnecessary sequential delays).",
+      "hint": "It is a common term for sequential network requests that slow down performance.",
+      "tags": ["performance", "relational-data"],
+      "learning_modes": ["guided", "custom"],
+      "topic_slugs": ["advanced-swr-features"],
+      "category_slugs": ["react-development"],
+      "source": {
+        "kind": "website",
+        "title": "An Introduction To SWR: React Hooks For Remote Data Fetching",
+        "url": null,
+        "section": "Dependent Fetching",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "Race conditions", "is_correct": false },
+        { "key": "B", "text": "Waterfalls", "is_correct": true },
+        { "key": "C", "text": "Memory leaks", "is_correct": false },
+        { "key": "D", "text": "Over-fetching", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "smashing-swr-focus-revalidation",
+      "question_text": "True or False: By default, SWR automatically revalidates (updates) data when a user re-focuses the page or switches back to the tab.",
+      "question_type": "true_false",
+      "difficulty": "intermediate",
+      "explanation": "Focus revalidation is a built-in feature of SWR that is enabled by default to keep data synchronized when the user returns to the page.",
+      "hint": "Check the default status of 'Focus Revalidation'.",
+      "tags": ["synchronization", "ux"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["swr-fundamentals"],
+      "category_slugs": ["react-development"],
+      "source": {
+        "kind": "website",
+        "title": "An Introduction To SWR: React Hooks For Remote Data Fetching",
+        "url": null,
+        "section": "Focus Revalidation",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "True", "is_correct": true },
+        { "key": "B", "text": "False", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "smashing-swr-pages-args",
+      "question_text": "The useSWRPages hook receives four specific arguments for pagination. Which of the following is NOT one of them?",
+      "question_type": "mcq",
+      "difficulty": "advanced",
+      "explanation": "According to the source, useSWRPages receives: 1. The key of the request, 2. A function to fetch the data, 3. A function that takes the SWR object for the next page, and 4. An array of dependencies.",
+      "hint": "One of these is usually associated with useEffect but is also used here.",
+      "tags": ["pagination", "hooks"],
+      "learning_modes": ["custom"],
+      "topic_slugs": ["advanced-swr-features"],
+      "category_slugs": ["react-development"],
+      "source": {
+        "kind": "website",
+        "title": "An Introduction To SWR: React Hooks For Remote Data Fetching",
+        "url": null,
+        "section": "Paginate Our Data With useSWRPages",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "A request key", "is_correct": false },
+        { "key": "B", "text": "A function to fetch the data", "is_correct": false },
+        { "key": "C", "text": "An array of dependencies", "is_correct": false },
+        { "key": "D", "text": "A maximum page limit integer", "is_correct": true }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    }
+  ],
+  "learning_cards": [
+    {
+      "external_ref": "smashing-card-swr-steps",
+      "title": "The 3 Steps of SWR",
+      "front": "What are the three internal steps SWR handles for remote data fetching?",
+      "back": "1. Return data from cache (stale). 2. Send the fetch request (revalidate). 3. Return up-to-date data.",
+      "difficulty": "intermediate",
+      "topic_slugs": ["swr-fundamentals"],
+      "category_slugs": ["react-development"],
+      "learning_modes": ["guided"],
+      "source": {
+        "kind": "website",
+        "title": "An Introduction To SWR: React Hooks For Remote Data Fetching",
+        "url": null,
+        "section": "What Is SWR?",
+        "timestamp": null
+      },
+      "validation_notes": []
+    },
+    {
+      "external_ref": "smashing-card-local-mutation",
+      "title": "Local Mutation & Offline-First",
+      "front": "How does the 'Local Mutation' feature in SWR support an 'Offline-first' approach?",
+      "back": "It allows setting a temporary local state that updates the UI immediately while waiting for the remote revalidation to finish.",
+      "difficulty": "advanced",
+      "topic_slugs": ["advanced-swr-features"],
+      "category_slugs": ["react-development"],
+      "learning_modes": ["custom"],
+      "source": {
+        "kind": "website",
+        "title": "An Introduction To SWR: React Hooks For Remote Data Fetching",
+        "url": null,
+        "section": "Local Mutation",
+        "timestamp": null
+      },
+      "validation_notes": []
+    },
+    {
+      "external_ref": "smashing-card-backend-agnostic",
+      "title": "Backend Agnostic Meaning",
+      "front": "What does it mean that SWR is 'backend agnostic'?",
+      "back": "It can fetch data from any kind of API or database (REST, GraphQL, etc.) as long as a fetcher function is provided.",
+      "difficulty": "beginner",
+      "topic_slugs": ["swr-fundamentals"],
+      "category_slugs": ["react-development"],
+      "learning_modes": ["guided"],
+      "source": {
+        "kind": "website",
+        "title": "An Introduction To SWR: React Hooks For Remote Data Fetching",
+        "url": null,
+        "section": "What Is SWR? (Paragraph 3)",
+        "timestamp": null
+      },
+      "validation_notes": []
+    }
+  ],
+  "relations": {
+    "questions_topics": [
+      { "question_external_ref": "smashing-swr-definition", "topic_slug": "swr-fundamentals" },
+      { "question_external_ref": "smashing-swr-vs-axios", "topic_slug": "data-fetching-patterns" },
+      { "question_external_ref": "smashing-swr-config-global", "topic_slug": "swr-fundamentals" },
+      { "question_external_ref": "smashing-swr-dependent-fetching", "topic_slug": "advanced-swr-features" },
+      { "question_external_ref": "smashing-swr-focus-revalidation", "topic_slug": "swr-fundamentals" },
+      { "question_external_ref": "smashing-swr-pages-args", "topic_slug": "advanced-swr-features" }
+    ],
+    "card_categories": [
+      { "card_external_ref": "smashing-card-swr-steps", "category_slug": "react-development" },
+      { "card_external_ref": "smashing-card-local-mutation", "category_slug": "react-development" },
+      { "card_external_ref": "smashing-card-backend-agnostic", "category_slug": "react-development" }
+    ],
+    "plan_questions": []
+  },
+  "quality_report": {
+    "total_sources_used": 1,
+    "total_questions_extracted": 6,
+    "duplicates_removed": 0,
+    "low_confidence_items": []
+  }
+}

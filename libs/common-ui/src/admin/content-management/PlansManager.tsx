@@ -40,6 +40,7 @@ import {
   AdminLearningCard,
   AdminCategory,
   Topic,
+  AdminQuestion,
   ContentManagementStats,
 } from "@elzatona/types";
 
@@ -56,6 +57,7 @@ interface PlansManagerProps {
   cards: AdminLearningCard[];
   categories: AdminCategory[];
   topics: Topic[];
+  questions: AdminQuestion[];
   stats: ContentManagementStats;
   planQuestions: Set<string>;
   expandedPlans: Set<string>;
@@ -76,6 +78,8 @@ interface PlansManagerProps {
 const PlanTopicNode: React.FC<{
   topic: Topic;
   plan: LearningPlan;
+  questions: AdminQuestion[];
+  planQuestions: Set<string>;
   expandedPlanTopics: Set<string>;
   togglePlanTopic: (id: string) => void;
   openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
@@ -83,11 +87,17 @@ const PlanTopicNode: React.FC<{
 }> = ({
   topic,
   plan,
+  questions,
+  planQuestions,
   expandedPlanTopics,
   togglePlanTopic,
   openTopicQuestionsModal,
   selectedQuestionsCount,
 }) => {
+  const topicQuestions = questions.filter((question) => {
+    return question.topic_id === topic.id;
+  });
+
   return (
     <div className="border-l-2 border-orange-100 pl-4 py-1">
       <div className="flex items-center justify-between">
@@ -119,6 +129,43 @@ const PlanTopicNode: React.FC<{
           </Badge>
         </div>
       </div>
+
+      {expandedPlanTopics.has(topic.id) && (
+        <div className="ml-8 mt-2 space-y-1">
+          {topicQuestions.length === 0 ? (
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              No questions in this topic.
+            </p>
+          ) : (
+            topicQuestions.map((question) => {
+              const inPlan = planQuestions.has(`${plan.id}-${question.id}`);
+
+              return (
+                <div
+                  key={question.id}
+                  className="rounded border border-gray-200 dark:border-gray-700 px-2 py-1 text-xs"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {question.title}
+                    </p>
+                    <Badge
+                      variant="outline"
+                      className={
+                        inPlan
+                          ? "bg-green-50 text-green-700"
+                          : "bg-gray-50 text-gray-600"
+                      }
+                    >
+                      {inPlan ? "In Plan" : "Available"}
+                    </Badge>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      )}
     </div>
   );
 };
@@ -127,6 +174,8 @@ const PlanCategoryNode: React.FC<{
   category: AdminCategory;
   categoryTopics: Topic[];
   plan: LearningPlan;
+  questions: AdminQuestion[];
+  planQuestions: Set<string>;
   expandedPlanCategories: Set<string>;
   togglePlanCategory: (id: string) => void;
   expandedPlanTopics: Set<string>;
@@ -137,6 +186,8 @@ const PlanCategoryNode: React.FC<{
   category,
   categoryTopics,
   plan,
+  questions,
+  planQuestions,
   expandedPlanCategories,
   togglePlanCategory,
   expandedPlanTopics,
@@ -173,6 +224,8 @@ const PlanCategoryNode: React.FC<{
               key={topic.id}
               topic={topic}
               plan={plan}
+              questions={questions}
+              planQuestions={planQuestions}
               expandedPlanTopics={expandedPlanTopics}
               togglePlanTopic={togglePlanTopic}
               openTopicQuestionsModal={openTopicQuestionsModal}
@@ -190,6 +243,7 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
   cards,
   categories,
   topics,
+  questions,
   stats,
   planQuestions,
   expandedPlans,
@@ -224,6 +278,8 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
         category={category}
         categoryTopics={categoryTopics}
         plan={plan}
+        questions={questions}
+        planQuestions={planQuestions}
         expandedPlanCategories={expandedPlanCategories}
         togglePlanCategory={togglePlanCategory}
         expandedPlanTopics={expandedPlanTopics}

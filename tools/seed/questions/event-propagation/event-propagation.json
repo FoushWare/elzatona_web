@@ -1,0 +1,186 @@
+{
+  "categories": [
+    {
+      "slug": "javascript-programming",
+      "name": "JavaScript Programming",
+      "description": "Language specifics, DOM interaction, and event handling."
+    }
+  ],
+  "topics": [
+    {
+      "slug": "event-propagation",
+      "name": "Event Propagation",
+      "category_slug": "javascript-programming",
+      "description": "The mechanism of how events travel through nested DOM elements."
+    }
+  ],
+  "questions": [
+    {
+      "external_ref": "wilkie-bubbling-definition",
+      "question_text": "What is the term for the default behavior where an event moves from the most-nested element 'up' to the least-nested element (like the document)?",
+      "question_type": "mcq",
+      "difficulty": "beginner",
+      "explanation": "The movement of events from the inner-most element to the outer-most container (document) is referred to as 'bubbling'.",
+      "hint": "Think of air rising in water.",
+      "tags": ["dom", "events", "bubbling"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["event-propagation"],
+      "category_slugs": ["javascript-programming"],
+      "source": {
+        "kind": "document",
+        "title": "A simplified explanation of event propagation in JavaScript.",
+        "url": null,
+        "section": "Bubbles",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "Trickling", "is_correct": false },
+        { "key": "B", "text": "Capturing", "is_correct": false },
+        { "key": "C", "text": "Bubbling", "is_correct": true },
+        { "key": "D", "text": "Tunneling", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "wilkie-trickling-definition",
+      "question_text": "If events start in the 'outer-most' element and move 'down' to the most-nested element, what is this process called?",
+      "question_type": "mcq",
+      "difficulty": "beginner",
+      "explanation": "According to the source, when events move from the outer container down to the nested target, it is referred to as 'trickling'.",
+      "hint": "It is the opposite of bubbling.",
+      "tags": ["dom", "events", "trickling"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["event-propagation"],
+      "category_slugs": ["javascript-programming"],
+      "source": {
+        "kind": "document",
+        "title": "A simplified explanation of event propagation in JavaScript.",
+        "url": null,
+        "section": "Bubbles",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "Bubbling", "is_correct": false },
+        { "key": "B", "text": "Trickling", "is_correct": true },
+        { "key": "C", "text": "Hoisting", "is_correct": false },
+        { "key": "D", "text": "Propagation", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "wilkie-stop-propagation-method",
+      "question_text": "Which JavaScript method is used to halt the bubbling of events up through the DOM?",
+      "question_type": "short_answer",
+      "difficulty": "beginner",
+      "explanation": "The 'e.stopPropagation()' method halts the bubbling process, preventing the event from firing on parent elements in the stack.",
+      "hint": "The method name describes exactly what it does to propagation.",
+      "tags": ["dom", "methods", "bubbling"],
+      "learning_modes": ["guided", "free-style"],
+      "topic_slugs": ["event-propagation"],
+      "category_slugs": ["javascript-programming"],
+      "source": {
+        "kind": "document",
+        "title": "A simplified explanation of event propagation in JavaScript.",
+        "url": null,
+        "section": "How to use event propagation to your advantage",
+        "timestamp": null
+      },
+      "choices": [],
+      "answer_text": "e.stopPropagation()",
+      "validation_notes": []
+    },
+    {
+      "external_ref": "wilkie-propagation-nesting-logic",
+      "question_text": "True or False: Because elements on a web browser are nested rather than covering each other up, a click on a nested 'a' tag also clicks on its parent row, the table, and the document.",
+      "question_type": "true_false",
+      "difficulty": "intermediate",
+      "explanation": "Elements do not cover each other; they are nested. Therefore, a click on a child element is also technically a click on all its parent containers all the way to the document.",
+      "hint": "Think about the stack of elements being clicked simultaneously.",
+      "tags": ["dom", "logic"],
+      "learning_modes": ["guided"],
+      "topic_slugs": ["event-propagation"],
+      "category_slugs": ["javascript-programming"],
+      "source": {
+        "kind": "document",
+        "title": "A simplified explanation of event propagation in JavaScript.",
+        "url": null,
+        "section": "Event propagation in a nutshell",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "True", "is_correct": true },
+        { "key": "B", "text": "False", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    },
+    {
+      "external_ref": "wilkie-preventdefault-vs-stoppropagation",
+      "question_text": "Why might 'e.preventDefault()' fail to stop a parent element's onClick event from firing when a child element is clicked?",
+      "question_type": "mcq",
+      "difficulty": "intermediate",
+      "explanation": "preventDefault() only stops the default browser behavior (like a form refreshing or a link navigating). It does not stop the event from bubbling up the DOM stack to parent elements.",
+      "hint": "Distinguish between 'browser default action' and 'event bubbling'.",
+      "tags": ["dom", "methods", "troubleshooting"],
+      "learning_modes": ["guided", "custom"],
+      "topic_slugs": ["event-propagation"],
+      "category_slugs": ["javascript-programming"],
+      "source": {
+        "kind": "document",
+        "title": "A simplified explanation of event propagation in JavaScript.",
+        "url": null,
+        "section": "preventDefault vs. stopPropagation",
+        "timestamp": null
+      },
+      "choices": [
+        { "key": "A", "text": "Because it is only compatible with form elements.", "is_correct": false },
+        { "key": "B", "text": "Because it stops the event from reaching the document but not the immediate parent.", "is_correct": false },
+        { "key": "C", "text": "Because it handles default browser actions rather than the event propagation stack.", "is_correct": true },
+        { "key": "D", "text": "Because it can only be used in React, not plain JavaScript.", "is_correct": false }
+      ],
+      "answer_text": null,
+      "validation_notes": []
+    }
+  ],
+  "learning_cards": [
+    {
+      "external_ref": "wilkie-card-bubbling-path",
+      "title": "Event Bubbling Path",
+      "front": "Where does event bubbling eventually end if it is not stopped?",
+      "back": "It moves all the way out to the 'document', the complete container that holds everything in the browser.",
+      "difficulty": "beginner",
+      "topic_slugs": ["event-propagation"],
+      "category_slugs": ["javascript-programming"],
+      "learning_modes": ["guided"],
+      "source": {
+        "kind": "document",
+        "title": "A simplified explanation of event propagation in JavaScript.",
+        "url": null,
+        "section": "Event propagation in a nutshell",
+        "timestamp": null
+      },
+      "validation_notes": []
+    }
+  ],
+  "relations": {
+    "questions_topics": [
+      { "question_external_ref": "wilkie-bubbling-definition", "topic_slug": "event-propagation" },
+      { "question_external_ref": "wilkie-trickling-definition", "topic_slug": "event-propagation" },
+      { "question_external_ref": "wilkie-stop-propagation-method", "topic_slug": "event-propagation" },
+      { "question_external_ref": "wilkie-propagation-nesting-logic", "topic_slug": "event-propagation" },
+      { "question_external_ref": "wilkie-preventdefault-vs-stoppropagation", "topic_slug": "event-propagation" }
+    ],
+    "card_categories": [
+      { "card_external_ref": "wilkie-card-bubbling-path", "category_slug": "javascript-programming" }
+    ],
+    "plan_questions": []
+  },
+  "quality_report": {
+    "total_sources_used": 1,
+    "total_questions_extracted": 5,
+    "duplicates_removed": 0,
+    "low_confidence_items": []
+  }
+}
