@@ -46,13 +46,6 @@ function countQuestionsForCategory(
   return questions.filter((q) => q.category_id === categoryId).length;
 }
 
-function countQuestionsForTopic(
-  topicId: string,
-  questions: AdminQuestion[],
-): number {
-  return questions.filter((q) => q.topic_id === topicId).length;
-}
-
 import React from "react";
 import {
   Card,
@@ -105,6 +98,8 @@ const TopicNode: React.FC<{
   expandedTopics: Set<string>;
   toggleTopic: (id: string) => void;
 }> = ({ topic, questions, expandedTopics, toggleTopic }) => {
+  const topicQuestions = questions.filter((q) => q.topic_id === topic.id);
+
   return (
     <div className="border-l-2 border-gray-100 pl-4 py-2">
       <div className="flex items-center justify-between">
@@ -132,10 +127,36 @@ const TopicNode: React.FC<{
             variant="outline"
             className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
           >
-            {countQuestionsForTopic(topic.id, questions)} Questions
+            {topicQuestions.length} Questions
           </Badge>
         </div>
       </div>
+
+      {expandedTopics.has(topic.id) && (
+        <div className="mt-2 ml-8 space-y-1">
+          {topicQuestions.length === 0 ? (
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              No questions assigned to this topic yet.
+            </p>
+          ) : (
+            topicQuestions.map((question) => (
+              <div
+                key={question.id}
+                className="rounded border border-gray-200 dark:border-gray-700 px-2 py-1 text-xs"
+              >
+                <p className="font-medium text-gray-900 dark:text-white">
+                  {question.title}
+                </p>
+                {question.difficulty && (
+                  <p className="text-gray-500 dark:text-gray-400">
+                    {question.difficulty}
+                  </p>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 };

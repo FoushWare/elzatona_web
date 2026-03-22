@@ -204,6 +204,15 @@ function buildCanonicalCards(cards: AdminLearningCard[]): {
   return { cards: canonicalCards, idsByKey };
 }
 
+function toSlug(input: string): string {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
 function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
   switch (sequence) {
     case 1:
@@ -719,29 +728,53 @@ export function useContentManagement() {
         topicsResult.error,
       ].filter((message): message is string => Boolean(message));
 
-      const canonicalCardsResult = buildCanonicalCards(cardsResult.data);
+      const normalizedCards = cardsResult.data;
+      const canonicalCardsResult = buildCanonicalCards(normalizedCards);
+
       const mappedCategories = categoriesResult.data.map((category) => {
+        // Preserve DB relationship first. Only infer a fallback when missing.
+        if ((category as AdminCategory).learning_card_id) {
+          return category as AdminCategory;
+        }
+
         const inferred = inferCardKeyFromCategory(category);
         return {
           ...category,
           learning_card_id: canonicalCardsResult.idsByKey[inferred],
-        };
+        } as AdminCategory;
       });
 
-      setCards(canonicalCardsResult.cards);
+      setCards(normalizedCards);
       setPlans(plansResult.data);
       setQuestions(questionsResult.data);
       setCategories(mappedCategories);
       setTopics(topicsResult.data.map(transformTopicToAdmin));
+
+      const { data: existingPlanQuestions, error: planQuestionsError } =
+        await supabase.from("plan_questions").select("plan_id, question_id");
+
+      if (planQuestionsError) {
+        console.error(
+          "❌ Failed to fetch plan-question links:",
+          planQuestionsError,
+        );
+      } else {
+        const planQuestionKeys = new Set(
+          (existingPlanQuestions ?? []).map(
+            (row) => `${row.plan_id}-${row.question_id}`,
+          ),
+        );
+        setPlanQuestions(planQuestionKeys);
+      }
 
       if (dataErrors.length > 0) {
         console.error("❌ Content management partial load errors:", dataErrors);
         toast.error("Some content management data could not be loaded");
       }
 
-      // ARCHITECTURAL: Fetch plan-question associations from planRepository.getPlanQuestions()
-      // Requires implementing new repository method for plan-question relationships
-      setPlanQuestions(new Set());
+      if (!existingPlanQuestions || existingPlanQuestions.length === 0) {
+        setPlanQuestions(new Set());
+      }
     } catch (err) {
       console.error("❌ Error fetching data:", err);
       setError(err instanceof Error ? err.message : "Failed to fetch data");
@@ -1124,6 +1157,188 @@ export function useContentManagement() {
     }
   }, [cards, fetchData, plans, questions]);
 
+  const createCategory = useCallback(async () => {
+    const name = globalThis.prompt("Category name");
+    if (!name || !name.trim()) {
+      return;
+    }
+
+    const description =
+      globalThis.prompt("Category description (optional)") || "";
+
+    const defaultCardId = cards[0]?.id;
+    const payload: Record<string, unknown> = {
+      name: name.trim(),
+      description,
+      slug: toSlug(name),
+      is_active: true,
+    };
+
+    if (defaultCardId) {
+      payload.learning_card_id = defaultCardId;
+    }
+
+    const { error: createError } = await supabase
+      .from("categories")
+      .insert(payload);
+
+    if (createError) {
+      toast.error(createError.message || "Failed to create category");
+      return;
+    }
+
+    toast.success("Category created");
+    await fetchData();
+  }, [cards, fetchData]);
+
+  const editCategory = useCallback(
+    async (category: AdminCategory) => {
+      const nextName = globalThis.prompt("Category name", category.name ?? "");
+      if (!nextName || !nextName.trim()) {
+        return;
+      }
+
+      const nextDescription =
+        globalThis.prompt("Category description", category.description ?? "") ??
+        "";
+
+      const { error: updateError } = await supabase
+        .from("categories")
+        .update({
+          name: nextName.trim(),
+          description: nextDescription,
+          slug: toSlug(nextName),
+        })
+        .eq("id", category.id);
+
+      if (updateError) {
+        toast.error(updateError.message || "Failed to update category");
+        return;
+      }
+
+      toast.success("Category updated");
+      await fetchData();
+    },
+    [fetchData],
+  );
+
+  const removeCategory = useCallback(
+    async (category: AdminCategory) => {
+      const confirmed = globalThis.confirm(
+        `Delete category \"${category.name}\"?`,
+      );
+      if (!confirmed) {
+        return;
+      }
+
+      const { error: deleteError } = await supabase
+        .from("categories")
+        .delete()
+        .eq("id", category.id);
+
+      if (deleteError) {
+        toast.error(deleteError.message || "Failed to delete category");
+        return;
+      }
+
+      toast.success("Category deleted");
+      await fetchData();
+    },
+    [fetchData],
+  );
+
+  const createTopic = useCallback(async () => {
+    if (categories.length === 0) {
+      toast.error("Create a category first");
+      return;
+    }
+
+    const name = globalThis.prompt("Topic name");
+    if (!name || !name.trim()) {
+      return;
+    }
+
+    const description = globalThis.prompt("Topic description (optional)") || "";
+    const categoryId = categories[0]?.id;
+
+    if (!categoryId) {
+      toast.error("No category available for topic assignment");
+      return;
+    }
+
+    const payload = {
+      name: name.trim(),
+      description,
+      category_id: categoryId,
+      is_active: true,
+      order_index: 0,
+    };
+
+    const { error: createError } = await supabase
+      .from("topics")
+      .insert(payload);
+
+    if (createError) {
+      toast.error(createError.message || "Failed to create topic");
+      return;
+    }
+
+    toast.success("Topic created");
+    await fetchData();
+  }, [categories, fetchData]);
+
+  const editTopic = useCallback(
+    async (topic: AdminTopic) => {
+      const nextName = globalThis.prompt("Topic name", topic.name ?? "");
+      if (!nextName || !nextName.trim()) {
+        return;
+      }
+
+      const nextDescription =
+        globalThis.prompt("Topic description", topic.description ?? "") ?? "";
+
+      const { error: updateError } = await supabase
+        .from("topics")
+        .update({
+          name: nextName.trim(),
+          description: nextDescription,
+        })
+        .eq("id", topic.id);
+
+      if (updateError) {
+        toast.error(updateError.message || "Failed to update topic");
+        return;
+      }
+
+      toast.success("Topic updated");
+      await fetchData();
+    },
+    [fetchData],
+  );
+
+  const removeTopic = useCallback(
+    async (topic: AdminTopic) => {
+      const confirmed = globalThis.confirm(`Delete topic \"${topic.name}\"?`);
+      if (!confirmed) {
+        return;
+      }
+
+      const { error: deleteError } = await supabase
+        .from("topics")
+        .delete()
+        .eq("id", topic.id);
+
+      if (deleteError) {
+        toast.error(deleteError.message || "Failed to delete topic");
+        return;
+      }
+
+      toast.success("Topic deleted");
+      await fetchData();
+    },
+    [fetchData],
+  );
+
   return {
     cards,
     plans,
@@ -1185,5 +1400,11 @@ export function useContentManagement() {
     toggleCardActiveStatus,
     openTopicQuestionsModal,
     createSpacedRepetitionPlans,
+    createCategory,
+    editCategory,
+    removeCategory,
+    createTopic,
+    editTopic,
+    removeTopic,
   };
 }

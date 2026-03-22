@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import {
   Button,
   StatsSection,
@@ -17,6 +18,7 @@ import { Loader2 } from "lucide-react";
 import { useContentManagement } from "./hooks/useContentManagement";
 
 export default function ContentManagementPage() {
+  const router = useRouter();
   const {
     loading,
     error,
@@ -75,6 +77,12 @@ export default function ContentManagementPage() {
     toggleCardActiveStatus,
     openTopicQuestionsModal,
     createSpacedRepetitionPlans,
+    createCategory,
+    editCategory,
+    removeCategory,
+    createTopic,
+    editTopic,
+    removeTopic,
   } = useContentManagement();
 
   if (loading) {
@@ -155,19 +163,29 @@ export default function ContentManagementPage() {
         {/* Topics Management Section */}
         <TopicsManager
           topics={topics}
-          onCreateTopic={() => console.log("Create topic")}
-          onEditTopic={(topic) => console.log("Edit topic", topic)}
-          onDeleteTopic={(topic) => console.log("Delete topic", topic)}
+          onCreateTopic={() => {
+            void createTopic();
+          }}
+          onEditTopic={(topic: any) => {
+            void editTopic(topic);
+          }}
+          onDeleteTopic={(topic: any) => {
+            void removeTopic(topic);
+          }}
         />
 
         {/* Categories Management Section */}
         <CategoriesManager
           categories={categories}
-          onCreateCategory={() => console.log("Create category")}
-          onEditCategory={(category) => console.log("Edit category", category)}
-          onDeleteCategory={(category) =>
-            console.log("Delete category", category)
-          }
+          onCreateCategory={() => {
+            void createCategory();
+          }}
+          onEditCategory={(category: any) => {
+            void editCategory(category);
+          }}
+          onDeleteCategory={(category: any) => {
+            void removeCategory(category);
+          }}
         />
 
         {/* Learning Cards Section */}
@@ -183,10 +201,14 @@ export default function ContentManagementPage() {
           toggleCategory={toggleCategory}
           expandedTopics={expandedTopics}
           toggleTopic={toggleTopic}
-          onEditCard={(card) => console.log("Edit card", card)}
+          onEditCard={(card) =>
+            router.push(
+              `/admin/learning-cards?edit=${encodeURIComponent(card.id)}`,
+            )
+          }
           onDeleteCard={openDeleteCardModal}
-          onCreateCard={() => console.log("Create card")}
-          onEditCategories={() => console.log("Edit categories")}
+          onCreateCard={() => router.push("/admin/learning-cards")}
+          onEditCategories={() => router.push("/admin/learning-cards")}
         />
 
         {/* Learning Plans Section */}
@@ -195,6 +217,7 @@ export default function ContentManagementPage() {
           cards={filteredCards}
           categories={categories}
           topics={topics}
+          questions={questions}
           stats={stats}
           planQuestions={planQuestions}
           expandedPlans={expandedPlans}
@@ -205,8 +228,16 @@ export default function ContentManagementPage() {
           togglePlanCategory={togglePlanCategory}
           expandedPlanTopics={expandedPlanTopics}
           togglePlanTopic={togglePlanTopic}
-          onEditPlan={(plan) => console.log("Edit plan", plan)}
-          onDeletePlan={(plan) => console.log("Delete plan", plan)}
+          onEditPlan={(plan) =>
+            globalThis.alert(
+              `Plan editing from this screen is coming soon: ${plan.name}`,
+            )
+          }
+          onDeletePlan={(plan) =>
+            globalThis.alert(
+              `Plan deletion from this screen is coming soon: ${plan.name}`,
+            )
+          }
           onCreatePlan={createSpacedRepetitionPlans}
           onManageCards={openCardManagementModal}
           openTopicQuestionsModal={openTopicQuestionsModal}
