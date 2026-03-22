@@ -10,6 +10,14 @@ import ContentManagementPage from "./page";
 import "@testing-library/jest-dom";
 import { useContentManagement } from "./hooks/useContentManagement";
 
+const mockRouterPush = vi.fn();
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: mockRouterPush,
+  }),
+}));
+
 // Mock the hook
 vi.mock("./hooks/useContentManagement", () => ({
   useContentManagement: vi.fn(),
@@ -130,33 +138,49 @@ describe("ContentManagementPage", () => {
     expandedPlanCards: new Set(),
     expandedPlanCategories: new Set(),
     expandedPlanTopics: new Set(),
-    showTopicQuestionsModal: false,
-    setShowTopicQuestionsModal: vi.fn(),
+    isTopicQuestionsModalOpen: false,
+    setIsTopicQuestionsModalOpen: vi.fn(),
     selectedTopic: null,
-    setSelectedTopic: vi.fn(),
-    showDeleteModal: false,
-    setShowDeleteModal: vi.fn(),
-    deleteTarget: null,
-    setDeleteTarget: vi.fn(),
-    showCardModal: false,
-    setShowCardModal: vi.fn(),
-    editingCard: null,
-    setEditingCard: vi.fn(),
-    handleCardUpdate: vi.fn(),
-    handleCardDelete: vi.fn(),
-    handlePlanUpdate: vi.fn(),
-    handlePlanDelete: vi.fn(),
-    handleTopicUpdate: vi.fn(),
-    handleTopicDelete: vi.fn(),
-    handleCategoryUpdate: vi.fn(),
-    handleCategoryDelete: vi.fn(),
-    toggleCardExpansion: vi.fn(),
-    toggleCategoryExpansion: vi.fn(),
-    toggleTopicExpansion: vi.fn(),
-    togglePlanExpansion: vi.fn(),
-    togglePlanCardExpansion: vi.fn(),
-    togglePlanCategoryExpansion: vi.fn(),
-    togglePlanTopicExpansion: vi.fn(),
+    selectedPlan: null,
+    selectedQuestions: new Set(),
+    toggleQuestionSelection: vi.fn(),
+    selectAllQuestions: vi.fn(),
+    deselectAllQuestions: vi.fn(),
+    addSelectedQuestionsToPlan: vi.fn(),
+    closeTopicQuestionsModal: vi.fn(),
+    isDeleteCardModalOpen: false,
+    setIsDeleteCardModalOpen: vi.fn(),
+    cardToDelete: null,
+    isDeleting: false,
+    openDeleteCardModal: vi.fn(),
+    closeDeleteCardModal: vi.fn(),
+    deleteCard: vi.fn(),
+    isCardManagementModalOpen: false,
+    setIsCardManagementModalOpen: vi.fn(),
+    selectedPlanForCards: null,
+    planCards: [],
+    availableCards: [],
+    isManagingCards: false,
+    openCardManagementModal: vi.fn(),
+    closeCardManagementModal: vi.fn(),
+    addCardToPlan: vi.fn(),
+    removeCardFromPlan: vi.fn(),
+    toggleCardActiveStatus: vi.fn(),
+    openTopicQuestionsModal: vi.fn(),
+    createSpacedRepetitionPlans: vi.fn(),
+    createCategory: vi.fn(),
+    editCategory: vi.fn(),
+    removeCategory: vi.fn(),
+    createTopic: vi.fn(),
+    editTopic: vi.fn(),
+    removeTopic: vi.fn(),
+    toggleCard: vi.fn(),
+    toggleCategory: vi.fn(),
+    toggleTopic: vi.fn(),
+    togglePlan: vi.fn(),
+    togglePlanCard: vi.fn(),
+    togglePlanCategory: vi.fn(),
+    togglePlanTopic: vi.fn(),
   };
 
   beforeEach(() => {
@@ -307,7 +331,7 @@ describe("ContentManagementPage", () => {
     it("should render topic questions modal when showTopicQuestionsModal is true", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
-        showTopicQuestionsModal: true,
+        isTopicQuestionsModalOpen: true,
       } as any);
 
       render(<ContentManagementPage />);
@@ -318,7 +342,7 @@ describe("ContentManagementPage", () => {
     it("should render delete confirmation modal when showDeleteModal is true", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
-        showDeleteModal: true,
+        isDeleteCardModalOpen: true,
       } as any);
 
       render(<ContentManagementPage />);
@@ -331,7 +355,7 @@ describe("ContentManagementPage", () => {
     it("should render card management modal when showCardModal is true", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
-        showCardModal: true,
+        isCardManagementModalOpen: true,
       } as any);
 
       render(<ContentManagementPage />);

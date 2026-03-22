@@ -6,6 +6,14 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import ContentManagementPage from "./page";
 
+const mockRouterPush = vi.fn();
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: mockRouterPush,
+  }),
+}));
+
 // Mock the content management hook
 const mockUseContentManagement = vi.fn();
 vi.mock("./hooks/useContentManagement", () => ({
@@ -62,70 +70,87 @@ vi.mock("@elzatona/common-ui", () => ({
 }));
 
 describe("Admin content management page - Integration", () => {
+  const buildHookState = () => ({
+    loading: false,
+    error: null,
+    searchTerm: "",
+    setSearchTerm: vi.fn(),
+    filterCardType: "all",
+    setFilterCardType: vi.fn(),
+    stats: {
+      cards: 25,
+      plans: 5,
+      categories: 8,
+      topics: 15,
+    },
+    filteredCards: [],
+    filteredPlans: [],
+    categories: [],
+    topics: [],
+    questions: [],
+    planQuestions: new Set(),
+    expandedCards: new Set(),
+    toggleCard: vi.fn(),
+    expandedCategories: new Set(),
+    toggleCategory: vi.fn(),
+    expandedTopics: new Set(),
+    toggleTopic: vi.fn(),
+    expandedPlans: new Set(),
+    togglePlan: vi.fn(),
+    expandedPlanCards: new Set(),
+    togglePlanCard: vi.fn(),
+    expandedPlanCategories: new Set(),
+    togglePlanCategory: vi.fn(),
+    expandedPlanTopics: new Set(),
+    togglePlanTopic: vi.fn(),
+    isTopicQuestionsModalOpen: false,
+    setIsTopicQuestionsModalOpen: vi.fn(),
+    selectedTopic: null,
+    selectedPlan: null,
+    selectedQuestions: new Set(),
+    toggleQuestionSelection: vi.fn(),
+    selectAllQuestions: vi.fn(),
+    deselectAllQuestions: vi.fn(),
+    addSelectedQuestionsToPlan: vi.fn(),
+    closeTopicQuestionsModal: vi.fn(),
+    isDeleteCardModalOpen: false,
+    setIsDeleteCardModalOpen: vi.fn(),
+    cardToDelete: null,
+    isDeleting: false,
+    openDeleteCardModal: vi.fn(),
+    closeDeleteCardModal: vi.fn(),
+    deleteCard: vi.fn(),
+    isCardManagementModalOpen: false,
+    setIsCardManagementModalOpen: vi.fn(),
+    selectedPlanForCards: null,
+    planCards: [],
+    availableCards: [],
+    isManagingCards: false,
+    openCardManagementModal: vi.fn(),
+    closeCardManagementModal: vi.fn(),
+    addCardToPlan: vi.fn(),
+    removeCardFromPlan: vi.fn(),
+    toggleCardActiveStatus: vi.fn(),
+    openTopicQuestionsModal: vi.fn(),
+    createSpacedRepetitionPlans: vi.fn(),
+    createCategory: vi.fn(),
+    editCategory: vi.fn(),
+    removeCategory: vi.fn(),
+    createTopic: vi.fn(),
+    editTopic: vi.fn(),
+    removeTopic: vi.fn(),
+  });
+
   beforeEach(() => {
-    mockUseContentManagement.mockReturnValue({
-      loading: false,
-      error: null,
-      searchTerm: "",
-      setSearchTerm: vi.fn(),
-      filterCardType: "all",
-      setFilterCardType: vi.fn(),
-      stats: {
-        totalCards: 25,
-        totalPlans: 5,
-        totalCategories: 8,
-        totalTopics: 15,
-      },
-      filteredCards: [],
-      filteredPlans: [],
-      categories: [],
-      topics: [],
-      questions: [],
-      // planQuestions present above; avoid duplicate property
-      expandedCards: new Set(),
-      toggleCard: vi.fn(),
-      expandedCategories: new Set(),
-      toggleCategory: vi.fn(),
-      expandedTopics: new Set(),
-      toggleTopic: vi.fn(),
-      expandedPlans: new Set(),
-      togglePlan: vi.fn(),
-      expandedPlanCards: new Set(),
-      togglePlanCard: vi.fn(),
-      expandedPlanCategories: new Set(),
-      togglePlanCategory: vi.fn(),
-      expandedPlanTopics: new Set(),
-      togglePlanTopic: vi.fn(),
-      isTopicQuestionsModalOpen: false,
-      setIsTopicQuestionsModalOpen: vi.fn(),
-      selectedTopic: null,
-      setSelectedTopic: vi.fn(),
-      isDeleteModalOpen: false,
-      setIsDeleteModalOpen: vi.fn(),
-      itemToDelete: null,
-      setItemToDelete: vi.fn(),
-      handleDelete: vi.fn(),
-      isCardManagementModalOpen: false,
-      setIsCardManagementModalOpen: vi.fn(),
-      selectedCard: null,
-      setSelectedCard: vi.fn(),
-      availableCards: [],
-      isManagingCards: false,
-      setIsManagingCards: vi.fn(),
-      planQuestions: new Set(),
-    });
+    mockUseContentManagement.mockReturnValue(buildHookState());
   });
 
   it("renders content management page with stats", () => {
     render(<ContentManagementPage />);
 
     expect(screen.getByTestId("stats-section")).toBeInTheDocument();
-    expect(screen.getByTestId("stat-totalCards")).toHaveTextContent(
-      "totalCards: 25",
-    );
-    expect(screen.getByTestId("stat-totalPlans")).toHaveTextContent(
-      "totalPlans: 5",
-    );
+    expect(screen.getByTestId("stat-cards")).toHaveTextContent("cards: 25");
+    expect(screen.getByTestId("stat-plans")).toHaveTextContent("plans: 5");
   });
 
   it("renders search and filter components", () => {
@@ -147,7 +172,7 @@ describe("Admin content management page - Integration", () => {
 
   it("shows loading state", () => {
     mockUseContentManagement.mockReturnValue({
-      ...mockUseContentManagement(),
+      ...buildHookState(),
       loading: true,
     });
 
@@ -158,7 +183,7 @@ describe("Admin content management page - Integration", () => {
 
   it("displays error message when error occurs", () => {
     mockUseContentManagement.mockReturnValue({
-      ...mockUseContentManagement(),
+      ...buildHookState(),
       error: "Failed to load content data",
     });
 
@@ -172,7 +197,7 @@ describe("Admin content management page - Integration", () => {
   it("search functionality updates search term", () => {
     const mockSetSearchTerm = vi.fn();
     mockUseContentManagement.mockReturnValue({
-      ...mockUseContentManagement(),
+      ...buildHookState(),
       setSearchTerm: mockSetSearchTerm,
     });
 
@@ -187,7 +212,7 @@ describe("Admin content management page - Integration", () => {
   it("filter functionality updates filter type", () => {
     const mockSetFilterCardType = vi.fn();
     mockUseContentManagement.mockReturnValue({
-      ...mockUseContentManagement(),
+      ...buildHookState(),
       setFilterCardType: mockSetFilterCardType,
     });
 
@@ -201,9 +226,9 @@ describe("Admin content management page - Integration", () => {
 
   it("renders modal components when open", () => {
     mockUseContentManagement.mockReturnValue({
-      ...mockUseContentManagement(),
+      ...buildHookState(),
       isTopicQuestionsModalOpen: true,
-      isDeleteModalOpen: true,
+      isDeleteCardModalOpen: true,
       isCardManagementModalOpen: true,
     });
 
