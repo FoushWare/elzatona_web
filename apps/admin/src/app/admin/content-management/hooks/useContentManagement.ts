@@ -171,9 +171,9 @@ function toSlug(input: string): string {
   return input
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
+    .replaceAll(/[^a-z0-9\s-]/g, "")
+    .replaceAll(/\s+/g, "-")
+    .replaceAll(/-+/g, "-");
 }
 
 function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
@@ -1027,7 +1027,7 @@ export function useContentManagement() {
   const openPlanEditModal = useCallback((plan: LearningPlan) => {
     setPlanToEdit(plan);
     setPlanEditFormData({
-      title: plan.title || plan.name || "",
+      title: plan.name || "",
       description: plan.description || "",
       estimated_duration: plan.estimated_duration || 0,
       status:
@@ -1174,7 +1174,7 @@ export function useContentManagement() {
 
   const createCategory = useCallback(async () => {
     const name = globalThis.prompt("Category name");
-    if (!name || !name.trim()) {
+    if (!name?.trim()) {
       return;
     }
 
@@ -1209,7 +1209,7 @@ export function useContentManagement() {
   const editCategory = useCallback(
     async (category: AdminCategory) => {
       const nextName = globalThis.prompt("Category name", category.name ?? "");
-      if (!nextName || !nextName.trim()) {
+      if (!nextName?.trim()) {
         return;
       }
 
@@ -1240,7 +1240,7 @@ export function useContentManagement() {
   const removeCategory = useCallback(
     async (category: AdminCategory) => {
       const confirmed = globalThis.confirm(
-        `Delete category \"${category.name}\"?`,
+        `Delete category "${category.name}"?`,
       );
       if (!confirmed) {
         return;
@@ -1305,7 +1305,7 @@ export function useContentManagement() {
   const editTopic = useCallback(
     async (topic: AdminTopic) => {
       const nextName = globalThis.prompt("Topic name", topic.name ?? "");
-      if (!nextName || !nextName.trim()) {
+      if (!nextName?.trim()) {
         return;
       }
 
@@ -1333,7 +1333,7 @@ export function useContentManagement() {
 
   const removeTopic = useCallback(
     async (topic: AdminTopic) => {
-      const confirmed = globalThis.confirm(`Delete topic \"${topic.name}\"?`);
+      const confirmed = globalThis.confirm(`Delete topic "${topic.name}"?`);
       if (!confirmed) {
         return;
       }

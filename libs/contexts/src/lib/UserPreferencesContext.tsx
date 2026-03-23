@@ -17,10 +17,8 @@ if (
 ) {
   // Dynamic import to avoid SSR issues
   import("@supabase/supabase-js").then(({ createClient }) => {
-    const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"] as string;
-    const supabaseServiceRoleKey = process.env[
-      "SUPABASE_SERVICE_ROLE_KEY"
-    ] as string;
+    const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
+    const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"];
     supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
   });
 }

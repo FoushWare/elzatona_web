@@ -1,9 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 import * as dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
 
 dotenv.config({ path: ".env.local" });
 
@@ -49,7 +49,7 @@ function toSeedDifficulty(rawDifficulty) {
 function normalizeOptions(question) {
     const sourceOptions = Array.isArray(question.options) ? question.options : Array.isArray(question.choices) ? question.choices : [];
     return sourceOptions.map((opt, index) => ({
-        id: opt?.id || opt?.key || String.fromCharCode(65 + index),
+        id: opt?.id || opt?.key || String.fromCodePoint(65 + index),
         text: opt?.text || "",
         isCorrect: Boolean(opt?.isCorrect ?? opt?.is_correct ?? false)
     }));
@@ -88,8 +88,8 @@ function slugify(text) {
     return String(text || "")
         .toLowerCase()
         .trim()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
+        .replaceAll(/[^a-z0-9]+/g, "-")
+        .replaceAll(/^-+|-+$/g, "");
 }
 
 const CANONICAL_LEARNING_CARDS = [
@@ -259,7 +259,7 @@ async function insertFirstValidPayload(table, payloads) {
 
             lastError = error;
 
-            const missingColumnMatch = String(error?.message || "").match(/Could not find the '([^']+)' column/);
+            const missingColumnMatch = /Could not find the '([^']+)' column/.exec(String(error?.message || ""));
             if (!missingColumnMatch) {
                 break;
             }
@@ -756,7 +756,11 @@ async function seed() {
                             order_index: planQuestionRows.length,
                             is_review: false,
                             parent_plan_id: null,
-                            difficulty_tier: i < grouped.easy.length ? "easy" : i < grouped.easy.length + grouped.medium.length ? "medium" : "hard",
+            difficulty_tier: i >= grouped.easy.length + grouped.medium.length
+                                ? "hard"
+                                : i >= grouped.easy.length
+                                ? "medium"
+                                : "easy",
                             is_active: true
                         });
                     }
@@ -1071,4 +1075,4 @@ async function seed() {
     console.log("\n✨ Seeding completed!");
 }
 
-seed();
+await seed();

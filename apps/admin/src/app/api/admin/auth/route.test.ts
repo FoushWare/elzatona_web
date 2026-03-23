@@ -57,7 +57,6 @@ describe("Admin Auth API", () => {
     // Dynamically import route after mocks are established
     const route = await import("./route");
     POST = route.POST;
-    GET = route.GET;
   });
 
   describe("POST /api/admin/auth (Login)", () => {
