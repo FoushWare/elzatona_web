@@ -33,7 +33,7 @@ jobs:
             apps/website/package-lock.json
 
       - name: Install dependencies
-        run: npm install --prefer-offline --no-audit
+        run: npm install --no-audit
 
       - name: Run Prettier formatting check
         run: npm run format:check:tracked
