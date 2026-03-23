@@ -909,7 +909,166 @@ async function seed() {
         console.log(`   ✅ Linked ${planQuestionRows.length} questions to ${metadata.title}`);
     }
 
-    console.log("✨ Seeding completed!");
+    // 5. Validate FK Integrity
+    console.log("🔍 Validating FK relationships integrity...");
+    const integrityReport = {
+        timestamp: new Date().toISOString(),
+        checks: {},
+        statistics: {},
+        violations: []
+    };
+
+    // Check 1: All categories have learning_card_id
+    const { data: categoriesWithoutCard, error: catCheckError } = await supabase
+        .from("categories")
+        .select("id, name, slug")
+        .is("learning_card_id", true);
+
+    integrityReport.checks.categories_without_card = {
+        passed: !catCheckError && (!categoriesWithoutCard || categoriesWithoutCard.length === 0),
+        count: categoriesWithoutCard?.length || 0
+    };
+
+    if (categoriesWithoutCard?.length > 0) {
+        integrityReport.violations.push({
+            type: "MISSING_CARD_LINK",
+            table: "categories",
+            description: `${categoriesWithoutCard.length} categories missing learning_card_id`,
+            items: categoriesWithoutCard
+        });
+    }
+
+    // Check 2: All topics have category_id
+    const { data: topicsWithoutCategory, error: topicCheckError } = await supabase
+        .from("topics")
+        .select("id, name, slug")
+        .is("category_id", true);
+
+    integrityReport.checks.topics_without_category = {
+        passed: !topicCheckError && (!topicsWithoutCategory || topicsWithoutCategory.length === 0),
+        count: topicsWithoutCategory?.length || 0
+    };
+
+    if (topicsWithoutCategory?.length > 0) {
+        integrityReport.violations.push({
+            type: "MISSING_CATEGORY_LINK",
+            table: "topics",
+            description: `${topicsWithoutCategory.length} topics missing category_id`,
+            items: topicsWithoutCategory
+        });
+    }
+
+    // Check 3: All questions have category_id and learning_card_id
+    const { data: questionsWithoutCategory, error: qCatCheckError } = await supabase
+        .from("questions")
+        .select("id, title")
+        .is("category_id", true);
+
+    integrityReport.checks.questions_without_category = {
+        passed: !qCatCheckError && (!questionsWithoutCategory || questionsWithoutCategory.length === 0),
+        count: questionsWithoutCategory?.length || 0
+    };
+
+    if (questionsWithoutCategory?.length > 0) {
+        integrityReport.violations.push({
+            type: "MISSING_CATEGORY_LINK",
+            table: "questions",
+            description: `${questionsWithoutCategory.length} questions missing category_id`,
+            items: questionsWithoutCategory.slice(0, 10) // Include first 10 for debugging
+        });
+    }
+
+    const { data: questionsWithoutCard, error: qCardCheckError } = await supabase
+        .from("questions")
+        .select("id, title")
+        .is("learning_card_id", true);
+
+    integrityReport.checks.questions_without_card = {
+        passed: !qCardCheckError && (!questionsWithoutCard || questionsWithoutCard.length === 0),
+        count: questionsWithoutCard?.length || 0
+    };
+
+    if (questionsWithoutCard?.length > 0) {
+        integrityReport.violations.push({
+            type: "MISSING_CARD_LINK",
+            table: "questions",
+            description: `${questionsWithoutCard.length} questions missing learning_card_id`,
+            items: questionsWithoutCard.slice(0, 10) // Include first 10 for debugging
+        });
+    }
+
+    // Check 4: All questions have topic_id (this is optional based on schema, but warn if significant missing)
+    const { data: questionsWithoutTopic, error: qTopicCheckError } = await supabase
+        .from("questions")
+        .select("id, title")
+        .is("topic_id", true);
+
+    integrityReport.checks.questions_without_topic = {
+        passed: !qTopicCheckError && (!questionsWithoutTopic || questionsWithoutTopic.length < questionsWithoutTopic?.length * 0.1),
+        count: questionsWithoutTopic?.length || 0
+    };
+
+    if (questionsWithoutTopic?.length > 0 && questionsWithoutTopic.length > successCount * 0.1) {
+        integrityReport.violations.push({
+            type: "MISSING_TOPIC_LINK",
+            table: "questions",
+            description: `${questionsWithoutTopic.length} questions missing topic_id (>10% threshold)`,
+            items: questionsWithoutTopic.slice(0, 10)
+        });
+    }
+
+    // Gather statistics
+    const { count: totalCats } = await supabase.from("categories").select("*", { count: "exact", head: true });
+    const { count: totalTopics } = await supabase.from("topics").select("*", { count: "exact", head: true });
+    const { count: totalQuestions } = await supabase.from("questions").select("*", { count: "exact", head: true });
+    const { count: totalPlans } = await supabase.from("learning_plans").select("*", { count: "exact", head: true });
+    const { count: totalCards } = await supabase.from("learning_cards").select("*", { count: "exact", head: true });
+    const { count: totalPlanQuestions } = await supabase.from("plan_questions").select("*", { count: "exact", head: true });
+
+    integrityReport.statistics = {
+        total_categories: totalCats || 0,
+        total_topics: totalTopics || 0,
+        total_questions: totalQuestions || 0,
+        total_learning_cards: totalCards || 0,
+        total_learning_plans: totalPlans || 0,
+        total_plan_questions: totalPlanQuestions || 0
+    };
+
+    // Write integrity report to file
+    const logsDir = path.join(__dirname, "logs");
+    if (!fs.existsSync(logsDir)) {
+        fs.mkdirSync(logsDir, { recursive: true });
+    }
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const reportPath = path.join(logsDir, `seeding-integrity-${timestamp}.json`);
+    fs.writeFileSync(reportPath, JSON.stringify(integrityReport, null, 2));
+
+    // Print summary to console
+    const allChecksPassed = integrityReport.violations.length === 0;
+    console.log("\n📋 Integrity Report Summary:");
+    console.log(`   Categories without card link: ${integrityReport.checks.categories_without_card.count}`);
+    console.log(`   Topics without category link: ${integrityReport.checks.topics_without_category.count}`);
+    console.log(`   Questions without category link: ${integrityReport.checks.questions_without_category.count}`);
+    console.log(`   Questions without card link: ${integrityReport.checks.questions_without_card.count}`);
+    console.log(`   Questions without topic link: ${integrityReport.checks.questions_without_topic.count}`);
+    console.log(`\n📊 Seeding Statistics:`);
+    console.log(`   Total categories: ${integrityReport.statistics.total_categories}`);
+    console.log(`   Total topics: ${integrityReport.statistics.total_topics}`);
+    console.log(`   Total questions: ${integrityReport.statistics.total_questions}`);
+    console.log(`   Total learning cards: ${integrityReport.statistics.total_learning_cards}`);
+    console.log(`   Total learning plans: ${integrityReport.statistics.total_learning_plans}`);
+    console.log(`   Total plan-question links: ${integrityReport.statistics.total_plan_questions}`);
+    console.log(`\n📁 Integrity report written to ${path.relative(process.cwd(), reportPath)}`);
+
+    if (allChecksPassed) {
+        console.log("\n✅ All integrity checks passed!");
+    } else {
+        console.log(`\n⚠️ Integrity check found ${integrityReport.violations.length} issue(s)!`);
+        process.exit(1);
+    }
+
+    console.log("\n✨ Seeding completed!");
 }
 
 seed();

@@ -135,43 +135,6 @@ const CANONICAL_CARDS: Array<{
   },
 ];
 
-function inferCardKeyFromCategory(
-  category: DatabaseCategoryRecord,
-): CanonicalCardKey {
-  const hint =
-    `${category.card_type ?? ""} ${category.name ?? ""}`.toLowerCase();
-
-  if (
-    hint.includes("framework") ||
-    hint.includes("react") ||
-    hint.includes("next") ||
-    hint.includes("vue") ||
-    hint.includes("angular") ||
-    hint.includes("svelte")
-  ) {
-    return "framework";
-  }
-
-  if (
-    hint.includes("problem") ||
-    hint.includes("algorithm") ||
-    hint.includes("coding") ||
-    hint.includes("challenge")
-  ) {
-    return "problem";
-  }
-
-  if (
-    hint.includes("system") ||
-    hint.includes("architecture") ||
-    hint.includes("design")
-  ) {
-    return "system";
-  }
-
-  return "core";
-}
-
 function buildCanonicalCards(cards: AdminLearningCard[]): {
   cards: AdminLearningCard[];
   idsByKey: Record<CanonicalCardKey, string>;
@@ -685,6 +648,16 @@ export function useContentManagement() {
   const [availableCards, setAvailableCards] = useState<AdminLearningCard[]>([]);
   const [isManagingCards, setIsManagingCards] = useState(false);
 
+  // Plan edit modal states
+  const [isPlanEditModalOpen, setIsPlanEditModalOpen] = useState(false);
+  const [planToEdit, setPlanToEdit] = useState<LearningPlan | null>(null);
+  const [planEditFormData, setPlanEditFormData] = useState({
+    title: "",
+    description: "",
+    estimated_duration: 0,
+    status: "published" as const,
+  });
+
   // Plan questions state
   const [planQuestions, setPlanQuestions] = useState<Set<string>>(new Set());
 
@@ -731,18 +704,11 @@ export function useContentManagement() {
       const normalizedCards = cardsResult.data;
       const canonicalCardsResult = buildCanonicalCards(normalizedCards);
 
-      const mappedCategories = categoriesResult.data.map((category) => {
-        // Preserve DB relationship first. Only infer a fallback when missing.
-        if ((category as AdminCategory).learning_card_id) {
-          return category as AdminCategory;
-        }
-
-        const inferred = inferCardKeyFromCategory(category);
-        return {
-          ...category,
-          learning_card_id: canonicalCardsResult.idsByKey[inferred],
-        } as AdminCategory;
-      });
+      // Strict DB-relation filtering: only display categories with valid learning_card_id FK
+      // This ensures the hierarchy is accurate to the database state (no inference fallback)
+      const mappedCategories = categoriesResult.data.filter(
+        (category) => (category as AdminCategory).learning_card_id != null,
+      );
 
       setCards(normalizedCards);
       setPlans(plansResult.data);
@@ -1057,6 +1023,50 @@ export function useContentManagement() {
     setPlanCards([]);
     setAvailableCards([]);
   }, []);
+
+  const openPlanEditModal = useCallback((plan: LearningPlan) => {
+    setPlanToEdit(plan);
+    setPlanEditFormData({
+      title: plan.title || plan.name || "",
+      description: plan.description || "",
+      estimated_duration: plan.estimated_duration || 0,
+      status: (plan.status as "published" | "draft" | "archived") || "published",
+    });
+    setIsPlanEditModalOpen(true);
+  }, []);
+
+  const closePlanEditModal = useCallback(() => {
+    setIsPlanEditModalOpen(false);
+    setPlanToEdit(null);
+    setPlanEditFormData({
+      title: "",
+      description: "",
+      estimated_duration: 0,
+      status: "published",
+    });
+  }, []);
+
+  const updatePlan = useCallback(async () => {
+    if (!planToEdit || !planRepository) return;
+
+    try {
+      await planRepository.update(planToEdit.id, {
+        title: planEditFormData.title,
+        description: planEditFormData.description,
+        estimated_duration: planEditFormData.estimated_duration,
+        status: planEditFormData.status,
+      });
+
+      toast.success("Plan updated successfully");
+      closePlanEditModal();
+      await fetchData();
+    } catch (err) {
+      console.error("Failed to update plan:", err);
+      toast.error(
+        err instanceof Error ? err.message : "Failed to update plan",
+      );
+    }
+  }, [planToEdit, planEditFormData, planRepository, closePlanEditModal, fetchData]);
 
   const addCardToPlan = useCallback(
     async (cardId: string) => {
@@ -1400,6 +1410,14 @@ export function useContentManagement() {
     toggleCardActiveStatus,
     openTopicQuestionsModal,
     createSpacedRepetitionPlans,
+    isPlanEditModalOpen,
+    setIsPlanEditModalOpen,
+    planToEdit,
+    planEditFormData,
+    setPlanEditFormData,
+    openPlanEditModal,
+    closePlanEditModal,
+    updatePlan,
     createCategory,
     editCategory,
     removeCategory,
