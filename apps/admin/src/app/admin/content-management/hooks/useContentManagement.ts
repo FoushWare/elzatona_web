@@ -1030,7 +1030,8 @@ export function useContentManagement() {
       title: plan.title || plan.name || "",
       description: plan.description || "",
       estimated_duration: plan.estimated_duration || 0,
-      status: (plan.status as "published" | "draft" | "archived") || "published",
+      status:
+        (plan.status as "published" | "draft" | "archived") || "published",
     });
     setIsPlanEditModalOpen(true);
   }, []);
@@ -1062,11 +1063,15 @@ export function useContentManagement() {
       await fetchData();
     } catch (err) {
       console.error("Failed to update plan:", err);
-      toast.error(
-        err instanceof Error ? err.message : "Failed to update plan",
-      );
+      toast.error(err instanceof Error ? err.message : "Failed to update plan");
     }
-  }, [planToEdit, planEditFormData, planRepository, closePlanEditModal, fetchData]);
+  }, [
+    planToEdit,
+    planEditFormData,
+    planRepository,
+    closePlanEditModal,
+    fetchData,
+  ]);
 
   const addCardToPlan = useCallback(
     async (cardId: string) => {
