@@ -27,6 +27,39 @@ vi.mock("@elzatona/common-ui", () => ({
       {children}
     </button>
   ),
+  Dialog: ({ children }: any) => <div data-testid="dialog">{children}</div>,
+  DialogContent: ({ children }: any) => (
+    <div data-testid="dialog-content">{children}</div>
+  ),
+  DialogHeader: ({ children }: any) => (
+    <div data-testid="dialog-header">{children}</div>
+  ),
+  DialogTitle: ({ children }: any) => (
+    <div data-testid="dialog-title">{children}</div>
+  ),
+  DialogDescription: ({ children }: any) => (
+    <div data-testid="dialog-description">{children}</div>
+  ),
+  Input: ({ ...props }: any) => <input {...props} />,
+  Label: ({ children, ...props }: any) => <label {...props}>{children}</label>,
+  Textarea: ({ children, ...props }: any) => (
+    <textarea {...props}>{children}</textarea>
+  ),
+  Select: ({ children, value, onValueChange }: any) => (
+    <select
+      value={value}
+      onChange={(e) => onValueChange?.(e.target.value)}
+      data-testid="select"
+    >
+      {children}
+    </select>
+  ),
+  SelectTrigger: ({ children }: any) => <>{children}</>,
+  SelectValue: ({ children }: any) => <>{children}</>,
+  SelectContent: ({ children }: any) => <>{children}</>,
+  SelectItem: ({ children, value }: any) => (
+    <option value={value}>{children}</option>
+  ),
   StatsSection: ({ stats }: any) => (
     <div data-testid="stats-section">
       {stats &&

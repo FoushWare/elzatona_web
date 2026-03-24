@@ -12,7 +12,13 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 // Only create Supabase client if environment variables are available
 let supabase: SupabaseClient | null = null;
+let supabaseInitPromise: Promise<void> | null = null;
+
 async function initSupabase() {
+  if (supabase) {
+    return;
+  }
+
   if (
     process.env["NEXT_PUBLIC_SUPABASE_URL"] &&
     process.env["SUPABASE_SERVICE_ROLE_KEY"]
@@ -27,7 +33,12 @@ async function initSupabase() {
   }
 }
 
-await initSupabase();
+function ensureSupabaseInitialized() {
+  if (!supabaseInitPromise) {
+    supabaseInitPromise = initSupabase();
+  }
+  return supabaseInitPromise;
+}
 
 interface UserPreferences {
   theme: "light" | "dark" | "system";
@@ -79,6 +90,11 @@ export function UserPreferencesProvider({
   children,
 }: Readonly<UserPreferencesProviderProps>) {
   const [user] = useState<{ id: string } | null>(null);
+
+  useEffect(() => {
+    void ensureSupabaseInitialized();
+  }, []);
+
   const updateUserProfile = async (_data: { preferences: UserPreferences }) => {
     // Placeholder for user profile update
     // If supabase is available, update user preferences in database
