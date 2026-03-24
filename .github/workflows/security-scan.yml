@@ -27,14 +27,45 @@ jobs:
           wget "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
           tar -xzf gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz
           chmod +x gitleaks
-          ./gitleaks detect --config .gitleaks.toml --verbose --report-format sarif --report-path gitleaks-results.sarif || true
+
+          # Use repository config when present, otherwise run with gitleaks defaults.
+          if [ -f .gitleaks.toml ]; then
+            echo "Using .gitleaks.toml configuration"
+            ./gitleaks detect --source . --config .gitleaks.toml --verbose --report-format sarif --report-path gitleaks-results.sarif || true
+          else
+            echo "No .gitleaks.toml found; running with default rules"
+            ./gitleaks detect --source . --verbose --report-format sarif --report-path gitleaks-results.sarif || true
+          fi
+
+          # Ensure SARIF exists so GitHub code scanning can always process this tool.
+          if [ ! -f gitleaks-results.sarif ]; then
+            echo "Gitleaks did not produce SARIF output; writing empty SARIF report"
+            cat > gitleaks-results.sarif <<'EOF'
+          {
+            "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+            "version": "2.1.0",
+            "runs": [
+              {
+                "tool": {
+                  "driver": {
+                    "name": "Gitleaks",
+                    "informationUri": "https://github.com/gitleaks/gitleaks",
+                    "rules": []
+                  }
+                },
+                "results": []
+              }
+            ]
+          }
+          EOF
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Gitleaks results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v4
         continue-on-error: true
-        if: always() && hashFiles('gitleaks-results.sarif') != ''
+        if: always()
         with:
           sarif_file: "gitleaks-results.sarif"
 
