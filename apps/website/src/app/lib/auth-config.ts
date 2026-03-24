@@ -51,19 +51,10 @@ declare module "next-auth/jwt" {
   }
 }
 
-const googleClientId = process.env.GOOGLE_CLIENT_ID;
-const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
-const githubClientId = process.env.GITHUB_CLIENT_ID;
-const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
-
-if (
-  !googleClientId ||
-  !googleClientSecret ||
-  !githubClientId ||
-  !githubClientSecret
-) {
-  throw new Error("Missing OAuth environment variables");
-}
+const googleClientId = process.env.GOOGLE_CLIENT_ID ?? "";
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET ?? "";
+const githubClientId = process.env.GITHUB_CLIENT_ID ?? "";
+const githubClientSecret = process.env.GITHUB_CLIENT_SECRET ?? "";
 
 export const authOptions: NextAuthOptions = {
   providers: [

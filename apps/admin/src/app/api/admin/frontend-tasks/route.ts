@@ -89,12 +89,10 @@ export async function POST(request: NextRequest) {
       type: "frontend-task",
       createdAt: new Date(),
       updatedAt: new Date(),
-    };
+    } as unknown as Parameters<typeof questionRepo.create>[0];
 
     // Add to repository
-    const newTask = await questionRepo.create(
-      taskData as unknown as Parameters<typeof questionRepo.create>[0],
-    );
+    const newTask = await questionRepo.create(taskData);
 
     const response: ApiResponse<{ id: string }> = {
       success: true,
