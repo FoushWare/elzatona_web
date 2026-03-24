@@ -35,8 +35,8 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           # CodeQL treats JavaScript and TypeScript as one language group.
-          # Scanning TypeScript covers this repository without matrix overhead.
-          languages: "typescript"
+          # Keep this as javascript to preserve GitHub's expected PR config key.
+          languages: "javascript"
           # Use custom config to reduce scanning scope and exclude PolynomialReDoS
           # The config file specifies the security query suite
           config-file: .github/codeql/codeql-config.yml
@@ -62,7 +62,7 @@ jobs:
         uses: github/codeql-action/analyze@v4
         continue-on-error: true
         with:
-          category: "/language:typescript"
+          category: "/language:javascript"
           upload: true
           wait-for-processing: false
           threads: 1
