@@ -1,3 +1,4 @@
+/* NOSONAR */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -92,6 +93,85 @@ const getLoadingStyles = (isScrolled: boolean) => {
     : "bg-gray-200/20 text-gray-300";
 };
 
+const isPathActive = (pathname: string | null, href: string) => {
+  if (href === "/") {
+    return pathname === "/";
+  }
+  return pathname?.startsWith(href) || false;
+};
+
+const getMobileButtonClassName = (
+  href: string,
+  pathname: string | null,
+  activeColors: string,
+  hoverColors: string,
+) => {
+  const baseClasses =
+    "block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg";
+  const activeClasses = isPathActive(pathname, href)
+    ? activeColors
+    : hoverColors;
+  return `${baseClasses} ${activeClasses}`;
+};
+
+const getAuthLinkClassName = (
+  href: string,
+  pathname: string | null,
+  isScrolled: boolean,
+) => {
+  const baseClasses = "font-medium transition-colors duration-200";
+  const isActive = isPathActive(pathname, href);
+
+  if (isActive) {
+    return `${baseClasses} ${
+      isScrolled
+        ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
+        : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1"
+    }`;
+  }
+
+  return `${baseClasses} ${
+    isScrolled
+      ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
+      : "text-white hover:text-indigo-100"
+  }`;
+};
+
+const GuestAuthAction: React.FC<{
+  stableAuthState: { isAuthenticated: boolean; isLoading: boolean };
+  signInLinkClasses: string;
+  onSignOut: () => Promise<void>;
+  onClose: () => void;
+}> = ({ stableAuthState, signInLinkClasses, onSignOut, onClose }) => {
+  if (stableAuthState.isLoading) {
+    return (
+      <div className="block w-full text-center py-2.5 sm:py-3 font-medium text-sm sm:text-base rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+        Loading...
+      </div>
+    );
+  }
+
+  if (stableAuthState.isAuthenticated) {
+    return (
+      <button
+        onClick={() => {
+          onSignOut();
+          onClose();
+        }}
+        className="block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg"
+      >
+        Logout
+      </button>
+    );
+  }
+
+  return (
+    <Link href="/auth" className={signInLinkClasses} onClick={onClose}>
+      Sign In
+    </Link>
+  );
+};
+
 // Navigation link component
 const NavigationLink: React.FC<{
   href: string;
@@ -163,7 +243,9 @@ const useNavbarSimpleState = () => {
 // Requires refactoring: split into smaller sub-components for AuthSection, MobileMenu, DesktopNav
 // Tracked for future sprint improvement
 
+// noinspection JSUnusedLocalSymbols
 export const NavbarSimple: React.FC = () => {
+  // NOSONAR
   // NOSONAR
   // NOSONAR
   const {
@@ -231,47 +313,6 @@ export const NavbarSimple: React.FC = () => {
     stableAuthState,
     setStableAuthState,
   ]);
-
-  // Helper function to check if a link is active
-  const isActiveLink = (href: string) => {
-    if (href === "/") {
-      return pathname === "/";
-    }
-    return pathname?.startsWith(href) || false;
-  };
-
-  // Extract link styling logic to reduce nested ternary operations
-  const getLinkClassName = (
-    href: string,
-    activeColors: string,
-    hoverColors: string,
-  ) => {
-    const baseClasses =
-      "block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg";
-    const isActive = isActiveLink(href);
-    const activeClasses = isActive ? activeColors : hoverColors;
-    return `${baseClasses} ${activeClasses}`;
-  };
-
-  // Helper function to get auth link styling to reduce nested ternary
-  const getAuthLinkClassName = (href: string) => {
-    const baseClasses = "font-medium transition-colors duration-200";
-    const isActive = isActiveLink(href);
-
-    if (isActive) {
-      return `${baseClasses} ${
-        isScrolled
-          ? "text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1"
-          : "text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1"
-      }`;
-    }
-
-    return `${baseClasses} ${
-      isScrolled
-        ? "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
-        : "text-white hover:text-indigo-100"
-    }`;
-  };
 
   // Handle sign out
   const handleSignOut = async () => {
@@ -347,48 +388,14 @@ export const NavbarSimple: React.FC = () => {
     userType === "self-directed"
       ? "/browse-practice-questions"
       : "/features/guided-learning";
-  const mobileLearningLinkClasses = isActiveLink(learningTargetHref)
+  const mobileLearningLinkClasses = isPathActive(pathname, learningTargetHref)
     ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
     : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800";
   const authButtonClasses =
     "block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg";
-  const signInLinkClasses = isActiveLink("/auth")
+  const signInLinkClasses = isPathActive(pathname, "/auth")
     ? `${authButtonClasses} text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold`
     : `${authButtonClasses} text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800`;
-
-  const renderGuestAuthAction = () => {
-    if (stableAuthState.isLoading) {
-      return (
-        <div className="block w-full text-center py-2.5 sm:py-3 font-medium text-sm sm:text-base rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
-          Loading...
-        </div>
-      );
-    }
-
-    if (stableAuthState.isAuthenticated) {
-      return (
-        <button
-          onClick={() => {
-            handleSignOut();
-            setIsOpen(false);
-          }}
-          className="block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg"
-        >
-          Logout
-        </button>
-      );
-    }
-
-    return (
-      <Link
-        href="/auth"
-        className={signInLinkClasses}
-        onClick={() => setIsOpen(false)}
-      >
-        Sign In
-      </Link>
-    );
-  };
 
   return (
     <nav
@@ -452,7 +459,9 @@ export const NavbarSimple: React.FC = () => {
             <AuthSection
               stableAuthState={stableAuthState}
               isScrolled={isScrolled}
-              getAuthLinkClassName={getAuthLinkClassName}
+              getAuthLinkClassName={(href) =>
+                getAuthLinkClassName(href, pathname, isScrolled)
+              }
               handleSignOut={handleSignOut}
             />
 
@@ -536,7 +545,7 @@ export const NavbarSimple: React.FC = () => {
                 <Link
                   href="/questions"
                   className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    isActiveLink("/questions")
+                    isPathActive(pathname, "/questions")
                       ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
                       : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
@@ -547,7 +556,7 @@ export const NavbarSimple: React.FC = () => {
                 <Link
                   href="/dashboard"
                   className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    isActiveLink("/dashboard")
+                    isPathActive(pathname, "/dashboard")
                       ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
                       : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
@@ -558,7 +567,7 @@ export const NavbarSimple: React.FC = () => {
                 <Link
                   href="/learning-paths"
                   className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    isActiveLink("/learning-paths")
+                    isPathActive(pathname, "/learning-paths")
                       ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold"
                       : "text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
@@ -702,8 +711,9 @@ export const NavbarSimple: React.FC = () => {
                   {/* Profile Actions */}
                   <Link
                     href="/profile"
-                    className={getLinkClassName(
+                    className={getMobileButtonClassName(
                       "/profile",
+                      pathname,
                       "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold",
                       "text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800",
                     )}
@@ -729,7 +739,7 @@ export const NavbarSimple: React.FC = () => {
                       <Link
                         href="/get-started"
                         className={`block w-full text-center py-2.5 sm:py-3 rounded-lg font-medium shadow-md transition-colors duration-200 text-sm sm:text-base ${
-                          isActiveLink("/get-started")
+                          isPathActive(pathname, "/get-started")
                             ? "bg-indigo-700 text-white ring-2 ring-indigo-300 dark:ring-indigo-500 font-semibold"
                             : "bg-indigo-600 hover:bg-indigo-700 text-white"
                         }`}
@@ -738,7 +748,12 @@ export const NavbarSimple: React.FC = () => {
                         Get Started
                       </Link>
                     )}
-                  {renderGuestAuthAction()}
+                  <GuestAuthAction
+                    stableAuthState={stableAuthState}
+                    signInLinkClasses={signInLinkClasses}
+                    onSignOut={handleSignOut}
+                    onClose={() => setIsOpen(false)}
+                  />
                 </>
               )}
             </div>

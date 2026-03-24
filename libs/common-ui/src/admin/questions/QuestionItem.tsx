@@ -12,6 +12,14 @@ interface QuestionItemProps {
   onDelete: (id: string) => void;
 }
 
+function getDifficultyVariant(
+  difficulty?: string,
+): "default" | "outline" | "destructive" {
+  if (difficulty === "beginner") return "default";
+  if (difficulty === "intermediate") return "outline";
+  return "destructive";
+}
+
 export const QuestionItem: React.FC<QuestionItemProps> = ({
   question,
   onView,
@@ -103,15 +111,7 @@ export const QuestionItem: React.FC<QuestionItemProps> = ({
 
             {/* Difficulty Badge */}
             {question.difficulty && (
-              <Badge
-                variant={
-                  question.difficulty === "beginner"
-                    ? "default"
-                    : question.difficulty === "intermediate"
-                      ? "outline"
-                      : "destructive"
-                }
-              >
+              <Badge variant={getDifficultyVariant(question.difficulty)}>
                 {question.difficulty}
               </Badge>
             )}

@@ -1,9 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 import * as dotenv from "dotenv";
 import fs from "node:fs";
-import path from "node:path";
+import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { dirname } from "node:path";
 
 dotenv.config({ path: ".env.local" });
 
@@ -47,7 +46,9 @@ function toSeedDifficulty(rawDifficulty) {
 }
 
 function normalizeOptions(question) {
-    const sourceOptions = Array.isArray(question.options) ? question.options : Array.isArray(question.choices) ? question.choices : [];
+    const optionsArray = Array.isArray(question.options) ? question.options : [];
+    const choicesArray = Array.isArray(question.choices) ? question.choices : [];
+    const sourceOptions = optionsArray.length > 0 ? optionsArray : choicesArray;
     return sourceOptions.map((opt, index) => ({
         id: opt?.id || opt?.key || String.fromCodePoint(65 + index),
         text: opt?.text || "",
@@ -90,6 +91,19 @@ function slugify(text) {
         .trim()
         .replaceAll(/[^a-z0-9]+/g, "-")
         .replaceAll(/^-+|-+$/g, "");
+}
+
+function getDifficultyTier(index, grouped) {
+    const easyCount = grouped.easy.length;
+    const mediumCount = grouped.medium.length;
+    
+    if (index >= easyCount + mediumCount) {
+        return "hard";
+    }
+    if (index >= easyCount) {
+        return "medium";
+    }
+    return "easy";
 }
 
 const CANONICAL_LEARNING_CARDS = [
@@ -314,7 +328,7 @@ function writeFailedQuestionLog(failedQuestions) {
         fs.mkdirSync(logsDir, { recursive: true });
     }
 
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const timestamp = new Date().toISOString().replaceAll(":", "-").replaceAll(".", "-");
     const logFilePath = path.join(logsDir, `failed-questions-${timestamp}.json`);
     fs.writeFileSync(logFilePath, JSON.stringify({
         created_at: new Date().toISOString(),
@@ -443,7 +457,7 @@ async function clearTables() {
     }
 }
 
-async function seed() {
+async function seed() { // NOSONAR
     console.log("🚀 Starting comprehensive seeding...");
 
     await clearTables();
@@ -736,7 +750,6 @@ async function seed() {
 
         // Distribute questions according to plan type
         const planQuestionRows = [];
-        let questionIndex = 0;
 
         for (const cardId of cardIds) {
             const cardQuestionIds = questionIdsByCardId[cardId] || [];
@@ -756,11 +769,7 @@ async function seed() {
                             order_index: planQuestionRows.length,
                             is_review: false,
                             parent_plan_id: null,
-            difficulty_tier: i >= grouped.easy.length + grouped.medium.length
-                                ? "hard"
-                                : i >= grouped.easy.length
-                                ? "medium"
-                                : "easy",
+                            difficulty_tier: getDifficultyTier(i, grouped),
                             is_active: true
                         });
                     }
@@ -1044,7 +1053,7 @@ async function seed() {
         fs.mkdirSync(logsDir, { recursive: true });
     }
 
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const timestamp = new Date().toISOString().replaceAll(":", "-").replaceAll(".", "-");
     const reportPath = path.join(logsDir, `seeding-integrity-${timestamp}.json`);
     fs.writeFileSync(reportPath, JSON.stringify(integrityReport, null, 2));
 

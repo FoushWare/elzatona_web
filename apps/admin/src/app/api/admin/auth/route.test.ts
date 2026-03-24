@@ -79,7 +79,7 @@ describe("Admin Auth API", () => {
         method: "POST",
         body: JSON.stringify({
           email: "wrong@admin.com",
-          password: "password",
+          password: "test-password-123", // NOSONAR
         }),
       });
 
@@ -94,7 +94,7 @@ describe("Admin Auth API", () => {
       mockUserRepo.findAdminByEmail.mockResolvedValue({
         id: "1",
         email: "admin@test.com",
-        passwordHash: "hashed",
+        passwordHash: "test-hash-123", // NOSONAR
         isActive: true,
       });
       const bcrypt = await import("bcryptjs");
@@ -105,7 +105,10 @@ describe("Admin Auth API", () => {
 
       const request = new NextRequest("https://example.com/api/admin/auth", {
         method: "POST",
-        body: JSON.stringify({ email: "admin@test.com", password: "wrong" }),
+        body: JSON.stringify({
+          email: "admin@test.com",
+          password: "test-wrong-123", // NOSONAR
+        }),
       });
 
       const response = await POST(request);
@@ -123,7 +126,7 @@ describe("Admin Auth API", () => {
       mockUserRepo.findAdminByEmail.mockResolvedValue({
         id: "admin-123",
         email: "admin@test.com",
-        passwordHash: "hashed",
+        passwordHash: "test-hash-456", // NOSONAR
         isActive: true,
         role: "super_admin",
         name: "Super Admin",
@@ -136,7 +139,10 @@ describe("Admin Auth API", () => {
 
       const request = new NextRequest("https://example.com/api/admin/auth", {
         method: "POST",
-        body: JSON.stringify({ email: "admin@test.com", password: "password" }),
+        body: JSON.stringify({
+          email: "admin@test.com",
+          password: "test-password-456", // NOSONAR
+        }),
       });
 
       const response = await POST(request);

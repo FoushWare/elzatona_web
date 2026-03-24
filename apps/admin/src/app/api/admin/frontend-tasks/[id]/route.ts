@@ -65,7 +65,8 @@ export async function PUT(
       updatedAt: new Date(),
     };
 
-    await questionRepo.update(id, updateData);
+    const { difficulty: _difficulty, ...rest } = updateData;
+    await questionRepo.update(id, rest);
     const response: ApiResponse<{ id: string }> = {
       success: true,
       data: { id },

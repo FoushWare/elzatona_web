@@ -173,9 +173,7 @@ export class RepositoryFactory {
    * Get or create Learning Card Repository instance
    */
   getLearningCardRepository(): ILearningCardRepository {
-    if (!this.learningCardRepository) {
-      this.learningCardRepository = this.createLearningCardRepository();
-    }
+    this.learningCardRepository ??= this.createLearningCardRepository();
     return this.learningCardRepository;
   }
 
@@ -183,9 +181,7 @@ export class RepositoryFactory {
    * Get or create Category Repository instance
    */
   getCategoryRepository(): ICategoryRepository {
-    if (!this.categoryRepository) {
-      this.categoryRepository = this.createCategoryRepository();
-    }
+    this.categoryRepository ??= this.createCategoryRepository();
     return this.categoryRepository;
   }
 
@@ -347,9 +343,7 @@ let factoryInstance: RepositoryFactory | null = null;
  * Get singleton repository factory instance
  */
 export function getRepositoryFactory(): RepositoryFactory {
-  if (!factoryInstance) {
-    factoryInstance = createRepositoryFactoryFromEnv();
-  }
+  factoryInstance ??= createRepositoryFactoryFromEnv();
   return factoryInstance;
 }
 

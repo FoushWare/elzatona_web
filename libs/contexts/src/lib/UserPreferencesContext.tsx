@@ -6,22 +6,28 @@ import {
   useState,
   useEffect,
   ReactNode,
+  useMemo,
 } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 // Only create Supabase client if environment variables are available
 let supabase: SupabaseClient | null = null;
-if (
-  process.env["NEXT_PUBLIC_SUPABASE_URL"] &&
-  process.env["SUPABASE_SERVICE_ROLE_KEY"]
-) {
-  // Dynamic import to avoid SSR issues
-  import("@supabase/supabase-js").then(({ createClient }) => {
-    const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"];
-    const supabaseServiceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"];
-    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-  });
+async function initSupabase() {
+  if (
+    process.env["NEXT_PUBLIC_SUPABASE_URL"] &&
+    process.env["SUPABASE_SERVICE_ROLE_KEY"]
+  ) {
+    const { createClient } = await import("@supabase/supabase-js");
+    const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"] || "";
+    const supabaseServiceRoleKey =
+      process.env["SUPABASE_SERVICE_ROLE_KEY"] || "";
+    if (supabaseUrl && supabaseServiceRoleKey) {
+      supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+    }
+  }
 }
+
+await initSupabase();
 
 interface UserPreferences {
   theme: "light" | "dark" | "system";
@@ -71,7 +77,7 @@ interface UserPreferencesProviderProps {
 
 export function UserPreferencesProvider({
   children,
-}: UserPreferencesProviderProps) {
+}: Readonly<UserPreferencesProviderProps>) {
   const [user] = useState<{ id: string } | null>(null);
   const updateUserProfile = async (_data: { preferences: UserPreferences }) => {
     // Placeholder for user profile update
@@ -178,11 +184,14 @@ export function UserPreferencesProvider({
     return undefined;
   }, [preferences.theme]);
 
-  const value: UserPreferencesContextType = {
-    preferences,
-    updatePreferences,
-    isLoading,
-  };
+  const value = useMemo<UserPreferencesContextType>(
+    () => ({
+      preferences,
+      updatePreferences,
+      isLoading,
+    }),
+    [preferences, updatePreferences, isLoading],
+  );
 
   return (
     <UserPreferencesContext.Provider value={value}>
