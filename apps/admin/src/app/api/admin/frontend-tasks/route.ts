@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the task data
-    const taskData: Parameters<typeof questionRepo.create>[0] = {
+    const taskData = {
       ...body,
       type: "frontend-task",
       createdAt: new Date(),
@@ -92,7 +92,9 @@ export async function POST(request: NextRequest) {
     };
 
     // Add to repository
-    const newTask = await questionRepo.create(taskData);
+    const newTask = await questionRepo.create(
+      taskData as unknown as Parameters<typeof questionRepo.create>[0],
+    );
 
     const response: ApiResponse<{ id: string }> = {
       success: true,
