@@ -456,6 +456,16 @@ function normalizePlan(plan: DatabasePlanRecord): LearningPlan {
   };
 }
 
+function normalizePlanStatus(
+  status: string | null | undefined,
+  fallback: PlanEditFormData["status"] = "published",
+): PlanEditFormData["status"] {
+  if (status === "draft" || status === "published" || status === "archived") {
+    return status;
+  }
+  return fallback;
+}
+
 function normalizeLearningCard(
   card: DatabaseLearningCardRecord,
 ): AdminLearningCard {
@@ -1031,13 +1041,29 @@ export function useContentManagement() {
     setAvailableCards([]);
   }, []);
 
-  const openPlanEditModal = useCallback((plan: LearningPlan) => {
+  const openPlanEditModal = useCallback(async (plan: LearningPlan) => {
     setPlanToEdit(plan);
+
+    const fallbackStatus: PlanEditFormData["status"] = plan.is_active
+      ? "published"
+      : "archived";
+    let status: PlanEditFormData["status"] = fallbackStatus;
+
+    const { data: latestPlanStatus, error: statusError } = await supabase
+      .from("learning_plans")
+      .select("status")
+      .eq("id", plan.id)
+      .maybeSingle();
+
+    if (!statusError) {
+      status = normalizePlanStatus(latestPlanStatus?.status, fallbackStatus);
+    }
+
     setPlanEditFormData({
       title: plan.name || "",
       description: plan.description || "",
       estimated_duration: plan.estimated_duration || 0,
-      status: "published",
+      status,
     });
     setIsPlanEditModalOpen(true);
   }, []);
@@ -1054,14 +1080,25 @@ export function useContentManagement() {
   }, []);
 
   const updatePlan = useCallback(async () => {
-    if (!planToEdit || !planRepository) return;
+    if (!planToEdit) return;
 
     try {
-      await planRepository.update(planToEdit.id, {
-        title: planEditFormData.title,
-        description: planEditFormData.description,
-        estimatedHours: Math.max(0, planEditFormData.estimated_duration / 60),
-      });
+      const { error: updateError } = await supabase
+        .from("learning_plans")
+        .update({
+          name: planEditFormData.title,
+          title: planEditFormData.title,
+          description: planEditFormData.description,
+          estimated_duration: Math.max(0, planEditFormData.estimated_duration),
+          status: planEditFormData.status,
+          is_public: planToEdit.is_public,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", planToEdit.id);
+
+      if (updateError) {
+        throw updateError;
+      }
 
       toast.success("Plan updated successfully");
       closePlanEditModal();
@@ -1070,13 +1107,7 @@ export function useContentManagement() {
       console.error("Failed to update plan:", err);
       toast.error(err instanceof Error ? err.message : "Failed to update plan");
     }
-  }, [
-    planToEdit,
-    planEditFormData,
-    planRepository,
-    closePlanEditModal,
-    fetchData,
-  ]);
+  }, [planToEdit, planEditFormData, closePlanEditModal, fetchData]);
 
   const addCardToPlan = useCallback(
     async (cardId: string) => {

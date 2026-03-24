@@ -274,7 +274,7 @@ export class PostgreSQLPlanRepository
       }
 
       const plan = await this.findById(planId);
-      const totalSteps = plan?.details?.steps?.length || 0;
+      const totalSteps = plan?.objectives?.length || 0;
 
       const dbData = this.toSnakeCase({
         planId,

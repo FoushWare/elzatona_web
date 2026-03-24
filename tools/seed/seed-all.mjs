@@ -935,7 +935,7 @@ async function seed() { // NOSONAR
     const { data: categoriesWithoutCard, error: catCheckError } = await supabase
         .from("categories")
         .select("id, name, slug")
-        .is("learning_card_id", true);
+        .is("learning_card_id", null);
 
     integrityReport.checks.categories_without_card = {
         passed: !catCheckError && (!categoriesWithoutCard || categoriesWithoutCard.length === 0),
@@ -955,7 +955,7 @@ async function seed() { // NOSONAR
     const { data: topicsWithoutCategory, error: topicCheckError } = await supabase
         .from("topics")
         .select("id, name, slug")
-        .is("category_id", true);
+        .is("category_id", null);
 
     integrityReport.checks.topics_without_category = {
         passed: !topicCheckError && (!topicsWithoutCategory || topicsWithoutCategory.length === 0),
@@ -975,7 +975,7 @@ async function seed() { // NOSONAR
     const { data: questionsWithoutCategory, error: qCatCheckError } = await supabase
         .from("questions")
         .select("id, title")
-        .is("category_id", true);
+        .is("category_id", null);
 
     integrityReport.checks.questions_without_category = {
         passed: !qCatCheckError && (!questionsWithoutCategory || questionsWithoutCategory.length === 0),
@@ -994,7 +994,7 @@ async function seed() { // NOSONAR
     const { data: questionsWithoutCard, error: qCardCheckError } = await supabase
         .from("questions")
         .select("id, title")
-        .is("learning_card_id", true);
+        .is("learning_card_id", null);
 
     integrityReport.checks.questions_without_card = {
         passed: !qCardCheckError && (!questionsWithoutCard || questionsWithoutCard.length === 0),
@@ -1014,18 +1014,21 @@ async function seed() { // NOSONAR
     const { data: questionsWithoutTopic, error: qTopicCheckError } = await supabase
         .from("questions")
         .select("id, title")
-        .is("topic_id", true);
+        .is("topic_id", null);
+
+    const missingTopicCount = questionsWithoutTopic?.length || 0;
+    const allowedMissingTopicCount = Math.floor((successCount || 0) * 0.1);
 
     integrityReport.checks.questions_without_topic = {
-        passed: !qTopicCheckError && (!questionsWithoutTopic || questionsWithoutTopic.length < questionsWithoutTopic?.length * 0.1),
-        count: questionsWithoutTopic?.length || 0
+        passed: !qTopicCheckError && (missingTopicCount === 0 || missingTopicCount <= allowedMissingTopicCount),
+        count: missingTopicCount
     };
 
-    if (questionsWithoutTopic?.length > 0 && questionsWithoutTopic.length > successCount * 0.1) {
+    if (missingTopicCount > 0 && missingTopicCount > allowedMissingTopicCount) {
         integrityReport.violations.push({
             type: "MISSING_TOPIC_LINK",
             table: "questions",
-            description: `${questionsWithoutTopic.length} questions missing topic_id (>10% threshold)`,
+            description: `${missingTopicCount} questions missing topic_id (>10% threshold)`,
             items: questionsWithoutTopic.slice(0, 10)
         });
     }
@@ -1058,7 +1061,9 @@ async function seed() { // NOSONAR
     fs.writeFileSync(reportPath, JSON.stringify(integrityReport, null, 2));
 
     // Print summary to console
-    const allChecksPassed = integrityReport.violations.length === 0;
+    const allChecksPassed =
+        integrityReport.violations.length === 0 &&
+        Object.values(integrityReport.checks).every((check) => check?.passed === true);
     console.log("\n📋 Integrity Report Summary:");
     console.log(`   Categories without card link: ${integrityReport.checks.categories_without_card.count}`);
     console.log(`   Topics without category link: ${integrityReport.checks.topics_without_category.count}`);

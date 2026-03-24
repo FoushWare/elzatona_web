@@ -6,7 +6,6 @@ import {
   ApiResponse,
   PaginatedResponse,
 } from "@elzatona/types";
-import type { CreateQuestionDTO } from "@elzatona/database";
 
 // GET /api/admin/frontend-tasks - List all frontend tasks
 export async function GET(request: NextRequest) {
@@ -85,7 +84,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the task data
-    const taskData = {
+    const taskData: Parameters<typeof questionRepo.create>[0] = {
       ...body,
       type: "frontend-task",
       createdAt: new Date(),
@@ -93,9 +92,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Add to repository
-    const newTask = await questionRepo.create(
-      taskData as unknown as CreateQuestionDTO,
-    );
+    const newTask = await questionRepo.create(taskData);
 
     const response: ApiResponse<{ id: string }> = {
       success: true,

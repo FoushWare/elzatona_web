@@ -4,6 +4,11 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import {
   Button,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
   StatsSection,
   SearchAndFilters,
   LearningCardsManager,
@@ -285,16 +290,20 @@ export default function ContentManagementPage() {
           onClose={closeCardManagementModal}
         />
 
-        {/* Plan Edit Modal */}
-        {isPlanEditModalOpen && planToEdit && (
-          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full">
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Edit Plan: {planToEdit.name}
-                </h2>
-              </div>
-              <div className="p-6 space-y-4">
+        <Dialog
+          open={isPlanEditModalOpen && Boolean(planToEdit)}
+          onOpenChange={(open) => {
+            if (!open) {
+              closePlanEditModal();
+            }
+          }}
+        >
+          {planToEdit && (
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>Edit Plan: {planToEdit.name}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-2">
                 <div>
                   <label
                     htmlFor="plan-edit-title"
@@ -350,7 +359,7 @@ export default function ContentManagementPage() {
                       setPlanEditFormData({
                         ...planEditFormData,
                         estimated_duration:
-                          Number.parseInt(e.target.value) || 0,
+                          Number.parseInt(e.target.value, 10) || 0,
                       })
                     }
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
@@ -383,24 +392,20 @@ export default function ContentManagementPage() {
                   </select>
                 </div>
               </div>
-              <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-2">
-                <Button
-                  variant="outline"
-                  onClick={closePlanEditModal}
-                  className="px-4 py-2"
-                >
+              <DialogFooter className="gap-2 sm:gap-2">
+                <Button variant="outline" onClick={closePlanEditModal}>
                   Cancel
                 </Button>
                 <Button
                   onClick={updatePlan}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   Save Changes
                 </Button>
-              </div>
-            </div>
-          </div>
-        )}
+              </DialogFooter>
+            </DialogContent>
+          )}
+        </Dialog>
       </div>
     </div>
   );
