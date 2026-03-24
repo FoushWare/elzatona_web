@@ -84,6 +84,13 @@ type PlanQuestionInsertRow = {
   is_active: boolean;
 };
 
+type PlanEditFormData = {
+  title: string;
+  description: string;
+  estimated_duration: number;
+  status: "published" | "draft" | "archived";
+};
+
 type CanonicalCardKey = "core" | "framework" | "problem" | "system";
 
 const PLAN_DISTRIBUTION = [
@@ -651,11 +658,11 @@ export function useContentManagement() {
   // Plan edit modal states
   const [isPlanEditModalOpen, setIsPlanEditModalOpen] = useState(false);
   const [planToEdit, setPlanToEdit] = useState<LearningPlan | null>(null);
-  const [planEditFormData, setPlanEditFormData] = useState({
+  const [planEditFormData, setPlanEditFormData] = useState<PlanEditFormData>({
     title: "",
     description: "",
     estimated_duration: 0,
-    status: "published" as const,
+    status: "published",
   });
 
   // Plan questions state
@@ -702,7 +709,7 @@ export function useContentManagement() {
       ].filter((message): message is string => Boolean(message));
 
       const normalizedCards = cardsResult.data;
-      const canonicalCardsResult = buildCanonicalCards(normalizedCards);
+      buildCanonicalCards(normalizedCards);
 
       // Strict DB-relation filtering: only display categories with valid learning_card_id FK
       // This ensures the hierarchy is accurate to the database state (no inference fallback)
@@ -1030,8 +1037,7 @@ export function useContentManagement() {
       title: plan.name || "",
       description: plan.description || "",
       estimated_duration: plan.estimated_duration || 0,
-      status:
-        (plan.status as "published" | "draft" | "archived") || "published",
+      status: "published",
     });
     setIsPlanEditModalOpen(true);
   }, []);
@@ -1054,8 +1060,7 @@ export function useContentManagement() {
       await planRepository.update(planToEdit.id, {
         title: planEditFormData.title,
         description: planEditFormData.description,
-        estimated_duration: planEditFormData.estimated_duration,
-        status: planEditFormData.status,
+        estimatedHours: Math.max(0, planEditFormData.estimated_duration / 60),
       });
 
       toast.success("Plan updated successfully");
@@ -1269,7 +1274,7 @@ export function useContentManagement() {
     }
 
     const name = globalThis.prompt("Topic name");
-    if (!name || !name.trim()) {
+    if (!name?.trim()) {
       return;
     }
 

@@ -78,7 +78,6 @@ export default function ContentManagementPage() {
     openTopicQuestionsModal,
     createSpacedRepetitionPlans,
     isPlanEditModalOpen,
-    setIsPlanEditModalOpen,
     planToEdit,
     planEditFormData,
     setPlanEditFormData,
@@ -292,15 +291,19 @@ export default function ContentManagementPage() {
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full">
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Edit Plan: {planToEdit.title || planToEdit.name}
+                  Edit Plan: {planToEdit.name}
                 </h2>
               </div>
               <div className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label
+                    htmlFor="plan-edit-title"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
                     Title
                   </label>
                   <input
+                    id="plan-edit-title"
                     type="text"
                     value={planEditFormData.title}
                     onChange={(e) =>
@@ -313,10 +316,14 @@ export default function ContentManagementPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label
+                    htmlFor="plan-edit-description"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
                     Description
                   </label>
                   <textarea
+                    id="plan-edit-description"
                     value={planEditFormData.description}
                     onChange={(e) =>
                       setPlanEditFormData({
@@ -329,26 +336,35 @@ export default function ContentManagementPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label
+                    htmlFor="plan-edit-estimated-duration"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
                     Estimated Duration (minutes)
                   </label>
                   <input
+                    id="plan-edit-estimated-duration"
                     type="number"
                     value={planEditFormData.estimated_duration}
                     onChange={(e) =>
                       setPlanEditFormData({
                         ...planEditFormData,
-                        estimated_duration: parseInt(e.target.value) || 0,
+                        estimated_duration:
+                          Number.parseInt(e.target.value) || 0,
                       })
                     }
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label
+                    htmlFor="plan-edit-status"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
                     Status
                   </label>
                   <select
+                    id="plan-edit-status"
                     value={planEditFormData.status}
                     onChange={(e) =>
                       setPlanEditFormData({
