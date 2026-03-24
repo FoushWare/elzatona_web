@@ -247,7 +247,6 @@ const useNavbarSimpleState = () => {
 export const NavbarSimple: React.FC = () => {
   // NOSONAR
   // NOSONAR
-  // NOSONAR
   const {
     isScrolled,
     setIsScrolled,

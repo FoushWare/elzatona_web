@@ -488,9 +488,8 @@ export class PostgreSQLPlanRepository
         completedEnrollments.length > 0
           ? completedEnrollments.reduce((sum, enrollment) => {
               const enrolledAt = new Date(enrollment.enrolledAt).getTime();
-              const completedAt = new Date(
-                enrollment.completedAt as Date,
-              ).getTime();
+              if (!enrollment.completedAt) return sum;
+              const completedAt = new Date(enrollment.completedAt).getTime();
               return sum + Math.max(0, completedAt - enrolledAt);
             }, 0) /
             completedEnrollments.length /
