@@ -273,13 +273,16 @@ export class PostgreSQLPlanRepository
         throw new Error("User is already enrolled in this plan");
       }
 
+      const plan = await this.findById(planId);
+      const totalSteps = plan?.objectives?.length || 0;
+
       const dbData = this.toSnakeCase({
         planId,
         userId,
         enrolledAt: new Date(),
         progress: 0,
         currentStep: 0,
-        totalSteps: 0, // TODO: Get from plan details
+        totalSteps,
         lastAccessedAt: new Date(),
         isActive: true,
       });
@@ -477,17 +480,46 @@ export class PostgreSQLPlanRepository
           ? (plan.completionCount / plan.enrollmentCount) * 100
           : 0;
 
+      const completedEnrollments = enrollments.data.filter(
+        (e) => e.completedAt && e.enrolledAt,
+      );
+
+      const averageCompletionTime =
+        completedEnrollments.length > 0
+          ? completedEnrollments.reduce((sum, enrollment) => {
+              const enrolledAt = new Date(enrollment.enrolledAt).getTime();
+              if (!enrollment.completedAt) return sum;
+              const completedAt = new Date(enrollment.completedAt).getTime();
+              return sum + Math.max(0, completedAt - enrolledAt);
+            }, 0) /
+            completedEnrollments.length /
+            (1000 * 60 * 60)
+          : 0;
+
+      const lastEnrollmentAtMs = enrollments.data.reduce<number | undefined>(
+        (latest, enrollment) => {
+          const enrolledAt = new Date(enrollment.enrolledAt).getTime();
+          if (Number.isNaN(enrolledAt)) return latest;
+          if (latest === undefined || enrolledAt > latest) return enrolledAt;
+          return latest;
+        },
+        undefined,
+      );
+
       return {
         planId,
         totalEnrollments: plan.enrollmentCount,
         activeEnrollments: activeCount,
         completions: plan.completionCount,
         completionRate,
-        averageCompletionTime: 0, // TODO: Calculate from enrollments
+        averageCompletionTime,
         averageRating: plan.averageRating || 0,
-        totalRatings: 0, // TODO: Get from ratings table
-        viewCount: 0, // TODO: Implement view tracking
-        lastEnrollmentAt: undefined, // TODO: Get max enrolled_at
+        totalRatings: plan.averageRating ? 1 : 0,
+        viewCount: 0,
+        lastEnrollmentAt:
+          lastEnrollmentAtMs === undefined
+            ? undefined
+            : new Date(lastEnrollmentAtMs),
       };
     } catch (error) {
       this.handleError(error, "PostgreSQLPlanRepository.getPlanStatistics");

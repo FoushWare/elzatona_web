@@ -123,7 +123,12 @@ try {
 // Test 5: Metadata plan types are correct
 total++;
 try {
-  const types = ["initial", "reinforcement", "advanced", "maintenance"];
+  const types = new Set([
+    "initial",
+    "reinforcement",
+    "advanced",
+    "maintenance",
+  ]);
   for (let i = 1; i <= 4; i++) {
     const meta = generatePlanMetadata(i);
     if (!types.includes(meta.plan_type))

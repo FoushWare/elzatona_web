@@ -1,31 +1,30 @@
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 export const handlers = [
-  rest.post("/api/auth/login", async (req, res, ctx) => {
-    const body = await req.json();
+  http.post("/api/auth/login", async ({ request }) => {
+    const body = (await request.json()) as { email?: string };
     const email = body?.email || "test@example.com";
-    return res(
-      ctx.status(200),
-      ctx.json({ user: { id: "test-user", email }, token: "fake-token" }),
+    return HttpResponse.json(
+      { user: { id: "test-user", email }, token: "fake-token" },
+      { status: 200 },
     );
   }),
 
-  rest.get("/api/user", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.json({
+  http.get("/api/user", () =>
+    HttpResponse.json(
+      {
         id: "test-user",
         email: "test@example.com",
         name: "Test User",
-      }),
+      },
+      { status: 200 },
     ),
   ),
 
   // Admin Problem Solving
-  rest.get("http://localhost:3000/api/admin/problem-solving", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.json({
+  http.get("http://localhost:3000/api/admin/problem-solving", () =>
+    HttpResponse.json(
+      {
         success: true,
         data: [
           {
@@ -40,15 +39,15 @@ export const handlers = [
             tags: ["array", "sorting"],
           },
         ],
-      }),
+      },
+      { status: 200 },
     ),
   ),
 
   // Admin Frontend Tasks
-  rest.get("http://localhost:3000/api/admin/frontend-tasks", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.json({
+  http.get("http://localhost:3000/api/admin/frontend-tasks", () =>
+    HttpResponse.json(
+      {
         success: true,
         data: [
           {
@@ -62,15 +61,15 @@ export const handlers = [
           },
         ],
         pagination: { totalCount: 1, totalPages: 1 },
-      }),
+      },
+      { status: 200 },
     ),
   ),
 
   // Admin Learning Cards
-  rest.get("http://localhost:3000/api/cards", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.json({
+  http.get("http://localhost:3000/api/cards", () =>
+    HttpResponse.json(
+      {
         success: true,
         data: [
           {
@@ -81,7 +80,8 @@ export const handlers = [
             question: "test",
           },
         ],
-      }),
+      },
+      { status: 200 },
     ),
   ),
 ];

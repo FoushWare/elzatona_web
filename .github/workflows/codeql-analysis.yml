@@ -27,11 +27,6 @@ jobs:
       # actions: read - Remove to reduce telemetry API calls
       # pull-requests: read - Remove to reduce API calls
 
-      matrix:
-        # CodeQL treats JavaScript and TypeScript as one language group.
-        # Scanning both separately is redundant and takes twice the resources.
-        language: ["typescript"]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,7 +34,9 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
-          languages: ${{ matrix.language }}
+          # CodeQL treats JavaScript and TypeScript as one language group.
+          # Keep this as javascript to preserve GitHub's expected PR config key.
+          languages: "javascript"
           # Use custom config to reduce scanning scope and exclude PolynomialReDoS
           # The config file specifies the security query suite
           config-file: .github/codeql/codeql-config.yml
@@ -65,7 +62,7 @@ jobs:
         uses: github/codeql-action/analyze@v4
         continue-on-error: true
         with:
-          category: "/language:${{ matrix.language }}"
+          category: "/language:javascript"
           upload: true
           wait-for-processing: false
           threads: 1

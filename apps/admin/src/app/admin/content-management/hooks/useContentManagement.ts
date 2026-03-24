@@ -84,6 +84,13 @@ type PlanQuestionInsertRow = {
   is_active: boolean;
 };
 
+type PlanEditFormData = {
+  title: string;
+  description: string;
+  estimated_duration: number;
+  status: "published" | "draft" | "archived";
+};
+
 type CanonicalCardKey = "core" | "framework" | "problem" | "system";
 
 const PLAN_DISTRIBUTION = [
@@ -135,43 +142,6 @@ const CANONICAL_CARDS: Array<{
   },
 ];
 
-function inferCardKeyFromCategory(
-  category: DatabaseCategoryRecord,
-): CanonicalCardKey {
-  const hint =
-    `${category.card_type ?? ""} ${category.name ?? ""}`.toLowerCase();
-
-  if (
-    hint.includes("framework") ||
-    hint.includes("react") ||
-    hint.includes("next") ||
-    hint.includes("vue") ||
-    hint.includes("angular") ||
-    hint.includes("svelte")
-  ) {
-    return "framework";
-  }
-
-  if (
-    hint.includes("problem") ||
-    hint.includes("algorithm") ||
-    hint.includes("coding") ||
-    hint.includes("challenge")
-  ) {
-    return "problem";
-  }
-
-  if (
-    hint.includes("system") ||
-    hint.includes("architecture") ||
-    hint.includes("design")
-  ) {
-    return "system";
-  }
-
-  return "core";
-}
-
 function buildCanonicalCards(cards: AdminLearningCard[]): {
   cards: AdminLearningCard[];
   idsByKey: Record<CanonicalCardKey, string>;
@@ -208,9 +178,9 @@ function toSlug(input: string): string {
   return input
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
+    .replaceAll(/[^a-z0-9\s-]/g, "")
+    .replaceAll(/\s+/g, "-")
+    .replaceAll(/-+/g, "-");
 }
 
 function generatePlanMetadata(sequence: number): PlanGenerationMetadata {
@@ -486,6 +456,16 @@ function normalizePlan(plan: DatabasePlanRecord): LearningPlan {
   };
 }
 
+function normalizePlanStatus(
+  status: string | null | undefined,
+  fallback: PlanEditFormData["status"] = "published",
+): PlanEditFormData["status"] {
+  if (status === "draft" || status === "published" || status === "archived") {
+    return status;
+  }
+  return fallback;
+}
+
 function normalizeLearningCard(
   card: DatabaseLearningCardRecord,
 ): AdminLearningCard {
@@ -685,6 +665,16 @@ export function useContentManagement() {
   const [availableCards, setAvailableCards] = useState<AdminLearningCard[]>([]);
   const [isManagingCards, setIsManagingCards] = useState(false);
 
+  // Plan edit modal states
+  const [isPlanEditModalOpen, setIsPlanEditModalOpen] = useState(false);
+  const [planToEdit, setPlanToEdit] = useState<LearningPlan | null>(null);
+  const [planEditFormData, setPlanEditFormData] = useState<PlanEditFormData>({
+    title: "",
+    description: "",
+    estimated_duration: 0,
+    status: "published",
+  });
+
   // Plan questions state
   const [planQuestions, setPlanQuestions] = useState<Set<string>>(new Set());
 
@@ -729,20 +719,13 @@ export function useContentManagement() {
       ].filter((message): message is string => Boolean(message));
 
       const normalizedCards = cardsResult.data;
-      const canonicalCardsResult = buildCanonicalCards(normalizedCards);
+      buildCanonicalCards(normalizedCards);
 
-      const mappedCategories = categoriesResult.data.map((category) => {
-        // Preserve DB relationship first. Only infer a fallback when missing.
-        if ((category as AdminCategory).learning_card_id) {
-          return category as AdminCategory;
-        }
-
-        const inferred = inferCardKeyFromCategory(category);
-        return {
-          ...category,
-          learning_card_id: canonicalCardsResult.idsByKey[inferred],
-        } as AdminCategory;
-      });
+      // Strict DB-relation filtering: only display categories with valid learning_card_id FK
+      // This ensures the hierarchy is accurate to the database state (no inference fallback)
+      const mappedCategories = categoriesResult.data.filter(
+        (category) => (category as AdminCategory).learning_card_id != null,
+      );
 
       setCards(normalizedCards);
       setPlans(plansResult.data);
@@ -1058,6 +1041,74 @@ export function useContentManagement() {
     setAvailableCards([]);
   }, []);
 
+  const openPlanEditModal = useCallback(async (plan: LearningPlan) => {
+    setPlanToEdit(plan);
+
+    const fallbackStatus: PlanEditFormData["status"] = plan.is_active
+      ? "published"
+      : "archived";
+    let status: PlanEditFormData["status"] = fallbackStatus;
+
+    const { data: latestPlanStatus, error: statusError } = await supabase
+      .from("learning_plans")
+      .select("status")
+      .eq("id", plan.id)
+      .maybeSingle();
+
+    if (!statusError) {
+      status = normalizePlanStatus(latestPlanStatus?.status, fallbackStatus);
+    }
+
+    setPlanEditFormData({
+      title: plan.name || "",
+      description: plan.description || "",
+      estimated_duration: plan.estimated_duration || 0,
+      status,
+    });
+    setIsPlanEditModalOpen(true);
+  }, []);
+
+  const closePlanEditModal = useCallback(() => {
+    setIsPlanEditModalOpen(false);
+    setPlanToEdit(null);
+    setPlanEditFormData({
+      title: "",
+      description: "",
+      estimated_duration: 0,
+      status: "published",
+    });
+  }, []);
+
+  const updatePlan = useCallback(async () => {
+    if (!planToEdit) return;
+
+    try {
+      const { error: updateError } = await supabase
+        .from("learning_plans")
+        .update({
+          name: planEditFormData.title,
+          title: planEditFormData.title,
+          description: planEditFormData.description,
+          estimated_duration: Math.max(0, planEditFormData.estimated_duration),
+          status: planEditFormData.status,
+          is_public: planToEdit.is_public,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", planToEdit.id);
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      toast.success("Plan updated successfully");
+      closePlanEditModal();
+      await fetchData();
+    } catch (err) {
+      console.error("Failed to update plan:", err);
+      toast.error(err instanceof Error ? err.message : "Failed to update plan");
+    }
+  }, [planToEdit, planEditFormData, closePlanEditModal, fetchData]);
+
   const addCardToPlan = useCallback(
     async (cardId: string) => {
       if (!selectedPlanForCards) return;
@@ -1159,7 +1210,7 @@ export function useContentManagement() {
 
   const createCategory = useCallback(async () => {
     const name = globalThis.prompt("Category name");
-    if (!name || !name.trim()) {
+    if (!name?.trim()) {
       return;
     }
 
@@ -1194,7 +1245,7 @@ export function useContentManagement() {
   const editCategory = useCallback(
     async (category: AdminCategory) => {
       const nextName = globalThis.prompt("Category name", category.name ?? "");
-      if (!nextName || !nextName.trim()) {
+      if (!nextName?.trim()) {
         return;
       }
 
@@ -1225,7 +1276,7 @@ export function useContentManagement() {
   const removeCategory = useCallback(
     async (category: AdminCategory) => {
       const confirmed = globalThis.confirm(
-        `Delete category \"${category.name}\"?`,
+        `Delete category "${category.name}"?`,
       );
       if (!confirmed) {
         return;
@@ -1254,7 +1305,7 @@ export function useContentManagement() {
     }
 
     const name = globalThis.prompt("Topic name");
-    if (!name || !name.trim()) {
+    if (!name?.trim()) {
       return;
     }
 
@@ -1290,7 +1341,7 @@ export function useContentManagement() {
   const editTopic = useCallback(
     async (topic: AdminTopic) => {
       const nextName = globalThis.prompt("Topic name", topic.name ?? "");
-      if (!nextName || !nextName.trim()) {
+      if (!nextName?.trim()) {
         return;
       }
 
@@ -1318,7 +1369,7 @@ export function useContentManagement() {
 
   const removeTopic = useCallback(
     async (topic: AdminTopic) => {
-      const confirmed = globalThis.confirm(`Delete topic \"${topic.name}\"?`);
+      const confirmed = globalThis.confirm(`Delete topic "${topic.name}"?`);
       if (!confirmed) {
         return;
       }
@@ -1400,6 +1451,14 @@ export function useContentManagement() {
     toggleCardActiveStatus,
     openTopicQuestionsModal,
     createSpacedRepetitionPlans,
+    isPlanEditModalOpen,
+    setIsPlanEditModalOpen,
+    planToEdit,
+    planEditFormData,
+    setPlanEditFormData,
+    openPlanEditModal,
+    closePlanEditModal,
+    updatePlan,
     createCategory,
     editCategory,
     removeCategory,

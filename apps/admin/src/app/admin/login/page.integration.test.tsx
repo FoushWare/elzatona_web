@@ -85,6 +85,11 @@ describe("Admin login page - Integration", () => {
     // Button should be disabled during submission
     expect(submitButton).toBeDisabled();
     expect(screen.getByText(/signing in/i)).toBeInTheDocument();
+
+    // Ensure pending async submit completes before test teardown
+    await waitFor(() => {
+      expect(submitButton).not.toBeDisabled();
+    });
   });
 
   it("displays error message on login failure", async () => {

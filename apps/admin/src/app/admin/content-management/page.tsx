@@ -4,6 +4,11 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import {
   Button,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
   StatsSection,
   SearchAndFilters,
   LearningCardsManager,
@@ -77,6 +82,13 @@ export default function ContentManagementPage() {
     toggleCardActiveStatus,
     openTopicQuestionsModal,
     createSpacedRepetitionPlans,
+    isPlanEditModalOpen,
+    planToEdit,
+    planEditFormData,
+    setPlanEditFormData,
+    openPlanEditModal,
+    closePlanEditModal,
+    updatePlan,
     createCategory,
     editCategory,
     removeCategory,
@@ -228,11 +240,7 @@ export default function ContentManagementPage() {
           togglePlanCategory={togglePlanCategory}
           expandedPlanTopics={expandedPlanTopics}
           togglePlanTopic={togglePlanTopic}
-          onEditPlan={(plan) =>
-            globalThis.alert(
-              `Plan editing from this screen is coming soon: ${plan.name}`,
-            )
-          }
+          onEditPlan={openPlanEditModal}
           onDeletePlan={(plan) =>
             globalThis.alert(
               `Plan deletion from this screen is coming soon: ${plan.name}`,
@@ -281,6 +289,123 @@ export default function ContentManagementPage() {
           onToggleActive={toggleCardActiveStatus}
           onClose={closeCardManagementModal}
         />
+
+        <Dialog
+          open={isPlanEditModalOpen && Boolean(planToEdit)}
+          onOpenChange={(open) => {
+            if (!open) {
+              closePlanEditModal();
+            }
+          }}
+        >
+          {planToEdit && (
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>Edit Plan: {planToEdit.name}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-2">
+                <div>
+                  <label
+                    htmlFor="plan-edit-title"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
+                    Title
+                  </label>
+                  <input
+                    id="plan-edit-title"
+                    type="text"
+                    value={planEditFormData.title}
+                    onChange={(e) =>
+                      setPlanEditFormData({
+                        ...planEditFormData,
+                        title: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="plan-edit-description"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    id="plan-edit-description"
+                    value={planEditFormData.description}
+                    onChange={(e) =>
+                      setPlanEditFormData({
+                        ...planEditFormData,
+                        description: e.target.value,
+                      })
+                    }
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="plan-edit-estimated-duration"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
+                    Estimated Duration (minutes)
+                  </label>
+                  <input
+                    id="plan-edit-estimated-duration"
+                    type="number"
+                    value={planEditFormData.estimated_duration}
+                    onChange={(e) =>
+                      setPlanEditFormData({
+                        ...planEditFormData,
+                        estimated_duration:
+                          Number.parseInt(e.target.value, 10) || 0,
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="plan-edit-status"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
+                    Status
+                  </label>
+                  <select
+                    id="plan-edit-status"
+                    value={planEditFormData.status}
+                    onChange={(e) =>
+                      setPlanEditFormData({
+                        ...planEditFormData,
+                        status: e.target.value as
+                          | "published"
+                          | "draft"
+                          | "archived",
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  >
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                    <option value="archived">Archived</option>
+                  </select>
+                </div>
+              </div>
+              <DialogFooter className="gap-2 sm:gap-2">
+                <Button variant="outline" onClick={closePlanEditModal}>
+                  Cancel
+                </Button>
+                <Button
+                  onClick={updatePlan}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Save Changes
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          )}
+        </Dialog>
       </div>
     </div>
   );

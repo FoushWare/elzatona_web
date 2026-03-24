@@ -93,7 +93,7 @@ export const questionSchema = z
         // Don't sanitize code field here - it will be handled separately in the API route
         // to preserve newlines and formatting
         // Return the value as-is (including null/empty string) - don't convert to undefined
-        return val === undefined ? null : val;
+        return val ?? null;
       }), // Optional code field for formatted display
     type: z
       .union([

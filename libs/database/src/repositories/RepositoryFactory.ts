@@ -46,7 +46,7 @@ export interface RepositoryFactoryConfig {
  */
 
 export class RepositoryFactory {
-  private config: RepositoryFactoryConfig;
+  private readonly config: RepositoryFactoryConfig;
   private questionRepository?: IQuestionRepository;
   private userRepository?: IUserRepository;
   private planRepository?: IPlanRepository;
@@ -60,9 +60,7 @@ export class RepositoryFactory {
    * Get or create Progress Repository instance
    */
   getProgressRepository(): IProgressRepository {
-    if (!this.progressRepository) {
-      this.progressRepository = this.createProgressRepository();
-    }
+    this.progressRepository ??= this.createProgressRepository();
     return this.progressRepository;
   }
   private createProgressRepository(): IProgressRepository {
@@ -83,9 +81,7 @@ export class RepositoryFactory {
    * Get or create Flashcard Repository instance
    */
   getFlashcardRepository(): IFlashcardRepository {
-    if (!this.flashcardRepository) {
-      this.flashcardRepository = this.createFlashcardRepository();
-    }
+    this.flashcardRepository ??= this.createFlashcardRepository();
     return this.flashcardRepository;
   }
   private createFlashcardRepository(): IFlashcardRepository {
@@ -106,9 +102,7 @@ export class RepositoryFactory {
    * Get or create Section Repository instance
    */
   getSectionRepository(): ISectionRepository {
-    if (!this.sectionRepository) {
-      this.sectionRepository = this.createSectionRepository();
-    }
+    this.sectionRepository ??= this.createSectionRepository();
     return this.sectionRepository;
   }
   private createSectionRepository(): ISectionRepository {
@@ -129,9 +123,7 @@ export class RepositoryFactory {
    * Get or create Topic Repository instance
    */
   getTopicRepository(): ITopicRepository {
-    if (!this.topicRepository) {
-      this.topicRepository = this.createTopicRepository();
-    }
+    this.topicRepository ??= this.createTopicRepository();
     return this.topicRepository;
   }
   private createTopicRepository(): ITopicRepository {
@@ -157,9 +149,7 @@ export class RepositoryFactory {
    * Get or create Question Repository instance
    */
   getQuestionRepository(): IQuestionRepository {
-    if (!this.questionRepository) {
-      this.questionRepository = this.createQuestionRepository();
-    }
+    this.questionRepository ??= this.createQuestionRepository();
     return this.questionRepository;
   }
 
@@ -167,9 +157,7 @@ export class RepositoryFactory {
    * Get or create User Repository instance
    */
   getUserRepository(): IUserRepository {
-    if (!this.userRepository) {
-      this.userRepository = this.createUserRepository();
-    }
+    this.userRepository ??= this.createUserRepository();
     return this.userRepository;
   }
 
@@ -177,9 +165,7 @@ export class RepositoryFactory {
    * Get or create Plan Repository instance
    */
   getPlanRepository(): IPlanRepository {
-    if (!this.planRepository) {
-      this.planRepository = this.createPlanRepository();
-    }
+    this.planRepository ??= this.createPlanRepository();
     return this.planRepository;
   }
 
@@ -187,9 +173,7 @@ export class RepositoryFactory {
    * Get or create Learning Card Repository instance
    */
   getLearningCardRepository(): ILearningCardRepository {
-    if (!this.learningCardRepository) {
-      this.learningCardRepository = this.createLearningCardRepository();
-    }
+    this.learningCardRepository ??= this.createLearningCardRepository();
     return this.learningCardRepository;
   }
 
@@ -197,9 +181,7 @@ export class RepositoryFactory {
    * Get or create Category Repository instance
    */
   getCategoryRepository(): ICategoryRepository {
-    if (!this.categoryRepository) {
-      this.categoryRepository = this.createCategoryRepository();
-    }
+    this.categoryRepository ??= this.createCategoryRepository();
     return this.categoryRepository;
   }
 
@@ -361,9 +343,7 @@ let factoryInstance: RepositoryFactory | null = null;
  * Get singleton repository factory instance
  */
 export function getRepositoryFactory(): RepositoryFactory {
-  if (!factoryInstance) {
-    factoryInstance = createRepositoryFactoryFromEnv();
-  }
+  factoryInstance ??= createRepositoryFactoryFromEnv();
   return factoryInstance;
 }
 
