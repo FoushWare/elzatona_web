@@ -23,8 +23,9 @@ async function globalSetup() {
 
   const loadedFiles: string[] = [];
   for (const envFile of envFiles) {
+    const isTestFile = envFile.includes(".env.test");
     try {
-      const result = config({ path: envFile, override: false }); // Don't override, respect priority
+      const result = config({ path: envFile, override: isTestFile }); // Override only if it's a test file
       if (!result.error) {
         loadedFiles.push(envFile);
       }

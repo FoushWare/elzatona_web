@@ -7,7 +7,7 @@ import {
   AdminLearningCard,
   AdminCategory,
   Topic,
-  AdminQuestion,
+  AdminUnifiedQuestion,
   ContentManagementStats,
 } from "@elzatona/types";
 
@@ -15,7 +15,7 @@ export function useLearningCards() {
   const [cards, setCards] = useState<AdminLearningCard[]>([]);
   const [categories, setCategories] = useState<AdminCategory[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
-  const [questions, setQuestions] = useState<AdminQuestion[]>([]);
+  const [questions, setQuestions] = useState<AdminUnifiedQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -106,7 +106,7 @@ export function useLearningCards() {
             "Failed to fetch categories",
           ),
           loadApiCollection<Topic>("/api/topics", "Failed to fetch topics"),
-          loadApiCollection<AdminQuestion>(
+          loadApiCollection<AdminUnifiedQuestion>(
             "/api/questions/unified?page=1&pageSize=2000&includePagination=false",
             "Failed to fetch questions",
           ),

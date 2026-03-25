@@ -26,8 +26,9 @@ const envFiles = [
 
 const loadedFiles: string[] = [];
 for (const envFile of envFiles) {
+  const isTestFile = envFile.includes(".env.test");
   try {
-    const result = config({ path: envFile, override: false }); // Don't override, respect priority
+    const result = config({ path: envFile, override: isTestFile }); // Override only if it's a test file
     if (!result.error) {
       loadedFiles.push(envFile);
     }
@@ -170,6 +171,13 @@ export default defineConfig({
       APP_ENV: "test",
       NEXT_PUBLIC_APP_ENV: "test",
       NODE_ENV: process.env.CI ? "production" : "test",
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+      NEXT_PUBLIC_SUPABASE_ANON_KEY:
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+      SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+      JWT_SECRET: process.env.JWT_SECRET || "",
+      ADMIN_EMAIL: process.env.ADMIN_EMAIL || "",
+      ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || "",
     },
   },
 
