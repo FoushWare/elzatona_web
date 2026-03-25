@@ -20,6 +20,8 @@ import {
   CardManagementModal,
   CategoryFormModal,
   TopicFormModal,
+  QuestionFormModal,
+  CardFormModal,
 } from "@elzatona/common-ui";
 import type { AdminQuestion, AdminUnifiedQuestion } from "@elzatona/types";
 import { Loader2 } from "lucide-react";
@@ -92,6 +94,7 @@ export default function ContentManagementPage() {
     categories,
     topics,
     questions,
+    cards,
     planQuestions,
     expandedCards,
     toggleCard,
@@ -158,6 +161,23 @@ export default function ContentManagementPage() {
     isTopicModalOpen,
     setIsTopicModalOpen,
     topicToEdit,
+    isQuestionModalOpen,
+    setIsQuestionModalOpen,
+    questionToEdit,
+    isQuestionReadOnly,
+    selectedTopicIdForNewQuestion,
+    openViewQuestionModal,
+    openEditQuestionModal,
+    openCreateQuestionModal,
+    submitQuestion,
+    isSubmittingQuestion,
+    isCardFormModalOpen,
+    setIsCardFormModalOpen,
+    cardToEdit,
+    isSubmittingCard,
+    openCreateCardModal,
+    openEditCardModal,
+    submitCard,
   } = useContentManagement();
 
   const unifiedQuestions = toUnifiedQuestions(questions);
@@ -278,29 +298,13 @@ export default function ContentManagementPage() {
           toggleCategory={toggleCategory}
           expandedTopics={expandedTopics}
           toggleTopic={toggleTopic}
-          onEditCard={(card) =>
-            router.push(
-              `/admin/learning-cards?edit=${encodeURIComponent(card.id)}`,
-            )
-          }
+          onEditCard={openEditCardModal}
           onDeleteCard={openDeleteCardModal}
-          onCreateCard={() => router.push("/admin/learning-cards")}
-          onEditCategories={() => router.push("/admin/learning-cards")}
-          onViewQuestion={(question) =>
-            router.push(
-              `/admin/questions?edit=${encodeURIComponent(question.id)}`,
-            )
-          }
-          onEditQuestion={(question) =>
-            router.push(
-              `/admin/questions?edit=${encodeURIComponent(question.id)}`,
-            )
-          }
-          onCreateQuestion={(topicId) =>
-            router.push(
-              `/admin/questions?new=true&topicId=${encodeURIComponent(topicId)}`,
-            )
-          }
+          onCreateCard={openCreateCardModal}
+          onEditCategories={() => {}}
+          onViewQuestion={openViewQuestionModal}
+          onEditQuestion={openEditQuestionModal}
+          onCreateQuestion={openCreateQuestionModal}
         />
 
         {/* Learning Plans Section */}
@@ -329,21 +333,9 @@ export default function ContentManagementPage() {
           onCreatePlan={createSpacedRepetitionPlans}
           onManageCards={openCardManagementModal}
           openTopicQuestionsModal={openTopicQuestionsModal}
-          onViewQuestion={(question) =>
-            router.push(
-              `/admin/questions?edit=${encodeURIComponent(question.id)}`,
-            )
-          }
-          onEditQuestion={(question) =>
-            router.push(
-              `/admin/questions?edit=${encodeURIComponent(question.id)}`,
-            )
-          }
-          onCreateQuestion={(topicId) =>
-            router.push(
-              `/admin/questions?new=true&topicId=${encodeURIComponent(topicId)}`,
-            )
-          }
+          onViewQuestion={openViewQuestionModal}
+          onEditQuestion={openEditQuestionModal}
+          onCreateQuestion={openCreateQuestionModal}
         />
 
         {/* Modals */}
@@ -374,6 +366,26 @@ export default function ContentManagementPage() {
           onDeselectAll={deselectAllQuestions}
           onAddSelected={addSelectedQuestionsToPlan}
           onCancel={closeTopicQuestionsModal}
+        />
+
+        <QuestionFormModal
+          isOpen={isQuestionModalOpen}
+          onOpenChange={setIsQuestionModalOpen}
+          question={questionToEdit}
+          topicId={selectedTopicIdForNewQuestion}
+          cards={cards}
+          allCategories={categories.map((c) => c.name)}
+          onSubmit={submitQuestion}
+          readOnly={isQuestionReadOnly}
+          isLoading={isSubmittingQuestion}
+        />
+
+        <CardFormModal
+          isOpen={isCardFormModalOpen}
+          onOpenChange={setIsCardFormModalOpen}
+          card={cardToEdit}
+          onSubmit={submitCard}
+          isLoading={isSubmittingCard}
         />
 
         <DeleteConfirmationModal

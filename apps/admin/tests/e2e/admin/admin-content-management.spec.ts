@@ -287,4 +287,31 @@ test.describe("Admin Content Management Page", () => {
       await expect(dialog).not.toBeVisible({ timeout: 3000 });
     }
   });
+
+  test("should open QuestionFormModal when Create Question is clicked", async ({ page }) => {
+    // Expand a topic first to see the Create Question button
+    const firstCardHeader = page.locator('.cursor-pointer').filter({ hasText: /Core Technologies|Framework Questions|Problem Solving|System Design|Frontend Tasks/ }).first();
+    if (await firstCardHeader.count() > 0) {
+      await firstCardHeader.click();
+      const categoryHeader = page.locator('.cursor-pointer').filter({ hasText: /Topics/ }).first();
+      if (await categoryHeader.count() > 0) {
+        await categoryHeader.click();
+        const createQuestionBtn = page.locator('[title="Create Question"]').first();
+        if (await createQuestionBtn.count() > 0) {
+          await createQuestionBtn.click();
+          await expect(page.getByRole("dialog")).toBeVisible();
+          await expect(page.getByRole("heading", { name: /Create New Question/i })).toBeVisible();
+        }
+      }
+    }
+  });
+
+  test("should open CardFormModal when Create Card is clicked", async ({ page }) => {
+    const createCardBtn = page.getByRole("button", { name: /Create Learning Card/i }).first();
+    if (await createCardBtn.count() > 0) {
+      await createCardBtn.click();
+      await expect(page.getByRole("dialog")).toBeVisible();
+      await expect(page.getByRole("heading", { name: /Create Learning Card/i })).toBeVisible();
+    }
+  });
 });

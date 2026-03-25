@@ -8,7 +8,7 @@ import {
   AdminLearningCard,
   LearningPlan,
   AdminCategory,
-  AdminQuestion,
+  AdminUnifiedQuestion,
   Topic as AdminTopic,
 } from "@elzatona/types";
 import {
@@ -174,6 +174,16 @@ function buildCanonicalCards(cards: AdminLearningCard[]): {
   return { cards: canonicalCards, idsByKey };
 }
 
+function transformQuestion(q: any): AdminUnifiedQuestion {
+  return {
+    ...q,
+    isActive: q.isActive ?? q.is_active ?? true,
+    createdAt: q.createdAt ?? q.created_at ?? "",
+    updatedAt: q.updatedAt ?? q.updated_at ?? "",
+    // Ensure nested objects are handled if needed
+  };
+}
+
 function toSlug(input: string): string {
   return input
     .toLowerCase()
@@ -254,7 +264,7 @@ function hasExistingSpacedPlans(plans: LearningPlan[]): boolean {
 
 function buildQuestionsByCard(
   cards: AdminLearningCard[],
-  questions: AdminQuestion[],
+  questions: AdminUnifiedQuestion[],
 ): Map<string, string[]> {
   const questionsByCard = new Map<string, string[]>();
   cards.forEach((card) => {
@@ -357,7 +367,7 @@ async function insertPlanQuestionRows(
 
 async function generateDashboardSpacedPlans(
   cards: AdminLearningCard[],
-  questions: AdminQuestion[],
+  questions: AdminUnifiedQuestion[],
 ): Promise<void> {
   const questionsByCard = buildQuestionsByCard(cards, questions);
   const introducedByCard = new Map<string, string[]>();
@@ -611,7 +621,7 @@ export function useContentManagement() {
   const [plans, setPlans] = useState<LearningPlan[]>([]);
   const [categories, setCategories] = useState<AdminCategory[]>([]);
   const [topics, setTopics] = useState<AdminTopic[]>([]);
-  const [questions, setQuestions] = useState<AdminQuestion[]>([]);
+  const [questions, setQuestions] = useState<AdminUnifiedQuestion[]>([]);
 
   // Loading states
   const [loading, setLoading] = useState(true);
@@ -677,6 +687,21 @@ export function useContentManagement() {
 
   const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
   const [topicToEdit, setTopicToEdit] = useState<AdminTopic | null>(null);
+
+  // Question Modal states
+  const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
+  const [questionToEdit, setQuestionToEdit] =
+    useState<AdminUnifiedQuestion | null>(null);
+  const [isQuestionReadOnly, setIsQuestionReadOnly] = useState(false);
+  const [selectedTopicIdForNewQuestion, setSelectedTopicIdForNewQuestion] =
+    useState<string | undefined>(undefined);
+
+  // Card Modal states
+  const [isCardFormModalOpen, setIsCardFormModalOpen] = useState(false);
+  const [cardToEdit, setCardToEdit] = useState<AdminLearningCard | null>(null);
+  const [isSubmittingCard, setIsSubmittingCard] = useState(false);
+  const [isSubmittingQuestion, setIsSubmittingQuestion] = useState(false);
+
   const [planEditFormData, setPlanEditFormData] = useState<PlanEditFormData>({
     title: "",
     description: "",
@@ -705,7 +730,7 @@ export function useContentManagement() {
           "Failed to fetch learning cards",
         ),
         loadLearningPlans(),
-        loadApiCollection<AdminQuestion>(
+        loadApiCollection<AdminUnifiedQuestion>(
           "/api/questions/unified?page=1&pageSize=2000&includePagination=false",
           "Failed to fetch questions",
         ),
@@ -738,7 +763,7 @@ export function useContentManagement() {
 
       setCards(normalizedCards);
       setPlans(plansResult.data);
-      setQuestions(questionsResult.data);
+      setQuestions(questionsResult.data.map(transformQuestion));
       setCategories(mappedCategories);
       setTopics(topicsResult.data.map(transformTopicToAdmin));
 
@@ -1378,6 +1403,140 @@ export function useContentManagement() {
     [fetchData],
   );
 
+  // Question Handlers
+  const openViewQuestionModal = useCallback(
+    (question: AdminUnifiedQuestion) => {
+      setQuestionToEdit(question);
+      setIsQuestionReadOnly(true);
+      setIsQuestionModalOpen(true);
+    },
+    [],
+  );
+
+  const openEditQuestionModal = useCallback(
+    (question: AdminUnifiedQuestion) => {
+      setQuestionToEdit(question);
+      setIsQuestionReadOnly(false);
+      setIsQuestionModalOpen(true);
+    },
+    [],
+  );
+
+  const openCreateQuestionModal = useCallback((topicId: string) => {
+    setQuestionToEdit(null);
+    setSelectedTopicIdForNewQuestion(topicId);
+    setIsQuestionReadOnly(false);
+    setIsQuestionModalOpen(true);
+  }, []);
+
+  const submitQuestion = useCallback(
+    async (data: Partial<AdminUnifiedQuestion>) => {
+      setIsSubmittingQuestion(true);
+      try {
+        const {
+          isActive: _isActive,
+          createdAt: _createdAt,
+          updatedAt: _updatedAt,
+          ...cleanData
+        } = data;
+
+        const payload: any = {
+          ...cleanData,
+          topic_id: selectedTopicIdForNewQuestion,
+        };
+
+        // Convert camelCase to snake_case for DB fields if needed
+        if (data.isActive !== undefined) payload.is_active = data.isActive;
+
+        if (questionToEdit) {
+          // Update
+          const { error: updateError } = await supabase
+            .from("questions")
+            .update(payload)
+            .eq("id", questionToEdit.id);
+
+          if (updateError) throw updateError;
+          toast.success("Question updated");
+        } else {
+          // Create
+          payload.is_active = true;
+          const { error: createError } = await supabase
+            .from("questions")
+            .insert(payload);
+
+          if (createError) throw createError;
+          toast.success("Question created");
+        }
+        setIsQuestionModalOpen(false);
+        await fetchData();
+      } catch (err) {
+        console.error("Failed to submit question:", err);
+        toast.error(
+          err instanceof Error ? err.message : "Failed to submit question",
+        );
+      } finally {
+        setIsSubmittingQuestion(false);
+      }
+    },
+    [questionToEdit, selectedTopicIdForNewQuestion, fetchData],
+  );
+
+  // Card Handlers
+  const openCreateCardModal = useCallback(() => {
+    setCardToEdit(null);
+    setIsCardFormModalOpen(true);
+  }, []);
+
+  const openEditCardModal = useCallback((card: AdminLearningCard) => {
+    setCardToEdit(card);
+    setIsCardFormModalOpen(true);
+  }, []);
+
+  const submitCard = useCallback(
+    async (data: any) => {
+      setIsSubmittingCard(true);
+      try {
+        const payload = {
+          title: data.name,
+          description: data.description,
+          color: data.color,
+          icon: data.icon,
+          order_index: data.order,
+        };
+
+        if (cardToEdit) {
+          // Update
+          const { error: updateError } = await supabase
+            .from("learning_cards")
+            .update(payload)
+            .eq("id", cardToEdit.id);
+
+          if (updateError) throw updateError;
+          toast.success("Card updated");
+        } else {
+          // Create
+          (payload as any).is_active = true;
+          const { error: createError } = await supabase
+            .from("learning_cards")
+            .insert(payload);
+
+          if (createError) throw createError;
+          toast.success("Card created");
+        }
+        setIsCardFormModalOpen(false);
+        await fetchData();
+      } catch (err) {
+        console.error("Failed to submit card:", err);
+        toast.error(
+          err instanceof Error ? err.message : "Failed to submit card",
+        );
+      } finally {
+        setIsSubmittingCard(false);
+      }
+    },
+    [cardToEdit, fetchData],
+  );
+
   return {
     cards,
     plans,
@@ -1461,5 +1620,22 @@ export function useContentManagement() {
     isTopicModalOpen,
     setIsTopicModalOpen,
     topicToEdit,
+    isQuestionModalOpen,
+    setIsQuestionModalOpen,
+    questionToEdit,
+    isQuestionReadOnly,
+    selectedTopicIdForNewQuestion,
+    openViewQuestionModal,
+    openEditQuestionModal,
+    openCreateQuestionModal,
+    submitQuestion,
+    isSubmittingQuestion,
+    isCardFormModalOpen,
+    setIsCardFormModalOpen,
+    cardToEdit,
+    isSubmittingCard,
+    openCreateCardModal,
+    openEditCardModal,
+    submitCard,
   };
 }
