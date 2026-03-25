@@ -7,7 +7,6 @@ MODE="${1:-all}"
 
 cd "$ROOT_DIR"
 
-export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=2048}"
 export NEXT_PUBLIC_SUPABASE_URL="${NEXT_PUBLIC_SUPABASE_URL:-https://placeholder.supabase.co}"
 export NEXT_PUBLIC_SUPABASE_ANON_KEY="${NEXT_PUBLIC_SUPABASE_ANON_KEY:-placeholder-key}"
 export JWT_SECRET="${JWT_SECRET:-placeholder-secret}"
@@ -40,7 +39,7 @@ run_lint_check() {
 }
 
 run_type_check() {
-  npm run type-check
+  NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=2048}" npm run type-check
 }
 
 run_build_check() {
@@ -64,7 +63,7 @@ case "$MODE" in
     run_prettier_check
     run_lint_check
     run_type_check
-    run_build_check
+    # Removed run_build_check from local pre-push to avoid Nx signalExit bugs and speed up local workflow
     ;;
   *)
     echo "Unknown mode: $MODE"
