@@ -18,6 +18,8 @@ import {
   TopicQuestionsModal,
   DeleteConfirmationModal,
   CardManagementModal,
+  CategoryFormModal,
+  TopicFormModal,
 } from "@elzatona/common-ui";
 import { Loader2 } from "lucide-react";
 import { useContentManagement } from "./hooks/useContentManagement";
@@ -89,12 +91,20 @@ export default function ContentManagementPage() {
     openPlanEditModal,
     closePlanEditModal,
     updatePlan,
-    createCategory,
-    editCategory,
+    openCreateCategoryModal,
+    openEditCategoryModal,
+    submitCategory,
     removeCategory,
-    createTopic,
-    editTopic,
+    openCreateTopicModal,
+    openEditTopicModal,
+    submitTopic,
     removeTopic,
+    isCategoryModalOpen,
+    setIsCategoryModalOpen,
+    categoryToEdit,
+    isTopicModalOpen,
+    setIsTopicModalOpen,
+    topicToEdit,
   } = useContentManagement();
 
   if (loading) {
@@ -176,10 +186,10 @@ export default function ContentManagementPage() {
         <TopicsManager
           topics={topics}
           onCreateTopic={() => {
-            void createTopic();
+            void openCreateTopicModal();
           }}
           onEditTopic={(topic: any) => {
-            void editTopic(topic);
+            void openEditTopicModal(topic);
           }}
           onDeleteTopic={(topic: any) => {
             void removeTopic(topic);
@@ -190,10 +200,10 @@ export default function ContentManagementPage() {
         <CategoriesManager
           categories={categories}
           onCreateCategory={() => {
-            void createCategory();
+            void openCreateCategoryModal();
           }}
           onEditCategory={(category: any) => {
-            void editCategory(category);
+            void openEditCategoryModal(category);
           }}
           onDeleteCategory={(category: any) => {
             void removeCategory(category);
@@ -221,6 +231,21 @@ export default function ContentManagementPage() {
           onDeleteCard={openDeleteCardModal}
           onCreateCard={() => router.push("/admin/learning-cards")}
           onEditCategories={() => router.push("/admin/learning-cards")}
+          onViewQuestion={(question) =>
+            router.push(
+              `/admin/questions?edit=${encodeURIComponent(question.id)}`,
+            )
+          }
+          onEditQuestion={(question) =>
+            router.push(
+              `/admin/questions?edit=${encodeURIComponent(question.id)}`,
+            )
+          }
+          onCreateQuestion={(topicId) =>
+            router.push(
+              `/admin/questions?new=true&topicId=${encodeURIComponent(topicId)}`,
+            )
+          }
         />
 
         {/* Learning Plans Section */}
@@ -249,9 +274,39 @@ export default function ContentManagementPage() {
           onCreatePlan={createSpacedRepetitionPlans}
           onManageCards={openCardManagementModal}
           openTopicQuestionsModal={openTopicQuestionsModal}
+          onViewQuestion={(question) =>
+            router.push(
+              `/admin/questions?edit=${encodeURIComponent(question.id)}`,
+            )
+          }
+          onEditQuestion={(question) =>
+            router.push(
+              `/admin/questions?edit=${encodeURIComponent(question.id)}`,
+            )
+          }
+          onCreateQuestion={(topicId) =>
+            router.push(
+              `/admin/questions?new=true&topicId=${encodeURIComponent(topicId)}`,
+            )
+          }
         />
 
         {/* Modals */}
+        <CategoryFormModal
+          isOpen={isCategoryModalOpen}
+          onOpenChange={setIsCategoryModalOpen}
+          category={categoryToEdit}
+          onSubmit={submitCategory}
+        />
+
+        <TopicFormModal
+          isOpen={isTopicModalOpen}
+          onOpenChange={setIsTopicModalOpen}
+          topic={topicToEdit}
+          categories={categories}
+          onSubmit={submitTopic}
+        />
+
         <TopicQuestionsModal
           isOpen={isTopicQuestionsModalOpen}
           onOpenChange={setIsTopicQuestionsModalOpen}

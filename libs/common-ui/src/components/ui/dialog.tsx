@@ -7,13 +7,16 @@ const Dialog = React.forwardRef<
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
   }
->(({ className, open, onOpenChange, ...props }, ref) => {
+>(({ className, open, onOpenChange, children, ...props }, ref) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+    >
       <button
-        className="fixed inset-0 bg-black/50 border-0 cursor-pointer"
+        className="absolute inset-0 w-full h-full border-0 cursor-pointer bg-transparent"
         onClick={() => onOpenChange?.(false)}
         onKeyDown={(e) => {
           if (e.key === "Escape") {
@@ -23,14 +26,8 @@ const Dialog = React.forwardRef<
         tabIndex={0}
         aria-label="Close dialog"
       />
-      <div
-        ref={ref}
-        className={cn(
-          "relative z-50 w-full rounded-lg border bg-background p-6 shadow-lg",
-          className,
-        )}
-        {...(props as any)}
-      />
+      {/* We just render the children (usually DialogContent) directly here so we don't double loop the backgrounds */}
+      {children}
     </div>
   );
 });
@@ -43,7 +40,7 @@ const DialogContent = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "relative z-50 w-full rounded-lg border bg-background p-6 shadow-lg",
+      "relative z-50 w-full max-w-lg rounded-xl border bg-white dark:bg-gray-900 p-6 shadow-2xl flex flex-col",
       className,
     )}
     {...(props as any)}

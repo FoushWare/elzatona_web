@@ -80,9 +80,11 @@ export { PlansManager } from "./admin/content-management/PlansManager";
 export { TopicsManager } from "./admin/content-management/TopicsManager";
 export { CategoriesManager } from "./admin/content-management/CategoriesManager";
 // Content Management Modals
-export { TopicQuestionsModal } from "./admin/content-management/modals/TopicQuestionsModal";
-export { DeleteConfirmationModal } from "./admin/content-management/modals/DeleteConfirmationModal";
-export { CardManagementModal } from "./admin/content-management/modals/CardManagementModal";
+export * from "./admin/content-management/modals/TopicQuestionsModal";
+export * from "./admin/content-management/modals/DeleteConfirmationModal";
+export * from "./admin/content-management/modals/CardManagementModal";
+export * from "./admin/content-management/modals/CategoryFormModal";
+export * from "./admin/content-management/modals/TopicFormModal";
 
 // Admin Questions
 export * from "./admin/questions/QuestionForm";

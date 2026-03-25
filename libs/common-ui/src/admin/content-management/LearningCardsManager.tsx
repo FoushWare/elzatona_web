@@ -64,6 +64,8 @@ import {
   BookOpen,
   Trash2,
   Target,
+  Eye,
+  Pencil,
 } from "lucide-react";
 
 const CARD_ICONS = {
@@ -90,6 +92,9 @@ interface LearningCardsManagerProps {
   onDeleteCard: (card: AdminLearningCard) => void;
   onCreateCard: () => void;
   onEditCategories: () => void;
+  onViewQuestion?: (question: AdminQuestion) => void;
+  onEditQuestion?: (question: AdminQuestion) => void;
+  onCreateQuestion?: (topicId: string) => void;
 }
 
 const TopicNode: React.FC<{
@@ -97,23 +102,34 @@ const TopicNode: React.FC<{
   questions: AdminQuestion[];
   expandedTopics: Set<string>;
   toggleTopic: (id: string) => void;
-}> = ({ topic, questions, expandedTopics, toggleTopic }) => {
+  onViewQuestion?: (question: AdminQuestion) => void;
+  onEditQuestion?: (question: AdminQuestion) => void;
+  onCreateQuestion?: (topicId: string) => void;
+}> = ({
+  topic,
+  questions,
+  expandedTopics,
+  toggleTopic,
+  onViewQuestion,
+  onEditQuestion,
+  onCreateQuestion,
+}) => {
   const topicQuestions = questions.filter((q) => q.topic_id === topic.id);
 
   return (
     <div className="border-l-2 border-gray-100 pl-4 py-2">
-      <div className="flex items-center justify-between">
+      <div
+        className="flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition-colors"
+        onClick={() => toggleTopic(topic.id)}
+      >
         <div className="flex items-center space-x-2">
-          <button
-            onClick={() => toggleTopic(topic.id)}
-            className="p-1 hover:bg-gray-100 rounded"
-          >
+          <div className="p-1">
             {expandedTopics.has(topic.id) ? (
-              <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="h-4 w-4 text-gray-500" />
             ) : (
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 text-gray-500" />
             )}
-          </button>
+          </div>
           <Target className="h-4 w-4 text-orange-600" />
           <div>
             <h5 className="font-medium">{topic.name}</h5>
@@ -129,6 +145,18 @@ const TopicNode: React.FC<{
           >
             {topicQuestions.length} Questions
           </Badge>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-6 w-6 p-0 hover:bg-gray-200 dark:hover:bg-gray-700"
+            title="Create Question"
+            onClick={(e) => {
+              e.stopPropagation();
+              onCreateQuestion?.(topic.id);
+            }}
+          >
+            <Plus className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+          </Button>
         </div>
       </div>
 
@@ -142,16 +170,44 @@ const TopicNode: React.FC<{
             topicQuestions.map((question) => (
               <div
                 key={question.id}
-                className="rounded border border-gray-200 dark:border-gray-700 px-2 py-1 text-xs"
+                className="flex items-center justify-between rounded border border-gray-200 dark:border-gray-700 px-2 py-1 text-xs"
               >
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {question.title}
-                </p>
-                {question.difficulty && (
-                  <p className="text-gray-500 dark:text-gray-400">
-                    {question.difficulty}
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-white">
+                    {question.title}
                   </p>
-                )}
+                  {question.difficulty && (
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {question.difficulty}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center space-x-1 opacity-0 hover:opacity-100 focus-within:opacity-100 group-hover:opacity-100 transition-opacity">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0"
+                    title="View Question"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onViewQuestion?.(question);
+                    }}
+                  >
+                    <Eye className="h-3 w-3" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0"
+                    title="Edit Question"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEditQuestion?.(question);
+                    }}
+                  >
+                    <Pencil className="h-3 w-3" />
+                  </Button>
+                </div>
               </div>
             ))
           )}
@@ -169,6 +225,9 @@ const CategoryNode: React.FC<{
   toggleCategory: (id: string) => void;
   expandedTopics: Set<string>;
   toggleTopic: (id: string) => void;
+  onViewQuestion?: (question: AdminQuestion) => void;
+  onEditQuestion?: (question: AdminQuestion) => void;
+  onCreateQuestion?: (topicId: string) => void;
 }> = ({
   category,
   categoryTopics,
@@ -177,21 +236,24 @@ const CategoryNode: React.FC<{
   toggleCategory,
   expandedTopics,
   toggleTopic,
+  onViewQuestion,
+  onEditQuestion,
+  onCreateQuestion,
 }) => {
   return (
     <div className="ml-6 border-l-2 border-gray-200 pl-4">
-      <div className="flex items-center justify-between py-2">
+      <div
+        className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition-colors"
+        onClick={() => toggleCategory(category.id)}
+      >
         <div className="flex items-center space-x-2">
-          <button
-            onClick={() => toggleCategory(category.id)}
-            className="p-1 hover:bg-gray-100 rounded"
-          >
+          <div className="p-1">
             {expandedCategories.has(category.id) ? (
-              <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="h-4 w-4 text-gray-500" />
             ) : (
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 text-gray-500" />
             )}
-          </button>
+          </div>
           <BookOpen className="h-4 w-4 text-purple-600" />
           <div>
             <h4 className="font-medium">{category.name}</h4>
@@ -225,6 +287,9 @@ const CategoryNode: React.FC<{
               questions={questions}
               expandedTopics={expandedTopics}
               toggleTopic={toggleTopic}
+              onViewQuestion={onViewQuestion}
+              onEditQuestion={onEditQuestion}
+              onCreateQuestion={onCreateQuestion}
             />
           ))}
         </div>
@@ -249,6 +314,9 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
   onDeleteCard,
   onCreateCard,
   onEditCategories,
+  onViewQuestion,
+  onEditQuestion,
+  onCreateQuestion,
 }) => {
   const getCardCategories = (card: AdminLearningCard) =>
     categories.filter((cat) => cat.learning_card_id === card.id);
@@ -269,6 +337,9 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
         toggleCategory={toggleCategory}
         expandedTopics={expandedTopics}
         toggleTopic={toggleTopic}
+        onViewQuestion={onViewQuestion}
+        onEditQuestion={onEditQuestion}
+        onCreateQuestion={onCreateQuestion}
       />
     );
   };
@@ -284,31 +355,36 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
         className="border-l-4"
         style={{ borderLeftColor: card.color }}
       >
-        <CardHeader className="pb-3">
+        <CardHeader
+          className="pb-3 border-b-0 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
+          onClick={() => toggleCard(card.id)}
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <button
-                onClick={() => toggleCard(card.id)}
-                className="p-1 hover:bg-gray-100 rounded"
-              >
+              <div className="p-1 rounded group-hover:bg-gray-200 dark:group-hover:bg-gray-700 transition-colors">
                 {expandedCards.has(card.id) ? (
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className="h-4 w-4 text-gray-500" />
                 ) : (
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-4 w-4 text-gray-500" />
                 )}
-              </button>
+              </div>
               <IconComponent
                 className="h-5 w-5"
                 style={{ color: card.color }}
               />
               <div>
-                <CardTitle className="text-lg">{card.title}</CardTitle>
+                <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
+                  {card.title}
+                </CardTitle>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   {card.description}
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
+            <div
+              className="flex items-center space-x-2"
+              onClick={(e) => e.stopPropagation()}
+            >
               <Badge
                 variant="outline"
                 className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
@@ -332,16 +408,22 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onEditCard(card)}
-                  className="h-8 w-8 p-0 hover:bg-blue-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEditCard(card);
+                  }}
+                  className="h-8 w-8 p-0 hover:bg-blue-100 z-10 relative"
                 >
                   <Edit className="h-4 w-4 text-blue-600" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onDeleteCard(card)}
-                  className="h-8 w-8 p-0 hover:bg-red-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteCard(card);
+                  }}
+                  className="h-8 w-8 p-0 hover:bg-red-100 z-10 relative"
                 >
                   <Trash2 className="h-4 w-4 text-red-600" />
                 </Button>

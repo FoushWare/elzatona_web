@@ -668,6 +668,15 @@ export function useContentManagement() {
   // Plan edit modal states
   const [isPlanEditModalOpen, setIsPlanEditModalOpen] = useState(false);
   const [planToEdit, setPlanToEdit] = useState<LearningPlan | null>(null);
+
+  // Category and Topic Modal states
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [categoryToEdit, setCategoryToEdit] = useState<AdminCategory | null>(
+    null,
+  );
+
+  const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
+  const [topicToEdit, setTopicToEdit] = useState<AdminTopic | null>(null);
   const [planEditFormData, setPlanEditFormData] = useState<PlanEditFormData>({
     title: "",
     description: "",
@@ -1208,69 +1217,58 @@ export function useContentManagement() {
     }
   }, [cards, fetchData, plans, questions]);
 
-  const createCategory = useCallback(async () => {
-    const name = globalThis.prompt("Category name");
-    if (!name?.trim()) {
-      return;
-    }
+  const openCreateCategoryModal = useCallback(() => {
+    setCategoryToEdit(null);
+    setIsCategoryModalOpen(true);
+  }, []);
 
-    const description =
-      globalThis.prompt("Category description (optional)") || "";
+  const openEditCategoryModal = useCallback((category: AdminCategory) => {
+    setCategoryToEdit(category);
+    setIsCategoryModalOpen(true);
+  }, []);
 
-    const defaultCardId = cards[0]?.id;
-    const payload: Record<string, unknown> = {
-      name: name.trim(),
-      description,
-      slug: toSlug(name),
-      is_active: true,
-    };
+  const submitCategory = useCallback(
+    async (data: { name: string; description?: string }) => {
+      const payload: Record<string, unknown> = {
+        name: data.name,
+        description: data.description || "",
+        slug: toSlug(data.name),
+      };
 
-    if (defaultCardId) {
-      payload.learning_card_id = defaultCardId;
-    }
+      if (categoryToEdit) {
+        // Update
+        const { error: updateError } = await supabase
+          .from("categories")
+          .update(payload)
+          .eq("id", categoryToEdit.id);
 
-    const { error: createError } = await supabase
-      .from("categories")
-      .insert(payload);
+        if (updateError) {
+          toast.error(updateError.message || "Failed to update category");
+          return;
+        }
+        toast.success("Category updated");
+      } else {
+        // Create
+        payload.is_active = true;
+        const defaultCardId = cards[0]?.id;
+        if (defaultCardId) {
+          payload.learning_card_id = defaultCardId;
+        }
 
-    if (createError) {
-      toast.error(createError.message || "Failed to create category");
-      return;
-    }
+        const { error: createError } = await supabase
+          .from("categories")
+          .insert(payload);
 
-    toast.success("Category created");
-    await fetchData();
-  }, [cards, fetchData]);
-
-  const editCategory = useCallback(
-    async (category: AdminCategory) => {
-      const nextName = globalThis.prompt("Category name", category.name ?? "");
-      if (!nextName?.trim()) {
-        return;
+        if (createError) {
+          toast.error(createError.message || "Failed to create category");
+          return;
+        }
+        toast.success("Category created");
       }
-
-      const nextDescription =
-        globalThis.prompt("Category description", category.description ?? "") ??
-        "";
-
-      const { error: updateError } = await supabase
-        .from("categories")
-        .update({
-          name: nextName.trim(),
-          description: nextDescription,
-          slug: toSlug(nextName),
-        })
-        .eq("id", category.id);
-
-      if (updateError) {
-        toast.error(updateError.message || "Failed to update category");
-        return;
-      }
-
-      toast.success("Category updated");
+      setIsCategoryModalOpen(false);
       await fetchData();
     },
-    [fetchData],
+    [categoryToEdit, cards, fetchData],
   );
 
   const removeCategory = useCallback(
@@ -1298,73 +1296,63 @@ export function useContentManagement() {
     [fetchData],
   );
 
-  const createTopic = useCallback(async () => {
+  const openCreateTopicModal = useCallback(() => {
     if (categories.length === 0) {
       toast.error("Create a category first");
       return;
     }
+    setTopicToEdit(null);
+    setIsTopicModalOpen(true);
+  }, [categories.length]);
 
-    const name = globalThis.prompt("Topic name");
-    if (!name?.trim()) {
-      return;
-    }
+  const openEditTopicModal = useCallback((topic: AdminTopic) => {
+    setTopicToEdit(topic);
+    setIsTopicModalOpen(true);
+  }, []);
 
-    const description = globalThis.prompt("Topic description (optional)") || "";
-    const categoryId = categories[0]?.id;
+  const submitTopic = useCallback(
+    async (data: {
+      name: string;
+      description?: string;
+      category_id: string;
+    }) => {
+      const payload: Record<string, unknown> = {
+        name: data.name,
+        description: data.description || "",
+        category_id: data.category_id,
+      };
 
-    if (!categoryId) {
-      toast.error("No category available for topic assignment");
-      return;
-    }
+      if (topicToEdit) {
+        // Update
+        const { error: updateError } = await supabase
+          .from("topics")
+          .update(payload)
+          .eq("id", topicToEdit.id);
 
-    const payload = {
-      name: name.trim(),
-      description,
-      category_id: categoryId,
-      is_active: true,
-      order_index: 0,
-    };
+        if (updateError) {
+          toast.error(updateError.message || "Failed to update topic");
+          return;
+        }
+        toast.success("Topic updated");
+      } else {
+        // Create
+        payload.is_active = true;
+        payload.order_index = 0;
 
-    const { error: createError } = await supabase
-      .from("topics")
-      .insert(payload);
+        const { error: createError } = await supabase
+          .from("topics")
+          .insert(payload);
 
-    if (createError) {
-      toast.error(createError.message || "Failed to create topic");
-      return;
-    }
-
-    toast.success("Topic created");
-    await fetchData();
-  }, [categories, fetchData]);
-
-  const editTopic = useCallback(
-    async (topic: AdminTopic) => {
-      const nextName = globalThis.prompt("Topic name", topic.name ?? "");
-      if (!nextName?.trim()) {
-        return;
+        if (createError) {
+          toast.error(createError.message || "Failed to create topic");
+          return;
+        }
+        toast.success("Topic created");
       }
-
-      const nextDescription =
-        globalThis.prompt("Topic description", topic.description ?? "") ?? "";
-
-      const { error: updateError } = await supabase
-        .from("topics")
-        .update({
-          name: nextName.trim(),
-          description: nextDescription,
-        })
-        .eq("id", topic.id);
-
-      if (updateError) {
-        toast.error(updateError.message || "Failed to update topic");
-        return;
-      }
-
-      toast.success("Topic updated");
+      setIsTopicModalOpen(false);
       await fetchData();
     },
-    [fetchData],
+    [topicToEdit, fetchData],
   );
 
   const removeTopic = useCallback(
@@ -1459,11 +1447,19 @@ export function useContentManagement() {
     openPlanEditModal,
     closePlanEditModal,
     updatePlan,
-    createCategory,
-    editCategory,
+    openCreateCategoryModal,
+    openEditCategoryModal,
+    submitCategory,
     removeCategory,
-    createTopic,
-    editTopic,
+    openCreateTopicModal,
+    openEditTopicModal,
+    submitTopic,
     removeTopic,
+    isCategoryModalOpen,
+    setIsCategoryModalOpen,
+    categoryToEdit,
+    isTopicModalOpen,
+    setIsTopicModalOpen,
+    topicToEdit,
   };
 }

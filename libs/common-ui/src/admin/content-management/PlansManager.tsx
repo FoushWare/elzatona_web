@@ -34,6 +34,8 @@ import {
   MessageSquare,
   Target,
   Network,
+  Eye,
+  Pencil,
 } from "lucide-react";
 import {
   LearningPlan,
@@ -73,6 +75,9 @@ interface PlansManagerProps {
   onCreatePlan: () => void;
   onManageCards: (plan: LearningPlan) => void;
   openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
+  onViewQuestion?: (question: AdminQuestion) => void;
+  onEditQuestion?: (question: AdminQuestion) => void;
+  onCreateQuestion?: (topicId: string) => void;
 }
 
 const PlanTopicNode: React.FC<{
@@ -84,6 +89,9 @@ const PlanTopicNode: React.FC<{
   togglePlanTopic: (id: string) => void;
   openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
   selectedQuestionsCount: number;
+  onViewQuestion?: (question: AdminQuestion) => void;
+  onEditQuestion?: (question: AdminQuestion) => void;
+  onCreateQuestion?: (topicId: string) => void;
 }> = ({
   topic,
   plan,
@@ -93,6 +101,9 @@ const PlanTopicNode: React.FC<{
   togglePlanTopic,
   openTopicQuestionsModal,
   selectedQuestionsCount,
+  onViewQuestion,
+  onEditQuestion,
+  onCreateQuestion,
 }) => {
   const topicQuestions = questions.filter((question) => {
     return question.topic_id === topic.id;
@@ -100,29 +111,49 @@ const PlanTopicNode: React.FC<{
 
   return (
     <div className="border-l-2 border-orange-100 pl-4 py-1">
-      <div className="flex items-center justify-between">
+      <div
+        className="flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded transition-colors"
+        onClick={() => togglePlanTopic(topic.id)}
+      >
         <div className="flex items-center space-x-2">
-          <button
-            onClick={() => togglePlanTopic(topic.id)}
-            className="p-1 hover:bg-gray-100 rounded"
-          >
+          <div className="p-1">
             {expandedPlanTopics.has(topic.id) ? (
-              <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="h-4 w-4 text-gray-500" />
             ) : (
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 text-gray-500" />
             )}
-          </button>
+          </div>
           <Target className="h-4 w-4 text-orange-600" />
-          <span className="text-xs">{topic.name}</span>
+          <span className="text-xs font-medium text-gray-900 dark:text-white">
+            {topic.name}
+          </span>
         </div>
-        <div className="flex items-center space-x-2">
+        <div
+          className="flex items-center space-x-2"
+          onClick={(e) => e.stopPropagation()}
+        >
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 text-[10px] text-blue-600"
-            onClick={() => openTopicQuestionsModal(topic, plan)}
+            className="h-7 text-[10px] text-blue-600 hover:bg-blue-50 z-10 relative"
+            onClick={(e) => {
+              e.stopPropagation();
+              openTopicQuestionsModal(topic, plan);
+            }}
           >
-            Add Questions
+            Add Existing Questions
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 w-7 p-0 text-blue-600 hover:bg-blue-50 relative z-10"
+            title="Create New Question"
+            onClick={(e) => {
+              e.stopPropagation();
+              onCreateQuestion?.(topic.id);
+            }}
+          >
+            <Plus className="h-4 w-4" />
           </Button>
           <Badge variant="outline" className="text-[10px] bg-green-50">
             {selectedQuestionsCount} Selected
@@ -149,16 +180,42 @@ const PlanTopicNode: React.FC<{
                     <p className="font-medium text-gray-900 dark:text-white">
                       {question.title}
                     </p>
-                    <Badge
-                      variant="outline"
-                      className={
-                        inPlan
-                          ? "bg-green-50 text-green-700"
-                          : "bg-gray-50 text-gray-600"
-                      }
-                    >
-                      {inPlan ? "In Plan" : "Available"}
-                    </Badge>
+                    <div className="flex items-center space-x-1 opacity-0 hover:opacity-100 focus-within:opacity-100 group-hover:opacity-100 transition-opacity">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0"
+                        title="View Question"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onViewQuestion?.(question);
+                        }}
+                      >
+                        <Eye className="h-3 w-3 text-gray-500 hover:text-blue-600" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0"
+                        title="Edit Question"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEditQuestion?.(question);
+                        }}
+                      >
+                        <Pencil className="h-3 w-3 text-gray-500 hover:text-blue-600" />
+                      </Button>
+                      <Badge
+                        variant="outline"
+                        className={
+                          inPlan
+                            ? "bg-green-50 text-green-700"
+                            : "bg-gray-50 text-gray-600"
+                        }
+                      >
+                        {inPlan ? "In Plan" : "Available"}
+                      </Badge>
+                    </div>
                   </div>
                 </div>
               );
@@ -182,6 +239,9 @@ const PlanCategoryNode: React.FC<{
   togglePlanTopic: (id: string) => void;
   openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
   selectedQuestionsCount: number;
+  onViewQuestion?: (question: AdminQuestion) => void;
+  onEditQuestion?: (question: AdminQuestion) => void;
+  onCreateQuestion?: (topicId: string) => void;
 }> = ({
   category,
   categoryTopics,
@@ -194,23 +254,28 @@ const PlanCategoryNode: React.FC<{
   togglePlanTopic,
   openTopicQuestionsModal,
   selectedQuestionsCount,
+  onViewQuestion,
+  onEditQuestion,
+  onCreateQuestion,
 }) => {
   return (
     <div className="border-l-2 border-purple-200 pl-4">
-      <div className="flex items-center justify-between py-1">
+      <div
+        className="flex items-center justify-between py-1.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded transition-colors"
+        onClick={() => togglePlanCategory(category.id)}
+      >
         <div className="flex items-center space-x-2">
-          <button
-            onClick={() => togglePlanCategory(category.id)}
-            className="p-1 hover:bg-gray-100 rounded"
-          >
+          <div className="p-1">
             {expandedPlanCategories.has(category.id) ? (
-              <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="h-4 w-4 text-gray-500" />
             ) : (
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 text-gray-500" />
             )}
-          </button>
+          </div>
           <BookOpen className="h-4 w-4 text-purple-600" />
-          <span className="text-sm font-medium">{category.name}</span>
+          <span className="text-sm font-medium text-gray-900 dark:text-white">
+            {category.name}
+          </span>
         </div>
         <Badge variant="outline" className="text-[10px] bg-purple-50">
           {categoryTopics.length} Topics
@@ -230,6 +295,9 @@ const PlanCategoryNode: React.FC<{
               togglePlanTopic={togglePlanTopic}
               openTopicQuestionsModal={openTopicQuestionsModal}
               selectedQuestionsCount={selectedQuestionsCount}
+              onViewQuestion={onViewQuestion}
+              onEditQuestion={onEditQuestion}
+              onCreateQuestion={onCreateQuestion}
             />
           ))}
         </div>
@@ -259,6 +327,9 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
   onCreatePlan,
   onManageCards,
   openTopicQuestionsModal,
+  onViewQuestion,
+  onEditQuestion,
+  onCreateQuestion,
 }) => {
   const getPlanCategories = (card: AdminLearningCard) =>
     categories.filter((cat) => cat.learning_card_id === card.id);
@@ -286,6 +357,9 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
         togglePlanTopic={togglePlanTopic}
         openTopicQuestionsModal={openTopicQuestionsModal}
         selectedQuestionsCount={getSelectedQuestionsCount(plan.id)}
+        onViewQuestion={onViewQuestion}
+        onEditQuestion={onEditQuestion}
+        onCreateQuestion={onCreateQuestion}
       />
     );
   };
@@ -297,21 +371,21 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
 
     return (
       <div key={card.id} className="ml-4 border-l-2 border-blue-200 pl-4">
-        <div className="flex items-center justify-between py-2">
+        <div
+          className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition-colors group"
+          onClick={() => togglePlanCard(card.id)}
+        >
           <div className="flex items-center space-x-2">
-            <button
-              onClick={() => togglePlanCard(card.id)}
-              className="p-1 hover:bg-gray-100 rounded"
-            >
+            <div className="p-1 rounded group-hover:bg-gray-200 dark:group-hover:bg-gray-700 transition-colors">
               {expandedPlanCards.has(card.id) ? (
-                <ChevronDown className="h-4 w-4" />
+                <ChevronDown className="h-4 w-4 text-gray-500" />
               ) : (
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-4 w-4 text-gray-500" />
               )}
-            </button>
+            </div>
             <IconComponent className="h-4 w-4" style={{ color: card.color }} />
             <div>
-              <h5 className="font-medium text-gray-900 dark:text-white">
+              <h5 className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors">
                 {card.title}
               </h5>
             </div>
@@ -345,28 +419,33 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
 
     return (
       <Card key={plan.id} className="border-l-4 border-l-green-500">
-        <CardHeader className="pb-3">
+        <CardHeader
+          className="pb-3 border-b-0 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
+          onClick={handlePlanToggle}
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <button
-                onClick={handlePlanToggle}
-                className="p-1 hover:bg-gray-100 rounded"
-              >
+              <div className="p-1 rounded group-hover:bg-gray-200 dark:group-hover:bg-gray-700 transition-colors">
                 {expandedPlans.has(plan.id) ? (
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className="h-4 w-4 text-gray-500" />
                 ) : (
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-4 w-4 text-gray-500" />
                 )}
-              </button>
+              </div>
               <Calendar className="h-5 w-5 text-green-600" />
               <div>
-                <CardTitle className="text-lg">{plan.name}</CardTitle>
+                <CardTitle className="text-lg group-hover:text-green-600 transition-colors">
+                  {plan.name}
+                </CardTitle>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   {plan.description}
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
+            <div
+              className="flex items-center space-x-2"
+              onClick={(e) => e.stopPropagation()}
+            >
               <Badge variant="outline">{plan.estimated_duration} days</Badge>
               <Badge variant="outline">
                 {plan.is_public ? "Public" : "Private"}
@@ -375,16 +454,22 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={handleEditPlan}
-                  className="h-8 w-8 p-0 hover:bg-green-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditPlan();
+                  }}
+                  className="h-8 w-8 p-0 hover:bg-green-100 z-10 relative"
                 >
                   <Edit className="h-4 w-4 text-green-600" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={handleDeletePlan}
-                  className="h-8 w-8 p-0 hover:bg-red-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeletePlan();
+                  }}
+                  className="h-8 w-8 p-0 hover:bg-red-100 z-10 relative"
                 >
                   <Trash2 className="h-4 w-4 text-red-600" />
                 </Button>
