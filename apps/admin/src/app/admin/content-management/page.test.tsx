@@ -137,6 +137,8 @@ vi.mock("@elzatona/common-ui", () => ({
     </div>
   ),
   TopicQuestionsModal: () => <div data-testid="topic-questions-modal" />,
+  CategoryFormModal: () => <div data-testid="category-form-modal" />,
+  TopicFormModal: () => <div data-testid="topic-form-modal" />,
   DeleteConfirmationModal: () => (
     <div data-testid="delete-confirmation-modal" />
   ),
