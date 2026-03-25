@@ -74,6 +74,8 @@ jobs:
         with:
           scan-type: "fs"
           scan-ref: "."
+          scanners: "vuln,misconfig"
+          skip-files: "gitleaks-results.sarif,trivy-results.sarif,**/*.sarif"
           format: "sarif"
           output: "trivy-results.sarif"
 
