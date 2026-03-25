@@ -1,52 +1,11 @@
+import React from "react";
 import {
   AdminLearningCard,
   AdminCategory,
   Topic,
-  AdminQuestion,
+  AdminUnifiedQuestion,
   ContentManagementStats,
 } from "@elzatona/types";
-
-// Helper functions to flatten nested reduce/filter logic
-function countTopicsForCategories(
-  categories: AdminCategory[],
-  topics: Topic[],
-): number {
-  return categories.reduce((total, cat) => {
-    const categoryTopics = topics.filter(
-      (_topic) => _topic.category_id === cat.id,
-    );
-    return total + categoryTopics.length;
-  }, 0);
-}
-
-function countQuestionsForCategories(
-  categories: AdminCategory[],
-  topics: Topic[],
-  questions: AdminQuestion[],
-): number {
-  return categories.reduce((total, cat) => {
-    const categoryTopics = topics.filter(
-      (topic) => topic.category_id === cat.id,
-    );
-    const categoryQuestionsCount = categoryTopics.reduce(
-      (topicTotal, _topic) => {
-        return topicTotal + countQuestionsForCategory(cat.id, questions);
-      },
-      0,
-    );
-    return total + categoryQuestionsCount;
-  }, 0);
-}
-
-// Helper functions to avoid nested filter operations
-function countQuestionsForCategory(
-  categoryId: string,
-  questions: AdminQuestion[],
-): number {
-  return questions.filter((q) => q.category_id === categoryId).length;
-}
-
-import React from "react";
 import {
   Card,
   CardContent,
@@ -70,17 +29,55 @@ import {
 
 const CARD_ICONS = {
   "Core Technologies": { icon: Layers, color: "#3B82F6" },
-  "Framework Questions": { icon: Layers, color: "#10B981" },
   "Problem Solving": { icon: Layers, color: "#F59E0B" },
   "System Design": { icon: Layers, color: "#EF4444" },
   "Frontend Tasks": { icon: Target, color: "#8B5CF6" },
 } as const;
 
+// Helper functions to avoid nested filter operations
+function countQuestionsForCategories(
+  categories: AdminCategory[],
+  topics: Topic[],
+  questions: AdminUnifiedQuestion[],
+): number {
+  return categories.reduce((total, cat) => {
+    const categoryTopics = topics.filter(
+      (topic) => topic.category_id === cat.id,
+    );
+    const categoryQuestionsCount = categoryTopics.reduce(
+      (topicTotal, topic) => {
+        return topicTotal + countQuestionsForCategory(topic.id, questions);
+      },
+      0,
+    );
+    return total + categoryQuestionsCount;
+  }, 0);
+}
+
+function countQuestionsForCategory(
+  topicId: string,
+  questions: AdminUnifiedQuestion[],
+): number {
+  return questions.filter((q) => q.topic_id === topicId).length;
+}
+
+function countTopicsForCategories(
+  categories: AdminCategory[],
+  topics: Topic[],
+): number {
+  return categories.reduce((total, cat) => {
+    const categoryTopics = topics.filter(
+      (topic) => topic.category_id === cat.id,
+    );
+    return total + categoryTopics.length;
+  }, 0);
+}
+
 interface LearningCardsManagerProps {
   cards: AdminLearningCard[];
   categories: AdminCategory[];
   topics: Topic[];
-  questions: AdminQuestion[];
+  questions: AdminUnifiedQuestion[];
   stats: ContentManagementStats;
   expandedCards: Set<string>;
   toggleCard: (id: string) => void;
@@ -92,18 +89,18 @@ interface LearningCardsManagerProps {
   onDeleteCard: (card: AdminLearningCard) => void;
   onCreateCard: () => void;
   onEditCategories: () => void;
-  onViewQuestion?: (question: AdminQuestion) => void;
-  onEditQuestion?: (question: AdminQuestion) => void;
+  onViewQuestion?: (question: AdminUnifiedQuestion) => void;
+  onEditQuestion?: (question: AdminUnifiedQuestion) => void;
   onCreateQuestion?: (topicId: string) => void;
 }
 
 const TopicNode: React.FC<{
   topic: Topic;
-  questions: AdminQuestion[];
+  questions: AdminUnifiedQuestion[];
   expandedTopics: Set<string>;
   toggleTopic: (id: string) => void;
-  onViewQuestion?: (question: AdminQuestion) => void;
-  onEditQuestion?: (question: AdminQuestion) => void;
+  onViewQuestion?: (question: AdminUnifiedQuestion) => void;
+  onEditQuestion?: (question: AdminUnifiedQuestion) => void;
   onCreateQuestion?: (topicId: string) => void;
 }> = ({
   topic,
@@ -182,7 +179,7 @@ const TopicNode: React.FC<{
                     </p>
                   )}
                 </div>
-                <div className="flex items-center space-x-1 opacity-0 hover:opacity-100 focus-within:opacity-100 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center space-x-1">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -220,13 +217,13 @@ const TopicNode: React.FC<{
 const CategoryNode: React.FC<{
   category: AdminCategory;
   categoryTopics: Topic[];
-  questions: AdminQuestion[];
+  questions: AdminUnifiedQuestion[];
   expandedCategories: Set<string>;
   toggleCategory: (id: string) => void;
   expandedTopics: Set<string>;
   toggleTopic: (id: string) => void;
-  onViewQuestion?: (question: AdminQuestion) => void;
-  onEditQuestion?: (question: AdminQuestion) => void;
+  onViewQuestion?: (question: AdminUnifiedQuestion) => void;
+  onEditQuestion?: (question: AdminUnifiedQuestion) => void;
   onCreateQuestion?: (topicId: string) => void;
 }> = ({
   category,
@@ -268,12 +265,6 @@ const CategoryNode: React.FC<{
             className="bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
           >
             {categoryTopics.length} Topics
-          </Badge>
-          <Badge
-            variant="outline"
-            className="bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
-          >
-            {countQuestionsForCategory(category.id, questions)} Questions
           </Badge>
         </div>
       </div>

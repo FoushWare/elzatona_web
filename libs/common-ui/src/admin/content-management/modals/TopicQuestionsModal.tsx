@@ -13,14 +13,14 @@ import {
   Checkbox,
 } from "../../../index";
 import { Target, Plus } from "lucide-react";
-import { Topic, LearningPlan, AdminQuestion } from "@elzatona/types";
+import { Topic, LearningPlan, AdminUnifiedQuestion } from "@elzatona/types";
 
 interface TopicQuestionsModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   topic: Topic | null;
   plan: LearningPlan | null;
-  questions: AdminQuestion[];
+  questions: AdminUnifiedQuestion[];
   selectedQuestions: Set<string>;
   onToggleQuestion: (id: string) => void;
   onSelectAll: () => void;

@@ -1,17 +1,3 @@
-// Helper functions to avoid nested filter operations
-function countSelectedQuestionsForPlan(
-  planId: string,
-  planQuestions: Set<string>,
-): number {
-  return Array.from(planQuestions).filter((pq) => pq.startsWith(`${planId}-`))
-    .length;
-}
-
-// Helper function to get topics for a category
-function getTopicsForCategory(categoryId: string, topics: Topic[]): Topic[] {
-  return topics.filter((topic) => topic.category_id === categoryId);
-}
-
 import React from "react";
 import {
   Card,
@@ -42,24 +28,37 @@ import {
   AdminLearningCard,
   AdminCategory,
   Topic,
-  AdminQuestion,
+  AdminUnifiedQuestion,
   ContentManagementStats,
 } from "@elzatona/types";
 
 const CARD_ICONS = {
   "Core Technologies": { icon: Layers, color: "#3B82F6" },
-  "Framework Questions": { icon: Layers, color: "#10B981" },
   "Problem Solving": { icon: Layers, color: "#F59E0B" },
   "System Design": { icon: Layers, color: "#EF4444" },
   "Frontend Tasks": { icon: Target, color: "#8B5CF6" },
 } as const;
+
+// Helper functions to avoid nested filter operations
+function countSelectedQuestionsForPlan(
+  planId: string,
+  planQuestions: Set<string>,
+): number {
+  return Array.from(planQuestions).filter((pq) => pq.startsWith(`${planId}-`))
+    .length;
+}
+
+// Helper function to get topics for a category
+function getTopicsForCategory(categoryId: string, topics: Topic[]): Topic[] {
+  return topics.filter((topic) => topic.category_id === categoryId);
+}
 
 interface PlansManagerProps {
   plans: LearningPlan[];
   cards: AdminLearningCard[];
   categories: AdminCategory[];
   topics: Topic[];
-  questions: AdminQuestion[];
+  questions: AdminUnifiedQuestion[];
   stats: ContentManagementStats;
   planQuestions: Set<string>;
   expandedPlans: Set<string>;
@@ -75,22 +74,22 @@ interface PlansManagerProps {
   onCreatePlan: () => void;
   onManageCards: (plan: LearningPlan) => void;
   openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
-  onViewQuestion?: (question: AdminQuestion) => void;
-  onEditQuestion?: (question: AdminQuestion) => void;
+  onViewQuestion?: (question: AdminUnifiedQuestion) => void;
+  onEditQuestion?: (question: AdminUnifiedQuestion) => void;
   onCreateQuestion?: (topicId: string) => void;
 }
 
 const PlanTopicNode: React.FC<{
   topic: Topic;
   plan: LearningPlan;
-  questions: AdminQuestion[];
+  questions: AdminUnifiedQuestion[];
   planQuestions: Set<string>;
   expandedPlanTopics: Set<string>;
   togglePlanTopic: (id: string) => void;
   openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
   selectedQuestionsCount: number;
-  onViewQuestion?: (question: AdminQuestion) => void;
-  onEditQuestion?: (question: AdminQuestion) => void;
+  onViewQuestion?: (question: AdminUnifiedQuestion) => void;
+  onEditQuestion?: (question: AdminUnifiedQuestion) => void;
   onCreateQuestion?: (topicId: string) => void;
 }> = ({
   topic,
@@ -180,7 +179,7 @@ const PlanTopicNode: React.FC<{
                     <p className="font-medium text-gray-900 dark:text-white">
                       {question.title}
                     </p>
-                    <div className="flex items-center space-x-1 opacity-0 hover:opacity-100 focus-within:opacity-100 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center space-x-1">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -231,7 +230,7 @@ const PlanCategoryNode: React.FC<{
   category: AdminCategory;
   categoryTopics: Topic[];
   plan: LearningPlan;
-  questions: AdminQuestion[];
+  questions: AdminUnifiedQuestion[];
   planQuestions: Set<string>;
   expandedPlanCategories: Set<string>;
   togglePlanCategory: (id: string) => void;
@@ -239,8 +238,8 @@ const PlanCategoryNode: React.FC<{
   togglePlanTopic: (id: string) => void;
   openTopicQuestionsModal: (topic: Topic, plan: LearningPlan) => void;
   selectedQuestionsCount: number;
-  onViewQuestion?: (question: AdminQuestion) => void;
-  onEditQuestion?: (question: AdminQuestion) => void;
+  onViewQuestion?: (question: AdminUnifiedQuestion) => void;
+  onEditQuestion?: (question: AdminUnifiedQuestion) => void;
   onCreateQuestion?: (topicId: string) => void;
 }> = ({
   category,
@@ -432,7 +431,7 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
                   <ChevronRight className="h-4 w-4 text-gray-500" />
                 )}
               </div>
-              <Calendar className="h-5 w-5 text-green-600" />
+              <Users className="h-5 w-5 text-green-600" />
               <div>
                 <CardTitle className="text-lg group-hover:text-green-600 transition-colors">
                   {plan.name}

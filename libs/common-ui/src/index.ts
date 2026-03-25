@@ -85,6 +85,8 @@ export * from "./admin/content-management/modals/DeleteConfirmationModal";
 export * from "./admin/content-management/modals/CardManagementModal";
 export * from "./admin/content-management/modals/CategoryFormModal";
 export * from "./admin/content-management/modals/TopicFormModal";
+export * from "./admin/content-management/modals/QuestionFormModal";
+export * from "./admin/content-management/modals/CardFormModal";
 
 // Admin Questions
 export * from "./admin/questions/QuestionForm";
