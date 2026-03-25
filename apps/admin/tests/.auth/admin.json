@@ -1,0 +1,18 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:3001",
+      "localStorage": [
+        {
+          "name": "theme",
+          "value": "dark"
+        },
+        {
+          "name": "admin_session",
+          "value": "{\"id\":\"e2e-test-admin-id\",\"email\":\"test-admin@example.com\",\"role\":\"admin\",\"name\":\"E2E Test Admin\",\"expiresAt\":\"2026-03-26T23:28:24.597Z\",\"created_at\":\"2026-03-25T23:28:24.605Z\",\"updated_at\":\"2026-03-25T23:28:24.605Z\"}"
+        }
+      ]
+    }
+  ]
+}

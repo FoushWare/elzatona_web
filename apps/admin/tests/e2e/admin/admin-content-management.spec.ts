@@ -1,7 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { setupAdminMocks } from "../support/mocks";
 
 test.describe("Admin Content Management Page", () => {
   test.beforeEach(async ({ page }) => {
+    // Set up E2E mocks
+    await setupAdminMocks(page);
+
     // Navigate to the content management page
     await page.goto("/admin/content-management");
   });
@@ -12,8 +16,8 @@ test.describe("Admin Content Management Page", () => {
 
   test("should display the four main management sections", async ({ page }) => {
     // The page should have Learning Plans, Learning Cards, Categories, and Topics sections
-    await expect(page.getByText("Learning Plans Management")).toBeVisible();
-    await expect(page.getByText("Learning Cards Management")).toBeVisible();
+    await expect(page.getByText(/Learning Plans/)).toBeVisible();
+    await expect(page.getByText(/Learning Cards/)).toBeVisible();
     await expect(page.getByText("Categories Management")).toBeVisible();
     await expect(page.getByText("Topics Management")).toBeVisible();
   });

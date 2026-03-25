@@ -11,7 +11,7 @@ import {
   // createQuestion,
 } from "./admin-questions-page.setup";
 
-test.describe.skip("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
+test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
   // Set default timeout for all tests in this suite
   test.setTimeout(120000); // 2 minutes
 
@@ -798,7 +798,7 @@ test.describe.skip("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       }
     } else {
       // Skip test if no questions exist
-      test.skip();
+      test();
     }
   });
 
@@ -963,7 +963,7 @@ test.describe.skip("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       }
     } else {
       // Skip test if no questions exist
-      test.skip();
+      test();
     }
   });
 
@@ -1009,7 +1009,7 @@ test.describe.skip("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       // If no delete buttons found, skip the test
       const count = await deleteButtons.count().catch(() => 0);
       if (count === 0) {
-        test.skip();
+        test();
         return;
       }
       throw e;
@@ -1123,7 +1123,7 @@ test.describe.skip("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       }
     } else {
       // Skip test if no questions exist
-      test.skip();
+      test();
     }
   });
 
@@ -1181,7 +1181,7 @@ test.describe.skip("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         await expect(questionHeading).toBeVisible({ timeout: 5000 });
       }
     } else {
-      test.skip();
+      test();
     }
   });
 });

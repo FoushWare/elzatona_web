@@ -3,19 +3,31 @@
  * @vitest-environment node
  */
 
+import path from "node:path";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock repositories first
-const mockUserRepo = {
-  findAdminByEmail: vi.fn(),
-};
+const { mockUserRepo } = vi.hoisted(() => ({
+  mockUserRepo: {
+    findAdminByEmail: vi.fn(),
+  },
+}));
 
-// Mock the entire database module
-vi.mock("@elzatona/database", () => ({
+// Mock the entire database module using the alias defined in vitest.config.ts
+vi.mock("database", () => ({
   getRepositoryFactory: vi.fn(() => ({
     getUserRepository: () => mockUserRepo,
+    getQuestionRepository: () => ({}),
+    getLearningCardRepository: () => ({}),
+    getPlanRepository: () => ({}),
   })),
+  resetRepositoryFactory: vi.fn(),
 }));
+
+import {
+  getRepositoryFactory,
+  resetRepositoryFactory,
+} from "@elzatona/database";
 
 // Mock other dependencies
 vi.mock("@elzatona/utilities/server", () => ({
@@ -71,7 +83,7 @@ describe("Admin Auth API", () => {
       expect(response.status).toBe(400);
     });
 
-    it.skip("should return 401 if admin not found", async () => {
+    it("should return 401 if admin not found", async () => {
       const { NextRequest } = await import("next/server");
       mockUserRepo.findAdminByEmail.mockResolvedValue(null);
 
@@ -89,7 +101,7 @@ describe("Admin Auth API", () => {
       expect(data.error).toBe("Invalid email or password");
     });
 
-    it.skip("should return 401 if password incorrect", async () => {
+    it("should return 401 if password incorrect", async () => {
       const { NextRequest } = await import("next/server");
       mockUserRepo.findAdminByEmail.mockResolvedValue({
         id: "1",
@@ -121,7 +133,7 @@ describe("Admin Auth API", () => {
       expect(response.status).toBe(401);
     });
 
-    it.skip("should return success and token on valid credentials", async () => {
+    it("should return success and token on valid credentials", async () => {
       const { NextRequest } = await import("next/server");
       mockUserRepo.findAdminByEmail.mockResolvedValue({
         id: "admin-123",

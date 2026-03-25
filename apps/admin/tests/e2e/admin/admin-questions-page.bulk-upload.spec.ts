@@ -11,7 +11,7 @@ import {
   waitForQuestionManagementReady,
 } from "./admin-questions-page.setup";
 
-test.describe.skip(
+test.describe(
   "A-E2E-001: Admin Bulk Question Addition - Bulk Upload",
   () => {
     test.setTimeout(120000);

@@ -15,7 +15,7 @@ import {
 } from "./admin-questions-page.setup";
 
 test.describe
-  .skip("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
+  ("A-E2E-001: Admin Bulk Question Addition - Pagination", () => {
   // Set default timeout for all tests in this suite
   test.setTimeout(120000); // 2 minutes
 
@@ -162,7 +162,7 @@ test.describe
           console.log(
             "⚠️ Pagination not available - skipping test. Need more than pageSize questions for pagination.",
           );
-          test.skip();
+          test();
           return;
         }
         // If API says we should have pagination, wait a bit more and try again
@@ -196,7 +196,7 @@ test.describe
       console.log(
         `   hasPagination: ${hasPagination}, hasMultiplePages: ${hasMultiplePages}, pageText: ${pageText}`,
       );
-      test.skip();
+      test();
       return;
     }
 
@@ -305,7 +305,7 @@ test.describe
       if (pageText) {
         console.log(`   Found page text: "${pageText}"`);
       }
-      test.skip();
+      test();
     }
   });
 
@@ -364,7 +364,7 @@ test.describe
           console.log(
             "⚠️ Pagination not available - skipping test. Need more than pageSize questions for pagination.",
           );
-          test.skip();
+          test();
           return;
         }
         await page.waitForTimeout(2000);
@@ -397,7 +397,7 @@ test.describe
       console.log(
         `   hasPagination: ${hasPagination}, hasMultiplePages: ${hasMultiplePages}, pageText: ${pageText}`,
       );
-      test.skip();
+      test();
       return;
     }
 
@@ -887,7 +887,7 @@ test.describe
       console.log(
         `   hasPagination: ${hasPagination}, hasMultiplePages: ${hasMultiplePages}, nextButtonCount: ${nextCount}, nextDisabled: ${nextDisabled}`,
       );
-      test.skip();
+      test();
     }
   });
 
@@ -962,7 +962,7 @@ test.describe
           console.log(
             "⚠️ Pagination not available - skipping test. Need more than pageSize questions for pagination.",
           );
-          test.skip();
+          test();
           return;
         }
         await page.waitForTimeout(2000);
@@ -995,7 +995,7 @@ test.describe
       console.log(
         `   hasPagination: ${hasPagination}, hasMultiplePages: ${hasMultiplePages}, pageText: ${pageText}`,
       );
-      test.skip();
+      test();
       return;
     }
 
@@ -1014,7 +1014,7 @@ test.describe
       console.log(
         '⚠️ "Show:" label not found - page size selector may not be visible (pagination might not be available)',
       );
-      test.skip();
+      test();
       return;
     }
 
@@ -1091,7 +1091,7 @@ test.describe
     if (!trigger || (await trigger.count().catch(() => 0)) === 0) {
       // Skip if page size selector not found
       console.log("⚠️ Page size selector not found - skipping test");
-      test.skip();
+      test();
       return;
     }
 

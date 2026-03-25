@@ -14,7 +14,7 @@ import {
   testPrefix,
 } from "./admin-questions-page.setup";
 
-test.describe.skip("A-E2E-001: Admin Bulk Question Addition - Search", () => {
+test.describe("A-E2E-001: Admin Bulk Question Addition - Search", () => {
   // Set default timeout for all tests in this suite
   test.setTimeout(120000); // 2 minutes
 
@@ -70,7 +70,7 @@ test.describe.skip("A-E2E-001: Admin Bulk Question Addition - Search", () => {
     const searchTerm = testPrefix;
 
     if (!searchableTitle) {
-      test.skip();
+      test();
       return;
     }
 
@@ -204,7 +204,7 @@ test.describe.skip("A-E2E-001: Admin Bulk Question Addition - Search", () => {
     const searchTerm = testPrefix;
 
     if (searchableTitles.length === 0) {
-      test.skip();
+      test();
       return;
     }
 

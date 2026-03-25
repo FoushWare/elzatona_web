@@ -9,12 +9,26 @@ export default defineConfig({
     // Use jsdom globally for browser-like tests
     environment: "jsdom",
     setupFiles: ["./tests/utils/test-db-setup.ts"],
+    exclude: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/cypress/**",
+      "**/.{idea,git,cache,output,temp}/**",
+      "**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*",
+      "**/*.spec.ts",
+      "**/*.spec.tsx",
+      "apps/admin/tests/**",
+    ],
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "lcov", "html"],
       reportsDirectory: "./coverage",
-      exclude: ["**/node_modules/**", "**/dist/**"],
     },
+  },
+  esbuild: {
+    loader: "tsx",
+    include: /.[tj]sx?$/,
+    exclude: [],
   },
   resolve: {
     alias: {
@@ -22,9 +36,25 @@ export default defineConfig({
       ui: path.resolve(__dirname, "./libs/ui/src/index.ts"),
       auth: path.resolve(__dirname, "./libs/auth/src/index.ts"),
       database: path.resolve(__dirname, "./libs/database/src/index.ts"),
+      "@elzatona/database": path.resolve(
+        __dirname,
+        "./libs/database/src/index.ts",
+      ),
+      "@elzatona/database/client": path.resolve(
+        __dirname,
+        "./libs/database/src/client.ts",
+      ),
       "@elzatona/utilities": path.resolve(
         __dirname,
         "./libs/utilities/src/index.ts",
+      ),
+      "@elzatona/utilities/client": path.resolve(
+        __dirname,
+        "./libs/utilities/src/client.ts",
+      ),
+      "@elzatona/utilities/server": path.resolve(
+        __dirname,
+        "./libs/utilities/src/server.ts",
       ),
       "@elzatona/common-ui": path.resolve(
         __dirname,

@@ -12,7 +12,7 @@ import {
   bulkDeleteQuestions,
 } from "./admin-questions-page.setup";
 
-test.describe.skip("A-E2E-001: Admin Bulk Question Addition - Stats", () => {
+test.describe("A-E2E-001: Admin Bulk Question Addition - Stats", () => {
   // Set default timeout for all tests in this suite
   test.setTimeout(120000); // 2 minutes
 

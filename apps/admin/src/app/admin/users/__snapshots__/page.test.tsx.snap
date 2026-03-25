@@ -1,20 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`A-UT-SNAPSHOT: Admin User Management Snapshot Tests > should match admin user management page snapshot (with users) 1`] = `
-<div
-  class="min-h-screen p-8"
->
-  <h1
-    class="text-2xl font-bold"
-  >
-    admin/users
-  </h1>
-  <p>
-    Page component - needs implementation
-  </p>
-</div>
-`;
-
 exports[`A-UT-SNAPSHOT: Admin User Management Snapshot Tests > should match admin user management page snapshot 1`] = `
 <div
   class="min-h-screen p-8"

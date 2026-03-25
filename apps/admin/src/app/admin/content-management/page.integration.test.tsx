@@ -102,6 +102,8 @@ vi.mock("@elzatona/common-ui", () => ({
     <div data-testid="delete-confirmation-modal" />
   ),
   CardManagementModal: () => <div data-testid="card-management-modal" />,
+  QuestionFormModal: () => <div data-testid="question-form-modal" />,
+  CardFormModal: () => <div data-testid="card-form-modal" />,
 }));
 
 describe("Admin content management page - Integration", () => {
