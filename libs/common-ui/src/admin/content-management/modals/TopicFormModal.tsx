@@ -87,7 +87,7 @@ export const TopicFormModal: React.FC<TopicFormModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <BookOpen className="h-5 w-5 text-purple-600" />

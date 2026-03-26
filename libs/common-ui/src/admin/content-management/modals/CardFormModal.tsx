@@ -29,7 +29,7 @@ export const CardFormModal: React.FC<CardFormModalProps> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Layers className="h-5 w-5 text-blue-600" />

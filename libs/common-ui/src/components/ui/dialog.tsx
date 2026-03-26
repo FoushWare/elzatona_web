@@ -12,7 +12,7 @@ const Dialog = React.forwardRef<
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center p-4 sm:p-6 pt-20 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 py-8 overflow-y-auto"
       style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
     >
       <button
