@@ -10,38 +10,37 @@ export interface CheckboxProps extends Omit<
 }
 
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ className, onCheckedChange, ...props }, ref) => {
-    const [checked, setChecked] = React.useState(props.checked || false);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newChecked = e.target.checked;
-      setChecked(newChecked);
-      onCheckedChange?.(newChecked);
-      props.onChange?.(e);
-    };
-
+  ({ className, onCheckedChange, checked, onChange, ...props }, ref) => {
     return (
-      <div className="relative">
+      <label
+        className="relative inline-flex items-center cursor-pointer"
+        onClick={(e) => e.stopPropagation()}
+      >
         <input
           type="checkbox"
-          className={cn(
-            "peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-            className,
-          )}
-          ref={ref}
           checked={checked}
-          onChange={handleChange}
+          onChange={(e) => onCheckedChange?.(e.target.checked)}
+          className="sr-only peer"
+          ref={ref}
           {...(props as any)}
         />
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div
+          className={cn(
+            "h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center transition-colors shadow-sm",
+            checked
+              ? "bg-primary border-primary"
+              : "bg-transparent border-primary",
+            className,
+          )}
+        >
           <Check
             className={cn(
-              "h-3 w-3 text-primary-foreground opacity-0 transition-opacity",
-              checked && "opacity-100",
+              "h-3 w-3 text-primary-foreground transition-opacity",
+              checked ? "opacity-100" : "opacity-0",
             )}
           />
         </div>
-      </div>
+      </label>
     );
   },
 );

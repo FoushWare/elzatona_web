@@ -925,10 +925,25 @@ export function useContentManagement() {
     (topic: AdminTopic, plan: LearningPlan) => {
       setSelectedTopic(topic);
       setSelectedPlan(plan);
-      setSelectedQuestions(new Set());
+
+      // Pre-populate with questions already in this plan
+      const initialSelected = new Set<string>();
+      planQuestions.forEach((key) => {
+        if (key.startsWith(`${plan.id}-`)) {
+          const questionId = key.replace(`${plan.id}-`, "");
+          // Only add if it belongs to this topic
+          if (
+            questions.find((q) => q.id === questionId)?.topic_id === topic.id
+          ) {
+            initialSelected.add(questionId);
+          }
+        }
+      });
+
+      setSelectedQuestions(initialSelected);
       setIsTopicQuestionsModalOpen(true);
     },
-    [],
+    [planQuestions, questions],
   );
 
   const closeTopicQuestionsModal = useCallback(() => {
@@ -938,15 +953,13 @@ export function useContentManagement() {
     setSelectedQuestions(new Set());
   }, []);
 
-  const toggleQuestionSelection = useCallback(
-    (id: string) =>
-      setSelectedQuestions((prev) => {
-        const next = new Set(prev);
-        next.has(id) ? next.delete(id) : next.add(id);
-        return next;
-      }),
-    [],
-  );
+  const toggleQuestionSelection = useCallback((id: string) => {
+    setSelectedQuestions((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }, []);
 
   const selectAllQuestions = useCallback(() => {
     if (!selectedTopic) return;
@@ -962,23 +975,80 @@ export function useContentManagement() {
   );
 
   const addSelectedQuestionsToPlan = useCallback(async () => {
-    if (!selectedPlan || !selectedTopic || selectedQuestions.size === 0) return;
+    if (!selectedPlan || !selectedTopic) return;
     try {
-      // ARCHITECTURAL: Implement addQuestionsToThePlan via planRepository.addQuestionsToPlan(planId, questionIds)
-      // Requires implementing new repository method for bulk question association
-      toast.success(`Added ${selectedQuestions.size} questions to plan`);
+      const planId = selectedPlan.id;
+      const topicId = selectedTopic.id;
+
+      // Current questions in plan for this topic
+      const currentInPlan = new Set<string>();
+      planQuestions.forEach((key) => {
+        if (key.startsWith(`${planId}-`)) {
+          const qId = key.replace(`${planId}-`, "");
+          if (questions.find((q) => q.id === qId)?.topic_id === topicId) {
+            currentInPlan.add(qId);
+          }
+        }
+      });
+
+      const toAdd = Array.from(selectedQuestions).filter(
+        (id) => !currentInPlan.has(id),
+      );
+      const toRemove = Array.from(currentInPlan).filter(
+        (id) => !selectedQuestions.has(id),
+      );
+
+      // Perform updates
+      if (toRemove.length > 0) {
+        const { error: deleteError } = await supabase
+          .from("plan_questions")
+          .delete()
+          .eq("plan_id", planId)
+          .in("question_id", toRemove);
+
+        if (deleteError) throw deleteError;
+      }
+
+      if (toAdd.length > 0) {
+        const insertRows = toAdd.map((qId, index) => ({
+          plan_id: planId,
+          question_id: qId,
+          order_index: index, // TBD: How to handle order better?
+          is_review: false,
+          is_active: true,
+        }));
+
+        const { error: insertError } = await supabase
+          .from("plan_questions")
+          .insert(insertRows);
+
+        if (insertError) throw insertError;
+      }
+
+      // Update local state
+      setPlanQuestions((prev) => {
+        const next = new Set(prev);
+        toRemove.forEach((id) => next.delete(`${planId}-${id}`));
+        toAdd.forEach((id) => next.add(`${planId}-${id}`));
+        return next;
+      });
+
+      toast.success(
+        `Plan updated: added ${toAdd.length}, removed ${toRemove.length} questions`,
+      );
       closeTopicQuestionsModal();
     } catch (err) {
-      console.error("Failed to add questions:", err);
+      console.error("Failed to update plan questions:", err);
       toast.error(
-        err instanceof Error ? err.message : "Failed to add questions",
+        err instanceof Error ? err.message : "Failed to update plan questions",
       );
     }
   }, [
     selectedPlan,
     selectedTopic,
     selectedQuestions,
-    planRepository,
+    planQuestions,
+    questions,
     closeTopicQuestionsModal,
   ]);
 
