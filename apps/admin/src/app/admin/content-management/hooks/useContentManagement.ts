@@ -771,10 +771,12 @@ export function useContentManagement() {
         await supabase.from("plan_questions").select("plan_id, question_id");
 
       if (planQuestionsError) {
-        console.error(
-          "❌ Failed to fetch plan-question links:",
-          planQuestionsError,
-        );
+        console.error("❌ Failed to fetch plan-question links:", {
+          message: planQuestionsError.message,
+          details: planQuestionsError.details,
+          hint: planQuestionsError.hint,
+          code: planQuestionsError.code,
+        });
       } else {
         const planQuestionKeys = new Set(
           (existingPlanQuestions ?? []).map(
