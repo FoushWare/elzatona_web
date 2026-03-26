@@ -1,0 +1,293 @@
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+[dotenv@17.2.3] injecting env (19) from .env.local -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (9) from .env.test.local -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+[Config] ✅ ADMIN_EMAIL loaded: test-admin...
+[Config] 📊 Using Supabase: http://localhost:54321... (TEST environment)
+[1A[2K[WebServer] [33m[1m⚠[22m[39m Warning: Next.js inferred your workspace root, but it may not be correct.
+[WebServer]  We detected multiple lockfiles and selected the directory of /Users/a.fouad/S/New_elzatona/package-lock.json as the root directory.
+[WebServer]  To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+[WebServer]    See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+[WebServer]  Detected additional lockfiles: 
+[WebServer]    * /Users/a.fouad/S/New_elzatona/apps/admin/package-lock.json
+[WebServer] 
+
+[1A[2K[WebServer] [31m[1m⨯[22m[39m You are using configuration and/or tools that are not yet
+[WebServer] supported by Next.js with Turbopack:
+[WebServer] 
+[WebServer] 
+[WebServer] - Unsupported Next.js configuration option(s) ([36mnext.config.js[39m)
+[WebServer]   Turbopack will ignore the following configuration options:
+[WebServer]     - [31mexperimental.forceSwcTransforms[39m
+[WebServer] 
+[WebServer] 
+
+[1A[2K[WebServer] [33m[1m⚠[22m[39m Learn more about how to configure Turbopack with Next.js:
+[WebServer] [4mhttps://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack[24m
+
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+[dotenv@17.2.3] injecting env (19) from .env.local -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (9) from .env.test.local -- tip: ⚙️  override existing env vars with { override: true }
+🔧 Running global setup...
+✅ Using TEST environment (separate test database)
+   Loaded: .env.local, .env.test.local
+✅ Admin credentials loaded
+   Email: test-admin...
+   Supabase: http://localhost:54321...
+
+Running 3 tests using 1 worker
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+
+[1A[2K[dotenv@17.2.3] injecting env (19) from .env.local -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+
+[1A[2K[dotenv@17.2.3] injecting env (9) from .env.test.local -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[1A[2K[Config] ✅ ADMIN_EMAIL loaded: test-admin...
+
+[1A[2K[Config] 📊 Using Supabase: http://localhost:54321... (TEST environment)
+
+[1A[2K[1/3] [setup] › apps/admin/tests/e2e/auth.setup.ts:9:6 › authenticate as admin
+[1A[2K[setup] › apps/admin/tests/e2e/auth.setup.ts:9:6 › authenticate as admin
+🔐 Starting admin authentication setup...
+
+[1A[2K🌐 Navigating to /admin/login...
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:1 (2.86.2) 2026-03-26T07:27:20.597Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:2 (2.86.2) 2026-03-26T07:27:20.602Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:3 (2.86.2) 2026-03-26T07:27:20.602Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:4 (2.86.2) 2026-03-26T07:27:20.602Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:5 (2.86.2) 2026-03-26T07:27:20.602Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:6 (2.86.2) 2026-03-26T07:27:20.602Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K⏳ Waiting for login form to be ready...
+
+[1A[2K🔐 Attempting login for: test-admin...
+
+[1A[2K[Browser] 🔐 Attempting admin login for: test-admin@example.com
+
+[1A[2K[Browser] ✅ Admin login successful
+
+[1A[2K[Browser] 🔄 AdminAuthProvider redirect logic: {isLoading: false, isHydrated: true, isAuthenticated: true, isLoginPage: true, isAdminRootPage: false}
+
+[1A[2K[Browser] ✅ User already authenticated, redirecting to dashboard
+
+[1A[2K💾 Cleaning up existing auth file...
+
+[1A[2K⏳ Waiting for dashboard navigation...
+
+[1A[2K[Browser] GoTrueClient@sb-localhost-auth-token:7 (2.86.2) 2026-03-26T07:27:21.369Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[1A[2K[Browser] [Questions API] Environment: TEST
+
+[1A[2K[Browser] [Questions API] Project: unknown
+
+[1A[2K[Browser] [Questions API] Supabase: http://localhost:54321...
+
+[1A[2K[Browser] [Questions API] Debug Logging: ON
+
+[1A[2K[Browser] [Questions API] Test Data: ENABLED
+
+[1A[2K[Browser] ✅ Supabase client configured successfully
+
+[1A[2K[Browser] GoTrueClient@sb-localhost-auth-token:8 (2.86.2) 2026-03-26T07:27:21.383Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[1A[2K[Browser] GoTrueClient@sb-localhost-auth-token:9 (2.86.2) 2026-03-26T07:27:21.385Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:7 (2.86.2) 2026-03-26T07:27:21.369Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/utilities/src/lib/supabase.ts:20:37)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:8 (2.86.2) 2026-03-26T07:27:21.383Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../website/src/app/lib/supabase-client.ts:34:17)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:9 (2.86.2) 2026-03-26T07:27:21.385Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/common-ui/src/auth/SignInPopup.tsx:12:19)[22m
+
+[1A[2K[Browser] 🔄 AdminAuthProvider redirect logic: {isLoading: false, isHydrated: true, isAuthenticated: true, isLoginPage: false, isAdminRootPage: false}
+
+[1A[2K💾 Auth state saved to: /Users/a.fouad/S/New_elzatona/apps/admin/tests/.auth/admin.json
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+
+[1A[2K[dotenv@17.2.3] injecting env (19) from .env.local -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: ⚙️  suppress all logs with { quiet: true }
+
+[1A[2K[dotenv@17.2.3] injecting env (9) from .env.test.local -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+[1A[2K[Config] ✅ ADMIN_EMAIL loaded: test-admin...
+
+[1A[2K[Config] 📊 Using Supabase: http://localhost:54321... (TEST environment)
+
+[1A[2K[2/3] [chromium] › apps/admin/tests/e2e/admin/admin-content-management.spec.ts:96:7 › Admin Content Management Page › should open TopicQuestionsModal from a plan and show spacing from navbar
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:1 (2.86.2) 2026-03-26T07:27:22.661Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/utilities/src/lib/supabase.ts:20:37)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:2 (2.86.2) 2026-03-26T07:27:22.673Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../website/src/app/lib/supabase-client.ts:34:17)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:3 (2.86.2) 2026-03-26T07:27:22.675Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/common-ui/src/auth/SignInPopup.tsx:12:19)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:4 (2.86.2) 2026-03-26T07:27:22.832Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:5 (2.86.2) 2026-03-26T07:27:22.833Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:6 (2.86.2) 2026-03-26T07:27:22.833Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:7 (2.86.2) 2026-03-26T07:27:22.833Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:8 (2.86.2) 2026-03-26T07:27:22.833Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:9 (2.86.2) 2026-03-26T07:27:22.834Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[chromium] › apps/admin/tests/e2e/admin/admin-content-management.spec.ts:96:7 › Admin Content Management Page › should open TopicQuestionsModal from a plan and show spacing from navbar
+[Mock] Intercepted cards request: http://localhost:3001/api/cards
+
+[1A[2K[Mock] Intercepted plans request: http://localhost:3001/api/plans
+
+[1A[2K[Mock] Intercepted questions request: http://localhost:3001/api/questions/unified?page=1&pageSize=2000&includePagination=false
+
+[1A[2K[Mock] Intercepted categories request: http://localhost:3001/api/categories
+
+[1A[2K[Mock] Intercepted topics request: http://localhost:3001/api/topics
+
+[1A[2K[Mock] Intercepted cards request: http://localhost:3001/api/cards
+
+[1A[2K[Mock] Intercepted plans request: http://localhost:3001/api/plans
+
+[1A[2K[Mock] Intercepted questions request: http://localhost:3001/api/questions/unified?page=1&pageSize=2000&includePagination=false
+
+[1A[2K[Mock] Intercepted categories request: http://localhost:3001/api/categories
+
+[1A[2K[Mock] Intercepted topics request: http://localhost:3001/api/topics
+
+[1A[2K[Mock] Intercepted Supabase REST: http://localhost:54321/rest/v1/plan_questions?select=plan_id%2Cquestion_id
+
+[1A[2K[Mock] Intercepted Supabase REST: http://localhost:54321/rest/v1/plan_questions?select=plan_id%2Cquestion_id
+
+[1A[2K  1) [chromium] › apps/admin/tests/e2e/admin/admin-content-management.spec.ts:96:7 › Admin Content Management Page › should open TopicQuestionsModal from a plan and show spacing from navbar 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByRole('dialog')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByRole('dialog')[22m
+
+
+      125 |     // 5. Verify modal is visible
+      126 |     const modal = page.getByRole("dialog");
+    > 127 |     await expect(modal).toBeVisible();
+          |                         ^
+      128 |     await expect(page.getByText(/Add Questions to Plan/i)).toBeVisible();
+      129 |
+      130 |     // 6. Verify spacing from top (navbar)
+        at /Users/a.fouad/S/New_elzatona/apps/admin/tests/e2e/admin/admin-content-management.spec.ts:127:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    apps/admin/tests/config/test-results/admin-admin-content-manage-f9906-nd-show-spacing-from-navbar-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    apps/admin/tests/config/test-results/admin-admin-content-manage-f9906-nd-show-spacing-from-navbar-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: apps/admin/tests/config/test-results/admin-admin-content-manage-f9906-nd-show-spacing-from-navbar-chromium/error-context.md
+
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[1A[2K[dotenv@17.2.3] injecting env (19) from .env.local -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[1A[2K[dotenv@17.2.3] injecting env (9) from .env.test.local -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+
+[1A[2K[Config] ✅ ADMIN_EMAIL loaded: test-admin...
+
+[1A[2K[Config] 📊 Using Supabase: http://localhost:54321... (TEST environment)
+
+[1A[2K[3/3] [msedge] › apps/admin/tests/e2e/admin/admin-content-management.spec.ts:96:7 › Admin Content Management Page › should open TopicQuestionsModal from a plan and show spacing from navbar
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:1 (2.86.2) 2026-03-26T07:27:34.475Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/utilities/src/lib/supabase.ts:20:37)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:2 (2.86.2) 2026-03-26T07:27:34.488Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../website/src/app/lib/supabase-client.ts:34:17)[22m
+[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:3 (2.86.2) 2026-03-26T07:27:34.489Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/common-ui/src/auth/SignInPopup.tsx:12:19)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:4 (2.86.2) 2026-03-26T07:27:34.633Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:5 (2.86.2) 2026-03-26T07:27:34.633Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:6 (2.86.2) 2026-03-26T07:27:34.633Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:7 (2.86.2) 2026-03-26T07:27:34.634Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:8 (2.86.2) 2026-03-26T07:27:34.634Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[WebServer] [36m[browser][39m [33mGoTrueClient@sb-localhost-auth-token:9 (2.86.2) 2026-03-26T07:27:34.634Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.[39m [2m(../../libs/database/src/adapters/postgresql/BasePostgreSQLAdapter.ts:51:31)[22m
+
+[1A[2K[msedge] › apps/admin/tests/e2e/admin/admin-content-management.spec.ts:96:7 › Admin Content Management Page › should open TopicQuestionsModal from a plan and show spacing from navbar
+[Mock] Intercepted cards request: http://localhost:3001/api/cards
+
+[1A[2K[Mock] Intercepted plans request: http://localhost:3001/api/plans
+
+[1A[2K[Mock] Intercepted questions request: http://localhost:3001/api/questions/unified?page=1&pageSize=2000&includePagination=false
+
+[1A[2K[Mock] Intercepted categories request: http://localhost:3001/api/categories
+
+[1A[2K[Mock] Intercepted topics request: http://localhost:3001/api/topics
+
+[1A[2K[Mock] Intercepted cards request: http://localhost:3001/api/cards
+
+[1A[2K[Mock] Intercepted plans request: http://localhost:3001/api/plans
+
+[1A[2K[Mock] Intercepted questions request: http://localhost:3001/api/questions/unified?page=1&pageSize=2000&includePagination=false
+
+[1A[2K[Mock] Intercepted categories request: http://localhost:3001/api/categories
+
+[1A[2K[Mock] Intercepted topics request: http://localhost:3001/api/topics
+
+[1A[2K[Mock] Intercepted Supabase REST: http://localhost:54321/rest/v1/plan_questions?select=plan_id%2Cquestion_id
+
+[1A[2K[Mock] Intercepted Supabase REST: http://localhost:54321/rest/v1/plan_questions?select=plan_id%2Cquestion_id
+
+[1A[2K  2) [msedge] › apps/admin/tests/e2e/admin/admin-content-management.spec.ts:96:7 › Admin Content Management Page › should open TopicQuestionsModal from a plan and show spacing from navbar 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByRole('dialog')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByRole('dialog')[22m
+
+
+      125 |     // 5. Verify modal is visible
+      126 |     const modal = page.getByRole("dialog");
+    > 127 |     await expect(modal).toBeVisible();
+          |                         ^
+      128 |     await expect(page.getByText(/Add Questions to Plan/i)).toBeVisible();
+      129 |
+      130 |     // 6. Verify spacing from top (navbar)
+        at /Users/a.fouad/S/New_elzatona/apps/admin/tests/e2e/admin/admin-content-management.spec.ts:127:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    apps/admin/tests/config/test-results/admin-admin-content-manage-f9906-nd-show-spacing-from-navbar-msedge/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    apps/admin/tests/config/test-results/admin-admin-content-manage-f9906-nd-show-spacing-from-navbar-msedge/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: apps/admin/tests/config/test-results/admin-admin-content-manage-f9906-nd-show-spacing-from-navbar-msedge/error-context.md
+
+
+🧹 Running global teardown...
+[1A[2K  2 failed
+    [chromium] › apps/admin/tests/e2e/admin/admin-content-management.spec.ts:96:7 › Admin Content Management Page › should open TopicQuestionsModal from a plan and show spacing from navbar 
+    [msedge] › apps/admin/tests/e2e/admin/admin-content-management.spec.ts:96:7 › Admin Content Management Page › should open TopicQuestionsModal from a plan and show spacing from navbar 
+  1 passed (28.7s)

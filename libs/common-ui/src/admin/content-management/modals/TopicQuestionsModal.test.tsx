@@ -8,11 +8,14 @@ describe("TopicQuestionsModal", () => {
   const mockPlan = { id: "plan-1", name: "Test Plan" } as any;
   const mockQuestions = [
     {
-      id: "q-1",
-      title: "Question 1",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      id: "q-1" as any,
+      text: "What is an article tag?",
       topic_id: "topic-1",
-      difficulty: "beginner",
-      type: "multiple-choice",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      difficulty: "beginner" as any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      type: "single_choice" as any,
     },
     {
       id: "q-2",
@@ -56,10 +59,10 @@ describe("TopicQuestionsModal", () => {
     render(<TopicQuestionsModal {...defaultProps} />);
 
     const checkboxes = screen.getAllByRole("checkbox");
-    // One for "Select All", and one for each question in topic (2)
     // q-1 is selected, q-2 is not
-    expect(checkboxes[1]).toBeChecked(); // q-1
-    expect(checkboxes[2]).not.toBeChecked(); // q-2
+    // checkboxes[0] should be q-1, checkboxes[1] should be q-2
+    expect(checkboxes[0]).toBeChecked(); // q-1
+    expect(checkboxes[1]).not.toBeChecked(); // q-2
   });
 
   it("calls onToggleQuestion when a question is clicked", () => {

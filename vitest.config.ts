@@ -44,10 +44,6 @@ export default defineConfig({
         __dirname,
         "./libs/database/src/client.ts",
       ),
-      "@elzatona/utilities": path.resolve(
-        __dirname,
-        "./libs/utilities/src/index.ts",
-      ),
       "@elzatona/utilities/client": path.resolve(
         __dirname,
         "./libs/utilities/src/client.ts",
@@ -55,6 +51,10 @@ export default defineConfig({
       "@elzatona/utilities/server": path.resolve(
         __dirname,
         "./libs/utilities/src/server.ts",
+      ),
+      "@elzatona/utilities": path.resolve(
+        __dirname,
+        "./libs/utilities/src/index.ts",
       ),
       "@elzatona/common-ui": path.resolve(
         __dirname,

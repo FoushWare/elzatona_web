@@ -30,6 +30,27 @@ export default defineConfig({
         find: "@elzatona/types",
         replacement: path.resolve(__dirname, "../../libs/types/src/index.ts"),
       },
+      {
+        find: "@elzatona/utilities/client",
+        replacement: path.resolve(
+          __dirname,
+          "../../libs/utilities/src/client.ts",
+        ),
+      },
+      {
+        find: "@elzatona/utilities/server",
+        replacement: path.resolve(
+          __dirname,
+          "../../libs/utilities/src/server.ts",
+        ),
+      },
+      {
+        find: "@elzatona/utilities",
+        replacement: path.resolve(
+          __dirname,
+          "../../libs/utilities/src/index.ts",
+        ),
+      },
     ],
   },
   plugins: [
@@ -54,6 +75,18 @@ export default defineConfig({
           "@elzatona/types": path.resolve(
             __dirname,
             "../../libs/types/src/index.ts",
+          ),
+          "@elzatona/utilities/client": path.resolve(
+            __dirname,
+            "../../libs/utilities/src/client.ts",
+          ),
+          "@elzatona/utilities/server": path.resolve(
+            __dirname,
+            "../../libs/utilities/src/server.ts",
+          ),
+          "@elzatona/utilities": path.resolve(
+            __dirname,
+            "../../libs/utilities/src/index.ts",
           ),
         };
 
@@ -116,6 +149,18 @@ export default defineConfig({
       "@elzatona/types": path.resolve(
         __dirname,
         "../../libs/types/src/index.ts",
+      ),
+      "@elzatona/utilities/client": path.resolve(
+        __dirname,
+        "../../libs/utilities/src/client.ts",
+      ),
+      "@elzatona/utilities/server": path.resolve(
+        __dirname,
+        "../../libs/utilities/src/server.ts",
+      ),
+      "@elzatona/utilities": path.resolve(
+        __dirname,
+        "../../libs/utilities/src/index.ts",
       ),
     },
   },
