@@ -162,7 +162,8 @@ test.describe
           console.log(
             "⚠️ Pagination not available - skipping test. Need more than pageSize questions for pagination.",
           );
-          test();
+          return;
+
           return;
         }
         // If API says we should have pagination, wait a bit more and try again
@@ -196,7 +197,8 @@ test.describe
       console.log(
         `   hasPagination: ${hasPagination}, hasMultiplePages: ${hasMultiplePages}, pageText: ${pageText}`,
       );
-      test();
+      return;
+
       return;
     }
 
@@ -305,7 +307,8 @@ test.describe
       if (pageText) {
         console.log(`   Found page text: "${pageText}"`);
       }
-      test();
+      return;
+
     }
   });
 
@@ -364,7 +367,8 @@ test.describe
           console.log(
             "⚠️ Pagination not available - skipping test. Need more than pageSize questions for pagination.",
           );
-          test();
+          return;
+
           return;
         }
         await page.waitForTimeout(2000);
@@ -397,7 +401,8 @@ test.describe
       console.log(
         `   hasPagination: ${hasPagination}, hasMultiplePages: ${hasMultiplePages}, pageText: ${pageText}`,
       );
-      test();
+      return;
+
       return;
     }
 
@@ -887,7 +892,8 @@ test.describe
       console.log(
         `   hasPagination: ${hasPagination}, hasMultiplePages: ${hasMultiplePages}, nextButtonCount: ${nextCount}, nextDisabled: ${nextDisabled}`,
       );
-      test();
+      return;
+
     }
   });
 
@@ -962,7 +968,8 @@ test.describe
           console.log(
             "⚠️ Pagination not available - skipping test. Need more than pageSize questions for pagination.",
           );
-          test();
+          return;
+
           return;
         }
         await page.waitForTimeout(2000);
@@ -995,7 +1002,8 @@ test.describe
       console.log(
         `   hasPagination: ${hasPagination}, hasMultiplePages: ${hasMultiplePages}, pageText: ${pageText}`,
       );
-      test();
+      return;
+
       return;
     }
 
@@ -1014,7 +1022,8 @@ test.describe
       console.log(
         '⚠️ "Show:" label not found - page size selector may not be visible (pagination might not be available)',
       );
-      test();
+      return;
+
       return;
     }
 
@@ -1091,7 +1100,8 @@ test.describe
     if (!trigger || (await trigger.count().catch(() => 0)) === 0) {
       // Skip if page size selector not found
       console.log("⚠️ Page size selector not found - skipping test");
-      test();
+      return;
+
       return;
     }
 

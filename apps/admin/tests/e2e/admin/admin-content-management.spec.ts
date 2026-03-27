@@ -16,10 +16,18 @@ test.describe("Admin Content Management Page", () => {
   });
 
   test("should display the four main management sections", async ({ page }) => {
-    await expect(page.getByText(/Learning Plans/)).toBeVisible();
-    await expect(page.getByText(/Learning Cards/)).toBeVisible();
-    await expect(page.getByText("Categories Management")).toBeVisible();
-    await expect(page.getByText("Topics Management")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Learning Plans/i, exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Learning Cards/i, exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Categories Management", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Topics Management", exact: true }),
+    ).toBeVisible();
   });
 
   // ─── Category CRUD ──────────────────────────────────────────────────────────
