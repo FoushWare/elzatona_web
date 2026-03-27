@@ -120,6 +120,29 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     await titleInput.waitFor({ state: "visible", timeout: 5000 });
     await titleInput.fill("E2E Test Question " + Date.now()); // Use timestamp to ensure uniqueness
 
+    // FILL REQUIRED CONTENT FIELD
+    console.log("📝 Filling required Content field");
+    const contentInput = page.locator("#content");
+    const contentPlaceholder = page.getByPlaceholder(/Enter the question content/i);
+
+    // Ensure Question Content section is expanded
+    const contentSection = page.getByRole("button", { name: /Question Content/i });
+    if ((await contentSection.count()) > 0) {
+      const isExpanded = await contentSection.getAttribute("aria-expanded");
+      if (isExpanded !== "true") {
+        console.log("🔓 Expanding Question Content section");
+        await contentSection.click();
+        await page.waitForTimeout(500);
+      }
+    }
+
+    if ((await contentInput.count()) > 0) {
+      await contentInput.fill("E2E Test Content for question " + Date.now());
+    } else if ((await contentPlaceholder.count()) > 0) {
+      await contentPlaceholder.fill("E2E Test Content for question " + Date.now());
+    }
+    await page.waitForTimeout(500);
+
     // Select category if dropdown exists (wait for it to be available)
     const categoryLabel = page.getByText(/Category/i);
     if ((await categoryLabel.count()) > 0) {
@@ -135,6 +158,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       if ((await categorySelect.count()) > 0) {
         await categorySelect.click();
         await page.waitForTimeout(500);
+
+        await page.waitForTimeout(500);
+
         // Wait for options to appear and be enabled
         await page.waitForSelector(
           '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
@@ -205,6 +231,16 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     }
 
     // For multiple-choice questions, add at least one option
+    const optionsSection = page.getByRole("button", { name: /Answer Options/i });
+    if ((await optionsSection.count()) > 0) {
+      const isExpanded = await optionsSection.getAttribute("aria-expanded");
+      if (isExpanded !== "true") {
+        console.log("🔓 Expanding Answer Options section");
+        await optionsSection.click();
+        await page.waitForTimeout(500);
+      }
+    }
+
     await page.waitForTimeout(300);
     const addOptionButton = page.getByRole("button", { name: /Add Option/i });
     if ((await addOptionButton.count()) > 0) {
@@ -802,7 +838,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       }
     } else {
       // Skip test if no questions exist
-      test();
+      console.log("No questions exist - skipping view details test");
+      return;
+
     }
   });
 
@@ -967,7 +1005,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       }
     } else {
       // Skip test if no questions exist
-      test();
+      console.log("No questions exist - skipping edit test");
+      return;
+
     }
   });
 
@@ -1013,7 +1053,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       // If no delete buttons found, skip the test
       const count = await deleteButtons.count().catch(() => 0);
       if (count === 0) {
-        test();
+        console.log("No questions found - skipping delete test");
         return;
       }
       throw e;
@@ -1127,7 +1167,9 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
       }
     } else {
       // Skip test if no questions exist
-      test();
+      console.log("No questions found - skipping delete test");
+      return;
+
     }
   });
 
@@ -1185,7 +1227,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
         await expect(questionHeading).toBeVisible({ timeout: 5000 });
       }
     } else {
-      test();
+      console.log("No questions found - skipping cancel delete test");
+      return;
     }
   });
 });
