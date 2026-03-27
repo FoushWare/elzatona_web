@@ -1,4 +1,5 @@
 "use client";
+// Triggering fresh CI run for synchronization check
 
 import React from "react";
 import { useRouter } from "next/navigation";
