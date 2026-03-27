@@ -175,6 +175,18 @@ export async function setupAdminMocks(page: Page) {
       return;
     }
 
+    // Mock plan_questions mapping
+    if (url.includes("plan_questions")) {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify([
+          { plan_id: "plan-1", question_id: "q-1" }
+        ]),
+      });
+      return;
+    }
+
     await route.fulfill({
       status: 200,
       contentType: "application/json",

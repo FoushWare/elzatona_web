@@ -211,10 +211,14 @@ test.describe("Admin Content Management Page", () => {
       .first();
     await categoryHeader.click();
 
-    // 4. Click 'Add Existing Questions'
-    const addQuestionsBtn = planStructure
-      .getByRole("button", { name: /Add Existing Questions/i })
-      .first();
+    // Verify topic is visible
+    await expect(planStructure.getByText(/Semantic HTML/i)).toBeVisible();
+
+    // 4. Click 'Add Existing Questions' specifically for that topic
+    const topicNode = planStructure.locator("#plan-topic-topic-1");
+    const addQuestionsBtn = topicNode
+      .getByRole("button", { name: /Add Existing Questions/i });
+    
     await expect(addQuestionsBtn).toBeVisible();
     await addQuestionsBtn.click();
 
@@ -227,14 +231,14 @@ test.describe("Admin Content Management Page", () => {
       throw new Error(`Next.js runtime error detected in E2E:\n${errorText}`);
     }
 
-    const modal = page
-      .locator('[role="dialog"]')
-      .filter({ hasText: /Add Questions to Plan/i });
+    const modal = page.locator('div.rounded-xl').filter({ has: page.locator('h2:has-text("Add Questions to Plan")') }).first();
     await expect(modal).toBeVisible({ timeout: 15000 });
-
-    // 6. Verify modal is not stuck to the top (visual check confirmed it's centered)
-    // The previous pt-20 check was too generic and often hit global layout overlays
-    const modalContent = modal.locator('[class*="DialogContent"]');
+    
+    // Ensure content is loaded
+    await expect(modal.getByText(/What is an article tag/i)).toBeVisible();
+    
+    // 6. Verify modal is centered (visual check confirmed it's centered)
+    const modalContent = modal;
     await expect(modalContent).toBeVisible();
 
     // 7. Select all / deselect all behaviour
@@ -242,13 +246,14 @@ test.describe("Admin Content Management Page", () => {
     if ((await checkbox.count()) > 0) {
       await expect(checkbox).toBeVisible();
 
-      const selectAllBtn = modal.getByRole("button", { name: /Select All/i });
-      await selectAllBtn.click();
-      await expect(modal.getByText("1 of 1 selected")).toBeVisible();
+    const selectAllBtn = modal.getByRole("button", { name: "Select All", exact: true });
+    await selectAllBtn.click();
+    await expect(modal.getByText("1 of 1 selected")).toBeVisible();
 
-      const deselectAllBtn = modal.getByRole("button", {
-        name: /Deselect All/i,
-      });
+    const deselectAllBtn = modal.getByRole("button", {
+      name: "Deselect All",
+      exact: true,
+    });
       await deselectAllBtn.click();
       await expect(modal.getByText("0 of 1 selected")).toBeVisible();
     }
