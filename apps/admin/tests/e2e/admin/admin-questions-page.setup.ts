@@ -684,12 +684,15 @@ export async function setupNetworkMocks(page: Page): Promise<void> {
   );
 }
 
+import { setupAdminMocks } from "../support/mocks";
+
 export async function setupAdminPage(
   page: Page,
   browserName: string,
 ): Promise<void> {
-  // Set up network isolation
+  // Set up network isolation and consolidated mocks
   await setupNetworkMocks(page);
+  await setupAdminMocks(page);
 
   // Debug: Log which env files were loaded and what credentials we have
   console.log(`[Config] 🔍 Checking credentials...`);
