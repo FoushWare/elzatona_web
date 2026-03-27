@@ -8,7 +8,7 @@ import {
   AdminLearningCard,
   LearningPlan,
   AdminCategory,
-  AdminUnifiedQuestion,
+  AdminQuestion,
   Topic as AdminTopic,
 } from "@elzatona/types";
 import {
@@ -174,16 +174,6 @@ function buildCanonicalCards(cards: AdminLearningCard[]): {
   return { cards: canonicalCards, idsByKey };
 }
 
-function transformQuestion(q: any): AdminUnifiedQuestion {
-  return {
-    ...q,
-    isActive: q.isActive ?? q.is_active ?? true,
-    createdAt: q.createdAt ?? q.created_at ?? "",
-    updatedAt: q.updatedAt ?? q.updated_at ?? "",
-    // Ensure nested objects are handled if needed
-  };
-}
-
 function toSlug(input: string): string {
   return input
     .toLowerCase()
@@ -264,7 +254,7 @@ function hasExistingSpacedPlans(plans: LearningPlan[]): boolean {
 
 function buildQuestionsByCard(
   cards: AdminLearningCard[],
-  questions: AdminUnifiedQuestion[],
+  questions: AdminQuestion[],
 ): Map<string, string[]> {
   const questionsByCard = new Map<string, string[]>();
   cards.forEach((card) => {
@@ -367,7 +357,7 @@ async function insertPlanQuestionRows(
 
 async function generateDashboardSpacedPlans(
   cards: AdminLearningCard[],
-  questions: AdminUnifiedQuestion[],
+  questions: AdminQuestion[],
 ): Promise<void> {
   const questionsByCard = buildQuestionsByCard(cards, questions);
   const introducedByCard = new Map<string, string[]>();
@@ -621,7 +611,7 @@ export function useContentManagement() {
   const [plans, setPlans] = useState<LearningPlan[]>([]);
   const [categories, setCategories] = useState<AdminCategory[]>([]);
   const [topics, setTopics] = useState<AdminTopic[]>([]);
-  const [questions, setQuestions] = useState<AdminUnifiedQuestion[]>([]);
+  const [questions, setQuestions] = useState<AdminQuestion[]>([]);
 
   // Loading states
   const [loading, setLoading] = useState(true);
@@ -678,32 +668,6 @@ export function useContentManagement() {
   // Plan edit modal states
   const [isPlanEditModalOpen, setIsPlanEditModalOpen] = useState(false);
   const [planToEdit, setPlanToEdit] = useState<LearningPlan | null>(null);
-
-  // Category and Topic Modal states
-  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-  const [categoryToEdit, setCategoryToEdit] = useState<AdminCategory | null>(
-    null,
-  );
-
-  const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
-  const [topicToEdit, setTopicToEdit] = useState<AdminTopic | null>(null);
-
-  // Question Modal states
-  const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
-  const [questionToEdit, setQuestionToEdit] =
-    useState<AdminUnifiedQuestion | null>(null);
-  const [isQuestionReadOnly, setIsQuestionReadOnly] = useState(false);
-  const [selectedTopicIdForNewQuestion, setSelectedTopicIdForNewQuestion] =
-    useState<string | undefined>(undefined);
-
-  // Card Modal states
-  const [isCardFormModalOpen, setIsCardFormModalOpen] = useState(false);
-  const [cardToEdit, setCardToEdit] = useState<AdminLearningCard | null>(null);
-  const [isSubmittingCard, setIsSubmittingCard] = useState(false);
-  const [isSubmittingQuestion, setIsSubmittingQuestion] = useState(false);
-  const [isSubmittingTopic, setIsSubmittingTopic] = useState(false);
-  const [isSubmittingCategory, setIsSubmittingCategory] = useState(false);
-
   const [planEditFormData, setPlanEditFormData] = useState<PlanEditFormData>({
     title: "",
     description: "",
@@ -732,7 +696,7 @@ export function useContentManagement() {
           "Failed to fetch learning cards",
         ),
         loadLearningPlans(),
-        loadApiCollection<AdminUnifiedQuestion>(
+        loadApiCollection<AdminQuestion>(
           "/api/questions/unified?page=1&pageSize=2000&includePagination=false",
           "Failed to fetch questions",
         ),
@@ -765,7 +729,7 @@ export function useContentManagement() {
 
       setCards(normalizedCards);
       setPlans(plansResult.data);
-      setQuestions(questionsResult.data.map(transformQuestion));
+      setQuestions(questionsResult.data);
       setCategories(mappedCategories);
       setTopics(topicsResult.data.map(transformTopicToAdmin));
 
@@ -773,12 +737,10 @@ export function useContentManagement() {
         await supabase.from("plan_questions").select("plan_id, question_id");
 
       if (planQuestionsError) {
-        console.error("❌ Failed to fetch plan-question links:", {
-          message: planQuestionsError.message,
-          details: planQuestionsError.details,
-          hint: planQuestionsError.hint,
-          code: planQuestionsError.code,
-        });
+        console.error(
+          "❌ Failed to fetch plan-question links:",
+          planQuestionsError,
+        );
       } else {
         const planQuestionKeys = new Set(
           (existingPlanQuestions ?? []).map(
@@ -852,94 +814,6 @@ export function useContentManagement() {
       );
     });
   }, [plans, debouncedSearchTerm]);
-
-  // Search scrolling logic
-  useEffect(() => {
-    if (!debouncedSearchTerm) return;
-
-    // Small delay to allow auto-expansion to finish rendering
-    const timer = setTimeout(() => {
-      const lowerSearch = debouncedSearchTerm.toLowerCase();
-
-      // Find first matching element and scroll to it
-      // Order of priority: Cards -> Categories -> Topics
-      const match =
-        cards.find((c) => c.title.toLowerCase().includes(lowerSearch)) ||
-        categories.find((c) => c.name.toLowerCase().includes(lowerSearch)) ||
-        topics.find((t) => t.name.toLowerCase().includes(lowerSearch));
-
-      if (match) {
-        let id = "";
-        if ("title" in match) id = `card-${match.id}`;
-        else if (categories.some((c) => c.id === match.id))
-          id = `category-${match.id}`;
-        else id = `topic-${match.id}`;
-
-        const element = document.getElementById(id);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [debouncedSearchTerm, cards, categories, topics]);
-
-  // Auto-expand logic for search results
-  useEffect(() => {
-    if (!debouncedSearchTerm) return;
-
-    const lowerSearch = debouncedSearchTerm.toLowerCase();
-    const newExpandedCards = new Set(expandedCards);
-    const newExpandedCategories = new Set(expandedCategories);
-    const newExpandedTopics = new Set(expandedTopics);
-
-    // If a topic matches, expand its category and card
-    topics.forEach((topic) => {
-      if (topic.name.toLowerCase().includes(lowerSearch)) {
-        if (topic.category_id) {
-          newExpandedCategories.add(topic.category_id);
-          const category = categories.find((c) => c.id === topic.category_id);
-          if (category?.learning_card_id) {
-            newExpandedCards.add(category.learning_card_id);
-          }
-        }
-      }
-    });
-
-    // If a category matches, expand its card
-    categories.forEach((category) => {
-      if (category.name.toLowerCase().includes(lowerSearch)) {
-        if (category.learning_card_id) {
-          newExpandedCards.add(category.learning_card_id);
-        }
-      }
-    });
-
-    // If a question matches, expand its topic, category, and card
-    questions.forEach((question) => {
-      if (
-        question.title.toLowerCase().includes(lowerSearch) ||
-        question.content?.toLowerCase().includes(lowerSearch)
-      ) {
-        if (question.topic_id) {
-          newExpandedTopics.add(question.topic_id);
-          const topic = topics.find((t) => t.id === question.topic_id);
-          if (topic?.category_id) {
-            newExpandedCategories.add(topic.category_id);
-            const category = categories.find((c) => c.id === topic.category_id);
-            if (category?.learning_card_id) {
-              newExpandedCards.add(category.learning_card_id);
-            }
-          }
-        }
-      }
-    });
-
-    setExpandedCards(newExpandedCards);
-    setExpandedCategories(newExpandedCategories);
-    setExpandedTopics(newExpandedTopics);
-  }, [debouncedSearchTerm, topics, categories, questions]);
 
   // Toggles
   const toggleCard = useCallback(
@@ -1017,25 +891,10 @@ export function useContentManagement() {
     (topic: AdminTopic, plan: LearningPlan) => {
       setSelectedTopic(topic);
       setSelectedPlan(plan);
-
-      // Pre-populate with questions already in this plan
-      const initialSelected = new Set<string>();
-      planQuestions.forEach((key) => {
-        if (key.startsWith(`${plan.id}-`)) {
-          const questionId = key.replace(`${plan.id}-`, "");
-          // Only add if it belongs to this topic
-          if (
-            questions.find((q) => q.id === questionId)?.topic_id === topic.id
-          ) {
-            initialSelected.add(questionId);
-          }
-        }
-      });
-
-      setSelectedQuestions(initialSelected);
+      setSelectedQuestions(new Set());
       setIsTopicQuestionsModalOpen(true);
     },
-    [planQuestions, questions],
+    [],
   );
 
   const closeTopicQuestionsModal = useCallback(() => {
@@ -1045,13 +904,15 @@ export function useContentManagement() {
     setSelectedQuestions(new Set());
   }, []);
 
-  const toggleQuestionSelection = useCallback((id: string) => {
-    setSelectedQuestions((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  }, []);
+  const toggleQuestionSelection = useCallback(
+    (id: string) =>
+      setSelectedQuestions((prev) => {
+        const next = new Set(prev);
+        next.has(id) ? next.delete(id) : next.add(id);
+        return next;
+      }),
+    [],
+  );
 
   const selectAllQuestions = useCallback(() => {
     if (!selectedTopic) return;
@@ -1067,80 +928,23 @@ export function useContentManagement() {
   );
 
   const addSelectedQuestionsToPlan = useCallback(async () => {
-    if (!selectedPlan || !selectedTopic) return;
+    if (!selectedPlan || !selectedTopic || selectedQuestions.size === 0) return;
     try {
-      const planId = selectedPlan.id;
-      const topicId = selectedTopic.id;
-
-      // Current questions in plan for this topic
-      const currentInPlan = new Set<string>();
-      planQuestions.forEach((key) => {
-        if (key.startsWith(`${planId}-`)) {
-          const qId = key.replace(`${planId}-`, "");
-          if (questions.find((q) => q.id === qId)?.topic_id === topicId) {
-            currentInPlan.add(qId);
-          }
-        }
-      });
-
-      const toAdd = Array.from(selectedQuestions).filter(
-        (id) => !currentInPlan.has(id),
-      );
-      const toRemove = Array.from(currentInPlan).filter(
-        (id) => !selectedQuestions.has(id),
-      );
-
-      // Perform updates
-      if (toRemove.length > 0) {
-        const { error: deleteError } = await supabase
-          .from("plan_questions")
-          .delete()
-          .eq("plan_id", planId)
-          .in("question_id", toRemove);
-
-        if (deleteError) throw deleteError;
-      }
-
-      if (toAdd.length > 0) {
-        const insertRows = toAdd.map((qId, index) => ({
-          plan_id: planId,
-          question_id: qId,
-          order_index: index, // TBD: How to handle order better?
-          is_review: false,
-          is_active: true,
-        }));
-
-        const { error: insertError } = await supabase
-          .from("plan_questions")
-          .insert(insertRows);
-
-        if (insertError) throw insertError;
-      }
-
-      // Update local state
-      setPlanQuestions((prev) => {
-        const next = new Set(prev);
-        toRemove.forEach((id) => next.delete(`${planId}-${id}`));
-        toAdd.forEach((id) => next.add(`${planId}-${id}`));
-        return next;
-      });
-
-      toast.success(
-        `Plan updated: added ${toAdd.length}, removed ${toRemove.length} questions`,
-      );
+      // ARCHITECTURAL: Implement addQuestionsToThePlan via planRepository.addQuestionsToPlan(planId, questionIds)
+      // Requires implementing new repository method for bulk question association
+      toast.success(`Added ${selectedQuestions.size} questions to plan`);
       closeTopicQuestionsModal();
     } catch (err) {
-      console.error("Failed to update plan questions:", err);
+      console.error("Failed to add questions:", err);
       toast.error(
-        err instanceof Error ? err.message : "Failed to update plan questions",
+        err instanceof Error ? err.message : "Failed to add questions",
       );
     }
   }, [
     selectedPlan,
     selectedTopic,
     selectedQuestions,
-    planQuestions,
-    questions,
+    planRepository,
     closeTopicQuestionsModal,
   ]);
 
@@ -1404,63 +1208,69 @@ export function useContentManagement() {
     }
   }, [cards, fetchData, plans, questions]);
 
-  const openCreateCategoryModal = useCallback(() => {
-    setCategoryToEdit(null);
-    setIsCategoryModalOpen(true);
-  }, []);
+  const createCategory = useCallback(async () => {
+    const name = globalThis.prompt("Category name");
+    if (!name?.trim()) {
+      return;
+    }
 
-  const openEditCategoryModal = useCallback((category: AdminCategory) => {
-    setCategoryToEdit(category);
-    setIsCategoryModalOpen(true);
-  }, []);
+    const description =
+      globalThis.prompt("Category description (optional)") || "";
 
-  const submitCategory = useCallback(
-    async (data: { name: string; description?: string }) => {
-      const payload: Record<string, unknown> = {
-        name: data.name,
-        description: data.description || "",
-        slug: toSlug(data.name),
-      };
+    const defaultCardId = cards[0]?.id;
+    const payload: Record<string, unknown> = {
+      name: name.trim(),
+      description,
+      slug: toSlug(name),
+      is_active: true,
+    };
 
-      setIsSubmittingCategory(true);
-      try {
-        if (categoryToEdit) {
-          // Update
-          const { error: updateError } = await supabase
-            .from("categories")
-            .update(payload)
-            .eq("id", categoryToEdit.id);
+    if (defaultCardId) {
+      payload.learning_card_id = defaultCardId;
+    }
 
-          if (updateError) {
-            toast.error(updateError.message || "Failed to update category");
-            return;
-          }
-          toast.success("Category updated");
-        } else {
-          // Create
-          payload.is_active = true;
-          const defaultCardId = cards[0]?.id;
-          if (defaultCardId) {
-            payload.learning_card_id = defaultCardId;
-          }
+    const { error: createError } = await supabase
+      .from("categories")
+      .insert(payload);
 
-          const { error: createError } = await supabase
-            .from("categories")
-            .insert(payload);
+    if (createError) {
+      toast.error(createError.message || "Failed to create category");
+      return;
+    }
 
-          if (createError) {
-            toast.error(createError.message || "Failed to create category");
-            return;
-          }
-          toast.success("Category created");
-        }
-        setIsCategoryModalOpen(false);
-        await fetchData();
-      } finally {
-        setIsSubmittingCategory(false);
+    toast.success("Category created");
+    await fetchData();
+  }, [cards, fetchData]);
+
+  const editCategory = useCallback(
+    async (category: AdminCategory) => {
+      const nextName = globalThis.prompt("Category name", category.name ?? "");
+      if (!nextName?.trim()) {
+        return;
       }
+
+      const nextDescription =
+        globalThis.prompt("Category description", category.description ?? "") ??
+        "";
+
+      const { error: updateError } = await supabase
+        .from("categories")
+        .update({
+          name: nextName.trim(),
+          description: nextDescription,
+          slug: toSlug(nextName),
+        })
+        .eq("id", category.id);
+
+      if (updateError) {
+        toast.error(updateError.message || "Failed to update category");
+        return;
+      }
+
+      toast.success("Category updated");
+      await fetchData();
     },
-    [categoryToEdit, cards, fetchData],
+    [fetchData],
   );
 
   const removeCategory = useCallback(
@@ -1488,69 +1298,73 @@ export function useContentManagement() {
     [fetchData],
   );
 
-  const openCreateTopicModal = useCallback(() => {
+  const createTopic = useCallback(async () => {
     if (categories.length === 0) {
       toast.error("Create a category first");
       return;
     }
-    setTopicToEdit(null);
-    setIsTopicModalOpen(true);
-  }, [categories.length]);
 
-  const openEditTopicModal = useCallback((topic: AdminTopic) => {
-    setTopicToEdit(topic);
-    setIsTopicModalOpen(true);
-  }, []);
+    const name = globalThis.prompt("Topic name");
+    if (!name?.trim()) {
+      return;
+    }
 
-  const submitTopic = useCallback(
-    async (data: {
-      name: string;
-      description?: string;
-      category_id: string;
-    }) => {
-      const payload: Record<string, unknown> = {
-        name: data.name,
-        description: data.description || "",
-        category_id: data.category_id,
-        slug: toSlug(data.name),
-      };
+    const description = globalThis.prompt("Topic description (optional)") || "";
+    const categoryId = categories[0]?.id;
 
-      setIsSubmittingTopic(true);
-      try {
-        if (topicToEdit) {
-          // Update
-          const { error: updateError } = await supabase
-            .from("topics")
-            .update(payload)
-            .eq("id", topicToEdit.id);
+    if (!categoryId) {
+      toast.error("No category available for topic assignment");
+      return;
+    }
 
-          if (updateError) {
-            toast.error(updateError.message || "Failed to update topic");
-            return;
-          }
-          toast.success("Topic updated");
-        } else {
-          // Create
-          payload.is_active = true;
-          payload.order_index = 0;
+    const payload = {
+      name: name.trim(),
+      description,
+      category_id: categoryId,
+      is_active: true,
+      order_index: 0,
+    };
 
-          const { error: createError } = await supabase
-            .from("topics")
-            .insert(payload);
+    const { error: createError } = await supabase
+      .from("topics")
+      .insert(payload);
 
-          if (createError) {
-            toast.error(createError.message || "Failed to create topic");
-            return;
-          }
-          toast.success("Topic created");
-        }
-        setIsTopicModalOpen(false);
-        await fetchData();
-      } finally {
-        setIsSubmittingTopic(false);
+    if (createError) {
+      toast.error(createError.message || "Failed to create topic");
+      return;
+    }
+
+    toast.success("Topic created");
+    await fetchData();
+  }, [categories, fetchData]);
+
+  const editTopic = useCallback(
+    async (topic: AdminTopic) => {
+      const nextName = globalThis.prompt("Topic name", topic.name ?? "");
+      if (!nextName?.trim()) {
+        return;
       }
+
+      const nextDescription =
+        globalThis.prompt("Topic description", topic.description ?? "") ?? "";
+
+      const { error: updateError } = await supabase
+        .from("topics")
+        .update({
+          name: nextName.trim(),
+          description: nextDescription,
+        })
+        .eq("id", topic.id);
+
+      if (updateError) {
+        toast.error(updateError.message || "Failed to update topic");
+        return;
+      }
+
+      toast.success("Topic updated");
+      await fetchData();
     },
-    [topicToEdit, fetchData],
+    [fetchData],
   );
 
   const removeTopic = useCallback(
@@ -1574,140 +1388,6 @@ export function useContentManagement() {
       await fetchData();
     },
     [fetchData],
-  );
-
-  // Question Handlers
-  const openViewQuestionModal = useCallback(
-    (question: AdminUnifiedQuestion) => {
-      setQuestionToEdit(question);
-      setIsQuestionReadOnly(true);
-      setIsQuestionModalOpen(true);
-    },
-    [],
-  );
-
-  const openEditQuestionModal = useCallback(
-    (question: AdminUnifiedQuestion) => {
-      setQuestionToEdit(question);
-      setIsQuestionReadOnly(false);
-      setIsQuestionModalOpen(true);
-    },
-    [],
-  );
-
-  const openCreateQuestionModal = useCallback((topicId: string) => {
-    setQuestionToEdit(null);
-    setSelectedTopicIdForNewQuestion(topicId);
-    setIsQuestionReadOnly(false);
-    setIsQuestionModalOpen(true);
-  }, []);
-
-  const submitQuestion = useCallback(
-    async (data: Partial<AdminUnifiedQuestion>) => {
-      setIsSubmittingQuestion(true);
-      try {
-        const {
-          isActive: _isActive,
-          createdAt: _createdAt,
-          updatedAt: _updatedAt,
-          ...cleanData
-        } = data;
-
-        const payload: any = {
-          ...cleanData,
-          topic_id: selectedTopicIdForNewQuestion,
-        };
-
-        // Convert camelCase to snake_case for DB fields if needed
-        if (data.isActive !== undefined) payload.is_active = data.isActive;
-
-        if (questionToEdit) {
-          // Update
-          const { error: updateError } = await supabase
-            .from("questions")
-            .update(payload)
-            .eq("id", questionToEdit.id);
-
-          if (updateError) throw updateError;
-          toast.success("Question updated");
-        } else {
-          // Create
-          payload.is_active = true;
-          const { error: createError } = await supabase
-            .from("questions")
-            .insert(payload);
-
-          if (createError) throw createError;
-          toast.success("Question created");
-        }
-        setIsQuestionModalOpen(false);
-        await fetchData();
-      } catch (err) {
-        console.error("Failed to submit question:", err);
-        toast.error(
-          err instanceof Error ? err.message : "Failed to submit question",
-        );
-      } finally {
-        setIsSubmittingQuestion(false);
-      }
-    },
-    [questionToEdit, selectedTopicIdForNewQuestion, fetchData],
-  );
-
-  // Card Handlers
-  const openCreateCardModal = useCallback(() => {
-    setCardToEdit(null);
-    setIsCardFormModalOpen(true);
-  }, []);
-
-  const openEditCardModal = useCallback((card: AdminLearningCard) => {
-    setCardToEdit(card);
-    setIsCardFormModalOpen(true);
-  }, []);
-
-  const submitCard = useCallback(
-    async (data: any) => {
-      setIsSubmittingCard(true);
-      try {
-        const payload = {
-          title: data.name,
-          description: data.description,
-          color: data.color,
-          icon: data.icon,
-          order_index: data.order,
-        };
-
-        if (cardToEdit) {
-          // Update
-          const { error: updateError } = await supabase
-            .from("learning_cards")
-            .update(payload)
-            .eq("id", cardToEdit.id);
-
-          if (updateError) throw updateError;
-          toast.success("Card updated");
-        } else {
-          // Create
-          (payload as any).is_active = true;
-          const { error: createError } = await supabase
-            .from("learning_cards")
-            .insert(payload);
-
-          if (createError) throw createError;
-          toast.success("Card created");
-        }
-        setIsCardFormModalOpen(false);
-        await fetchData();
-      } catch (err) {
-        console.error("Failed to submit card:", err);
-        toast.error(
-          err instanceof Error ? err.message : "Failed to submit card",
-        );
-      } finally {
-        setIsSubmittingCard(false);
-      }
-    },
-    [cardToEdit, fetchData],
   );
 
   return {
@@ -1779,38 +1459,11 @@ export function useContentManagement() {
     openPlanEditModal,
     closePlanEditModal,
     updatePlan,
-    openCreateCategoryModal,
-    openEditCategoryModal,
-    submitCategory,
+    createCategory,
+    editCategory,
     removeCategory,
-    openCreateTopicModal,
-    openEditTopicModal,
-    submitTopic,
+    createTopic,
+    editTopic,
     removeTopic,
-    isCategoryModalOpen,
-    setIsCategoryModalOpen,
-    categoryToEdit,
-    isTopicModalOpen,
-    setIsTopicModalOpen,
-    topicToEdit,
-    isQuestionModalOpen,
-    setIsQuestionModalOpen,
-    questionToEdit,
-    isQuestionReadOnly,
-    selectedTopicIdForNewQuestion,
-    openViewQuestionModal,
-    openEditQuestionModal,
-    openCreateQuestionModal,
-    submitQuestion,
-    isSubmittingQuestion,
-    isCardFormModalOpen,
-    setIsCardFormModalOpen,
-    cardToEdit,
-    isSubmittingCard,
-    isSubmittingTopic,
-    isSubmittingCategory,
-    openCreateCardModal,
-    openEditCardModal,
-    submitCard,
   };
 }

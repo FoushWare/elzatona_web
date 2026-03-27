@@ -1,5 +1,4 @@
 "use client";
-// Triggering fresh CI run for synchronization check
 
 import React from "react";
 import { useRouter } from "next/navigation";
@@ -19,13 +18,62 @@ import {
   TopicQuestionsModal,
   DeleteConfirmationModal,
   CardManagementModal,
-  CategoryFormModal,
-  TopicFormModal,
-  QuestionFormModal,
-  CardFormModal,
 } from "@elzatona/common-ui";
+import type { AdminQuestion, AdminUnifiedQuestion } from "@elzatona/types";
 import { Loader2 } from "lucide-react";
 import { useContentManagement } from "./hooks/useContentManagement";
+
+function toUnifiedQuestions(
+  questions: AdminQuestion[],
+): AdminUnifiedQuestion[] {
+  return questions.map((question) => {
+    const difficulty =
+      question.difficulty === "beginner" ||
+      question.difficulty === "intermediate" ||
+      question.difficulty === "advanced"
+        ? question.difficulty
+        : "intermediate";
+
+    const type =
+      question.type === "multiple-choice" ||
+      question.type === "true-false" ||
+      question.type === "code" ||
+      question.type === "mcq"
+        ? question.type
+        : "multiple-choice";
+
+    const rawOptions = Array.isArray(question.options) ? question.options : [];
+    const options = rawOptions
+      .filter((option): option is string => typeof option === "string")
+      .map((option, index) => ({
+        id: `opt-${index + 1}`,
+        text: option,
+        isCorrect: option === question.correct_answer,
+      }));
+
+    return {
+      id: question.id,
+      title: question.title,
+      content: question.content,
+      difficulty,
+      type,
+      options,
+      category_id: question.category_id,
+      topic_id: question.topic_id,
+      learning_card_id: question.learning_card_id,
+      correct_answer: question.correct_answer,
+      explanation: question.explanation,
+      hints: question.hints,
+      tags: question.tags,
+      isActive: Boolean(question.is_active),
+      createdAt: question.created_at,
+      updatedAt: question.updated_at,
+      is_active: question.is_active,
+      created_at: question.created_at,
+      updated_at: question.updated_at,
+    };
+  });
+}
 
 export default function ContentManagementPage() {
   const router = useRouter();
@@ -42,7 +90,6 @@ export default function ContentManagementPage() {
     categories,
     topics,
     questions,
-    cards,
     planQuestions,
     expandedCards,
     toggleCard,
@@ -95,40 +142,15 @@ export default function ContentManagementPage() {
     openPlanEditModal,
     closePlanEditModal,
     updatePlan,
-    openCreateCategoryModal,
-    openEditCategoryModal,
-    submitCategory,
+    createCategory,
+    editCategory,
     removeCategory,
-    openCreateTopicModal,
-    openEditTopicModal,
-    submitTopic,
+    createTopic,
+    editTopic,
     removeTopic,
-    isCategoryModalOpen,
-    setIsCategoryModalOpen,
-    categoryToEdit,
-    isTopicModalOpen,
-    setIsTopicModalOpen,
-    topicToEdit,
-    isQuestionModalOpen,
-    setIsQuestionModalOpen,
-    questionToEdit,
-    isQuestionReadOnly,
-    selectedTopicIdForNewQuestion,
-    openViewQuestionModal,
-    openEditQuestionModal,
-    openCreateQuestionModal,
-    submitQuestion,
-    isSubmittingQuestion,
-    isCardFormModalOpen,
-    setIsCardFormModalOpen,
-    cardToEdit,
-    isSubmittingCard,
-    isSubmittingTopic,
-    isSubmittingCategory,
-    openCreateCardModal,
-    openEditCardModal,
-    submitCard,
   } = useContentManagement();
+
+  const unifiedQuestions = toUnifiedQuestions(questions);
 
   if (loading) {
     return (
@@ -209,10 +231,10 @@ export default function ContentManagementPage() {
         <TopicsManager
           topics={topics}
           onCreateTopic={() => {
-            void openCreateTopicModal();
+            void createTopic();
           }}
           onEditTopic={(topic: any) => {
-            void openEditTopicModal(topic);
+            void editTopic(topic);
           }}
           onDeleteTopic={(topic: any) => {
             void removeTopic(topic);
@@ -223,10 +245,10 @@ export default function ContentManagementPage() {
         <CategoriesManager
           categories={categories}
           onCreateCategory={() => {
-            void openCreateCategoryModal();
+            void createCategory();
           }}
           onEditCategory={(category: any) => {
-            void openEditCategoryModal(category);
+            void editCategory(category);
           }}
           onDeleteCategory={(category: any) => {
             void removeCategory(category);
@@ -238,7 +260,7 @@ export default function ContentManagementPage() {
           cards={filteredCards}
           categories={categories}
           topics={topics}
-          questions={questions}
+          questions={unifiedQuestions}
           stats={stats}
           expandedCards={expandedCards}
           toggleCard={toggleCard}
@@ -246,13 +268,14 @@ export default function ContentManagementPage() {
           toggleCategory={toggleCategory}
           expandedTopics={expandedTopics}
           toggleTopic={toggleTopic}
-          onEditCard={openEditCardModal}
+          onEditCard={(card) =>
+            router.push(
+              `/admin/learning-cards?edit=${encodeURIComponent(card.id)}`,
+            )
+          }
           onDeleteCard={openDeleteCardModal}
-          onCreateCard={openCreateCardModal}
-          onEditCategories={() => {}}
-          onViewQuestion={openViewQuestionModal}
-          onEditQuestion={openEditQuestionModal}
-          onCreateQuestion={openCreateQuestionModal}
+          onCreateCard={() => router.push("/admin/learning-cards")}
+          onEditCategories={() => router.push("/admin/learning-cards")}
         />
 
         {/* Learning Plans Section */}
@@ -261,7 +284,7 @@ export default function ContentManagementPage() {
           cards={filteredCards}
           categories={categories}
           topics={topics}
-          questions={questions}
+          questions={unifiedQuestions}
           stats={stats}
           planQuestions={planQuestions}
           expandedPlans={expandedPlans}
@@ -281,63 +304,21 @@ export default function ContentManagementPage() {
           onCreatePlan={createSpacedRepetitionPlans}
           onManageCards={openCardManagementModal}
           openTopicQuestionsModal={openTopicQuestionsModal}
-          onViewQuestion={openViewQuestionModal}
-          onEditQuestion={openEditQuestionModal}
-          onCreateQuestion={openCreateQuestionModal}
         />
 
         {/* Modals */}
-        <CategoryFormModal
-          isOpen={isCategoryModalOpen}
-          onOpenChange={setIsCategoryModalOpen}
-          category={categoryToEdit}
-          onSubmit={submitCategory}
-        />
-
-        <TopicFormModal
-          isOpen={isTopicModalOpen}
-          onOpenChange={setIsTopicModalOpen}
-          topic={topicToEdit}
-          categories={categories}
-          onSubmit={submitTopic}
-          onCreateCategory={async (name) => {
-            await submitCategory({ name });
-          }}
-          isSubmitting={isSubmittingTopic}
-        />
-
         <TopicQuestionsModal
           isOpen={isTopicQuestionsModalOpen}
           onOpenChange={setIsTopicQuestionsModalOpen}
           topic={selectedTopic}
           plan={selectedPlan}
-          questions={questions}
+          questions={unifiedQuestions}
           selectedQuestions={selectedQuestions}
           onToggleQuestion={toggleQuestionSelection}
           onSelectAll={selectAllQuestions}
           onDeselectAll={deselectAllQuestions}
           onAddSelected={addSelectedQuestionsToPlan}
           onCancel={closeTopicQuestionsModal}
-        />
-
-        <QuestionFormModal
-          isOpen={isQuestionModalOpen}
-          onOpenChange={setIsQuestionModalOpen}
-          question={questionToEdit}
-          topicId={selectedTopicIdForNewQuestion}
-          cards={cards}
-          allCategories={categories.map((c) => c.name)}
-          onSubmit={submitQuestion}
-          readOnly={isQuestionReadOnly}
-          isLoading={isSubmittingQuestion}
-        />
-
-        <CardFormModal
-          isOpen={isCardFormModalOpen}
-          onOpenChange={setIsCardFormModalOpen}
-          card={cardToEdit}
-          onSubmit={submitCard}
-          isLoading={isSubmittingCard}
         />
 
         <DeleteConfirmationModal
