@@ -122,6 +122,8 @@ export default function ContentManagementPage() {
     setIsCardFormModalOpen,
     cardToEdit,
     isSubmittingCard,
+    isSubmittingTopic,
+    isSubmittingCategory,
     openCreateCardModal,
     openEditCardModal,
     submitCard,
@@ -297,6 +299,10 @@ export default function ContentManagementPage() {
           topic={topicToEdit}
           categories={categories}
           onSubmit={submitTopic}
+          onCreateCategory={async (name) => {
+            await submitCategory({ name });
+          }}
+          isSubmitting={isSubmittingTopic}
         />
 
         <TopicQuestionsModal

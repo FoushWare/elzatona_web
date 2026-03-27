@@ -701,6 +701,8 @@ export function useContentManagement() {
   const [cardToEdit, setCardToEdit] = useState<AdminLearningCard | null>(null);
   const [isSubmittingCard, setIsSubmittingCard] = useState(false);
   const [isSubmittingQuestion, setIsSubmittingQuestion] = useState(false);
+  const [isSubmittingTopic, setIsSubmittingTopic] = useState(false);
+  const [isSubmittingCategory, setIsSubmittingCategory] = useState(false);
 
   const [planEditFormData, setPlanEditFormData] = useState<PlanEditFormData>({
     title: "",
@@ -850,6 +852,94 @@ export function useContentManagement() {
       );
     });
   }, [plans, debouncedSearchTerm]);
+
+  // Search scrolling logic
+  useEffect(() => {
+    if (!debouncedSearchTerm) return;
+
+    // Small delay to allow auto-expansion to finish rendering
+    const timer = setTimeout(() => {
+      const lowerSearch = debouncedSearchTerm.toLowerCase();
+
+      // Find first matching element and scroll to it
+      // Order of priority: Cards -> Categories -> Topics
+      const match =
+        cards.find((c) => c.title.toLowerCase().includes(lowerSearch)) ||
+        categories.find((c) => c.name.toLowerCase().includes(lowerSearch)) ||
+        topics.find((t) => t.name.toLowerCase().includes(lowerSearch));
+
+      if (match) {
+        let id = "";
+        if ("title" in match) id = `card-${match.id}`;
+        else if (categories.some((c) => c.id === match.id))
+          id = `category-${match.id}`;
+        else id = `topic-${match.id}`;
+
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [debouncedSearchTerm, cards, categories, topics]);
+
+  // Auto-expand logic for search results
+  useEffect(() => {
+    if (!debouncedSearchTerm) return;
+
+    const lowerSearch = debouncedSearchTerm.toLowerCase();
+    const newExpandedCards = new Set(expandedCards);
+    const newExpandedCategories = new Set(expandedCategories);
+    const newExpandedTopics = new Set(expandedTopics);
+
+    // If a topic matches, expand its category and card
+    topics.forEach((topic) => {
+      if (topic.name.toLowerCase().includes(lowerSearch)) {
+        if (topic.category_id) {
+          newExpandedCategories.add(topic.category_id);
+          const category = categories.find((c) => c.id === topic.category_id);
+          if (category?.learning_card_id) {
+            newExpandedCards.add(category.learning_card_id);
+          }
+        }
+      }
+    });
+
+    // If a category matches, expand its card
+    categories.forEach((category) => {
+      if (category.name.toLowerCase().includes(lowerSearch)) {
+        if (category.learning_card_id) {
+          newExpandedCards.add(category.learning_card_id);
+        }
+      }
+    });
+
+    // If a question matches, expand its topic, category, and card
+    questions.forEach((question) => {
+      if (
+        question.title.toLowerCase().includes(lowerSearch) ||
+        question.content?.toLowerCase().includes(lowerSearch)
+      ) {
+        if (question.topic_id) {
+          newExpandedTopics.add(question.topic_id);
+          const topic = topics.find((t) => t.id === question.topic_id);
+          if (topic?.category_id) {
+            newExpandedCategories.add(topic.category_id);
+            const category = categories.find((c) => c.id === topic.category_id);
+            if (category?.learning_card_id) {
+              newExpandedCards.add(category.learning_card_id);
+            }
+          }
+        }
+      }
+    });
+
+    setExpandedCards(newExpandedCards);
+    setExpandedCategories(newExpandedCategories);
+    setExpandedTopics(newExpandedTopics);
+  }, [debouncedSearchTerm, topics, categories, questions]);
 
   // Toggles
   const toggleCard = useCallback(
@@ -1332,38 +1422,43 @@ export function useContentManagement() {
         slug: toSlug(data.name),
       };
 
-      if (categoryToEdit) {
-        // Update
-        const { error: updateError } = await supabase
-          .from("categories")
-          .update(payload)
-          .eq("id", categoryToEdit.id);
+      setIsSubmittingCategory(true);
+      try {
+        if (categoryToEdit) {
+          // Update
+          const { error: updateError } = await supabase
+            .from("categories")
+            .update(payload)
+            .eq("id", categoryToEdit.id);
 
-        if (updateError) {
-          toast.error(updateError.message || "Failed to update category");
-          return;
-        }
-        toast.success("Category updated");
-      } else {
-        // Create
-        payload.is_active = true;
-        const defaultCardId = cards[0]?.id;
-        if (defaultCardId) {
-          payload.learning_card_id = defaultCardId;
-        }
+          if (updateError) {
+            toast.error(updateError.message || "Failed to update category");
+            return;
+          }
+          toast.success("Category updated");
+        } else {
+          // Create
+          payload.is_active = true;
+          const defaultCardId = cards[0]?.id;
+          if (defaultCardId) {
+            payload.learning_card_id = defaultCardId;
+          }
 
-        const { error: createError } = await supabase
-          .from("categories")
-          .insert(payload);
+          const { error: createError } = await supabase
+            .from("categories")
+            .insert(payload);
 
-        if (createError) {
-          toast.error(createError.message || "Failed to create category");
-          return;
+          if (createError) {
+            toast.error(createError.message || "Failed to create category");
+            return;
+          }
+          toast.success("Category created");
         }
-        toast.success("Category created");
+        setIsCategoryModalOpen(false);
+        await fetchData();
+      } finally {
+        setIsSubmittingCategory(false);
       }
-      setIsCategoryModalOpen(false);
-      await fetchData();
     },
     [categoryToEdit, cards, fetchData],
   );
@@ -1417,37 +1512,43 @@ export function useContentManagement() {
         name: data.name,
         description: data.description || "",
         category_id: data.category_id,
+        slug: toSlug(data.name),
       };
 
-      if (topicToEdit) {
-        // Update
-        const { error: updateError } = await supabase
-          .from("topics")
-          .update(payload)
-          .eq("id", topicToEdit.id);
+      setIsSubmittingTopic(true);
+      try {
+        if (topicToEdit) {
+          // Update
+          const { error: updateError } = await supabase
+            .from("topics")
+            .update(payload)
+            .eq("id", topicToEdit.id);
 
-        if (updateError) {
-          toast.error(updateError.message || "Failed to update topic");
-          return;
+          if (updateError) {
+            toast.error(updateError.message || "Failed to update topic");
+            return;
+          }
+          toast.success("Topic updated");
+        } else {
+          // Create
+          payload.is_active = true;
+          payload.order_index = 0;
+
+          const { error: createError } = await supabase
+            .from("topics")
+            .insert(payload);
+
+          if (createError) {
+            toast.error(createError.message || "Failed to create topic");
+            return;
+          }
+          toast.success("Topic created");
         }
-        toast.success("Topic updated");
-      } else {
-        // Create
-        payload.is_active = true;
-        payload.order_index = 0;
-
-        const { error: createError } = await supabase
-          .from("topics")
-          .insert(payload);
-
-        if (createError) {
-          toast.error(createError.message || "Failed to create topic");
-          return;
-        }
-        toast.success("Topic created");
+        setIsTopicModalOpen(false);
+        await fetchData();
+      } finally {
+        setIsSubmittingTopic(false);
       }
-      setIsTopicModalOpen(false);
-      await fetchData();
     },
     [topicToEdit, fetchData],
   );
@@ -1706,6 +1807,8 @@ export function useContentManagement() {
     setIsCardFormModalOpen,
     cardToEdit,
     isSubmittingCard,
+    isSubmittingTopic,
+    isSubmittingCategory,
     openCreateCardModal,
     openEditCardModal,
     submitCard,

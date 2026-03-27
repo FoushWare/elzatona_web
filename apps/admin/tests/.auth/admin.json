@@ -10,7 +10,7 @@
         },
         {
           "name": "admin_session",
-          "value": "{\"id\":\"e2e-test-admin-id\",\"email\":\"test-admin@example.com\",\"role\":\"admin\",\"name\":\"E2E Test Admin\",\"expiresAt\":\"2026-03-27T22:55:04.490Z\",\"created_at\":\"2026-03-26T22:55:04.494Z\",\"updated_at\":\"2026-03-26T22:55:04.494Z\"}"
+          "value": "{\"id\":\"e2e-test-admin-id\",\"email\":\"test-admin@example.com\",\"role\":\"admin\",\"name\":\"E2E Test Admin\",\"expiresAt\":\"2026-03-28T00:18:42.106Z\",\"created_at\":\"2026-03-27T00:18:42.115Z\",\"updated_at\":\"2026-03-27T00:18:42.115Z\"}"
         }
       ]
     }

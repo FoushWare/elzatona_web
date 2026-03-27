@@ -114,7 +114,10 @@ const TopicNode: React.FC<{
   const topicQuestions = questions.filter((q) => q.topic_id === topic.id);
 
   return (
-    <div className="border-l-2 border-gray-100 pl-4 py-2">
+    <div
+      id={`topic-${topic.id}`}
+      className="border-l-2 border-gray-100 pl-4 py-2"
+    >
       <div
         className="flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition-colors"
         onClick={() => toggleTopic(topic.id)}
@@ -238,7 +241,10 @@ const CategoryNode: React.FC<{
   onCreateQuestion,
 }) => {
   return (
-    <div className="ml-6 border-l-2 border-gray-200 pl-4">
+    <div
+      id={`category-${category.id}`}
+      className="ml-6 border-l-2 border-gray-200 pl-4"
+    >
       <div
         className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition-colors"
         onClick={() => toggleCategory(category.id)}
@@ -342,6 +348,7 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
 
     return (
       <Card
+        id={`card-${card.id}`}
         key={card.id}
         className="border-l-4"
         style={{ borderLeftColor: card.color }}
@@ -442,15 +449,6 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
           Learning Cards ({stats.totalCards})
         </h2>
         <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onEditCategories}
-            className="flex items-center space-x-1"
-          >
-            <Edit className="h-4 w-4" />
-            <span>Edit Cards</span>
-          </Button>
           <Button
             size="sm"
             onClick={onCreateCard}

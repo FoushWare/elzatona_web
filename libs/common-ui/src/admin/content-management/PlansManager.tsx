@@ -109,7 +109,10 @@ const PlanTopicNode: React.FC<{
   });
 
   return (
-    <div className="border-l-2 border-orange-100 pl-4 py-1">
+    <div
+      id={`plan-topic-${topic.id}`}
+      className="border-l-2 border-orange-100 pl-4 py-1"
+    >
       <div
         className="flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded transition-colors"
         onClick={() => togglePlanTopic(topic.id)}
@@ -258,7 +261,10 @@ const PlanCategoryNode: React.FC<{
   onCreateQuestion,
 }) => {
   return (
-    <div className="border-l-2 border-purple-200 pl-4">
+    <div
+      id={`plan-category-${category.id}`}
+      className="border-l-2 border-purple-200 pl-4"
+    >
       <div
         className="flex items-center justify-between py-1.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded transition-colors"
         onClick={() => togglePlanCategory(category.id)}
@@ -369,7 +375,11 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
       CARD_ICONS[card.title as keyof typeof CARD_ICONS]?.icon || Layers;
 
     return (
-      <div key={card.id} className="ml-4 border-l-2 border-blue-200 pl-4">
+      <div
+        id={`plan-card-${card.id}`}
+        key={card.id}
+        className="ml-4 border-l-2 border-blue-200 pl-4"
+      >
         <div
           className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition-colors group"
           onClick={() => togglePlanCard(card.id)}
@@ -417,7 +427,11 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
     const handleManageCards = () => onManageCards(plan);
 
     return (
-      <Card key={plan.id} className="border-l-4 border-l-green-500">
+      <Card
+        id={`plan-${plan.id}`}
+        key={plan.id}
+        className="border-l-4 border-l-green-500"
+      >
         <CardHeader
           className="pb-3 border-b-0 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
           onClick={handlePlanToggle}
@@ -567,14 +581,6 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
           Learning Plans ({stats.totalPlans})
         </h2>
         <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex items-center space-x-1"
-          >
-            <Edit className="h-4 w-4" />
-            <span>Edit Plans</span>
-          </Button>
           <Button
             size="sm"
             onClick={onCreatePlan}
