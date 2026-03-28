@@ -1,0 +1,25 @@
+# pnpm Configuration
+
+# Project-specific pnpm settings (see docs/PACKAGE_MANAGER_PNPM.md)
+
+# Store location - must be writable and persistent
+# Default: ~/.pnpm-store (recommended for 8GB RAM systems)
+# store-dir=~/.pnpm-store
+
+# Hoist packages for compatibility (use sparingly)
+# shamefully-hoist=false
+
+# Use strict peer dependency resolution
+strict-peer-dependencies=true
+
+# Enable auto-install of peer dependencies (cautiously)
+auto-install-peers=false
+
+# Suppress deprecation warnings from dependencies
+suppress-error=false
+
+# Node version requirement (optional)
+node-version=20.x
+
+# Package manager version requirement  
+pnpm-version=9.x

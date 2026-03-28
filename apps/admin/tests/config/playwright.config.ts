@@ -136,14 +136,24 @@ export default defineConfig({
       dependencies: ["setup"],
     },
 
+    /**
+     * Safari (WebKit) - Enabled for macOS local testing and CI cross-browser coverage
+     * Memory-efficient: ~150MB vs Chrome's ~300MB
+     * Good for catching macOS-specific rendering issues
+     */
+    {
+      name: "safari",
+      use: {
+        ...devices["Desktop Safari"],
+        storageState: resolve(__dirname, "../.auth/admin.json"),
+      },
+      dependencies: ["setup"],
+    },
+
     /* Other browsers disabled for faster test execution - uncomment if needed */
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },
-    // },
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
     // },
     // {
     //   name: 'Mobile Chrome',
