@@ -151,14 +151,22 @@ export async function setupAdminMocks(page: Page) {
 
     // Response for POST (Create)
     if (method === "POST") {
-      const body = await route.request().postDataJSON().catch(() => ({}));
+      let body: Record<string, unknown> = {};
+      try {
+        const parsed = route.request().postDataJSON();
+        if (parsed && typeof parsed === "object") {
+          body = parsed as Record<string, unknown>;
+        }
+      } catch {
+        body = {};
+      }
       const newQuestion = {
         id: `new-q-${Date.now()}`,
-        title: body.title || "New Question",
-        type: body.type || "single_choice",
-        topic_id: body.topic_id || "topic-1",
-        learning_card_id: body.learning_card_id || "card-1",
-        difficulty: body.difficulty || "beginner",
+        title: String(body.title || "New Question"),
+        type: String(body.type || "single_choice"),
+        topic_id: String(body.topic_id || "topic-1"),
+        learning_card_id: String(body.learning_card_id || "card-1"),
+        difficulty: String(body.difficulty || "beginner"),
         isActive: true,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
