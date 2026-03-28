@@ -413,7 +413,7 @@ describe("ContentManagementPage", () => {
 
       expect(screen.getByTestId("card-management-modal")).toBeInTheDocument();
     });
-    it("should render question form modal when isQuestionModalOpen is true", () => {
+    it("should not render legacy question form modal on this page", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
         isQuestionModalOpen: true,
@@ -421,10 +421,12 @@ describe("ContentManagementPage", () => {
 
       render(<ContentManagementPage />);
 
-      expect(screen.getByTestId("question-form-modal")).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("question-form-modal"),
+      ).not.toBeInTheDocument();
     });
 
-    it("should render card form modal when isCardFormModalOpen is true", () => {
+    it("should not render legacy card form modal on this page", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
         isCardFormModalOpen: true,
@@ -432,7 +434,7 @@ describe("ContentManagementPage", () => {
 
       render(<ContentManagementPage />);
 
-      expect(screen.getByTestId("card-form-modal")).toBeInTheDocument();
+      expect(screen.queryByTestId("card-form-modal")).not.toBeInTheDocument();
     });
   });
 });

@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Admin Dashboard", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeEach(async ({ page }) => {
     // Mock auth API for login
     await page.route("**/api/admin/auth", async (route) => {

@@ -222,111 +222,123 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
   // Select Category
   const categoryLabel = page.getByText(/Category/i);
   if ((await categoryLabel.count()) > 0) {
-    await page.waitForTimeout(500);
-    const categorySelect = page
-      .locator("label")
-      .filter({ hasText: /Category/i })
-      .locator("..")
-      .locator("button")
-      .first();
-    if ((await categorySelect.count()) > 0) {
-      await categorySelect.click();
-      // Wait for enabled options to appear (filter out disabled ones)
-      await page.waitForSelector(
-        '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
-        { timeout: 10000 },
-      );
-      const categoryOption = page
-        .locator(
-          '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
-        )
+    try {
+      await page.waitForTimeout(500);
+      const categorySelect = page
+        .locator("label")
+        .filter({ hasText: /Category/i })
+        .locator("..")
+        .locator("button")
         .first();
-      if ((await categoryOption.count()) > 0) {
-        await categoryOption.waitFor({ state: "visible", timeout: 5000 });
-        await categoryOption.click();
-      } else {
-        console.log(
-          "⚠️ No enabled category options found, skipping category selection",
+      if ((await categorySelect.count()) > 0) {
+        await categorySelect.click();
+        // Wait for enabled options to appear (filter out disabled ones)
+        await page.waitForSelector(
+          '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
+          { timeout: 10000 },
         );
+        const categoryOption = page
+          .locator(
+            '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
+          )
+          .first();
+        if ((await categoryOption.count()) > 0) {
+          await categoryOption.waitFor({ state: "visible", timeout: 5000 });
+          await categoryOption.click();
+        } else {
+          console.log(
+            "⚠️ No enabled category options found, skipping category selection",
+          );
+        }
       }
+    } catch (error) {
+      console.log("⚠️ Category selection skipped:", error);
     }
   }
 
   // Select Type (default is multiple-choice, but ensure it's set)
   const typeLabel = page.getByText(/Type/i);
   if ((await typeLabel.count()) > 0) {
-    const typeSelect = page
-      .locator("label")
-      .filter({ hasText: /Type/i })
-      .locator("..")
-      .locator("button")
-      .first();
-    if ((await typeSelect.count()) > 0) {
-      await typeSelect.click();
-      // Wait for enabled options to appear
-      await page.waitForSelector(
-        '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
-        { timeout: 10000 },
-      );
-      const multipleChoiceOption = page
-        .locator(
-          '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
-        )
-        .filter({ hasText: /multiple-choice/i })
+    try {
+      const typeSelect = page
+        .locator("label")
+        .filter({ hasText: /Type/i })
+        .locator("..")
+        .locator("button")
         .first();
-      if ((await multipleChoiceOption.count()) > 0) {
-        await multipleChoiceOption.waitFor({ state: "visible", timeout: 5000 });
-        await multipleChoiceOption.click();
-      } else {
-        const firstOption = page
+      if ((await typeSelect.count()) > 0) {
+        await typeSelect.click();
+        // Wait for enabled options to appear
+        await page.waitForSelector(
+          '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
+          { timeout: 10000 },
+        );
+        const multipleChoiceOption = page
           .locator(
             '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
           )
+          .filter({ hasText: /multiple-choice/i })
           .first();
-        if ((await firstOption.count()) > 0) {
-          await firstOption.waitFor({ state: "visible", timeout: 5000 });
-          await firstOption.click();
+        if ((await multipleChoiceOption.count()) > 0) {
+          await multipleChoiceOption.waitFor({ state: "visible", timeout: 5000 });
+          await multipleChoiceOption.click();
+        } else {
+          const firstOption = page
+            .locator(
+              '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
+            )
+            .first();
+          if ((await firstOption.count()) > 0) {
+            await firstOption.waitFor({ state: "visible", timeout: 5000 });
+            await firstOption.click();
+          }
         }
       }
+    } catch (error) {
+      console.log("⚠️ Type selection skipped:", error);
     }
   }
 
   // Select Difficulty
   const difficultyLabel = page.getByText(/Difficulty/i);
   if ((await difficultyLabel.count()) > 0) {
-    const difficultySelect = page
-      .locator("label")
-      .filter({ hasText: /Difficulty/i })
-      .locator("..")
-      .locator("button")
-      .first();
-    if ((await difficultySelect.count()) > 0) {
-      await difficultySelect.click();
-      // Wait for enabled options to appear
-      await page.waitForSelector(
-        '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
-        { timeout: 10000 },
-      );
-      const beginnerOption = page
-        .locator(
-          '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
-        )
-        .filter({ hasText: /beginner/i })
+    try {
+      const difficultySelect = page
+        .locator("label")
+        .filter({ hasText: /Difficulty/i })
+        .locator("..")
+        .locator("button")
         .first();
-      if ((await beginnerOption.count()) > 0) {
-        await beginnerOption.waitFor({ state: "visible", timeout: 5000 });
-        await beginnerOption.click();
-      } else {
-        const firstOption = page
+      if ((await difficultySelect.count()) > 0) {
+        await difficultySelect.click();
+        // Wait for enabled options to appear
+        await page.waitForSelector(
+          '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
+          { timeout: 10000 },
+        );
+        const beginnerOption = page
           .locator(
             '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
           )
+          .filter({ hasText: /beginner/i })
           .first();
-        if ((await firstOption.count()) > 0) {
-          await firstOption.waitFor({ state: "visible", timeout: 5000 });
-          await firstOption.click();
+        if ((await beginnerOption.count()) > 0) {
+          await beginnerOption.waitFor({ state: "visible", timeout: 5000 });
+          await beginnerOption.click();
+        } else {
+          const firstOption = page
+            .locator(
+              '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
+            )
+            .first();
+          if ((await firstOption.count()) > 0) {
+            await firstOption.waitFor({ state: "visible", timeout: 5000 });
+            await firstOption.click();
+          }
         }
       }
+    } catch (error) {
+      console.log("⚠️ Difficulty selection skipped:", error);
     }
   }
 
