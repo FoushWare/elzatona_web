@@ -17,10 +17,10 @@ test.describe("Admin Content Management Page", () => {
 
   test("should display the four main management sections", async ({ page }) => {
     await expect(
-      page.getByRole("heading", { name: /^Learning Plans \(/i }),
+      page.getByRole("heading", { name: /^Learning Plans\s*\(/i }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /^Learning Cards \(/i }),
+      page.getByRole("heading", { name: /^Learning Cards\s*\(/i }),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: /^Categories Management\s*\(/i }),
