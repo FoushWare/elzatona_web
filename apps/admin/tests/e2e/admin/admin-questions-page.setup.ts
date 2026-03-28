@@ -547,32 +547,48 @@ async function waitForServerReady(
   maxRetries = 15, // Increased retries for CI stability
   retryDelay = 2000, // Increased delay
 ): Promise<void> {
-  const baseURL = process.env.ADMIN_BASE_URL || "http://localhost:3001";
+  const configuredBaseURL = process.env.ADMIN_BASE_URL || "http://localhost:3001";
+  const fallbackBaseURL = configuredBaseURL.includes("localhost")
+    ? configuredBaseURL.replace("localhost", "127.0.0.1")
+    : configuredBaseURL;
+  const probeUrls =
+    fallbackBaseURL === configuredBaseURL
+      ? [configuredBaseURL]
+      : [configuredBaseURL, fallbackBaseURL];
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      // Try to fetch the root page to check if server is ready
-      const response = await page.request.get(baseURL, { timeout: 2000 });
-      if (response.status() < 500) {
-        // Server is responding (even if 404, it means server is up)
-        console.log(`✅ Server is ready (attempt ${attempt}/${maxRetries})`);
-        return;
+    let lastErrorMessage = "Unknown server readiness error";
+    // Probe configured URL first, then IPv4 fallback if needed.
+    for (const probeUrl of probeUrls) {
+      try {
+        const response = await page.request.get(probeUrl, { timeout: 2000 });
+        if (response.status() < 500) {
+          console.log(
+            `✅ Server is ready at ${probeUrl} (attempt ${attempt}/${maxRetries})`,
+          );
+          return;
+        }
+        lastErrorMessage = `Unexpected status ${response.status()} at ${probeUrl}`;
+      } catch (probeError: unknown) {
+        const normalizedProbeError =
+          probeError instanceof Error
+            ? probeError
+            : new Error(String(probeError));
+        lastErrorMessage = `${probeUrl} => ${normalizedProbeError.message}`;
       }
-    } catch (error: unknown) {
-      // Server not ready yet
-      const _err = error instanceof Error ? error : new Error(String(error));
-      if (attempt < maxRetries) {
-        console.log(
-          `⏳ Waiting for server to be ready at ${baseURL} (attempt ${attempt}/${maxRetries})...`,
-        );
-        await new Promise((resolve) => setTimeout(resolve, retryDelay));
-      } else {
-        throw new Error(
-          `Dev server is not ready after ${maxRetries} attempts. ` +
-            `Please ensure the dev server is running at ${baseURL} or check Playwright's webServer configuration. ` +
-            `Error: ${_err.message}`,
-        );
-      }
+    }
+
+    if (attempt < maxRetries) {
+      console.log(
+        `⏳ Waiting for server to be ready (${attempt}/${maxRetries}). Last probe: ${lastErrorMessage}`,
+      );
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
+    } else {
+      throw new Error(
+        `Dev server is not ready after ${maxRetries} attempts. ` +
+          `Please ensure the dev server is running at ${configuredBaseURL} or check Playwright's webServer configuration. ` +
+          `Last error: ${lastErrorMessage}`,
+      );
     }
   }
 }

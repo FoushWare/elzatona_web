@@ -23,10 +23,10 @@ test.describe("Admin Content Management Page", () => {
       page.getByRole("heading", { name: /^Learning Cards \(/i }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Categories Management", exact: true }),
+      page.getByRole("heading", { name: /^Categories Management\s*\(/i }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Topics Management", exact: true }),
+      page.getByRole("heading", { name: /^Topics Management\s*\(/i }),
     ).toBeVisible();
   });
 
