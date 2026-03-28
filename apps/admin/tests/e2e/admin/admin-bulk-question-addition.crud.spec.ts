@@ -239,7 +239,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
 
     // FILL REQUIRED CONTENT FIELD
     console.log("📝 Filling required Content field");
-    const contentInput = page.getByLabel(/Content/i);
+    const contentInput = page.locator("#content");
     if ((await contentInput.count()) > 0) {
       await contentInput.fill("E2E Test Content for question " + Date.now());
     } else {
