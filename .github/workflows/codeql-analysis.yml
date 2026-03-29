@@ -63,7 +63,7 @@ jobs:
         continue-on-error: true
         with:
           # Keep category aligned with existing repository Code Scanning configuration key.
-          category: "/language:typescript"
+          category: "/language:javascript"
           upload: true
           wait-for-processing: false
           threads: 1
