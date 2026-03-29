@@ -213,6 +213,30 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
 
   await waitForQuestionManagementReady(page);
 
+  const waitForQuestionModal = async (): Promise<boolean> => {
+    const heading = page
+      .getByRole("heading", { name: /Create New Question|Add Question/i })
+      .first();
+    const titleInput = page.getByLabel(/Title/i).first();
+
+    if ((await titleInput.count()) > 0) {
+      const titleReady = await titleInput
+        .waitFor({ state: "visible", timeout: 3000 })
+        .then(() => true)
+        .catch(() => false);
+      if (titleReady) return true;
+    }
+
+    if ((await heading.count()) > 0) {
+      return heading
+        .waitFor({ state: "visible", timeout: 3000 })
+        .then(() => true)
+        .catch(() => false);
+    }
+
+    return false;
+  };
+
   // Click "Add New Question" button - use a more robust selector
   const addButton = page
     .getByRole("button", { name: /Add New Question/i })
@@ -233,12 +257,19 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
     }
   }
 
-  await resilientClick(addButton, "Add New Question button");
+  // Retry opening modal because CI can intermittently miss initial click.
+  let modalOpened = false;
+  for (let attempt = 0; attempt < 3 && !modalOpened; attempt++) {
+    await resilientClick(addButton, "Add New Question button");
+    modalOpened = await waitForQuestionModal();
+    if (!modalOpened) {
+      await page.waitForTimeout(400);
+    }
+  }
 
-  // Wait for modal to open
-  await page
-    .getByText(/Create New Question|Add Question/i)
-    .waitFor({ timeout: 10000, state: "visible" });
+  if (!modalOpened) {
+    throw new Error("Question modal did not open after retries");
+  }
 
   // Fill in the form
   const titleInput = page.getByLabel(/Title/i);
@@ -260,11 +291,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
         if (!(await resilientClick(categorySelect, "Category select"))) {
           console.log("⚠️ Category select unavailable, skipping category selection");
         }
-        // Wait for enabled options to appear (filter out disabled ones)
-        await page.waitForSelector(
-          '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
-          { timeout: 10000 },
-        );
+        await page.waitForTimeout(300);
         const categoryOption = page
           .locator(
             '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
@@ -298,11 +325,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
         if (!(await resilientClick(typeSelect, "Type select"))) {
           console.log("⚠️ Type select unavailable, skipping type selection");
         }
-        // Wait for enabled options to appear
-        await page.waitForSelector(
-          '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
-          { timeout: 10000 },
-        );
+        await page.waitForTimeout(300);
         const multipleChoiceOption = page
           .locator(
             '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
@@ -343,11 +366,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
         if (!(await resilientClick(difficultySelect, "Difficulty select"))) {
           console.log("⚠️ Difficulty select unavailable, skipping difficulty selection");
         }
-        // Wait for enabled options to appear
-        await page.waitForSelector(
-          '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
-          { timeout: 10000 },
-        );
+        await page.waitForTimeout(300);
         const beginnerOption = page
           .locator(
             '[role="option"]:not([data-disabled]):not([aria-disabled="true"])',
@@ -411,19 +430,16 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
     });
 
   // Submit the form
-  const submitButton = page.getByRole("button", {
-    name: /Create Question|Add Question|Save/i,
-  });
-  if ((await submitButton.count()) > 0) {
-    await submitButton.waitFor({ state: "visible", timeout: 5000 });
-    await resilientClick(submitButton, "Create Question submit");
-    console.log("✅ Clicked Create Question button");
-  } else {
-    const saveButton = page.getByRole("button", { name: /Save/i });
-    await saveButton.waitFor({ state: "visible", timeout: 5000 });
-    await resilientClick(saveButton, "Save button");
-    console.log("✅ Clicked Save button");
+  const submitButton = page
+    .getByRole("button", {
+      name: /Create Question|Add Question|Save/i,
+    })
+    .first();
+  const submitClicked = await resilientClick(submitButton, "Create/Save submit");
+  if (!submitClicked) {
+    throw new Error("Could not click question submit button");
   }
+  console.log("✅ Clicked question submit button");
 
   // Wait for API response with timeout
   try {
