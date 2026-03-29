@@ -62,7 +62,8 @@ jobs:
         uses: github/codeql-action/analyze@v4
         continue-on-error: true
         with:
-          category: "/language:javascript"
+          # Keep category aligned with existing repository Code Scanning configuration key.
+          category: "/language:typescript"
           upload: true
           wait-for-processing: false
           threads: 1
