@@ -51,7 +51,7 @@ jobs:
           npm config set fetch-retry-factor 2
           npm config set fetch-retry-mintimeout 10000
           npm config set fetch-retry-maxtimeout 120000
-          npm config set network-timeout 300000
+          npm config set fetch-timeout 300000
 
           for attempt in 1 2 3; do
             echo "📦 npm install attempt ${attempt}/3"
