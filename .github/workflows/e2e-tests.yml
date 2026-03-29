@@ -45,7 +45,30 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          # Improve resilience for transient npm network issues on CI runners.
+          npm config set fetch-retries 5
+          npm config set fetch-retry-factor 2
+          npm config set fetch-retry-mintimeout 10000
+          npm config set fetch-retry-maxtimeout 120000
+          npm config set network-timeout 300000
+
+          for attempt in 1 2 3; do
+            echo "📦 npm install attempt ${attempt}/3"
+            if npm install --no-audit --prefer-online; then
+              echo "✅ Dependencies installed"
+              break
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "❌ npm install failed after 3 attempts"
+              exit 1
+            fi
+
+            sleep_seconds=$((attempt * 20))
+            echo "⚠️ Install failed, retrying in ${sleep_seconds}s..."
+            sleep "$sleep_seconds"
+          done
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
