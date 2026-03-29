@@ -156,7 +156,8 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     // Fill in the form - Title is required
     const titleInput = page.getByLabel(/Title/i);
     await titleInput.waitFor({ state: "visible", timeout: 5000 });
-    await titleInput.fill("E2E Test Question " + Date.now()); // Use timestamp to ensure uniqueness
+    const questionTitle = `E2E Test Question ${Date.now()}`;
+    await titleInput.fill(questionTitle); // Use timestamp to ensure uniqueness
 
     // FILL REQUIRED CONTENT FIELD
     console.log("📝 Filling required Content field");
@@ -307,8 +308,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - CRUD", () => {
     // Component now uses toast notifications instead of alert dialogs
     // No need to set up alert handler
 
-    // Get the question title for later verification
-    const questionTitle = await titleInput.inputValue();
+    // Keep the generated title instead of reading from the input again.
 
     // Set up response listeners BEFORE clicking submit
     // 1. Wait for POST request (create question)
