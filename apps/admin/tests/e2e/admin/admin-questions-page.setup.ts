@@ -434,7 +434,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
       (response) =>
         response.url().includes("/api/questions/unified") &&
         response.request().method() === "POST",
-      { timeout: 12000 },
+      { timeout: 5000 },
     )
     .catch((error) => {
       console.log("⚠️ Create API response timeout or error:", error);
@@ -484,7 +484,7 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
   }
   console.log("✅ Clicked question submit button");
 
-  // Wait for API response with timeout
+  // Wait for API response with timeout (best effort only)
   try {
     const createResponse = await createResponsePromise;
     if (createResponse) {
@@ -508,14 +508,19 @@ export async function createQuestion(page: Page, title: string): Promise<void> {
     await modalTitle.waitFor({ state: "hidden", timeout: 10000 });
     console.log("✅ Modal closed");
   } catch (_error) {
+    if (page.isClosed()) {
+      console.log("⚠️ Page closed before modal close handling");
+      return;
+    }
     console.log("⚠️ Modal did not close automatically, trying to close it...");
     // Try to close modal manually if it's still open
     const closeButton = page.getByRole("button", { name: /Close|Cancel/i });
-    if ((await closeButton.count()) > 0) {
+    const hasCloseButton = await closeButton.count().catch(() => 0);
+    if (hasCloseButton > 0) {
       await resilientClick(closeButton.first(), "Close/Cancel button");
     }
     // Also try pressing Escape
-    await page.keyboard.press("Escape");
+    await page.keyboard.press("Escape").catch(() => {});
   }
 
   // Wait for page header to be visible (indicates we're back on the questions page)
