@@ -288,7 +288,7 @@ test.describe("Admin Content Management Page", () => {
     }
   });
 
-  test("should open QuestionFormModal when Create Question is clicked", async ({ page }) => {
+  test("should open QuestionFormModal when Create Question is clicked from expanded hierarchy", async ({ page }) => {
     // Expand a topic first to see the Create Question button
     const firstCardHeader = page.locator('.cursor-pointer').filter({ hasText: /Core Technologies|Framework Questions|Problem Solving|System Design|Frontend Tasks/ }).first();
     if (await firstCardHeader.count() > 0) {
