@@ -83,5 +83,6 @@
       }
     }
   },
-  "defaultProject": "website"
+  "defaultProject": "website",
+  "analytics": false
 }

@@ -50,17 +50,13 @@ jobs:
       - name: Run unit tests for admin login components
         run: |
           echo "🧪 Running unit tests for admin login components..."
-          # Run Vitest tests for components library (AdminLogin components)
-          echo "📦 Testing AdminLoginFormMolecule and AdminLoginPageTemplate..."
-          NODE_OPTIONS=--max-old-space-size=768 npx nx test components --testNamePattern="AdminLogin" --run || echo "⚠️  Vitest tests skipped (may need setup)"
-          # Run Jest tests for website app (AdminLoginPage)
-          echo "📦 Testing AdminLoginPage..."
-          NODE_OPTIONS=--max-old-space-size=768 JEST_MAX_WORKERS=1 npx jest \
-            apps/website/src/app/admin/login/page.test.tsx \
-            --maxWorkers=1 \
-            --silent \
-            --coverage=false \
-            --config=apps/website/jest.config.js || echo "⚠️  Jest tests skipped"
+          # Run Vitest tests for common-ui library (AdminLogin components)
+          echo "📦 Testing AdminLoginFormMolecule in common-ui..."
+          NODE_OPTIONS=--max-old-space-size=768 npx vitest run libs/common-ui/src/components/molecules/AdminLoginFormMolecule.test.tsx
+
+          # Run Vitest tests for admin app (AdminLoginPage)
+          echo "📦 Testing AdminLoginPage in apps/admin..."
+          NODE_OPTIONS=--max-old-space-size=768 npx vitest run apps/admin/src/app/admin/login/page.test.tsx
         continue-on-error: true
         env:
           NODE_OPTIONS: "--max-old-space-size=768"

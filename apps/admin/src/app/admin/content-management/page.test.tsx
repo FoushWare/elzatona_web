@@ -137,6 +137,10 @@ vi.mock("@elzatona/common-ui", () => ({
     </div>
   ),
   TopicQuestionsModal: () => <div data-testid="topic-questions-modal" />,
+  CategoryFormModal: () => <div data-testid="category-form-modal" />,
+  TopicFormModal: () => <div data-testid="topic-form-modal" />,
+  QuestionFormModal: () => <div data-testid="question-form-modal" />,
+  CardFormModal: () => <div data-testid="card-form-modal" />,
   DeleteConfirmationModal: () => (
     <div data-testid="delete-confirmation-modal" />
   ),
@@ -201,19 +205,33 @@ describe("ContentManagementPage", () => {
     toggleCardActiveStatus: vi.fn(),
     openTopicQuestionsModal: vi.fn(),
     createSpacedRepetitionPlans: vi.fn(),
-    createCategory: vi.fn(),
-    editCategory: vi.fn(),
-    removeCategory: vi.fn(),
-    createTopic: vi.fn(),
-    editTopic: vi.fn(),
+    openCreateTopicModal: vi.fn(),
+    openEditTopicModal: vi.fn(),
+    submitTopic: vi.fn(),
     removeTopic: vi.fn(),
-    toggleCard: vi.fn(),
-    toggleCategory: vi.fn(),
-    toggleTopic: vi.fn(),
-    togglePlan: vi.fn(),
-    togglePlanCard: vi.fn(),
-    togglePlanCategory: vi.fn(),
-    togglePlanTopic: vi.fn(),
+    isCategoryModalOpen: false,
+    setIsCategoryModalOpen: vi.fn(),
+    categoryToEdit: null,
+    isTopicModalOpen: false,
+    setIsTopicModalOpen: vi.fn(),
+    topicToEdit: null,
+    isQuestionModalOpen: false,
+    setIsQuestionModalOpen: vi.fn(),
+    questionToEdit: null,
+    isQuestionReadOnly: false,
+    selectedTopicIdForNewQuestion: undefined,
+    openViewQuestionModal: vi.fn(),
+    openEditQuestionModal: vi.fn(),
+    openCreateQuestionModal: vi.fn(),
+    submitQuestion: vi.fn(),
+    isSubmittingQuestion: false,
+    isCardFormModalOpen: false,
+    setIsCardFormModalOpen: vi.fn(),
+    cardToEdit: null,
+    isSubmittingCard: false,
+    openCreateCardModal: vi.fn(),
+    openEditCardModal: vi.fn(),
+    submitCard: vi.fn(),
   };
 
   beforeEach(() => {
@@ -394,6 +412,29 @@ describe("ContentManagementPage", () => {
       render(<ContentManagementPage />);
 
       expect(screen.getByTestId("card-management-modal")).toBeInTheDocument();
+    });
+    it("should not render legacy question form modal on this page", () => {
+      vi.mocked(useContentManagement).mockReturnValue({
+        ...mockHookReturn,
+        isQuestionModalOpen: true,
+      } as any);
+
+      render(<ContentManagementPage />);
+
+      expect(
+        screen.queryByTestId("question-form-modal"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should not render legacy card form modal on this page", () => {
+      vi.mocked(useContentManagement).mockReturnValue({
+        ...mockHookReturn,
+        isCardFormModalOpen: true,
+      } as any);
+
+      render(<ContentManagementPage />);
+
+      expect(screen.queryByTestId("card-form-modal")).not.toBeInTheDocument();
     });
   });
 });

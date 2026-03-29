@@ -1239,10 +1239,10 @@ export const usePrefetchRelatedData = () => {
 };
 
 // Hook for optimistic updates
-export const useOptimisticUpdate = <T>(
+export function useOptimisticUpdate<T>(
   queryKey: readonly unknown[],
   updateFn: (oldData: T, newData: Partial<T>) => T,
-) => {
+) {
   const queryClient = useQueryClient();
 
   const optimisticUpdate = (newData: Partial<T>) => {
@@ -1253,7 +1253,7 @@ export const useOptimisticUpdate = <T>(
   };
 
   return optimisticUpdate;
-};
+}
 
 // ============================================================================
 // BULK OPERATIONS HOOKS

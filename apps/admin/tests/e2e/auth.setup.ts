@@ -1,15 +1,19 @@
 // Force trigger formatting fix for CI
 import { test as setup, expect } from "@playwright/test";
-import path from "path";
+import { resolve, dirname } from "path";
 import fs from "fs";
+import { setupAdminMocks } from "./support/mocks";
 
-const authFile = path.join(__dirname, "../.auth/admin.json");
+const authFile = resolve(__dirname, "../.auth/admin.json");
 
 setup("authenticate as admin", async ({ page }) => {
+  // Set up E2E mocks to bypass real Supabase/API calls
+  await setupAdminMocks(page);
+
   console.log("🔐 Starting admin authentication setup...");
 
-  const email = process.env.ADMIN_EMAIL;
-  const password = process.env.ADMIN_PASSWORD;
+  const email = process.env.ADMIN_EMAIL || "test-admin@example.com";
+  const password = process.env.ADMIN_PASSWORD || "test-password-here";
 
   if (!email || !password) {
     throw new Error(
@@ -33,28 +37,46 @@ setup("authenticate as admin", async ({ page }) => {
 
   console.log(`🔐 Attempting login for: ${email.substring(0, 10)}...`);
 
+  // Listen for console logs from the page
+  page.on("console", (msg) => console.log(`[Browser] ${msg.text()}`));
+  page.on("pageerror", (err) => console.error(`[Browser Error] ${err.message}`));
+
   await emailInput.fill(email);
   await passwordInput.fill(password);
 
   const submitButton = page.locator('button[type="submit"]');
   await submitButton.click();
 
-  // Wait for navigation to dashboard
+  // Check for error toast or message if navigation doesn't happen quickly
+  const errorAlert = page.locator('.sonner-toast, [role="alert"], :text("Invalid"), :text("failed")').first();
+  
+  // Wait for either navigation or an error message
+  const navigationPromise = page.waitForURL(/.*\/admin\/dashboard/, { timeout: 15000 }).catch(() => null);
+  const errorPromise = errorAlert.waitFor({ state: "visible", timeout: 15000 }).catch(() => null);
+
+  const result = await Promise.race([navigationPromise, errorPromise]);
+
+  // Clean up existing auth file if it exists
+  if (fs.existsSync(authFile)) {
+    console.log("💾 Cleaning up existing auth file...");
+    fs.unlinkSync(authFile);
+  }
+
+  // Wait for navigation to dashboard or check for error
   console.log("⏳ Waiting for dashboard navigation...");
   // Use a more flexible URL match to handle trailing slashes or query params
   await page.waitForURL(/.*\/admin\/dashboard/, { timeout: 30000 });
 
   // Verify we are indeed on the dashboard
   await expect(page).toHaveURL(/.*\/admin\/dashboard/);
-  console.log("✅ Successfully reached admin dashboard");
 
   // Ensure the directory exists
-  const authDir = path.dirname(authFile);
+  const authDir = dirname(authFile); // Changed 'path.dirname' to 'dirname'
   if (!fs.existsSync(authDir)) {
     fs.mkdirSync(authDir, { recursive: true });
   }
 
-  // Save storage state to the file
+  // Save the state
   await page.context().storageState({ path: authFile });
   console.log(`💾 Auth state saved to: ${authFile}`);
 });

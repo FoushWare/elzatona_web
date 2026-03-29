@@ -6,17 +6,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock repositories first
-const mockRepos = {
-  questions: { findAll: vi.fn() },
-  cards: { findAll: vi.fn() },
-  plans: { findAll: vi.fn() },
-  users: { findByRole: vi.fn() },
-  categories: { getAllCategories: vi.fn() },
-  topics: { getAllTopics: vi.fn() },
-};
+const { mockRepos } = vi.hoisted(() => ({
+  mockRepos: {
+    questions: { count: vi.fn(), findAll: vi.fn() },
+    cards: { findAll: vi.fn() },
+    plans: { findAll: vi.fn() },
+    users: { findByRole: vi.fn() },
+    categories: { getAllCategories: vi.fn() },
+    topics: { getAllTopics: vi.fn() },
+  },
+}));
 
-// Mock the entire database module
-vi.mock("@elzatona/database", () => ({
+// Mock the entire database module using the alias
+vi.mock("database", () => ({
   getRepositoryFactory: vi.fn(() => ({
     getQuestionRepository: () => mockRepos.questions,
     getLearningCardRepository: () => mockRepos.cards,
@@ -25,15 +27,20 @@ vi.mock("@elzatona/database", () => ({
     getCategoryRepository: () => mockRepos.categories,
     getTopicRepository: () => mockRepos.topics,
   })),
+  resetRepositoryFactory: vi.fn(),
 }));
+
+import { getRepositoryFactory, resetRepositoryFactory } from "database";
 
 describe("Admin Dashboard Stats API", () => {
   let GET: any;
 
   beforeEach(async () => {
     vi.clearAllMocks();
+    resetRepositoryFactory();
 
     // Default successful counts
+    mockRepos.questions.count.mockResolvedValue(0);
     mockRepos.questions.findAll.mockResolvedValue([]);
     mockRepos.cards.findAll.mockResolvedValue([]);
     mockRepos.plans.findAll.mockResolvedValue([]);
@@ -46,14 +53,14 @@ describe("Admin Dashboard Stats API", () => {
     GET = route.GET;
   });
 
-  it.skip("should return aggregated statistics correctly", async () => {
+  it("should return aggregated statistics correctly", async () => {
     const { NextRequest } = await import("next/server");
     const request = new NextRequest(
       "https://example.com/api/admin/dashboard-stats",
     );
 
     // Setup specific successful mocks
-    mockRepos.questions.findAll.mockResolvedValue([{}, {}]);
+    mockRepos.questions.count.mockResolvedValue(2);
     mockRepos.cards.findAll.mockResolvedValue([{}]);
     mockRepos.users.findByRole.mockResolvedValue({ total: 5 });
     mockRepos.categories.getAllCategories.mockResolvedValue([{}, {}, {}]);
@@ -71,7 +78,7 @@ describe("Admin Dashboard Stats API", () => {
 
   it("should handle failures in individual repositories gracefully", async () => {
     const { NextRequest } = await import("next/server");
-    mockRepos.questions.findAll.mockRejectedValue(new Error("DB Error"));
+    mockRepos.questions.count.mockRejectedValue(new Error("DB Error"));
 
     const request = new NextRequest(
       "https://example.com/api/admin/dashboard-stats",

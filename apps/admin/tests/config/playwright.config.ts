@@ -15,19 +15,19 @@ const ciWorkers =
     : defaultCiWorkers;
 
 // Load test-specific environment variables for E2E tests
-// Priority: .env.test.local > .env.test > .env.local (fallback)
-// This ensures E2E tests use a separate test database
+// Order: Lowest -> Highest priority (.env.test.local wins)
 const projectRoot = process.cwd();
 const envFiles = [
-  resolve(projectRoot, ".env.test.local"), // Highest priority - test overrides
+  resolve(projectRoot, ".env"), // Base defaults
+  resolve(projectRoot, ".env.local"), // Local development overrides
   resolve(projectRoot, ".env.test"), // Test-specific defaults
-  resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
+  resolve(projectRoot, ".env.test.local"), // Highest priority - test overrides
 ];
 
 const loadedFiles: string[] = [];
 for (const envFile of envFiles) {
   try {
-    const result = config({ path: envFile, override: false }); // Don't override, respect priority
+    const result = config({ path: envFile, override: true });
     if (!result.error) {
       loadedFiles.push(envFile);
     }
@@ -170,6 +170,14 @@ export default defineConfig({
       APP_ENV: "test",
       NEXT_PUBLIC_APP_ENV: "test",
       NODE_ENV: process.env.CI ? "production" : "test",
+      NODE_OPTIONS: "--max-old-space-size=1536 --dns-result-order=ipv4first",
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+      NEXT_PUBLIC_SUPABASE_ANON_KEY:
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+      SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+      JWT_SECRET: process.env.JWT_SECRET || "",
+      ADMIN_EMAIL: process.env.ADMIN_EMAIL || "",
+      ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || "",
     },
   },
 

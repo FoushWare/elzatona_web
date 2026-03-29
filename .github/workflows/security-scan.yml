@@ -29,12 +29,13 @@ jobs:
           chmod +x gitleaks
 
           # Use repository config when present, otherwise run with gitleaks defaults.
+          # `dir` scans the current workspace contents; this avoids SARIF bloat from full history scans.
           if [ -f .gitleaks.toml ]; then
             echo "Using .gitleaks.toml configuration"
-            ./gitleaks detect --source . --config .gitleaks.toml --verbose --report-format sarif --report-path gitleaks-results.sarif || true
+            ./gitleaks dir --source . --config .gitleaks.toml --verbose --report-format sarif --report-path gitleaks-results.sarif || true
           else
             echo "No .gitleaks.toml found; running with default rules"
-            ./gitleaks detect --source . --verbose --report-format sarif --report-path gitleaks-results.sarif || true
+            ./gitleaks dir --source . --verbose --report-format sarif --report-path gitleaks-results.sarif || true
           fi
 
           # Ensure SARIF exists so GitHub code scanning can always process this tool.

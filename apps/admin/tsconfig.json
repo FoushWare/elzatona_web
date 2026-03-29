@@ -55,6 +55,7 @@
     "**/*.integration.test.ts",
     "**/*.integration.test.tsx",
     "**/*.spec.ts",
-    "**/*.spec.tsx"
+    "**/*.spec.tsx",
+    "tests/e2e/**/*"
   ]
 }

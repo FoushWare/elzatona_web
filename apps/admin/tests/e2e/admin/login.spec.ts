@@ -1,7 +1,9 @@
 import { test, expect } from "@playwright/test";
 import { setupNetworkMocks } from "./admin-questions-page.setup";
 
-test.describe.skip("Admin Authentication", () => {
+test.describe("Admin Authentication", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeEach(async ({ page }) => {
     await setupNetworkMocks(page);
   });
@@ -33,9 +35,6 @@ test.describe.skip("Admin Authentication", () => {
   });
 
   test.describe("Unauthenticated tests", () => {
-    // Override storage state to start fresh
-    test.use({ storageState: { cookies: [], origins: [] } });
-
     test("failed login shows error", async ({ page }) => {
       await page.goto("/admin/login");
 
@@ -54,7 +53,9 @@ test.describe.skip("Admin Authentication", () => {
       await page.click('button[type="submit"]');
 
       // Should show error message (sonner toast or inline error)
-      await expect(page.getByText(/Invalid/)).toBeVisible();
+      await expect(
+        page.getByText(/Invalid email or password/i).first(),
+      ).toBeVisible();
     });
 
     test("protected routes redirect to login", async ({ page }) => {

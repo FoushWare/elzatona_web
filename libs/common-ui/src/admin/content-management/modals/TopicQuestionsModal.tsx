@@ -12,15 +12,15 @@ import {
   Badge,
   Checkbox,
 } from "../../../index";
-import { Target, Plus } from "lucide-react";
-import { Topic, LearningPlan, AdminQuestion } from "@elzatona/types";
+import { Target, Plus, Check } from "lucide-react";
+import { Topic, LearningPlan, AdminUnifiedQuestion } from "@elzatona/types";
 
 interface TopicQuestionsModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   topic: Topic | null;
   plan: LearningPlan | null;
-  questions: AdminQuestion[];
+  questions: AdminUnifiedQuestion[];
   selectedQuestions: Set<string>;
   onToggleQuestion: (id: string) => void;
   onSelectAll: () => void;
@@ -68,23 +68,28 @@ export const TopicQuestionsModal: React.FC<TopicQuestionsModalProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={onSelectAll}
-                className="flex items-center space-x-1"
+                className="flex items-center space-x-2"
               >
-                <Checkbox
-                  className="h-4 w-4"
-                  checked={
+                <div
+                  className={`h-4 w-4 shrink-0 rounded-sm border border-primary flex items-center justify-center transition-colors ${
                     selectedQuestions.size === topicQuestions.length &&
                     topicQuestions.length > 0
-                  }
-                  readOnly
-                />
+                      ? "bg-primary border-primary"
+                      : "bg-transparent border-primary"
+                  }`}
+                >
+                  {selectedQuestions.size === topicQuestions.length &&
+                    topicQuestions.length > 0 && (
+                      <Check className="h-3 w-3 text-primary-foreground" />
+                    )}
+                </div>
                 <span>Select All</span>
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onDeselectAll}
-                className="flex items-center space-x-1"
+                className="flex items-center"
               >
                 <span>Deselect All</span>
               </Button>
@@ -109,6 +114,7 @@ export const TopicQuestionsModal: React.FC<TopicQuestionsModalProps> = ({
                 <div className="flex items-start space-x-3">
                   <div className="mt-1">
                     <Checkbox
+                      data-testid={`question-checkbox-${question.id}`}
                       checked={selectedQuestions.has(question.id)}
                       onCheckedChange={() => onToggleQuestion(question.id)}
                     />

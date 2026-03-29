@@ -19,8 +19,61 @@ import {
   DeleteConfirmationModal,
   CardManagementModal,
 } from "@elzatona/common-ui";
+import type { AdminQuestion, AdminUnifiedQuestion } from "@elzatona/types";
 import { Loader2 } from "lucide-react";
 import { useContentManagement } from "./hooks/useContentManagement";
+
+function toUnifiedQuestions(
+  questions: AdminQuestion[],
+): AdminUnifiedQuestion[] {
+  return questions.map((question) => {
+    const difficulty =
+      question.difficulty === "beginner" ||
+      question.difficulty === "intermediate" ||
+      question.difficulty === "advanced"
+        ? question.difficulty
+        : "intermediate";
+
+    const type =
+      question.type === "multiple-choice" ||
+      question.type === "true-false" ||
+      question.type === "code" ||
+      question.type === "mcq"
+        ? question.type
+        : "multiple-choice";
+
+    const rawOptions = Array.isArray(question.options) ? question.options : [];
+    const options = rawOptions
+      .filter((option): option is string => typeof option === "string")
+      .map((option, index) => ({
+        id: `opt-${index + 1}`,
+        text: option,
+        isCorrect: option === question.correct_answer,
+      }));
+
+    return {
+      id: question.id,
+      title: question.title,
+      content: question.content,
+      difficulty,
+      type,
+      options,
+      category_id: question.category_id,
+      topic_id: question.topic_id,
+      learning_card_id: question.learning_card_id,
+      correct_answer: question.correct_answer,
+      explanation: question.explanation,
+      hints: question.hints,
+      tags: question.tags,
+      isActive: Boolean(question.is_active),
+      createdAt: question.created_at,
+      updatedAt: question.updated_at,
+      is_active: question.is_active,
+      created_at: question.created_at,
+      updated_at: question.updated_at,
+    };
+  });
+}
 
 export default function ContentManagementPage() {
   const router = useRouter();
@@ -96,6 +149,8 @@ export default function ContentManagementPage() {
     editTopic,
     removeTopic,
   } = useContentManagement();
+
+  const unifiedQuestions = toUnifiedQuestions(questions);
 
   if (loading) {
     return (
@@ -205,7 +260,7 @@ export default function ContentManagementPage() {
           cards={filteredCards}
           categories={categories}
           topics={topics}
-          questions={questions}
+          questions={unifiedQuestions}
           stats={stats}
           expandedCards={expandedCards}
           toggleCard={toggleCard}
@@ -229,7 +284,7 @@ export default function ContentManagementPage() {
           cards={filteredCards}
           categories={categories}
           topics={topics}
-          questions={questions}
+          questions={unifiedQuestions}
           stats={stats}
           planQuestions={planQuestions}
           expandedPlans={expandedPlans}
@@ -257,7 +312,7 @@ export default function ContentManagementPage() {
           onOpenChange={setIsTopicQuestionsModalOpen}
           topic={selectedTopic}
           plan={selectedPlan}
-          questions={questions}
+          questions={unifiedQuestions}
           selectedQuestions={selectedQuestions}
           onToggleQuestion={toggleQuestionSelection}
           onSelectAll={selectAllQuestions}

@@ -139,18 +139,16 @@ export const TopicsManager: React.FC<TopicsManagerProps> = ({
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 {searchTerm
-                  ? "Try adjusting your search terms"
+                  ? "Try adjusting your search terms. OR you can create it"
                   : "Create your first topic to get started"}
               </p>
-              {!searchTerm && (
-                <Button
-                  onClick={onCreateTopic}
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Topic
-                </Button>
-              )}
+              <Button
+                onClick={onCreateTopic}
+                className="bg-purple-600 hover:bg-purple-700 text-white"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Create Topic
+              </Button>
             </div>
           ) : (
             <>

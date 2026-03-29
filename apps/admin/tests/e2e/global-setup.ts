@@ -13,18 +13,19 @@ import { resolve } from "path";
  */
 async function globalSetup() {
   // Load test-specific environment variables
-  // Priority: .env.test.local > .env.test > .env.local (fallback)
+  // Order: Lowest -> Highest priority (.env.test.local wins)
   const projectRoot = process.cwd();
   const envFiles = [
-    resolve(projectRoot, ".env.test.local"), // Highest priority - test overrides
+    resolve(projectRoot, ".env"), // Base defaults
+    resolve(projectRoot, ".env.local"), // Local development overrides
     resolve(projectRoot, ".env.test"), // Test-specific defaults
-    resolve(projectRoot, ".env.local"), // Fallback to dev (for backwards compatibility)
+    resolve(projectRoot, ".env.test.local"), // Highest priority - test overrides
   ];
 
   const loadedFiles: string[] = [];
   for (const envFile of envFiles) {
     try {
-      const result = config({ path: envFile, override: false }); // Don't override, respect priority
+      const result = config({ path: envFile, override: true });
       if (!result.error) {
         loadedFiles.push(envFile);
       }

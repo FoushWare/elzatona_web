@@ -142,18 +142,16 @@ export const CategoriesManager: React.FC<CategoriesManagerProps> = ({
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 {searchTerm
-                  ? "Try adjusting your search terms"
+                  ? "Try adjusting your search terms. OR you can create it"
                   : "Create your first category to get started"}
               </p>
-              {!searchTerm && (
-                <Button
-                  onClick={onCreateCategory}
-                  className="bg-green-600 hover:bg-green-700 text-white"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Category
-                </Button>
-              )}
+              <Button
+                onClick={onCreateCategory}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Create Category
+              </Button>
             </div>
           ) : (
             <>
