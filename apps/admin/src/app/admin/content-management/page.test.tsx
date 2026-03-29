@@ -136,15 +136,20 @@ vi.mock("@elzatona/common-ui", () => ({
       )) || "No categories"}
     </div>
   ),
-  TopicQuestionsModal: () => <div data-testid="topic-questions-modal" />,
-  CategoryFormModal: () => <div data-testid="category-form-modal" />,
-  TopicFormModal: () => <div data-testid="topic-form-modal" />,
-  QuestionFormModal: () => <div data-testid="question-form-modal" />,
-  CardFormModal: () => <div data-testid="card-form-modal" />,
-  DeleteConfirmationModal: () => (
-    <div data-testid="delete-confirmation-modal" />
-  ),
-  CardManagementModal: () => <div data-testid="card-management-modal" />,
+  TopicQuestionsModal: ({ isOpen }: any) =>
+    isOpen ? <div data-testid="topic-questions-modal" /> : null,
+  CategoryFormModal: ({ isOpen }: any) =>
+    isOpen ? <div data-testid="category-form-modal" /> : null,
+  TopicFormModal: ({ isOpen }: any) =>
+    isOpen ? <div data-testid="topic-form-modal" /> : null,
+  QuestionFormModal: ({ isOpen }: any) =>
+    isOpen ? <div data-testid="question-form-modal" /> : null,
+  CardFormModal: ({ isOpen }: any) =>
+    isOpen ? <div data-testid="card-form-modal" /> : null,
+  DeleteConfirmationModal: ({ isOpen }: any) =>
+    isOpen ? <div data-testid="delete-confirmation-modal" /> : null,
+  CardManagementModal: ({ isOpen }: any) =>
+    isOpen ? <div data-testid="card-management-modal" /> : null,
 }));
 
 describe("ContentManagementPage", () => {
@@ -413,28 +418,28 @@ describe("ContentManagementPage", () => {
 
       expect(screen.getByTestId("card-management-modal")).toBeInTheDocument();
     });
-    it("should not render legacy question form modal on this page", () => {
+    it("should render question form modal when isQuestionModalOpen is true", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
         isQuestionModalOpen: true,
+        questionToEdit: { id: "q1", title: "Test Question" },
       } as any);
 
       render(<ContentManagementPage />);
 
-      expect(
-        screen.queryByTestId("question-form-modal"),
-      ).not.toBeInTheDocument();
+      expect(screen.getByTestId("question-form-modal")).toBeInTheDocument();
     });
 
-    it("should not render legacy card form modal on this page", () => {
+    it("should render card form modal when isCardFormModalOpen is true", () => {
       vi.mocked(useContentManagement).mockReturnValue({
         ...mockHookReturn,
         isCardFormModalOpen: true,
+        cardToEdit: { id: "c1", title: "Test Card" },
       } as any);
 
       render(<ContentManagementPage />);
 
-      expect(screen.queryByTestId("card-form-modal")).not.toBeInTheDocument();
+      expect(screen.getByTestId("card-form-modal")).toBeInTheDocument();
     });
   });
 });
