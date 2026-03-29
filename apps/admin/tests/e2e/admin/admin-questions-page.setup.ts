@@ -563,84 +563,79 @@ export async function bulkDeleteQuestions(
     await waitForQuestionManagementReady(page);
   }
 
-  // Select all questions that match our test prefix
-  const selectAllCheckbox = page.locator('input[type="checkbox"]').first();
-  if ((await selectAllCheckbox.count()) > 0) {
-    // First, unselect all to start fresh
-    const isChecked = await selectAllCheckbox.isChecked();
-    if (isChecked) {
-      await selectAllCheckbox.click();
-      await waitForQuestionManagementReady(page);
-    }
-
-    // Select questions one by one that match our test prefix
-    let selectedCount = 0;
-    for (const title of titles) {
-      const questionLocator = page.getByText(title, { exact: false });
-      if ((await questionLocator.count()) > 0) {
-        const questionRow = questionLocator.first().locator("..").locator("..");
-        const checkbox = questionRow.locator('input[type="checkbox"]').first();
-        if ((await checkbox.count()) > 0) {
-          await checkbox.check();
-          selectedCount++;
-        }
+  // Select questions one by one by title.
+  // Avoid broad first-checkbox selectors because they can target unrelated hidden toggles.
+  let selectedCount = 0;
+  for (const title of titles) {
+    const questionLocator = page.getByText(title, { exact: false });
+    if ((await questionLocator.count()) > 0) {
+      const questionRow = questionLocator.first().locator("..").locator("..");
+      const checkbox = questionRow.locator('input[type="checkbox"]').first();
+      if ((await checkbox.count()) > 0) {
+        await checkbox
+          .setChecked(true, { force: true, timeout: 3000 })
+          .catch(async () => {
+            const clickTarget = questionRow.locator('[role="checkbox"]').first();
+            if ((await clickTarget.count()) > 0) {
+              await clickTarget.click({ timeout: 3000 });
+            }
+          });
+        selectedCount++;
       }
     }
+  }
 
-    // If we selected any questions, delete them
-    if (selectedCount > 0) {
-      const deleteSelectedButton = page.getByRole("button", {
-        name: /Delete Selected/i,
+  // If we selected any questions, delete them
+  if (selectedCount > 0) {
+    const deleteSelectedButton = page.getByRole("button", {
+      name: /Delete Selected/i,
+    });
+    if ((await deleteSelectedButton.count()) > 0) {
+      await deleteSelectedButton.click();
+
+      // Confirm deletion - wait for dialog first
+      const dialog = page.locator('[role="dialog"]');
+      await dialog.waitFor({ timeout: 10000, state: "visible" });
+
+      // Verify modal heading
+      await page
+        .locator('[role="dialog"]')
+        .getByRole("heading", { name: /Delete Selected Questions/i })
+        .waitFor({ timeout: 5000 });
+
+      // The button text is "Delete Question" (singular, even for multiple) - use dialog scope
+      const confirmDeleteButton = dialog.getByRole("button", {
+        name: /Delete Question/i,
       });
-      if ((await deleteSelectedButton.count()) > 0) {
-        await deleteSelectedButton.click();
-
-        // Confirm deletion - wait for dialog first
-        const dialog = page.locator('[role="dialog"]');
-        await dialog.waitFor({ timeout: 10000, state: "visible" });
-
-        // Verify modal heading
-        await page
-          .locator('[role="dialog"]')
-          .getByRole("heading", { name: /Delete Selected Questions/i })
-          .waitFor({ timeout: 5000 });
-
-        // The button text is "Delete Question" (singular, even for multiple) - use dialog scope
-        const confirmDeleteButton = dialog.getByRole("button", {
-          name: /Delete Question/i,
+      if ((await confirmDeleteButton.count()) > 0) {
+        await confirmDeleteButton.waitFor({
+          state: "visible",
+          timeout: 5000,
         });
-        if ((await confirmDeleteButton.count()) > 0) {
-          await confirmDeleteButton.waitFor({
-            state: "visible",
-            timeout: 5000,
-          });
-          await confirmDeleteButton.click();
+        await confirmDeleteButton.click();
 
-          // Wait for API responses
-          await page
-            .waitForResponse(
-              (response) =>
-                response.url().includes("/api/questions/unified") &&
-                response.request().method() === "DELETE",
-              { timeout: 20000 },
-            )
-            .catch(() => null);
+        // Wait for API responses
+        await page
+          .waitForResponse(
+            (response) =>
+              response.url().includes("/api/questions/unified") &&
+              response.request().method() === "DELETE",
+            { timeout: 20000 },
+          )
+          .catch(() => null);
 
-          await page
-            .waitForResponse(
-              (response) =>
-                response.url().includes("/api/questions/unified") &&
-                response.request().method() === "GET",
-              { timeout: 20000 },
-            )
-            .catch(() => null);
+        await page
+          .waitForResponse(
+            (response) =>
+              response.url().includes("/api/questions/unified") &&
+              response.request().method() === "GET",
+            { timeout: 20000 },
+          )
+          .catch(() => null);
 
-          // Wait for modal to close - check for dialog to disappear
-          await dialog
-            .waitFor({ state: "hidden", timeout: 10000 })
-            .catch(() => {});
-          await waitForQuestionManagementReady(page);
-        }
+        // Wait for modal to close - check for dialog to disappear
+        await dialog.waitFor({ state: "hidden", timeout: 10000 }).catch(() => {});
+        await waitForQuestionManagementReady(page);
       }
     }
   }

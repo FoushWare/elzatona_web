@@ -171,8 +171,6 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Search", () => {
       );
     }
 
-    await page.waitForTimeout(1000); // Additional wait for rendering
-
     // Step 2: Check for "No questions found" message
     // Use getByRole('heading') to target the h3 specifically (avoids strict mode violations)
     // Try multiple strategies to find the heading
@@ -229,7 +227,11 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Search", () => {
       searchTerm,
       { timeout: 5000 },
     );
-    await page.waitForTimeout(1500);
+    await page.waitForFunction(
+      (title) => document.body?.innerText?.includes(title) ?? false,
+      searchableTitles[0],
+      { timeout: 15000 },
+    );
 
     // Step 2: Verify filtered results appear
     const firstQuestion = page.getByText(searchableTitles[0], { exact: false });
@@ -248,7 +250,11 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Search", () => {
       },
       { timeout: 5000 },
     );
-    await page.waitForTimeout(1500);
+    await page.waitForFunction(
+      (title) => document.body?.innerText?.includes(title) ?? false,
+      searchableTitles[0],
+      { timeout: 15000 },
+    );
 
     // Step 4: Verify all questions are shown again (or at least more than the filtered results)
     // The questions should still be visible after clearing search
