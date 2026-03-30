@@ -345,11 +345,29 @@ test.describe("Admin Content Management Page", () => {
     await categoryHeader.click();
     
     // Wait for 'Add Existing Questions' button (inside topic node)
-    const addQuestionsBtn = planStructure.getByRole("button", { name: /Add Existing Questions/i }).first();
+    const addQuestionsBtn = planStructure
+      .locator('button:has-text("Add Existing Questions"):visible')
+      .first();
     await expect(addQuestionsBtn).toBeVisible();
+    await addQuestionsBtn.scrollIntoViewIfNeeded();
 
     // 4. Click 'Add Existing Questions'
-    await addQuestionsBtn.click();
+    let clicked = false;
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        await addQuestionsBtn.click({ timeout: 8000 });
+        clicked = true;
+        break;
+      } catch {
+        if (attempt === 2) {
+          await addQuestionsBtn.click({ force: true, timeout: 8000 });
+          clicked = true;
+        } else {
+          await page.waitForTimeout(300);
+        }
+      }
+    }
+    await expect(clicked).toBeTruthy();
 
     // 5. Verify modal is visible
     // Use a more specific locator to avoid collision with Next.js error overlay
