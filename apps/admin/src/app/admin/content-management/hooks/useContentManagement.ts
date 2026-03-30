@@ -174,6 +174,73 @@ function buildCanonicalCards(cards: AdminLearningCard[]): {
   return { cards: canonicalCards, idsByKey };
 }
 
+function normalizeCardTypeKey(
+  cardType?: string | null,
+): CanonicalCardKey | null {
+  if (!cardType) {
+    return null;
+  }
+
+  const normalized = cardType.trim().toLowerCase();
+
+  if (
+    normalized === "core" ||
+    normalized === "core technologies" ||
+    normalized === "core_technologies" ||
+    normalized === "core-technologies"
+  ) {
+    return "core";
+  }
+
+  if (
+    normalized === "framework" ||
+    normalized === "framework questions" ||
+    normalized === "framework_questions" ||
+    normalized === "framework-questions"
+  ) {
+    return "framework";
+  }
+
+  if (
+    normalized === "problem" ||
+    normalized === "problem solving" ||
+    normalized === "problem_solving" ||
+    normalized === "problem-solving"
+  ) {
+    return "problem";
+  }
+
+  if (
+    normalized === "system" ||
+    normalized === "system design" ||
+    normalized === "system_design" ||
+    normalized === "system-design"
+  ) {
+    return "system";
+  }
+
+  return null;
+}
+
+function mapCategoryToCard(
+  category: DatabaseCategoryRecord,
+  idsByKey: Record<CanonicalCardKey, string>,
+): AdminCategory | null {
+  if (category.learning_card_id) {
+    return category as AdminCategory;
+  }
+
+  const key = normalizeCardTypeKey(category.card_type);
+  if (!key) {
+    return null;
+  }
+
+  return {
+    ...(category as AdminCategory),
+    learning_card_id: idsByKey[key],
+  };
+}
+
 function transformQuestion(q: any): AdminUnifiedQuestion {
   return {
     ...q,
@@ -755,15 +822,14 @@ export function useContentManagement() {
       ].filter((message): message is string => Boolean(message));
 
       const normalizedCards = cardsResult.data;
-      buildCanonicalCards(normalizedCards);
+      const { cards: canonicalCards, idsByKey } =
+        buildCanonicalCards(normalizedCards);
 
-      // Strict DB-relation filtering: only display categories with valid learning_card_id FK
-      // This ensures the hierarchy is accurate to the database state (no inference fallback)
-      const mappedCategories = categoriesResult.data.filter(
-        (category) => (category as AdminCategory).learning_card_id != null,
-      );
+      const mappedCategories = categoriesResult.data
+        .map((category) => mapCategoryToCard(category, idsByKey))
+        .filter((category): category is AdminCategory => category !== null);
 
-      setCards(normalizedCards);
+      setCards(canonicalCards);
       setPlans(plansResult.data);
       setQuestions(questionsResult.data.map(transformQuestion));
       setCategories(mappedCategories);
