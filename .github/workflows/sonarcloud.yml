@@ -1,0 +1,84 @@
+name: SonarCloud Code Analysis
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install --no-audit
+
+      - name: Validate Sonar token is configured
+        run: |
+          if [ -z "${{ secrets.SONAR_TOKEN }}" ]; then
+            echo "SONAR_TOKEN secret is required for SonarCloud analysis"
+            exit 1
+          fi
+
+      - name: Run lint check
+        run: npm run lint:ci
+        env:
+          NODE_OPTIONS: "--max-old-space-size=1536"
+
+      - name: TypeScript type checking
+        run: npm run type-check:ci
+        env:
+          NODE_OPTIONS: "--max-old-space-size=1536"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
+
+      - name: Run unit tests with coverage
+        run: |
+          npm run test:unit -- --coverage --coverageReporters=lcov --coverageDirectory=coverage
+        env:
+          NODE_ENV: test
+          APP_ENV: test
+          CI: "true"
+          NODE_OPTIONS: "--max-old-space-size=1536"
+          JEST_MAX_WORKERS: "1"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-role-key' }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_SCANNER_OPTS: "-Xmx2048m"
+        with:
+          projectBaseDir: .
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+        continue-on-error: true
