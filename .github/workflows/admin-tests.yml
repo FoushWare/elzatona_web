@@ -3,18 +3,8 @@ name: Admin Tests
 on:
   push:
     branches: [main, develop, "release/**"]
-    paths:
-      - "apps/admin/**"
-      - "libs/database/**"
-      - "libs/contexts/**"
-      - "libs/common-ui/**"
   pull_request:
     branches: [main, develop, "release/**"]
-    paths:
-      - "apps/admin/**"
-      - "libs/database/**"
-      - "libs/contexts/**"
-      - "libs/common-ui/**"
   workflow_dispatch:
 
 concurrency:
