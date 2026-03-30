@@ -293,14 +293,14 @@ export function createRepositoryFactoryFromEnv(): RepositoryFactory {
     | "mongodb"
     | "mysql";
 
-  // Support both public and server-only Supabase env vars.
-  // Public vars are needed for browser usage; server routes may only have server vars.
+  // Prefer server-only Supabase env vars in API/runtime contexts.
+  // Fall back to public vars for local/dev compatibility.
   const resolvedSupabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "";
+    process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
   const resolvedSupabaseKey =
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.SUPABASE_ANON_KEY ||
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     "";
 
   const config: RepositoryFactoryConfig = {
