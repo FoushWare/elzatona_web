@@ -30,8 +30,9 @@ export function validateTestEnvironment(): {
     process.env.GITHUB_ACTIONS === "true" ||
     !!process.env.TEST_SUPABASE_URL;
 
-  // Check if file exists
-  if (!existsSync(testEnvFile)) {
+  // Local development requires .env.test.local on disk.
+  // In CI, secrets are injected as environment variables, so no file is required.
+  if (!isCI && !existsSync(testEnvFile)) {
     errors.push(
       `❌ .env.test.local file is missing!\n` +
         `   Location: ${testEnvFile}\n` +

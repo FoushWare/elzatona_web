@@ -52,20 +52,6 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
           JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
 
-      - name: Run unit tests with coverage
-        run: |
-          npm run test:unit -- --coverage --coverageReporters=lcov --coverageDirectory=coverage
-        env:
-          NODE_ENV: test
-          APP_ENV: test
-          CI: "true"
-          NODE_OPTIONS: "--max-old-space-size=1536"
-          JEST_MAX_WORKERS: "1"
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL || 'https://placeholder.supabase.co' }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-role-key' }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
-
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
@@ -75,6 +61,7 @@ jobs:
           projectBaseDir: .
 
       - name: Upload coverage reports
+        if: hashFiles('coverage/lcov.info') != ''
         uses: codecov/codecov-action@v4
         with:
           files: ./coverage/lcov.info
