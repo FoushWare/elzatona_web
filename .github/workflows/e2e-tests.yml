@@ -364,7 +364,7 @@ jobs:
         if: always() && env.RUN_E2E_TESTS == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-shard-${{ matrix.shardIndex }}
           path: apps/website/playwright-report/
           retention-days: 7
 
