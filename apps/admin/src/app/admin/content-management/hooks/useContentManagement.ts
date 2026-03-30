@@ -24,6 +24,14 @@ type DatabaseTopicRecord = DatabaseTopic & {
 };
 
 type DatabaseCategoryRecord = AdminCategory & {
+  id: string;
+  name?: string;
+  slug?: string;
+  description?: string;
+  learning_card_id?: string;
+  is_active?: boolean;
+  created_at?: string;
+  updated_at?: string;
   card_type?: string | null;
 };
 
@@ -225,9 +233,22 @@ function normalizeCardTypeKey(
 function mapCategoryToCard(
   category: DatabaseCategoryRecord,
   idsByKey: Record<CanonicalCardKey, string>,
+  cardIdByCategoryId: Map<string, string>,
 ): AdminCategory | null {
-  if (category.learning_card_id) {
-    return category as AdminCategory;
+  const mappedCardId =
+    category.learning_card_id || cardIdByCategoryId.get(category.id);
+
+  if (mappedCardId) {
+    return {
+      id: category.id,
+      name: category.name ?? "",
+      slug: category.slug ?? toSlug(category.name ?? category.id),
+      description: category.description ?? "",
+      learning_card_id: mappedCardId,
+      is_active: category.is_active ?? true,
+      created_at: category.created_at ?? "",
+      updated_at: category.updated_at ?? "",
+    };
   }
 
   const key = normalizeCardTypeKey(category.card_type);
@@ -236,9 +257,42 @@ function mapCategoryToCard(
   }
 
   return {
-    ...(category as AdminCategory),
+    id: category.id,
+    name: category.name ?? "",
+    slug: category.slug ?? toSlug(category.name ?? category.id),
+    description: category.description ?? "",
     learning_card_id: idsByKey[key],
+    is_active: category.is_active ?? true,
+    created_at: category.created_at ?? "",
+    updated_at: category.updated_at ?? "",
   };
+}
+
+function getQuestionLearningCardId(question: AdminUnifiedQuestion): string {
+  const withLegacyCardId = question as AdminUnifiedQuestion & {
+    learningCardId?: string;
+  };
+
+  return question.learning_card_id ?? withLegacyCardId.learningCardId ?? "";
+}
+
+function buildCategoryCardLookup(
+  questions: AdminUnifiedQuestion[],
+): Map<string, string> {
+  const lookup = new Map<string, string>();
+
+  questions.forEach((question) => {
+    const categoryId = question.category_id;
+    const learningCardId = getQuestionLearningCardId(question);
+
+    if (!categoryId || !learningCardId || lookup.has(categoryId)) {
+      return;
+    }
+
+    lookup.set(categoryId, learningCardId);
+  });
+
+  return lookup;
 }
 
 function transformQuestion(q: any): AdminUnifiedQuestion {
@@ -824,9 +878,12 @@ export function useContentManagement() {
       const normalizedCards = cardsResult.data;
       const { cards: canonicalCards, idsByKey } =
         buildCanonicalCards(normalizedCards);
+      const categoryCardLookup = buildCategoryCardLookup(questionsResult.data);
 
       const mappedCategories = categoriesResult.data
-        .map((category) => mapCategoryToCard(category, idsByKey))
+        .map((category) =>
+          mapCategoryToCard(category, idsByKey, categoryCardLookup),
+        )
         .filter((category): category is AdminCategory => category !== null);
 
       setCards(canonicalCards);

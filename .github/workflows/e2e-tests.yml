@@ -255,7 +255,6 @@ jobs:
             --workers=1 \
             --reporter=html,list \
             --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
-        continue-on-error: true
         env:
           APP_ENV: test
           NODE_ENV: test
@@ -279,7 +278,6 @@ jobs:
             --workers=1 \
             --reporter=html,list \
             --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
-        continue-on-error: true
         env:
           APP_ENV: test
           NODE_ENV: test
@@ -303,7 +301,6 @@ jobs:
             --workers=1 \
             --reporter=html,list \
             --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
-        continue-on-error: true
         env:
           APP_ENV: test
           NODE_ENV: test
@@ -325,7 +322,6 @@ jobs:
             --workers=1 \
             --reporter=html,list \
             --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
-        continue-on-error: true
         env:
           APP_ENV: test
           NODE_ENV: test
@@ -349,7 +345,6 @@ jobs:
             --workers=1 \
             --reporter=html,list \
             --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
-        continue-on-error: true
         env:
           APP_ENV: test
           NODE_ENV: test
@@ -369,7 +364,7 @@ jobs:
         if: always() && env.RUN_E2E_TESTS == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-shard-${{ matrix.shardIndex }}
           path: apps/website/playwright-report/
           retention-days: 7
 

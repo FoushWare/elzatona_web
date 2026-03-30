@@ -57,7 +57,7 @@ jobs:
           # Run Vitest tests for admin app (AdminLoginPage)
           echo "📦 Testing AdminLoginPage in apps/admin..."
           NODE_OPTIONS=--max-old-space-size=768 npx vitest run apps/admin/src/app/admin/login/page.test.tsx
-        continue-on-error: true
+        continue-on-error: false
         env:
           NODE_OPTIONS: "--max-old-space-size=768"
           CI: "true"
