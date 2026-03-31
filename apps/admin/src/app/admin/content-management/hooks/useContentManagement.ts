@@ -276,6 +276,16 @@ function getQuestionLearningCardId(question: AdminUnifiedQuestion): string {
   return question.learning_card_id ?? withLegacyCardId.learningCardId ?? "";
 }
 
+/**
+ * Extracts the "primary" ID from a nested array of objects.
+ *
+ * Selection priority:
+ * 1. The first item whose `is_primary` flag is `true`.
+ * 2. The item with the lowest `order_index` value.
+ * 3. The first valid item in the array (fallback).
+ *
+ * Items without a string `id` field are filtered out before selection.
+ */
 function getPrimaryNestedId(value: unknown): string {
   if (!Array.isArray(value) || value.length === 0) {
     return "";
@@ -290,7 +300,7 @@ function getPrimaryNestedId(value: unknown): string {
 
   const primary =
     candidates.find((item) => item["is_primary"] === true) ??
-    candidates.sort(
+    [...candidates].sort(
       (a, b) =>
         Number(a["order_index"] ?? Number.MAX_SAFE_INTEGER) -
         Number(b["order_index"] ?? Number.MAX_SAFE_INTEGER),

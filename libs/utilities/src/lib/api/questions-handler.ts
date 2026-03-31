@@ -39,6 +39,19 @@ let _questionsCache: Array<{
 const _cacheTimestamp: number = 0;
 const _CACHE_DURATION = 30000; // 30 seconds
 
+/**
+ * Removes unsafe Unicode control characters from a string while preserving
+ * characters that are meaningful in source-code contexts:
+ *   - U+0009 (HT / tab) — used for code indentation
+ *   - U+000A (LF / newline) — line separator
+ *   - U+000D (CR) — carriage return (Windows line endings)
+ *   - U+0020–U+007E except U+007F (DEL) — printable ASCII
+ *   - U+0080 and above — extended Unicode (emoji, non-Latin scripts, etc.)
+ *
+ * All other C0/C1 control characters (e.g. NUL, BEL, BS, ESC) are stripped
+ * because they have no display meaning in a code field and can be used to
+ * obscure or manipulate rendered output.
+ */
 function stripUnsafeControlCharacters(value: string): string {
   return Array.from(value)
     .filter((char) => {
