@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { contentManagementMappingTestUtils } from "./useContentManagement";
+import { contentManagementMappingTestUtils } from "./contentManagementMapping";
 
 const {
   transformQuestion,
