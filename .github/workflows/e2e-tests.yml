@@ -82,6 +82,12 @@ jobs:
         run: |
           echo "🔒 Validating TEST Supabase secrets..."
 
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "ℹ️ Skipping build-based E2E flow on pull requests."
+            echo "RUN_E2E_TESTS=false" >> $GITHUB_ENV
+            exit 0
+          fi
+
           if [ -z "${{ secrets.TEST_SUPABASE_URL }}" ] || \
              [ -z "${{ secrets.TEST_SUPABASE_ANON_KEY }}" ] || \
              [ -z "${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}" ]; then
