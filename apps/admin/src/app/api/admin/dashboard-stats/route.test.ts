@@ -30,7 +30,7 @@ vi.mock("database", () => ({
   resetRepositoryFactory: vi.fn(),
 }));
 
-import { getRepositoryFactory, resetRepositoryFactory } from "database";
+import { resetRepositoryFactory } from "database";
 
 describe("Admin Dashboard Stats API", () => {
   let GET: any;

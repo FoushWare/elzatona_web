@@ -276,6 +276,44 @@ function getQuestionLearningCardId(question: AdminUnifiedQuestion): string {
   return question.learning_card_id ?? withLegacyCardId.learningCardId ?? "";
 }
 
+function getPrimaryNestedId(value: unknown): string {
+  if (!Array.isArray(value) || value.length === 0) {
+    return "";
+  }
+
+  const first = value[0] as Record<string, unknown>;
+  const id = first["id"];
+  return typeof id === "string" ? id : "";
+}
+
+function getQuestionCategoryId(question: AdminUnifiedQuestion): string {
+  const legacy = question as AdminUnifiedQuestion & {
+    categoryId?: string;
+    categories?: unknown;
+  };
+
+  return (
+    question.category_id ??
+    legacy.categoryId ??
+    getPrimaryNestedId(legacy.categories) ??
+    ""
+  );
+}
+
+function getQuestionTopicId(question: AdminUnifiedQuestion): string {
+  const legacy = question as AdminUnifiedQuestion & {
+    topicId?: string;
+    topics?: unknown;
+  };
+
+  return (
+    question.topic_id ??
+    legacy.topicId ??
+    getPrimaryNestedId(legacy.topics) ??
+    ""
+  );
+}
+
 function buildCategoryCardLookup(
   questions: AdminUnifiedQuestion[],
 ): Map<string, string> {
@@ -295,9 +333,41 @@ function buildCategoryCardLookup(
   return lookup;
 }
 
+function buildTopicCategoryLookup(
+  questions: AdminUnifiedQuestion[],
+): Map<string, string> {
+  const lookup = new Map<string, string>();
+
+  questions.forEach((question) => {
+    const topicId = getQuestionTopicId(question);
+    const categoryId = getQuestionCategoryId(question);
+
+    if (!topicId || !categoryId || lookup.has(topicId)) {
+      return;
+    }
+
+    lookup.set(topicId, categoryId);
+  });
+
+  return lookup;
+}
+
 function transformQuestion(q: any): AdminUnifiedQuestion {
+  const category_id =
+    q.category_id ?? q.categoryId ?? getPrimaryNestedId(q.categories) ?? "";
+  const topic_id =
+    q.topic_id ?? q.topicId ?? getPrimaryNestedId(q.topics) ?? "";
+  const learning_card_id =
+    q.learning_card_id ??
+    q.learningCardId ??
+    getPrimaryNestedId(q.learning_cards) ??
+    "";
+
   return {
     ...q,
+    category_id,
+    topic_id,
+    learning_card_id,
     isActive: q.isActive ?? q.is_active ?? true,
     createdAt: q.createdAt ?? q.created_at ?? "",
     updatedAt: q.updatedAt ?? q.updated_at ?? "",
@@ -723,7 +793,10 @@ export function useContentManagement() {
   const planRepository = usePlanRepository();
 
   // Transform database Topic to admin Topic
-  const transformTopicToAdmin = (topic: DatabaseTopicRecord): AdminTopic => ({
+  const transformTopicToAdmin = (
+    topic: DatabaseTopicRecord,
+    categoryByTopicId: Map<string, string>,
+  ): AdminTopic => ({
     id: topic.id,
     name: topic.name,
     slug: "", // Database doesn't store slug, default to empty
@@ -731,7 +804,11 @@ export function useContentManagement() {
     difficulty: "beginner", // Database doesn't store difficulty, default to beginner
     estimated_questions: 0, // Database doesn't store this, default to 0
     order_index: topic.orderIndex ?? topic.order_index ?? 0,
-    category_id: topic.categoryId ?? topic.category_id ?? "",
+    category_id:
+      topic.categoryId ??
+      topic.category_id ??
+      categoryByTopicId.get(topic.id) ??
+      "",
     is_active: topic.is_active ?? true,
     created_at: topic.created_at || "",
     updated_at: topic.updated_at || "",
@@ -878,7 +955,9 @@ export function useContentManagement() {
       const normalizedCards = cardsResult.data;
       const { cards: canonicalCards, idsByKey } =
         buildCanonicalCards(normalizedCards);
-      const categoryCardLookup = buildCategoryCardLookup(questionsResult.data);
+      const normalizedQuestions = questionsResult.data.map(transformQuestion);
+      const categoryCardLookup = buildCategoryCardLookup(normalizedQuestions);
+      const topicCategoryLookup = buildTopicCategoryLookup(normalizedQuestions);
 
       const mappedCategories = categoriesResult.data
         .map((category) =>
@@ -888,9 +967,13 @@ export function useContentManagement() {
 
       setCards(canonicalCards);
       setPlans(plansResult.data);
-      setQuestions(questionsResult.data.map(transformQuestion));
+      setQuestions(normalizedQuestions);
       setCategories(mappedCategories);
-      setTopics(topicsResult.data.map(transformTopicToAdmin));
+      setTopics(
+        topicsResult.data.map((topic) =>
+          transformTopicToAdmin(topic, topicCategoryLookup),
+        ),
+      );
 
       const { data: existingPlanQuestions, error: planQuestionsError } =
         await supabase.from("plan_questions").select("plan_id, question_id");

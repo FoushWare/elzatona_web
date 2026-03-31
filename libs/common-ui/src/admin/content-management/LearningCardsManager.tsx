@@ -121,6 +121,14 @@ const TopicNode: React.FC<{
       <div
         className="flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition-colors"
         onClick={() => toggleTopic(topic.id)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleTopic(topic.id);
+          }
+        }}
       >
         <div className="flex items-center space-x-2">
           <div className="p-1">
@@ -356,6 +364,14 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
         <CardHeader
           className="pb-3 border-b-0 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
           onClick={() => toggleCard(card.id)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              toggleCard(card.id);
+            }
+          }}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
