@@ -4,7 +4,7 @@
 
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { toast } from "sonner";
-import {
+import type {
   AdminLearningCard,
   LearningPlan,
   AdminCategory,

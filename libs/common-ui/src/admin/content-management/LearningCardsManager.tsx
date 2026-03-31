@@ -355,9 +355,7 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
         className="border-l-4"
         style={{ borderLeftColor: card.color }}
       >
-        <CardHeader
-          className="pb-3 border-b-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
-        >
+        <CardHeader className="pb-3 border-b-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
           <div className="flex items-center justify-between">
             <button
               type="button"

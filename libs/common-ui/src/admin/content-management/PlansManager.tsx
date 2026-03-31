@@ -432,9 +432,7 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
         key={plan.id}
         className="border-l-4 border-l-green-500"
       >
-        <CardHeader
-          className="pb-3 border-b-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
-        >
+        <CardHeader className="pb-3 border-b-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
           <div className="flex items-center justify-between">
             <button
               type="button"
