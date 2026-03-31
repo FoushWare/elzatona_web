@@ -58,6 +58,18 @@ async function resolveAdminByEmail(email: string) {
   return userRepo.findAdminByEmail(email);
 }
 
+function isValidE2ETestPassword(password: string): boolean {
+  const configuredPassword = process.env.E2E_TEST_ADMIN_PASSWORD;
+  if (!configuredPassword) {
+    console.warn(
+      "[Admin Auth API] E2E test password is not configured (E2E_TEST_ADMIN_PASSWORD).",
+    );
+    return false;
+  }
+
+  return password === configuredPassword;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const rateLimitResponse = await checkAuthRateLimit(request);
@@ -104,7 +116,7 @@ export async function POST(request: NextRequest) {
     // Verify password
     let isValidPassword = false;
     if (adminData.id === "e2e-test-admin-id") {
-      isValidPassword = password === "test-password-here";
+      isValidPassword = isValidE2ETestPassword(password);
       console.log(
         `[Admin Auth API] 🔑 E2E Password bypass check: ${isValidPassword ? "SUCCESS" : "FAILED"}`,
       );

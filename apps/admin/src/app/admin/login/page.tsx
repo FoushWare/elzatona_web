@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useAdminAuth } from "@elzatona/contexts";
 
@@ -11,12 +10,11 @@ export default function AdminLoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const { isAuthenticated, isLoading, login } = useAdminAuth();
-  const router = useRouter();
+  const { isLoading, login } = useAdminAuth();
 
   // Redirect is now handled by AdminAuthProvider context or the Root redirect page
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError("");
@@ -41,10 +39,9 @@ export default function AdminLoginPage() {
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 dark:from-gray-900 dark:to-gray-800">
         <div className="pt-20 flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div
-              role="status"
-              className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"
-            ></div>
+            <output className="block">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+            </output>
             <p className="text-gray-600 dark:text-gray-400">Loading...</p>
           </div>
         </div>

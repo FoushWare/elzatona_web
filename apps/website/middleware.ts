@@ -38,7 +38,6 @@ export function middleware(request: NextRequest): NextResponse | Response {
     if (!adminUrl) {
       const hasAdminUrl = !!process.env["ADMIN_URL"];
       const hasAdminUrlDot = !!process.env.ADMIN_URL;
-      const envKeys = Object.keys(process.env).join(", ");
 
       console.error(
         `❌ [Middleware] ADMIN_URL is missing or invalid. hasAdminUrl: ${hasAdminUrl}, hasAdminUrlDot: ${hasAdminUrlDot}, host: ${request.headers.get("host")}`,
