@@ -99,8 +99,14 @@ export async function setupAdminMocks(page: Page) {
     // Response for GET
     if (method === "GET") {
       const query = url.searchParams.get("query") || "";
-      const pageNum = parseInt(url.searchParams.get("page") || "1", 10);
-      const pageSize = parseInt(url.searchParams.get("pageSize") || "20", 10); // Standard page size for admin UI
+      const pageNum = Number.parseInt(
+        url.searchParams.get("page") || "1",
+        10,
+      );
+      const pageSize = Number.parseInt(
+        url.searchParams.get("pageSize") || "20",
+        10,
+      ); // Standard page size for admin UI
       
       const state = getMockState();
       
