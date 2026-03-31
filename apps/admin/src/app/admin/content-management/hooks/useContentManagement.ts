@@ -375,6 +375,14 @@ function transformQuestion(q: any): AdminUnifiedQuestion {
   };
 }
 
+export const contentManagementMappingTestUtils = {
+  normalizeCardTypeKey,
+  mapCategoryToCard,
+  transformQuestion,
+  buildCategoryCardLookup,
+  buildTopicCategoryLookup,
+};
+
 function toSlug(input: string): string {
   return input
     .toLowerCase()
