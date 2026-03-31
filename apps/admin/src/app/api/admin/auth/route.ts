@@ -15,29 +15,54 @@ const adminConfig = {
   },
 };
 
+async function checkAuthRateLimit(request: NextRequest) {
+  const ip = request.headers.get("x-forwarded-for") ?? "anonymous";
+  const { success: withinLimit, remaining, reset } = await authRateLimiter.check(
+    10,
+    ip,
+  );
+
+  if (withinLimit) {
+    return null;
+  }
+
+  return NextResponse.json(
+    {
+      success: false,
+      error: "Too many login attempts. Please try again later.",
+    },
+    {
+      status: 429,
+      headers: {
+        "Retry-After": String(Math.ceil((reset - Date.now()) / 1000)),
+        "X-RateLimit-Remaining": String(remaining),
+      },
+    },
+  );
+}
+
+async function resolveAdminByEmail(email: string) {
+  if (process.env.APP_ENV === "test" && email === "test-admin@example.com") {
+    console.log("[Admin Auth API] 🛠️ E2E Auth Bypass Triggered for:", email);
+    return {
+      id: "e2e-test-admin-id",
+      email: "test-admin@example.com",
+      role: "admin",
+      name: "E2E Test Admin",
+      isActive: true,
+    };
+  }
+
+  const factory = getRepositoryFactory();
+  const userRepo = factory.getUserRepository();
+  return userRepo.findAdminByEmail(email);
+}
+
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting: 10 auth attempts per minute per IP
-    const ip = request.headers.get("x-forwarded-for") ?? "anonymous";
-    const {
-      success: withinLimit,
-      remaining,
-      reset,
-    } = await authRateLimiter.check(10, ip);
-    if (!withinLimit) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Too many login attempts. Please try again later.",
-        },
-        {
-          status: 429,
-          headers: {
-            "Retry-After": String(Math.ceil((reset - Date.now()) / 1000)),
-            "X-RateLimit-Remaining": String(remaining),
-          },
-        },
-      );
+    const rateLimitResponse = await checkAuthRateLimit(request);
+    if (rateLimitResponse) {
+      return rateLimitResponse;
     }
 
     const body = await request.json();
@@ -57,22 +82,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Use repository pattern to find admin by email
-    let adminData;
-    if (process.env.APP_ENV === "test" && email === "test-admin@example.com") {
-      console.log("[Admin Auth API] 🛠️ E2E Auth Bypass Triggered for:", email);
-      // Direct bypass for E2E tests to avoid DNS/DB dependency in restricted environments
-      adminData = {
-        id: "e2e-test-admin-id",
-        email: "test-admin@example.com",
-        role: "admin",
-        name: "E2E Test Admin",
-        isActive: true,
-      };
-    } else {
-      const factory = getRepositoryFactory();
-      const userRepo = factory.getUserRepository();
-      adminData = await userRepo.findAdminByEmail(email);
-    }
+    const adminData = await resolveAdminByEmail(email);
 
     if (!adminData) {
       const maskedEmail = email.replace(/^(.{2})[^@]*(@.*)$/, "$1***$2");
@@ -138,18 +148,25 @@ export async function POST(request: NextRequest) {
     };
 
     return NextResponse.json({ success: true, admin: session });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorDetails = error as {
+      message?: string;
+      stack?: string;
+      code?: string;
+      details?: string;
+    };
     console.error("[Admin Auth API] 💥 Full Error:", {
-      message: error.message,
-      stack: error.stack,
-      code: error.code,
-      details: error.details,
+      message: errorDetails.message,
+      stack: errorDetails.stack,
+      code: errorDetails.code,
+      details: errorDetails.details,
     });
     return NextResponse.json(
       {
         success: false,
         error: "Internal server error",
-        debug: process.env.NODE_ENV === "production" ? undefined : error.stack,
+        debug:
+          process.env.NODE_ENV === "production" ? undefined : errorDetails.stack,
       },
       { status: 500 },
     );
