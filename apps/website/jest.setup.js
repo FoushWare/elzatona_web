@@ -374,7 +374,7 @@ function createResponseClass() {
   };
 }
 
-if (globalThis.Request === undefined) {
+if (!globalThis.Request) {
   try {
     let fetchAPI;
     if (globalThis.fetch?.Request) {
@@ -383,7 +383,7 @@ if (globalThis.Request === undefined) {
 
     if (fetchAPI?.Request) {
       // Ensure `fetch` is available globally. Prefer existing global fetch, otherwise try node-fetch.
-      if (globalThis.fetch === undefined) {
+      if (!globalThis.fetch) {
         try {
           // node-fetch v2 supports require — allow require here
 
@@ -427,7 +427,7 @@ if (globalThis.Request === undefined) {
 // Make `window.location` configurable for tests that redefine it.
 try {
   // Make `window.location` configurable for tests that redefine it.
-  if (globalThis.window !== undefined) {
+  if (globalThis.window) {
     try {
       delete globalThis.window.location;
     } catch (error_) {

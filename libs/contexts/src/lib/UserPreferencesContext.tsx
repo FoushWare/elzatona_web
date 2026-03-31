@@ -34,9 +34,7 @@ async function initSupabase() {
 }
 
 function ensureSupabaseInitialized() {
-  if (!supabaseInitPromise) {
-    supabaseInitPromise = initSupabase();
-  }
+  supabaseInitPromise ??= initSupabase();
   return supabaseInitPromise;
 }
 

@@ -116,6 +116,14 @@ const PlanTopicNode: React.FC<{
       <div
         className="flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded transition-colors"
         onClick={() => togglePlanTopic(topic.id)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            togglePlanTopic(topic.id);
+          }
+        }}
       >
         <div className="flex items-center space-x-2">
           <div className="p-1">

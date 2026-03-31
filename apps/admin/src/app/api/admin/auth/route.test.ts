@@ -3,7 +3,6 @@
  * @vitest-environment node
  */
 
-import path from "node:path";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock repositories first
@@ -23,11 +22,6 @@ vi.mock("database", () => ({
   })),
   resetRepositoryFactory: vi.fn(),
 }));
-
-import {
-  getRepositoryFactory,
-  resetRepositoryFactory,
-} from "@elzatona/database";
 
 // Mock other dependencies
 vi.mock("@elzatona/utilities/server", () => ({

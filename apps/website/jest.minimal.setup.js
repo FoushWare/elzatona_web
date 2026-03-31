@@ -1,6 +1,6 @@
 // Minimal setup for Jest runs to avoid recursive setup complexity.
 // Provides minimal Web API shims and a small `vi` shim mapped to Jest.
-if (globalThis.Headers === undefined) {
+if (!globalThis.Headers) {
   globalThis.Headers = class Headers {
     constructor(init = {}) {
       this._map = {};
@@ -23,7 +23,7 @@ if (globalThis.Headers === undefined) {
   };
 }
 
-if (globalThis.Request === undefined) {
+if (!globalThis.Request) {
   globalThis.Request = class Request {
     constructor(input, init = {}) {
       this._url = typeof input === "string" ? input : input?.url || "";
@@ -48,7 +48,7 @@ if (globalThis.Request === undefined) {
   };
 }
 
-if (globalThis.Response === undefined) {
+if (!globalThis.Response) {
   globalThis.Response = class Response {
     constructor(body, init = {}) {
       this._body = body;
@@ -68,7 +68,7 @@ if (globalThis.Response === undefined) {
   };
 }
 
-if (globalThis.vi === undefined) {
+if (!globalThis.vi) {
   globalThis.vi = {
     fn: (...args) => jest.fn(...args),
     mock: (m, f) => {
