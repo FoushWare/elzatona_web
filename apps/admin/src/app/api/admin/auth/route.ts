@@ -64,9 +64,6 @@ export async function POST(request: NextRequest) {
       adminData = {
         id: "e2e-test-admin-id",
         email: "test-admin@example.com",
-        // Using a pre-computed hash for "test-password-here" to avoid bcrypt overhead in bypass
-        passwordHash:
-          "$2a$10$Xm77ZfGz/X9YJ3pZ0Y5mO.u1sH8lV2K4Qyq5W0m5G1J9J9J9J9J9J",
         role: "admin",
         name: "E2E Test Admin",
         isActive: true,

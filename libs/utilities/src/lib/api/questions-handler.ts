@@ -39,6 +39,20 @@ let _questionsCache: Array<{
 const _cacheTimestamp: number = 0;
 const _CACHE_DURATION = 30000; // 30 seconds
 
+function stripUnsafeControlCharacters(value: string): string {
+  return Array.from(value)
+    .filter((char) => {
+      const codePoint = char.codePointAt(0) ?? 0;
+      return (
+        codePoint === 9 ||
+        codePoint === 10 ||
+        codePoint === 13 ||
+        (codePoint >= 32 && codePoint !== 127)
+      );
+    })
+    .join("");
+}
+
 // GET /api/questions/unified - Get questions with filters
 export async function questionsGetHandler(request: NextRequest) {
   try {
@@ -1270,10 +1284,8 @@ export async function PUT(request: NextRequest) {
         .replace(/\r\n/g, "\n") // Normalize Windows line breaks
         .replace(/\r/g, "\n"); // Normalize Mac line breaks
 
-      // Basic sanitization - remove null bytes and control characters (except newlines and tabs)
-      codeContent = codeContent
-        .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n, \r, \t
-        .replace(/\x00/g, ""); // Remove null bytes
+      // Remove unsafe control chars while preserving tabs/newlines for code readability.
+      codeContent = stripUnsafeControlCharacters(codeContent);
 
       sanitizedUpdate["code"] = codeContent;
     } else if (
