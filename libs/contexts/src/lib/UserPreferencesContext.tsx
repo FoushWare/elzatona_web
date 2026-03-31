@@ -21,14 +21,14 @@ async function initSupabase() {
 
   if (
     process.env["NEXT_PUBLIC_SUPABASE_URL"] &&
-    process.env["SUPABASE_SERVICE_ROLE_KEY"]
+    process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"]
   ) {
     const { createClient } = await import("@supabase/supabase-js");
     const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"] || "";
-    const supabaseServiceRoleKey =
-      process.env["SUPABASE_SERVICE_ROLE_KEY"] || "";
-    if (supabaseUrl && supabaseServiceRoleKey) {
-      supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+    const supabaseAnonKey =
+      process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"] || "";
+    if (supabaseUrl && supabaseAnonKey) {
+      supabase = createClient(supabaseUrl, supabaseAnonKey);
     }
   }
 }

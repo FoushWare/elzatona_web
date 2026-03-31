@@ -119,6 +119,7 @@ const PlanTopicNode: React.FC<{
         role="button"
         tabIndex={0}
         onKeyDown={(e) => {
+          if (e.currentTarget !== e.target) return;
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             togglePlanTopic(topic.id);

@@ -281,9 +281,22 @@ function getPrimaryNestedId(value: unknown): string {
     return "";
   }
 
-  const first = value[0] as Record<string, unknown>;
-  const id = first["id"];
-  return typeof id === "string" ? id : "";
+  const candidates = value.filter(
+    (item): item is Record<string, unknown> =>
+      Boolean(item) &&
+      typeof item === "object" &&
+      typeof (item as Record<string, unknown>)["id"] === "string",
+  ) as Record<string, unknown>[];
+
+  const primary =
+    candidates.find((item) => item["is_primary"] === true) ??
+    candidates.sort(
+      (a, b) =>
+        Number(a["order_index"] ?? Number.MAX_SAFE_INTEGER) -
+        Number(b["order_index"] ?? Number.MAX_SAFE_INTEGER),
+    )[0];
+
+  return primary ? String(primary["id"]) : "";
 }
 
 function getQuestionCategoryId(question: AdminUnifiedQuestion): string {

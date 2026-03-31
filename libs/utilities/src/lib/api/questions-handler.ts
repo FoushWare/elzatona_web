@@ -490,7 +490,7 @@ export async function questionsPostHandler(request: NextRequest) {
         );
 
         // CRITICAL: Restore code field AFTER sanitization (it was skipped during sanitization)
-        // Code field is NOT sanitized - we rely on CSP protection for XSS prevention
+        // Code field is sanitized to remove unsafe control characters, with newlines preserved
         // ALWAYS set the code field, even if it's null
         if (codeBeforeSanitization !== null && codeBeforeSanitization !== "") {
           // Process the code to convert \n escape sequences to actual newlines
@@ -508,6 +508,8 @@ export async function questionsPostHandler(request: NextRequest) {
             codeContent = processedCode;
           }
 
+          // Remove unsafe control characters while preserving tabs/newlines for code readability
+          codeContent = stripUnsafeControlCharacters(codeContent);
           sanitizedQuestion["code"] = codeContent;
 
           // Security: Removed debug logging to prevent information disclosure
@@ -539,6 +541,8 @@ export async function questionsPostHandler(request: NextRequest) {
             codeContent = codeContent.replaceAll(String.raw`\r`, "\n");
             codeContent = codeContent.replaceAll("\r\n", "\n");
             codeContent = codeContent.replaceAll("\r", "\n");
+            // Remove unsafe control characters while preserving tabs/newlines
+            codeContent = stripUnsafeControlCharacters(codeContent);
             sanitizedQuestion["code"] = codeContent;
             processedCode = codeContent;
             // Security: Removed debug logging to prevent information disclosure
