@@ -431,8 +431,11 @@ export class ErrorLoggingService {
           totalOperations) *
         100;
 
-      const slowestOperations = allLogs
-        .sort((a: PerformanceLog, b: PerformanceLog) => b.duration - a.duration)
+      const sortedLogs = [...allLogs].sort(
+        (a: PerformanceLog, b: PerformanceLog) => b.duration - a.duration,
+      );
+
+      const slowestOperations = sortedLogs
         .slice(0, 10)
         .map((log: PerformanceLog) => ({
           operation: log.operation,
