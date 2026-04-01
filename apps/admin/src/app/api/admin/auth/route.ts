@@ -17,10 +17,11 @@ const adminConfig = {
 
 async function checkAuthRateLimit(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") ?? "anonymous";
-  const { success: withinLimit, remaining, reset } = await authRateLimiter.check(
-    10,
-    ip,
-  );
+  const {
+    success: withinLimit,
+    remaining,
+    reset,
+  } = await authRateLimiter.check(10, ip);
 
   if (withinLimit) {
     return null;
@@ -178,7 +179,9 @@ export async function POST(request: NextRequest) {
         success: false,
         error: "Internal server error",
         debug:
-          process.env.NODE_ENV === "production" ? undefined : errorDetails.stack,
+          process.env.NODE_ENV === "production"
+            ? undefined
+            : errorDetails.stack,
       },
       { status: 500 },
     );

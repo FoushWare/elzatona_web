@@ -255,7 +255,8 @@ export class FrontendTaskValidator {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
-  private async runReactTestCase( // NOSONAR - dedicated refactor tracked separately
+  private async runReactTestCase(
+    // NOSONAR - dedicated refactor tracked separately
     iframe: HTMLIFrameElement,
     testCase: TestCase,
   ): Promise<ValidationResult> {

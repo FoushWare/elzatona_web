@@ -244,7 +244,8 @@ const useNavbarSimpleState = () => {
 // Tracked for future sprint improvement
 
 // noinspection JSUnusedLocalSymbols
-export const NavbarSimple: React.FC = () => { // NOSONAR
+export const NavbarSimple: React.FC = () => {
+  // NOSONAR
   // NOSONAR
   // NOSONAR
   const {

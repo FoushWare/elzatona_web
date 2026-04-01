@@ -93,7 +93,8 @@ function getErrorMessage(error: unknown): string {
 
 // GET /api/questions/unified - Get questions with filters
 // NOSONAR - legacy endpoint complexity is tracked for a dedicated refactor.
-export async function questionsGetHandler(request: NextRequest) { // NOSONAR
+export async function questionsGetHandler(request: NextRequest) {
+  // NOSONAR
   try {
     // Get Supabase client with validation
     const supabase = getSupabaseClient();
@@ -225,7 +226,8 @@ export async function questionsGetHandler(request: NextRequest) { // NOSONAR
     // Transform questions to normalize the relationship data
     // Supabase returns single objects for foreign keys, but frontend expects arrays for display
     // NOSONAR - relationship normalization is intentionally verbose for backward compatibility.
-    const questions = rawQuestions.map((question: Record<string, unknown>) => { // NOSONAR
+    const questions = rawQuestions.map((question: Record<string, unknown>) => {
+      // NOSONAR
       const transformed: Record<string, unknown> = { ...question };
 
       // Ensure code field preserves newlines - convert any \n escape sequences to actual newlines
@@ -356,7 +358,8 @@ export async function questionsGetHandler(request: NextRequest) { // NOSONAR
 
 // POST /api/questions/unified - Create questions (bulk import or single)
 // NOSONAR - legacy endpoint complexity is tracked for a dedicated refactor.
-export async function questionsPostHandler(request: NextRequest) { // NOSONAR
+export async function questionsPostHandler(request: NextRequest) {
+  // NOSONAR
   try {
     // Get Supabase client with validation
     const supabase = getSupabaseClient();
@@ -477,9 +480,9 @@ export async function questionsPostHandler(request: NextRequest) { // NOSONAR
         // Extract code field BEFORE sanitization to completely bypass it
         // Code field will NOT be sanitized - we'll use CSP protection instead
         // Priority: processedCode > originalCode > validatedData.code
-        const validatedCode = (validationResult.data as Record<string, unknown>)[
-          "code"
-        ];
+        const validatedCode = (
+          validationResult.data as Record<string, unknown>
+        )["code"];
         const codeBeforeSanitization =
           getNonEmptyString(processedCode) ??
           getNonEmptyString(originalCode) ??
@@ -1211,7 +1214,8 @@ export async function questionsPostHandler(request: NextRequest) { // NOSONAR
 
 // PUT /api/questions/unified - Update a question
 // NOSONAR - legacy endpoint complexity is tracked for a dedicated refactor.
-export async function PUT(request: NextRequest) { // NOSONAR
+export async function PUT(request: NextRequest) {
+  // NOSONAR
   try {
     // Get Supabase client with validation
     const supabase = getSupabaseClient();
@@ -1244,7 +1248,9 @@ export async function PUT(request: NextRequest) { // NOSONAR
       sanitizedUpdate["code"] !== ""
     ) {
       // Convert \n escape sequences to actual newlines (in case they're stored as strings)
-      let codeContent = normalizeCodeLineBreaks(String(sanitizedUpdate["code"]));
+      let codeContent = normalizeCodeLineBreaks(
+        String(sanitizedUpdate["code"]),
+      );
 
       // Remove unsafe control chars while preserving tabs/newlines for code readability.
       codeContent = stripUnsafeControlCharacters(codeContent);

@@ -12,6 +12,8 @@ interface JotaiProviderProps {
 export function JotaiProvider({ children }: JotaiProviderProps) {
   const contextValue = useMemo(() => ({}), []);
   return (
-    <JotaiContext.Provider value={contextValue}>{children}</JotaiContext.Provider>
+    <JotaiContext.Provider value={contextValue}>
+      {children}
+    </JotaiContext.Provider>
   );
 }
