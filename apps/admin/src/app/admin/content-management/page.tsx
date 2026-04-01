@@ -2,7 +2,6 @@
 // Triggering fresh CI run for synchronization check
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import {
   Button,
   Dialog,
@@ -29,7 +28,6 @@ import { Loader2 } from "lucide-react";
 import { useContentManagement } from "./hooks/useContentManagement";
 
 export default function ContentManagementPage() {
-  const router = useRouter();
   const {
     loading,
     error,
@@ -125,7 +123,6 @@ export default function ContentManagementPage() {
     cardToEdit,
     isSubmittingCard,
     isSubmittingTopic,
-    isSubmittingCategory,
     openCreateCardModal,
     openEditCardModal,
     submitCard,
@@ -212,13 +209,13 @@ export default function ContentManagementPage() {
         <TopicsManager
           topics={topics}
           onCreateTopic={() => {
-            void openCreateTopicModal();
+            openCreateTopicModal();
           }}
           onEditTopic={(topic: any) => {
-            void openEditTopicModal(topic);
+            openEditTopicModal(topic);
           }}
           onDeleteTopic={(topic: any) => {
-            void removeTopic(topic);
+            removeTopic(topic);
           }}
         />
 
@@ -226,13 +223,13 @@ export default function ContentManagementPage() {
         <CategoriesManager
           categories={categories}
           onCreateCategory={() => {
-            void openCreateCategoryModal();
+            openCreateCategoryModal();
           }}
           onEditCategory={(category: any) => {
-            void openEditCategoryModal(category);
+            openEditCategoryModal(category);
           }}
           onDeleteCategory={(category: any) => {
-            void removeCategory(category);
+            removeCategory(category);
           }}
         />
 

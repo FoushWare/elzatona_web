@@ -6,7 +6,7 @@
 // cache to register the provided factory output so subsequent requires return
 // the mocked module.
 try {
-  if (globalThis.vi === undefined) {
+  if (!globalThis.vi) {
     const Module = require("node:module");
     globalThis.vi = {
       _registered: [],
@@ -51,7 +51,7 @@ try {
   console.debug("jest.fetch.setup init error:", error_);
 }
 try {
-  if (globalThis.fetch === undefined) {
+  if (!globalThis.fetch) {
     // Prefer node-fetch if available
 
     const nodeFetch = require("node-fetch");

@@ -1,9 +1,7 @@
 "use client";
 
-import React from "react";
-
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function QuestionsRedirectPage() {
   const router = useRouter();

@@ -12,21 +12,22 @@ export interface FlashcardItem {
 const STORAGE_KEY = "flashcards:v1";
 
 export function loadFlashcards(): FlashcardItem[] {
-  if (typeof window === "undefined") return [];
+  if (globalThis.window === undefined) return [];
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = globalThis.window.localStorage.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as FlashcardItem[]) : [];
-  } catch (_) {
+  } catch (error) {
+    console.debug("loadFlashcards failed:", error);
     return [];
   }
 }
 
 export function saveFlashcards(items: FlashcardItem[]) {
-  if (typeof window === "undefined") return;
+  if (globalThis.window === undefined) return;
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  } catch (_) {
-    // no-op
+    globalThis.window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  } catch (error) {
+    console.debug("saveFlashcards failed:", error);
   }
 }
 

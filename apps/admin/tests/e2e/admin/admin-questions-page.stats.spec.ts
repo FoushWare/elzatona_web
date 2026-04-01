@@ -53,7 +53,7 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Stats", () => {
       .first()
       .locator("..")
       .textContent();
-    const initialCount = parseInt(
+    const initialCount = Number.parseInt(
       initialCountText?.match(/\d+/)?.[0] || "0",
       10,
     );
@@ -103,7 +103,10 @@ test.describe("A-E2E-001: Admin Bulk Question Addition - Stats", () => {
       .first()
       .locator("..")
       .textContent();
-    const newCount = parseInt(newCountText?.match(/\d+/)?.[0] || "0", 10);
+    const newCount = Number.parseInt(
+      newCountText?.match(/\d+/)?.[0] || "0",
+      10,
+    );
 
     // Count should have increased (or at least be the same if there was a race condition)
     expect(newCount).toBeGreaterThanOrEqual(initialCount);

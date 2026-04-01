@@ -17,7 +17,7 @@ export const isSessionValid = async (): Promise<boolean> => {
     }
 
     // Check if session is expired
-    const now = new Date().getTime() / 1000;
+    const now = Date.now() / 1000;
     if (session.expires_at && session.expires_at < now) {
       return false;
     }
@@ -88,21 +88,21 @@ export const clearAuthData = async () => {
     const supabase = getSupabaseClientWithAnonKey();
     await supabase.auth.signOut();
 
-    if (typeof window !== "undefined") {
+    if (globalThis.window !== undefined) {
       // Clear localStorage
-      Object.keys(localStorage).forEach((key) => {
+      Object.keys(globalThis.window.localStorage).forEach((key) => {
         if (
           key.startsWith("supabase:") ||
           key.startsWith("auth_") ||
           key.includes("user") ||
           key.startsWith("progress_")
         ) {
-          localStorage.removeItem(key);
+          globalThis.window.localStorage.removeItem(key);
         }
       });
 
       // Clear sessionStorage
-      sessionStorage.clear();
+      globalThis.window.sessionStorage.clear();
 
       // Clear any cookies (if any)
       document.cookie.split(";").forEach((cookie) => {
@@ -121,7 +121,7 @@ export const clearAuthData = async () => {
 
 // Set up automatic token refresh
 export const setupTokenRefresh = () => {
-  if (typeof window === "undefined") return;
+  if (globalThis.window === undefined) return;
 
   // Supabase handles token refresh automatically
   // We just need to listen for auth state changes

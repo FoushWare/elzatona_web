@@ -118,11 +118,12 @@ const TopicNode: React.FC<{
       id={`topic-${topic.id}`}
       className="border-l-2 border-gray-100 pl-4 py-2"
     >
-      <div
-        className="flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition-colors"
-        onClick={() => toggleTopic(topic.id)}
-      >
-        <div className="flex items-center space-x-2">
+      <div className="flex items-center justify-between p-2 rounded transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+        <button
+          type="button"
+          className="flex items-center space-x-2 text-left flex-1"
+          onClick={() => toggleTopic(topic.id)}
+        >
           <div className="p-1">
             {expandedTopics.has(topic.id) ? (
               <ChevronDown className="h-4 w-4 text-gray-500" />
@@ -137,7 +138,7 @@ const TopicNode: React.FC<{
               {topic.description}
             </p>
           </div>
-        </div>
+        </button>
         <div className="flex items-center space-x-2">
           <Badge
             variant="outline"
@@ -245,7 +246,8 @@ const CategoryNode: React.FC<{
       id={`category-${category.id}`}
       className="ml-6 border-l-2 border-gray-200 pl-4"
     >
-      <div
+      <button
+        type="button"
         className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition-colors"
         onClick={() => toggleCategory(category.id)}
       >
@@ -273,7 +275,7 @@ const CategoryNode: React.FC<{
             {categoryTopics.length} Topics
           </Badge>
         </div>
-      </div>
+      </button>
 
       {expandedCategories.has(category.id) && (
         <div className="ml-6 space-y-2">
@@ -353,12 +355,13 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
         className="border-l-4"
         style={{ borderLeftColor: card.color }}
       >
-        <CardHeader
-          className="pb-3 border-b-0 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
-          onClick={() => toggleCard(card.id)}
-        >
+        <CardHeader className="pb-3 border-b-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+            <button
+              type="button"
+              className="flex items-center space-x-3 text-left flex-1"
+              onClick={() => toggleCard(card.id)}
+            >
               <div className="p-1 rounded group-hover:bg-gray-200 dark:group-hover:bg-gray-700 transition-colors">
                 {expandedCards.has(card.id) ? (
                   <ChevronDown className="h-4 w-4 text-gray-500" />
@@ -378,11 +381,8 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                   {card.description}
                 </p>
               </div>
-            </div>
-            <div
-              className="flex items-center space-x-2"
-              onClick={(e) => e.stopPropagation()}
-            >
+            </button>
+            <div className="flex items-center space-x-2">
               <Badge
                 variant="outline"
                 className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"

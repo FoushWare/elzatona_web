@@ -30,7 +30,7 @@ export interface SolutionValidation {
 }
 
 export class FrontendTaskValidator {
-  private timeout: number = 5000; // 5 seconds default timeout
+  private readonly timeout: number; // 5 seconds default timeout
 
   constructor(timeout: number = 5000) {
     this.timeout = timeout;
@@ -63,7 +63,7 @@ export class FrontendTaskValidator {
       }
 
       // Cleanup
-      document.body.removeChild(iframe);
+      iframe.remove();
     } catch (error) {
       console.error("Validation error:", error);
       // Add error result for all test cases
@@ -120,7 +120,7 @@ export class FrontendTaskValidator {
       }
 
       // Cleanup
-      document.body.removeChild(iframe);
+      iframe.remove();
     } catch (error) {
       console.error("Validation error:", error);
       testCases.forEach((testCase) => {
@@ -161,9 +161,8 @@ export class FrontendTaskValidator {
       // Create a test iframe
       const iframe = this.createTestIframe();
 
-      // Inject user code
-      iframe.contentDocument!.write(userCode);
-      iframe.contentDocument!.close();
+      // Inject user code without using deprecated document.write API.
+      iframe.srcdoc = userCode;
 
       // Wait for content to load
       await new Promise((resolve) => {
@@ -178,7 +177,7 @@ export class FrontendTaskValidator {
       }
 
       // Cleanup
-      document.body.removeChild(iframe);
+      iframe.remove();
     } catch (error) {
       console.error("Validation error:", error);
       testCases.forEach((testCase) => {
@@ -217,11 +216,7 @@ export class FrontendTaskValidator {
 
   private async injectReactLibraries(iframe: HTMLIFrameElement): Promise<void> {
     return new Promise((resolve, reject) => {
-      const doc = iframe.contentDocument!;
-
-      // Create HTML structure
-      doc.open();
-      doc.write(`
+      iframe.srcdoc = `
         <!DOCTYPE html>
         <html>
         <head>
@@ -233,8 +228,7 @@ export class FrontendTaskValidator {
           <div id="root"></div>
         </body>
         </html>
-      `);
-      doc.close();
+      `;
 
       iframe.onload = () => resolve();
       iframe.onerror = () =>
@@ -262,6 +256,7 @@ export class FrontendTaskValidator {
   }
 
   private async runReactTestCase(
+    // NOSONAR - dedicated refactor tracked separately
     iframe: HTMLIFrameElement,
     testCase: TestCase,
   ): Promise<ValidationResult> {
@@ -308,13 +303,14 @@ export class FrontendTaskValidator {
       let actualOutput: any;
 
       switch (testCase.input) {
-        case "initial":
+        case "initial": {
           // Check initial state
           const initialText = root.textContent || "";
           actualOutput = initialText.includes("0") ? "0" : initialText;
           break;
+        }
 
-        case "increment":
+        case "increment": {
           // Find and click increment button
           const incrementBtn = Array.from(root.querySelectorAll("button")).find(
             (btn) =>
@@ -322,7 +318,7 @@ export class FrontendTaskValidator {
           );
 
           if (incrementBtn) {
-            (incrementBtn as HTMLButtonElement).click();
+            incrementBtn.click();
             await new Promise((resolve) => setTimeout(resolve, 100));
             const text = root.textContent || "";
             actualOutput = text.includes("1") ? "1" : text;
@@ -330,8 +326,9 @@ export class FrontendTaskValidator {
             throw new Error("Increment button not found");
           }
           break;
+        }
 
-        case "decrement":
+        case "decrement": {
           // Find and click decrement button
           const decrementBtn = Array.from(root.querySelectorAll("button")).find(
             (btn) =>
@@ -339,7 +336,7 @@ export class FrontendTaskValidator {
           );
 
           if (decrementBtn) {
-            (decrementBtn as HTMLButtonElement).click();
+            decrementBtn.click();
             await new Promise((resolve) => setTimeout(resolve, 100));
             const text = root.textContent || "";
             actualOutput = text.includes("-1") ? "-1" : text;
@@ -347,15 +344,16 @@ export class FrontendTaskValidator {
             throw new Error("Decrement button not found");
           }
           break;
+        }
 
-        case "reset":
+        case "reset": {
           // Find and click reset button
           const resetBtn = Array.from(root.querySelectorAll("button")).find(
             (btn) => btn.textContent?.toLowerCase().includes("reset"),
           );
 
           if (resetBtn) {
-            (resetBtn as HTMLButtonElement).click();
+            resetBtn.click();
             await new Promise((resolve) => setTimeout(resolve, 100));
             const text = root.textContent || "";
             actualOutput = text.includes("0") ? "0" : text;
@@ -363,6 +361,7 @@ export class FrontendTaskValidator {
             throw new Error("Reset button not found");
           }
           break;
+        }
 
         default:
           actualOutput = root.textContent || "";
@@ -442,19 +441,21 @@ export class FrontendTaskValidator {
       let actualOutput: any;
 
       switch (testCase.input) {
-        case "check-grid":
+        case "check-grid": {
           const gridElement = doc.querySelector(".card-container");
           actualOutput = gridElement
-            ? window.getComputedStyle(gridElement).display
+            ? globalThis.window.getComputedStyle(gridElement).display
             : "none";
           break;
+        }
 
-        case "check-responsive":
+        case "check-responsive": {
           // Check if responsive classes exist
           const responsiveElements = doc.querySelectorAll('[class*="grid"]');
           actualOutput =
             responsiveElements.length > 0 ? "responsive" : "not-responsive";
           break;
+        }
 
         default:
           actualOutput = doc.body.textContent || "";

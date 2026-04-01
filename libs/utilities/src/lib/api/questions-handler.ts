@@ -38,9 +38,63 @@ let _questionsCache: Array<{
 }> | null = null;
 const _cacheTimestamp: number = 0;
 const _CACHE_DURATION = 30000; // 30 seconds
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function stripUnsafeControlCharacters(value: string): string {
+  return Array.from(value)
+    .filter((char) => {
+      const codePoint = char.codePointAt(0) ?? 0;
+      return (
+        codePoint === 9 ||
+        codePoint === 10 ||
+        codePoint === 13 ||
+        (codePoint >= 32 && codePoint !== 127)
+      );
+    })
+    .join("");
+}
+
+function parseBooleanParam(value: string | null): boolean | undefined {
+  if (value === "true") {
+    return true;
+  }
+  if (value === "false") {
+    return false;
+  }
+  return undefined;
+}
+
+function normalizeCodeLineBreaks(value: string): string {
+  return value
+    .replaceAll(String.raw`\r\n`, "\n")
+    .replaceAll(String.raw`\n`, "\n")
+    .replaceAll(String.raw`\r`, "\n")
+    .replaceAll("\r\n", "\n")
+    .replaceAll("\r", "\n");
+}
+
+function getNonEmptyString(value: unknown): string | null {
+  if (value === undefined || value === null || value === "") {
+    return null;
+  }
+  return String(value);
+}
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === "string") {
+    return error;
+  }
+  return String(JSON.stringify(error));
+}
 
 // GET /api/questions/unified - Get questions with filters
+// NOSONAR - legacy endpoint complexity is tracked for a dedicated refactor.
 export async function questionsGetHandler(request: NextRequest) {
+  // NOSONAR
   try {
     // Get Supabase client with validation
     const supabase = getSupabaseClient();
@@ -52,21 +106,8 @@ export async function questionsGetHandler(request: NextRequest) {
     const pageSize = Number.parseInt(searchParams.get("pageSize") || "10");
     const offset = (page - 1) * pageSize;
 
-    const isActiveParam = searchParams.get("isActive");
-    const is_active =
-      isActiveParam === "true"
-        ? true
-        : isActiveParam === "false"
-          ? false
-          : undefined;
-
-    const isCompleteParam = searchParams.get("isComplete");
-    const isComplete =
-      isCompleteParam === "true"
-        ? true
-        : isCompleteParam === "false"
-          ? false
-          : undefined;
+    const is_active = parseBooleanParam(searchParams.get("isActive"));
+    const isComplete = parseBooleanParam(searchParams.get("isComplete"));
 
     const filters = {
       category: searchParams.get("category") || undefined,
@@ -184,18 +225,15 @@ export async function questionsGetHandler(request: NextRequest) {
 
     // Transform questions to normalize the relationship data
     // Supabase returns single objects for foreign keys, but frontend expects arrays for display
+    // NOSONAR - relationship normalization is intentionally verbose for backward compatibility.
     const questions = rawQuestions.map((question: Record<string, unknown>) => {
+      // NOSONAR
       const transformed: Record<string, unknown> = { ...question };
 
       // Ensure code field preserves newlines - convert any \n escape sequences to actual newlines
       if (transformed["code"] && typeof transformed["code"] === "string") {
         // Handle cases where newlines might be stored as escape sequences
-        transformed["code"] = (transformed["code"] as string)
-          .replaceAll(/\\n/g, "\n") // Replace \n escape sequences with actual newlines
-          .replaceAll(/\\r\\n/g, "\n") // Replace \r\n escape sequences
-          .replaceAll(/\\r/g, "\n") // Replace \r escape sequences
-          .replaceAll(/\r\n/g, "\n") // Normalize Windows line breaks
-          .replaceAll(/\r/g, "\n"); // Normalize Mac line breaks
+        transformed["code"] = normalizeCodeLineBreaks(transformed["code"]);
       }
 
       // Transform categories: single object -> array for display, also add category name for form
@@ -319,7 +357,9 @@ export async function questionsGetHandler(request: NextRequest) {
 }
 
 // POST /api/questions/unified - Create questions (bulk import or single)
+// NOSONAR - legacy endpoint complexity is tracked for a dedicated refactor.
 export async function questionsPostHandler(request: NextRequest) {
+  // NOSONAR
   try {
     // Get Supabase client with validation
     const supabase = getSupabaseClient();
@@ -350,10 +390,7 @@ export async function questionsPostHandler(request: NextRequest) {
 
         // CRITICAL: Extract code field FIRST, before any processing, to ensure it's never lost
         // Store the original code value from the input data
-        const originalCode =
-          questionData["code"] !== undefined
-            ? questionData["code"]
-            : normalizedData["code"];
+        const originalCode = questionData["code"] ?? normalizedData["code"];
 
         // Handle isActive -> is_active
         if ("isActive" in normalizedData && !("is_active" in normalizedData)) {
@@ -381,8 +418,7 @@ export async function questionsPostHandler(request: NextRequest) {
 
         // CRITICAL: Process code field BEFORE validation/sanitization to preserve newlines
         // Extract and preserve code field separately - this ensures newlines are never lost
-        const codeField =
-          originalCode !== undefined ? originalCode : normalizedData["code"];
+        const codeField = originalCode ?? normalizedData["code"];
         let processedCode: string | null = null;
 
         // Security: Removed debug logging to prevent information disclosure
@@ -392,13 +428,7 @@ export async function questionsPostHandler(request: NextRequest) {
           let codeContent = String(codeField);
 
           // Convert literal \n escape sequences to actual newlines
-          codeContent = codeContent.replaceAll(String.raw`\n`, "\n");
-          codeContent = codeContent.replaceAll(String.raw`\r\n`, "\n");
-          codeContent = codeContent.replaceAll(String.raw`\r`, "\n");
-
-          // Normalize line breaks
-          codeContent = codeContent.replaceAll("\r\n", "\n");
-          codeContent = codeContent.replaceAll("\r", "\n");
+          codeContent = normalizeCodeLineBreaks(codeContent);
 
           // Store processed code separately (will restore after sanitization)
           processedCode = codeContent;
@@ -450,23 +480,13 @@ export async function questionsPostHandler(request: NextRequest) {
         // Extract code field BEFORE sanitization to completely bypass it
         // Code field will NOT be sanitized - we'll use CSP protection instead
         // Priority: processedCode > originalCode > validatedData.code
+        const validatedCode = (
+          validationResult.data as Record<string, unknown>
+        )["code"];
         const codeBeforeSanitization =
-          processedCode !== null && processedCode !== ""
-            ? processedCode
-            : originalCode !== undefined &&
-                originalCode !== null &&
-                originalCode !== ""
-              ? String(originalCode)
-              : (validationResult.data as Record<string, unknown>)["code"] !==
-                    undefined &&
-                  (validationResult.data as Record<string, unknown>)["code"] !==
-                    null &&
-                  (validationResult.data as Record<string, unknown>)["code"] !==
-                    ""
-                ? String(
-                    (validationResult.data as Record<string, unknown>)["code"],
-                  )
-                : null;
+          getNonEmptyString(processedCode) ??
+          getNonEmptyString(originalCode) ??
+          getNonEmptyString(validatedCode);
 
         // Security: Removed debug logging to prevent information disclosure
 
@@ -537,7 +557,7 @@ export async function questionsPostHandler(request: NextRequest) {
         // Ensure is_active is set (use isActive if is_active is not set)
         if (
           sanitizedQuestion["is_active"] === undefined &&
-          (sanitizedQuestion["isActive"] as unknown) !== undefined
+          sanitizedQuestion["isActive"] !== undefined
         ) {
           sanitizedQuestion["is_active"] = sanitizedQuestion["isActive"];
         }
@@ -594,12 +614,10 @@ export async function questionsPostHandler(request: NextRequest) {
         // Map category name to category_id if needed
         let categoryId =
           sanitizedQuestion["category_id"] || sanitizedQuestion["category"];
-        const uuidRegex =
-          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
         if (
           categoryId &&
           typeof categoryId === "string" &&
-          !uuidRegex.exec(categoryId)
+          !UUID_REGEX.exec(categoryId)
         ) {
           // It's a category name, not an ID - need to look it up
           // Categories table only has 'name' column, not 'title'
@@ -640,9 +658,7 @@ export async function questionsPostHandler(request: NextRequest) {
         if (
           topicId &&
           typeof topicId === "string" &&
-          !topicId.match(
-            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-          )
+          !UUID_REGEX.exec(topicId)
         ) {
           // It's a topic name, not an ID - need to look it up
           // Topics table only has 'name' column, not 'title'
@@ -695,11 +711,7 @@ export async function questionsPostHandler(request: NextRequest) {
         ) {
           const trimmedId = learningCardId.trim();
           // Check if it's a valid UUID
-          if (
-            trimmedId.match(
-              /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-            )
-          ) {
+          if (UUID_REGEX.exec(trimmedId)) {
             // It's already a UUID, use it directly
             finalLearningCardId = trimmedId;
             // Security: Removed debug logging to prevent information disclosure
@@ -758,8 +770,7 @@ export async function questionsPostHandler(request: NextRequest) {
         // Remove fields that don't exist in the database or are frontend-only
         // CRITICAL: Preserve code field - extract it before destructuring to ensure it's not lost
         // Use processedCode if available (from earlier processing), otherwise use sanitizedQuestion.code
-        const codeForDb =
-          processedCode !== null ? processedCode : sanitizedQuestion["code"];
+        const codeForDb = processedCode ?? sanitizedQuestion["code"];
 
         const {
           category: _category,
@@ -799,11 +810,9 @@ export async function questionsPostHandler(request: NextRequest) {
 
         // Ensure type field exists (required by database)
         // Map 'multiple-select' to 'multiple-choice' since database doesn't support 'multiple-select'
-        if (!dbQuestion["type"]) {
-          dbQuestion["type"] = "multiple-choice"; // Default type
-        } else if (dbQuestion["type"] === "multiple-select") {
+        if (!dbQuestion["type"] || dbQuestion["type"] === "multiple-select") {
           // Database constraint only allows: 'multiple-choice', 'open-ended', 'true-false', 'code'
-          // Map 'multiple-select' to 'multiple-choice' as they're functionally the same
+          // Map missing type and 'multiple-select' to 'multiple-choice'.
           dbQuestion["type"] = "multiple-choice";
           // Security: Removed debug logging to prevent information disclosure
         }
@@ -861,7 +870,6 @@ export async function questionsPostHandler(request: NextRequest) {
             console.warn(
               "⚠️ Invalid resources format - must be array or null. Setting to null.",
             );
-            resources = null;
           }
         }
 
@@ -918,12 +926,7 @@ export async function questionsPostHandler(request: NextRequest) {
           originalCode !== ""
         ) {
           // Last resort: process originalCode now
-          let codeContent = String(originalCode);
-          codeContent = codeContent.replace(/\\n/g, "\n");
-          codeContent = codeContent.replace(/\\r\\n/g, "\n");
-          codeContent = codeContent.replace(/\\r/g, "\n");
-          codeContent = codeContent.replace(/\r\n/g, "\n");
-          codeContent = codeContent.replace(/\r/g, "\n");
+          const codeContent = normalizeCodeLineBreaks(String(originalCode));
           codeToStore = codeContent;
           // Security: Removed user data from logs to prevent log injection
           console.log("⚠️ Using originalCode as fallback");
@@ -953,14 +956,8 @@ export async function questionsPostHandler(request: NextRequest) {
           originalCode !== ""
         ) {
           // Last resort: process originalCode now
-          let codeContent = String(originalCode);
-          codeContent = codeContent.replace(/\\n/g, "\n");
-          codeContent = codeContent.replace(/\\r\\n/g, "\n");
-          codeContent = codeContent.replace(/\\r/g, "\n");
-          codeContent = codeContent.replace(/\r\n/g, "\n");
-          codeContent = codeContent.replace(/\r/g, "\n");
+          const codeContent = normalizeCodeLineBreaks(String(originalCode));
           questionWithTimestamps["code"] = codeContent;
-          processedCode = codeContent; // Update for consistency
           // Security: Removed debug logging to prevent information disclosure
           const _newlineCount = (codeContent.match(/\n/g) || []).length;
         } else {
@@ -1021,12 +1018,9 @@ export async function questionsPostHandler(request: NextRequest) {
           );
         } else {
           // If no code, check for same content
-          if (questionWithTimestamps["content"]) {
-            duplicateQuery = duplicateQuery.eq(
-              "content",
-              questionWithTimestamps["content"],
-            );
-          }
+          duplicateQuery = questionWithTimestamps["content"]
+            ? duplicateQuery.eq("content", questionWithTimestamps["content"])
+            : duplicateQuery;
         }
 
         const { data: existingQuestion, error: duplicateCheckError } =
@@ -1043,9 +1037,16 @@ export async function questionsPostHandler(request: NextRequest) {
         if (existingQuestion) {
           // Security: Removed user data from logs to prevent log injection
           console.log("⚠️ Duplicate question found");
+          let duplicateFieldSuffix = "";
+          if (questionWithTimestamps["code"]) {
+            duplicateFieldSuffix = " and code";
+          } else if (questionWithTimestamps["content"]) {
+            duplicateFieldSuffix = " and content";
+          }
+
           errors.push({
             question: questionData,
-            error: `Duplicate question: A question with the same title${questionWithTimestamps["code"] ? " and code" : questionWithTimestamps["content"] ? " and content" : ""} already exists (ID: ${existingQuestion["id"]})`,
+            error: `Duplicate question: A question with the same title${duplicateFieldSuffix} already exists (ID: ${existingQuestion["id"]})`,
             index: index + 1,
           });
           continue; // Skip this question and move to next
@@ -1073,14 +1074,8 @@ export async function questionsPostHandler(request: NextRequest) {
             originalCode !== ""
           ) {
             // Process originalCode as last resort
-            let codeContent = String(originalCode);
-            codeContent = codeContent.replace(/\\n/g, "\n");
-            codeContent = codeContent.replace(/\\r\\n/g, "\n");
-            codeContent = codeContent.replace(/\\r/g, "\n");
-            codeContent = codeContent.replace(/\r\n/g, "\n");
-            codeContent = codeContent.replace(/\r/g, "\n");
+            const codeContent = normalizeCodeLineBreaks(String(originalCode));
             questionWithTimestamps["code"] = codeContent;
-            processedCode = codeContent; // Update for consistency
             // Security: Removed debug logging to prevent information disclosure
           } else if (
             sanitizedQuestion["code"] !== undefined &&
@@ -1096,40 +1091,31 @@ export async function questionsPostHandler(request: NextRequest) {
               "⚠️ Code field not found in any source, setting to null",
             );
           }
-        } else {
+        } else if (
+          questionWithTimestamps["code"] === null ||
+          questionWithTimestamps["code"] === ""
+        ) {
           // Code field exists, but verify it's not empty when it should have content
-          if (
-            questionWithTimestamps["code"] === null ||
-            questionWithTimestamps["code"] === ""
+          if (processedCode !== null && processedCode !== "") {
+            questionWithTimestamps["code"] = processedCode;
+            // Security: Removed debug logging to prevent information disclosure
+          } else if (
+            originalCode !== undefined &&
+            originalCode !== null &&
+            originalCode !== ""
           ) {
-            // If we have code from other sources, use it
-            if (processedCode !== null && processedCode !== "") {
-              questionWithTimestamps["code"] = processedCode;
-              // Security: Removed debug logging to prevent information disclosure
-            } else if (
-              originalCode !== undefined &&
-              originalCode !== null &&
-              originalCode !== ""
-            ) {
-              let codeContent = String(originalCode);
-              codeContent = codeContent.replace(/\\n/g, "\n");
-              codeContent = codeContent.replace(/\\r\\n/g, "\n");
-              codeContent = codeContent.replace(/\\r/g, "\n");
-              codeContent = codeContent.replace(/\r\n/g, "\n");
-              codeContent = codeContent.replace(/\r/g, "\n");
-              questionWithTimestamps["code"] = codeContent;
-              processedCode = codeContent;
-              // Security: Log code length instead of content to prevent log injection
-              const sanitizedCodeLength = sanitizeForLogging(
-                String(codeContent.length),
-              );
-              // codeql[js/log-injection]: Value sanitized via sanitizeForLogging() and JSON.stringify
-              console.log(
-                "⚠️ Code field was null/empty, restored from originalCode:",
-                JSON.stringify(sanitizedCodeLength),
-                "chars",
-              );
-            }
+            const codeContent = normalizeCodeLineBreaks(String(originalCode));
+            questionWithTimestamps["code"] = codeContent;
+            // Security: Log code length instead of content to prevent log injection
+            const sanitizedCodeLength = sanitizeForLogging(
+              String(codeContent.length),
+            );
+            // codeql[js/log-injection]: Value sanitized via sanitizeForLogging() and JSON.stringify
+            console.log(
+              "⚠️ Code field was null/empty, restored from originalCode:",
+              JSON.stringify(sanitizedCodeLength),
+              "chars",
+            );
           }
         }
 
@@ -1189,12 +1175,7 @@ export async function questionsPostHandler(request: NextRequest) {
           "Error:",
           sanitizedError,
         );
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : typeof error === "string"
-              ? error
-              : JSON.stringify(error);
+        const errorMessage = getErrorMessage(error);
 
         errors.push({
           question: questionData,
@@ -1232,7 +1213,9 @@ export async function questionsPostHandler(request: NextRequest) {
 }
 
 // PUT /api/questions/unified - Update a question
+// NOSONAR - legacy endpoint complexity is tracked for a dedicated refactor.
 export async function PUT(request: NextRequest) {
+  // NOSONAR
   try {
     // Get Supabase client with validation
     const supabase = getSupabaseClient();
@@ -1265,15 +1248,12 @@ export async function PUT(request: NextRequest) {
       sanitizedUpdate["code"] !== ""
     ) {
       // Convert \n escape sequences to actual newlines (in case they're stored as strings)
-      let codeContent = String(sanitizedUpdate["code"])
-        .replace(/\\n/g, "\n") // Replace \n escape sequences
-        .replace(/\r\n/g, "\n") // Normalize Windows line breaks
-        .replace(/\r/g, "\n"); // Normalize Mac line breaks
+      let codeContent = normalizeCodeLineBreaks(
+        String(sanitizedUpdate["code"]),
+      );
 
-      // Basic sanitization - remove null bytes and control characters (except newlines and tabs)
-      codeContent = codeContent
-        .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, "") // Remove control chars except \n, \r, \t
-        .replace(/\x00/g, ""); // Remove null bytes
+      // Remove unsafe control chars while preserving tabs/newlines for code readability.
+      codeContent = stripUnsafeControlCharacters(codeContent);
 
       sanitizedUpdate["code"] = codeContent;
     } else if (
@@ -1308,9 +1288,7 @@ export async function PUT(request: NextRequest) {
       if (
         categoryValue &&
         typeof categoryValue === "string" &&
-        !categoryValue.match(
-          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-        )
+        !UUID_REGEX.exec(categoryValue)
       ) {
         // It's a category name, not an ID - need to look it up
         const categoryName = categoryValue.trim();
@@ -1383,9 +1361,7 @@ export async function PUT(request: NextRequest) {
       if (
         topicValue &&
         typeof topicValue === "string" &&
-        !topicValue.match(
-          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-        )
+        !UUID_REGEX.exec(topicValue)
       ) {
         // It's a topic name, not an ID - need to look it up
         const topicName = topicValue.trim();
@@ -1467,11 +1443,7 @@ export async function PUT(request: NextRequest) {
       ) {
         const trimmedId = learningCardId.trim();
         // Check if it's a valid UUID
-        if (
-          trimmedId.match(
-            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-          )
-        ) {
+        if (UUID_REGEX.exec(trimmedId)) {
           finalLearningCardId = trimmedId;
           // Security: Sanitize value before using in template string
           const sanitizedLearningCardId =

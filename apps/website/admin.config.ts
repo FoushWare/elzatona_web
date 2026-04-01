@@ -105,7 +105,7 @@ export const adminConfig = {
 // Only runs on server side to avoid client-side errors
 export function validateAdminConfig() {
   // Only validate on server side
-  if (typeof window !== "undefined") {
+  if (globalThis.window !== undefined) {
     return; // Skip validation on client side
   }
 
@@ -117,15 +117,6 @@ export function validateAdminConfig() {
     "INITIAL_ADMIN_EMAIL",
     "INITIAL_ADMIN_PASSWORD",
     "INITIAL_ADMIN_NAME",
-  ];
-
-  // Optional environment variables (with dynamic defaults)
-  const _optionalVars = [
-    "ADMIN_PORT",
-    "WEB_PORT",
-    "ADMIN_URL",
-    "WEB_URL",
-    "ADMIN_API_BASE_URL",
   ];
 
   for (const varName of requiredVars) {

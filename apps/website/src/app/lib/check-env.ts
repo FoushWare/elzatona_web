@@ -10,7 +10,8 @@
  */
 
 import { config } from "dotenv";
-import { resolve } from "path";
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
 import {
   getEnvironment,
   isTestEnvironment,
@@ -33,8 +34,9 @@ const envFiles = [
 for (const envFile of envFiles) {
   try {
     config({ path: envFile, override: false });
-  } catch (_error) {
+  } catch (error) {
     // File doesn't exist, that's okay
+    console.debug("Unable to load env file:", envFile, error);
   }
 }
 
@@ -94,15 +96,8 @@ console.log("");
 // Determine which environment file is being used
 const loadedFiles: string[] = [];
 for (const envFile of envFiles) {
-  try {
-    // Dynamic import for Node.js fs module (only used in Node.js environment)
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const fs = require("fs");
-    if (fs.existsSync(envFile)) {
-      loadedFiles.push(envFile);
-    }
-  } catch (_error) {
-    // Ignore
+  if (existsSync(envFile)) {
+    loadedFiles.push(envFile);
   }
 }
 
@@ -112,14 +107,14 @@ if (loadedFiles.length > 0) {
     const fileName = file.split("/").pop();
     const isTest = file.includes(".test");
     const isLocal = file.includes(".local");
-    const priority =
-      isTest && isLocal
-        ? "1️⃣  (Highest Priority)"
-        : isTest
-          ? "2️⃣ "
-          : isLocal
-            ? "3️⃣ "
-            : "4️⃣ ";
+    let priority = "4️⃣ ";
+    if (isTest && isLocal) {
+      priority = "1️⃣  (Highest Priority)";
+    } else if (isTest) {
+      priority = "2️⃣ ";
+    } else if (isLocal) {
+      priority = "3️⃣ ";
+    }
     console.log(`   ${priority} ${fileName}`);
   });
 } else {

@@ -113,11 +113,12 @@ const PlanTopicNode: React.FC<{
       id={`plan-topic-${topic.id}`}
       className="border-l-2 border-orange-100 pl-4 py-1"
     >
-      <div
-        className="flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded transition-colors"
-        onClick={() => togglePlanTopic(topic.id)}
-      >
-        <div className="flex items-center space-x-2">
+      <div className="flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded transition-colors">
+        <button
+          type="button"
+          className="flex items-center space-x-2 text-left flex-1"
+          onClick={() => togglePlanTopic(topic.id)}
+        >
           <div className="p-1">
             {expandedPlanTopics.has(topic.id) ? (
               <ChevronDown className="h-4 w-4 text-gray-500" />
@@ -129,11 +130,8 @@ const PlanTopicNode: React.FC<{
           <span className="text-xs font-medium text-gray-900 dark:text-white">
             {topic.name}
           </span>
-        </div>
-        <div
-          className="flex items-center space-x-2"
-          onClick={(e) => e.stopPropagation()}
-        >
+        </button>
+        <div className="flex items-center space-x-2">
           <Button
             variant="ghost"
             size="sm"
@@ -265,7 +263,8 @@ const PlanCategoryNode: React.FC<{
       id={`plan-category-${category.id}`}
       className="border-l-2 border-purple-200 pl-4"
     >
-      <div
+      <button
+        type="button"
         className="flex items-center justify-between py-1.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded transition-colors"
         onClick={() => togglePlanCategory(category.id)}
       >
@@ -285,7 +284,7 @@ const PlanCategoryNode: React.FC<{
         <Badge variant="outline" className="text-[10px] bg-purple-50">
           {categoryTopics.length} Topics
         </Badge>
-      </div>
+      </button>
 
       {expandedPlanCategories.has(category.id) && (
         <div className="ml-6 space-y-2">
@@ -380,7 +379,8 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
         key={card.id}
         className="ml-4 border-l-2 border-blue-200 pl-4"
       >
-        <div
+        <button
+          type="button"
           className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition-colors group"
           onClick={() => togglePlanCard(card.id)}
         >
@@ -405,7 +405,7 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
           >
             {cardCategories.length} Categories
           </Badge>
-        </div>
+        </button>
 
         {expandedPlanCards.has(card.id) && (
           <div className="ml-6 space-y-4">
@@ -432,12 +432,13 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
         key={plan.id}
         className="border-l-4 border-l-green-500"
       >
-        <CardHeader
-          className="pb-3 border-b-0 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
-          onClick={handlePlanToggle}
-        >
+        <CardHeader className="pb-3 border-b-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+            <button
+              type="button"
+              className="flex items-center space-x-3 text-left flex-1"
+              onClick={handlePlanToggle}
+            >
               <div className="p-1 rounded group-hover:bg-gray-200 dark:group-hover:bg-gray-700 transition-colors">
                 {expandedPlans.has(plan.id) ? (
                   <ChevronDown className="h-4 w-4 text-gray-500" />
@@ -454,11 +455,8 @@ export const PlansManager: React.FC<PlansManagerProps> = ({
                   {plan.description}
                 </p>
               </div>
-            </div>
-            <div
-              className="flex items-center space-x-2"
-              onClick={(e) => e.stopPropagation()}
-            >
+            </button>
+            <div className="flex items-center space-x-2">
               <Badge variant="outline">{plan.estimated_duration} days</Badge>
               <Badge variant="outline">
                 {plan.is_public ? "Public" : "Private"}

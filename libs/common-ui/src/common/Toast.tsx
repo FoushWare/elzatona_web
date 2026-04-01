@@ -15,8 +15,8 @@ export interface Toast {
 }
 
 interface ToastProps {
-  toast: Toast;
-  onRemove: (id: string) => void;
+  readonly toast: Toast;
+  readonly onRemove: (id: string) => void;
 }
 
 function ToastComponent({ toast, onRemove }: ToastProps) {
@@ -82,8 +82,8 @@ function ToastComponent({ toast, onRemove }: ToastProps) {
 }
 
 interface ToastContainerProps {
-  toasts: Toast[];
-  onRemove: (id: string) => void;
+  readonly toasts: Toast[];
+  readonly onRemove: (id: string) => void;
 }
 
 export function ToastContainer({ toasts, onRemove }: ToastContainerProps) {

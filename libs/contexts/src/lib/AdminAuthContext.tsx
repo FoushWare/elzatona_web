@@ -67,7 +67,7 @@ const AdminAuthContext = createContext<AdminAuthContextType | undefined>(
 );
 
 interface AdminAuthProviderProps {
-  children: ReactNode;
+  readonly children: ReactNode;
 }
 
 export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
@@ -84,7 +84,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        if (typeof window === "undefined") {
+        if (globalThis.window === undefined) {
           return;
         }
 

@@ -58,7 +58,7 @@ test.describe
         .first();
       const countText = await countElement.textContent().catch(() => null);
       if (countText) {
-        currentCount = parseInt(countText.trim(), 10) || 0;
+        currentCount = Number.parseInt(countText.trim(), 10) || 0;
       }
     }
 
@@ -187,7 +187,8 @@ test.describe
       .catch(() => null);
     const hasMultiplePages = pageText
       ? /Page \d+ of (\d+)/.test(pageText) &&
-        parseInt(/Page \d+ of (\d+)/.exec(pageText)?.[1] || "1") > 1
+        Number.parseInt(/Page \d+ of (\d+)/.exec(pageText)?.[1] || "1", 10) >
+          1
       : false;
 
     if (!hasPagination && !hasMultiplePages) {
@@ -279,7 +280,9 @@ test.describe
       const currentPageText =
         pageText || (await pageIndicator.first().textContent());
       const currentPageMatch = currentPageText?.match(/Page (\d+) of/);
-      const currentPage = currentPageMatch ? parseInt(currentPageMatch[1]) : 1;
+      const currentPage = currentPageMatch
+        ? Number.parseInt(currentPageMatch[1], 10)
+        : 1;
 
       if (!nextButton) {
         throw new Error("Next button not found");
@@ -293,7 +296,9 @@ test.describe
       // Verify page changed - check if "Page X of Y" text changed
       const newPageText = await pageIndicator.first().textContent();
       const newPageMatch = newPageText?.match(/Page (\d+) of/);
-      const newPage = newPageMatch ? parseInt(newPageMatch[1]) : currentPage;
+      const newPage = newPageMatch
+        ? Number.parseInt(newPageMatch[1], 10)
+        : currentPage;
 
       expect(newPage).toBeGreaterThan(currentPage);
     } else {
@@ -391,7 +396,8 @@ test.describe
       .catch(() => null);
     const hasMultiplePages = pageText
       ? /Page \d+ of (\d+)/.test(pageText) &&
-        parseInt(/Page \d+ of (\d+)/.exec(pageText)?.[1] || "1") > 1
+        Number.parseInt(/Page \d+ of (\d+)/.exec(pageText)?.[1] || "1", 10) >
+          1
       : false;
 
     if (!hasPagination && !hasMultiplePages) {
@@ -489,7 +495,9 @@ test.describe
       const beforePageText =
         pageText || (await pageIndicator.first().textContent());
       const beforePageMatch = beforePageText?.match(/Page (\d+) of/);
-      const beforePage = beforePageMatch ? parseInt(beforePageMatch[1]) : 1;
+      const beforePage = beforePageMatch
+        ? Number.parseInt(beforePageMatch[1], 10)
+        : 1;
 
       if (!nextButton) {
         throw new Error("Next button not found");
@@ -568,7 +576,7 @@ test.describe
 
       const afterNextPageMatch = afterNextPageText?.match(/Page (\d+) of/);
       const afterNextPage = afterNextPageMatch
-        ? parseInt(afterNextPageMatch[1])
+        ? Number.parseInt(afterNextPageMatch[1], 10)
         : beforePage;
       expect(afterNextPage).toBeGreaterThan(beforePage);
 
@@ -647,7 +655,7 @@ test.describe
           );
           if (pageSpan) {
             const match = pageSpan.textContent?.match(/Page (\d+) of/);
-            return match ? parseInt(match[1]) : null;
+            return match ? Number.parseInt(match[1], 10) : null;
           }
           return null;
         });
@@ -675,7 +683,7 @@ test.describe
                 // Extract page number from URL
                 const pageMatch = url.match(/[?&]page=(\d+)/);
                 if (pageMatch) {
-                  const requestedPage = parseInt(pageMatch[1]);
+                  const requestedPage = Number.parseInt(pageMatch[1], 10);
                   // Should request page 1 (less than current page 2)
                   return requestedPage < (currentPageBeforePrev || 2);
                 }
@@ -833,7 +841,7 @@ test.describe
 
         const afterPrevPageMatch = afterPrevPageText?.match(/Page (\d+) of/);
         const afterPrevPage = afterPrevPageMatch
-          ? parseInt(afterPrevPageMatch[1])
+          ? Number.parseInt(afterPrevPageMatch[1], 10)
           : afterNextPage;
 
         console.log(
@@ -863,7 +871,7 @@ test.describe
 
           const finalCheckMatch = finalCheck?.match(/Page (\d+) of/);
           const finalPage = finalCheckMatch
-            ? parseInt(finalCheckMatch[1])
+            ? Number.parseInt(finalCheckMatch[1], 10)
             : afterPrevPage;
 
           if (finalPage === 2) {
@@ -992,7 +1000,8 @@ test.describe
       .catch(() => null);
     const hasMultiplePages = pageText
       ? /Page \d+ of (\d+)/.test(pageText) &&
-        parseInt(/Page \d+ of (\d+)/.exec(pageText)?.[1] || "1") > 1
+        Number.parseInt(/Page \d+ of (\d+)/.exec(pageText)?.[1] || "1", 10) >
+          1
       : false;
 
     if (!hasPagination && !hasMultiplePages) {

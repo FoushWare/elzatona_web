@@ -1,14 +1,19 @@
 "use client";
 
-import { ReactNode, createContext } from "react";
+import { ReactNode, createContext, useMemo } from "react";
 
 // Temporary fallback until Jotai is properly installed
 const JotaiContext = createContext({});
 
 interface JotaiProviderProps {
-  children: ReactNode;
+  readonly children: ReactNode;
 }
 
 export function JotaiProvider({ children }: JotaiProviderProps) {
-  return <JotaiContext.Provider value={{}}>{children}</JotaiContext.Provider>;
+  const contextValue = useMemo(() => ({}), []);
+  return (
+    <JotaiContext.Provider value={contextValue}>
+      {children}
+    </JotaiContext.Provider>
+  );
 }

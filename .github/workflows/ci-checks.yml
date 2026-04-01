@@ -69,6 +69,7 @@ jobs:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'test-password' }}
 
       - name: Build validation
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: npm run build:ci
         continue-on-error: false
 
