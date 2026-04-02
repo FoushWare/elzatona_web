@@ -1,5 +1,8 @@
 {
   "buildCommand": "npx nx build admin",
   "outputDirectory": ".next",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "git": {
+    "deploymentEnabled": false
+  }
 }
