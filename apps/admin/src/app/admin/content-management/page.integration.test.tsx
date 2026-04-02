@@ -102,7 +102,14 @@ vi.mock("@elzatona/common-ui", () => ({
     <div data-testid="delete-confirmation-modal" />
   ),
   CardManagementModal: () => <div data-testid="card-management-modal" />,
-  QuestionFormModal: () => <div data-testid="question-form-modal" />,
+  QuestionFormModal: ({ isOpen, readOnly, question }: any) =>
+    isOpen ? (
+      <div
+        data-testid="question-form-modal"
+        data-read-only={readOnly ? "true" : "false"}
+        data-question-id={question?.id ?? ""}
+      />
+    ) : null,
   CardFormModal: () => <div data-testid="card-form-modal" />,
 }));
 
@@ -274,5 +281,35 @@ describe("Admin content management page - Integration", () => {
     expect(screen.getByTestId("topic-questions-modal")).toBeInTheDocument();
     expect(screen.getByTestId("delete-confirmation-modal")).toBeInTheDocument();
     expect(screen.getByTestId("card-management-modal")).toBeInTheDocument();
+  });
+
+  it("passes read-only mode to question modal for view flow", () => {
+    mockUseContentManagement.mockReturnValue({
+      ...buildHookState(),
+      isQuestionModalOpen: true,
+      isQuestionReadOnly: true,
+      questionToEdit: { id: "q-view-1", title: "View only" },
+    });
+
+    render(<ContentManagementPage />);
+
+    const questionModal = screen.getByTestId("question-form-modal");
+    expect(questionModal).toHaveAttribute("data-read-only", "true");
+    expect(questionModal).toHaveAttribute("data-question-id", "q-view-1");
+  });
+
+  it("passes editable mode to question modal for edit flow", () => {
+    mockUseContentManagement.mockReturnValue({
+      ...buildHookState(),
+      isQuestionModalOpen: true,
+      isQuestionReadOnly: false,
+      questionToEdit: { id: "q-edit-1", title: "Editable" },
+    });
+
+    render(<ContentManagementPage />);
+
+    const questionModal = screen.getByTestId("question-form-modal");
+    expect(questionModal).toHaveAttribute("data-read-only", "false");
+    expect(questionModal).toHaveAttribute("data-question-id", "q-edit-1");
   });
 });

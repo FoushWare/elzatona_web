@@ -7,16 +7,20 @@ const Dialog = React.forwardRef<
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
   }
->(({ className, open, onOpenChange, children, ...props }, ref) => {
+>(({ className: _className, open, onOpenChange, children, ...props }, ref) => {
   if (!open) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 py-8 overflow-y-auto"
+    <dialog
+      open
+      ref={ref}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 py-8 overflow-y-auto"
       style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+      {...props}
     >
       <button
-        className="fixed inset-0 w-full h-full border-0 cursor-pointer bg-transparent -z-10"
+        type="button"
+        className="fixed inset-0 w-full h-full border-0 cursor-pointer bg-transparent"
         onClick={() => onOpenChange?.(false)}
         onKeyDown={(e) => {
           if (e.key === "Escape") {
@@ -28,7 +32,7 @@ const Dialog = React.forwardRef<
       />
       {/* We just render the children (usually DialogContent) directly here so we don't double loop the backgrounds */}
       {children}
-    </div>
+    </dialog>
   );
 });
 Dialog.displayName = "Dialog";
@@ -40,7 +44,7 @@ const DialogContent = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "relative z-50 w-full max-w-lg rounded-xl border bg-white dark:bg-gray-900 p-6 shadow-2xl flex flex-col my-8",
+      "relative z-[101] w-full max-w-lg rounded-xl border bg-white dark:bg-gray-900 p-6 shadow-2xl flex flex-col my-8",
       className,
     )}
     {...(props as any)}
