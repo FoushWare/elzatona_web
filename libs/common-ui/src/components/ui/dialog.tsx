@@ -2,8 +2,8 @@ import * as React from "react";
 import { cn } from "../../utils";
 
 const Dialog = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & {
+  HTMLDialogElement,
+  React.HTMLAttributes<HTMLDialogElement> & {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
   }
