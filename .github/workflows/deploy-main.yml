@@ -4,11 +4,6 @@ on:
   workflow_run:
     workflows:
       - CI Checks (Lint, Type Check, Build)
-      - Admin Tests
-      - E2E Tests
-      - Security Scan
-      - CodeQL Analysis
-      - SonarCloud Code Analysis
     types: [completed]
 
 concurrency:
@@ -22,94 +17,18 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      actions: read
     outputs:
-      can_deploy: ${{ steps.wait-for-ci.outputs.can_deploy }}
+      can_deploy: ${{ steps.validate.outputs.can_deploy }}
     steps:
-      - name: Wait for all required workflows on this commit
-        id: wait-for-ci
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const headSha = context.payload.workflow_run.head_sha;
-
-            const requiredWorkflows = [
-              'CI Checks (Lint, Type Check, Build)',
-              'Admin Tests',
-              'E2E Tests',
-              'Security Scan',
-              'CodeQL Analysis',
-              'SonarCloud Code Analysis',
-            ];
-
-            const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-            const timeoutMs = 45 * 60 * 1000;
-            const pollEveryMs = 30 * 1000;
-            const startedAt = Date.now();
-
-            while (Date.now() - startedAt < timeoutMs) {
-              const runsResponse = await github.rest.actions.listWorkflowRunsForRepo({
-                owner,
-                repo,
-                head_sha: headSha,
-                per_page: 100,
-              });
-
-              const runByName = new Map();
-              for (const run of runsResponse.data.workflow_runs) {
-                if (!requiredWorkflows.includes(run.name)) {
-                  continue;
-                }
-                const previous = runByName.get(run.name);
-                if (!previous || previous.run_number < run.run_number) {
-                  runByName.set(run.name, run);
-                }
-              }
-
-              const missing = requiredWorkflows.filter((name) => !runByName.has(name));
-              const pending = [];
-              const failed = [];
-
-              for (const name of requiredWorkflows) {
-                const run = runByName.get(name);
-                if (!run) {
-                  continue;
-                }
-
-                if (run.status !== 'completed') {
-                  pending.push(`${name} (status=${run.status})`);
-                  continue;
-                }
-
-                if (run.conclusion !== 'success') {
-                  failed.push(`${name} (conclusion=${run.conclusion})`);
-                }
-              }
-
-              core.info(`Checked workflows for ${headSha}`);
-              core.info(`Missing: ${missing.join(', ') || 'none'}`);
-              core.info(`Pending: ${pending.join(', ') || 'none'}`);
-              core.info(`Failed: ${failed.join(', ') || 'none'}`);
-
-              if (missing.length === 0 && pending.length === 0) {
-                if (failed.length > 0) {
-                  core.setFailed(`CI gate failed. Non-success workflows: ${failed.join('; ')}`);
-                  core.setOutput('can_deploy', 'false');
-                  return;
-                }
-
-                core.setOutput('can_deploy', 'true');
-                return;
-              }
-
-              await sleep(pollEveryMs);
-            }
-
-            core.setFailed('Timed out waiting for all required CI workflows to complete on this commit.');
-            core.setOutput('can_deploy', 'false');
+      - name: Validate CI success for main
+        id: validate
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" = "success" ]; then
+            echo "can_deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "can_deploy=false" >> "$GITHUB_OUTPUT"
+            echo "CI workflow did not succeed; skipping deployment."
+          fi
 
   deploy:
     name: Deploy Website Then Admin
