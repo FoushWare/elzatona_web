@@ -286,6 +286,62 @@ test.describe("Admin Content Management Page", () => {
     }
   });
 
+  test("should open view and edit question modals above the fixed navbar", async ({
+    page,
+  }) => {
+    const planHeaders = page.locator('[id^="plan-"] .cursor-pointer');
+    const planCount = await planHeaders.count();
+    test.skip(planCount === 0, "No plans available in mocked dataset");
+
+    await planHeaders.first().click();
+
+    const planStructure = page.locator(
+      'div:has(> h4:has-text("Plan Structure"))',
+    );
+    await expect(planStructure).toBeVisible();
+
+    const cardHeader = planStructure
+      .locator('[id^="plan-card-"] .cursor-pointer')
+      .first();
+    await cardHeader.click();
+
+    const categoryHeader = planStructure
+      .locator('[id^="plan-category-"] .cursor-pointer')
+      .first();
+    await categoryHeader.click();
+
+    const topicHeader = planStructure
+      .locator('[id^="plan-topic-"] .cursor-pointer')
+      .first();
+    await topicHeader.click();
+
+    const viewButton = planStructure.locator('[title="View Question"]').first();
+    const editButton = planStructure.locator('[title="Edit Question"]').first();
+
+    await expect(viewButton).toBeVisible();
+    await expect(editButton).toBeVisible();
+
+    await viewButton.click();
+
+    const viewDialog = page.getByRole("dialog");
+    await expect(viewDialog).toBeVisible();
+    await expect(viewDialog).toHaveClass(/z-\[100\]/);
+    await expect(
+      page.getByRole("heading", { name: /View Question/i }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: /Close dialog/i }).click();
+    await expect(viewDialog).not.toBeVisible({ timeout: 3000 });
+
+    await editButton.click();
+
+    const editDialog = page.getByRole("dialog");
+    await expect(editDialog).toBeVisible();
+    await expect(editDialog).toHaveClass(/z-\[100\]/);
+    await expect(
+      page.getByRole("heading", { name: /Edit Question/i }),
+    ).toBeVisible();
+  });
+
   // ─── Delete Confirmation Modal ───────────────────────────────────────────────
   test("should open Delete confirmation modal when delete card is clicked", async ({
     page,
