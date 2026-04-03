@@ -53,7 +53,12 @@ jobs:
         run: |
           set -euo pipefail
 
-          CHANGED_FILES="$(git diff-tree --no-commit-id --name-only -r "${{ needs.gate-ci.outputs.head_sha }}")"
+          if git rev-parse --verify "${{ needs.gate-ci.outputs.head_sha }}^1" >/dev/null 2>&1; then
+            CHANGED_FILES="$(git diff --name-only "${{ needs.gate-ci.outputs.head_sha }}^1" "${{ needs.gate-ci.outputs.head_sha }}")"
+          else
+            CHANGED_FILES="$(git show --pretty='' --name-only "${{ needs.gate-ci.outputs.head_sha }}")"
+          fi
+
           echo "Changed files on main push:"
           echo "$CHANGED_FILES"
 
@@ -68,6 +73,14 @@ jobs:
           fi
 
           if echo "$CHANGED_FILES" | grep -Eq "$ADMIN_PATTERN"; then
+            ADMIN_CHANGED=true
+          fi
+
+          # Safety fallback: if file detection unexpectedly returns empty,
+          # deploy both targets to avoid missing production deployments.
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "::warning::No changed files detected. Falling back to deploying both apps."
+            WEBSITE_CHANGED=true
             ADMIN_CHANGED=true
           fi
 
