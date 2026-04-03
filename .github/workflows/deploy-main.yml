@@ -19,6 +19,7 @@ jobs:
       contents: read
     outputs:
       can_deploy: ${{ steps.validate.outputs.can_deploy }}
+      head_sha: ${{ github.event.workflow_run.head_sha }}
     steps:
       - name: Validate CI success for main
         id: validate
@@ -30,10 +31,58 @@ jobs:
             echo "CI workflow did not succeed; skipping deployment."
           fi
 
-  deploy:
-    name: Deploy Website Then Admin
+  detect-changes:
+    name: Detect Changed Deploy Targets
     needs: gate-ci
     if: needs.gate-ci.outputs.can_deploy == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      website_changed: ${{ steps.changed.outputs.website_changed }}
+      admin_changed: ${{ steps.changed.outputs.admin_changed }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.gate-ci.outputs.head_sha }}
+          fetch-depth: 2
+
+      - name: Detect changed files for deploy targets
+        id: changed
+        run: |
+          set -euo pipefail
+
+          CHANGED_FILES="$(git diff-tree --no-commit-id --name-only -r "${{ needs.gate-ci.outputs.head_sha }}")"
+          echo "Changed files on main push:"
+          echo "$CHANGED_FILES"
+
+          WEBSITE_PATTERN='^(apps/website/|libs/common-ui/|libs/contexts/|libs/types/|libs/utilities/|libs/hooks/|libs/shared-atoms/|libs/shared-components/|package.json|package-lock.json|nx.json|tsconfig.base.json|tailwind.config.ts|postcss.config.js)'
+          ADMIN_PATTERN='^(apps/admin/|libs/common-ui/|libs/contexts/|libs/types/|libs/utilities/|libs/hooks/|libs/shared-atoms/|libs/shared-components/|package.json|package-lock.json|nx.json|tsconfig.base.json|tailwind.config.ts|postcss.config.js)'
+
+          WEBSITE_CHANGED=false
+          ADMIN_CHANGED=false
+
+          if echo "$CHANGED_FILES" | grep -Eq "$WEBSITE_PATTERN"; then
+            WEBSITE_CHANGED=true
+          fi
+
+          if echo "$CHANGED_FILES" | grep -Eq "$ADMIN_PATTERN"; then
+            ADMIN_CHANGED=true
+          fi
+
+          echo "website_changed=$WEBSITE_CHANGED" >> "$GITHUB_OUTPUT"
+          echo "admin_changed=$ADMIN_CHANGED" >> "$GITHUB_OUTPUT"
+
+      - name: Print deploy decision
+        run: |
+          echo "Website changed: ${{ steps.changed.outputs.website_changed }}"
+          echo "Admin changed: ${{ steps.changed.outputs.admin_changed }}"
+
+  deploy-website:
+    name: Deploy Website
+    needs: [gate-ci, detect-changes]
+    if: needs.gate-ci.outputs.can_deploy == 'true' && needs.detect-changes.outputs.website_changed == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -42,24 +91,70 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.gate-ci.outputs.head_sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Install dependencies
-        run: npm install --no-audit
-
-      - name: Validate deployment secrets
+      - name: Validate Vercel token
         run: |
           if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
-            echo "Missing VERCEL_TOKEN secret"
+            echo "::error::Missing VERCEL_TOKEN secret"
             exit 1
           fi
+          echo "VERCEL_TOKEN is configured"
+
+      - name: Prepare website package manifest for Vercel build
+        run: |
+          npm pkg delete --prefix apps/website dependencies.@elzatona/common-ui || true
+          npm pkg delete --prefix apps/website dependencies.@elzatona/contexts || true
+          npm pkg delete --prefix apps/website dependencies.@elzatona/database || true
+          npm pkg delete --prefix apps/website dependencies.@elzatona/types || true
+          npm pkg delete --prefix apps/website dependencies.@elzatona/utilities || true
+          rm -f apps/website/package-lock.json
 
       - name: Deploy website
         run: npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
+
+  deploy-admin:
+    name: Deploy Admin
+    needs: [gate-ci, detect-changes]
+    if: needs.gate-ci.outputs.can_deploy == 'true' && needs.detect-changes.outputs.admin_changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    environment:
+      name: production
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.gate-ci.outputs.head_sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate Vercel token
+        run: |
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "::error::Missing VERCEL_TOKEN secret"
+            exit 1
+          fi
+          echo "VERCEL_TOKEN is configured"
+
+      - name: Prepare admin package manifest for Vercel build
+        run: |
+          npm pkg delete --prefix apps/admin dependencies.@elzatona/common-ui || true
+          npm pkg delete --prefix apps/admin dependencies.@elzatona/contexts || true
+          npm pkg delete --prefix apps/admin dependencies.@elzatona/database || true
+          npm pkg delete --prefix apps/admin dependencies.@elzatona/types || true
+          npm pkg delete --prefix apps/admin dependencies.@elzatona/utilities || true
+          rm -f apps/admin/package-lock.json
 
       - name: Deploy admin
         run: npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
