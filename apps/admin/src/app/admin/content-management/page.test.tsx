@@ -11,6 +11,7 @@ import "@testing-library/jest-dom";
 import { useContentManagement } from "./hooks/useContentManagement";
 
 const mockRouterPush = vi.fn();
+const mockSetIsNavbarVisible = vi.fn();
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -21,6 +22,13 @@ vi.mock("next/navigation", () => ({
 // Mock the hook
 vi.mock("./hooks/useContentManagement", () => ({
   useContentManagement: vi.fn(),
+}));
+
+vi.mock("@elzatona/contexts", () => ({
+  useAdminNavbarVisibility: () => ({
+    isNavbarVisible: true,
+    setIsNavbarVisible: mockSetIsNavbarVisible,
+  }),
 }));
 
 // Mock common-ui components
