@@ -1,10 +1,13 @@
 import React from "react";
 import type { Metadata } from "next";
-import { AdminAuthProvider, ThemeProvider } from "@elzatona/contexts";
+import {
+  AdminAuthProvider,
+  AdminNavbarVisibilityProvider,
+  ThemeProvider,
+} from "@elzatona/contexts";
 import { RepositoryProvider } from "@elzatona/database/client";
-import { AdminNavbar } from "@elzatona/common-ui";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-import { Toaster } from "sonner";
+import AdminShell from "./AdminShell";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -23,13 +26,11 @@ export default function RootLayout({
         <NuqsAdapter>
           <RepositoryProvider>
             <ThemeProvider>
-              <AdminAuthProvider>
-                <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-                  <AdminNavbar />
-                  <main className="pt-16">{children}</main>
-                  <Toaster position="top-right" />
-                </div>
-              </AdminAuthProvider>
+              <AdminNavbarVisibilityProvider>
+                <AdminAuthProvider>
+                  <AdminShell>{children}</AdminShell>
+                </AdminAuthProvider>
+              </AdminNavbarVisibilityProvider>
             </ThemeProvider>
           </RepositoryProvider>
         </NuqsAdapter>

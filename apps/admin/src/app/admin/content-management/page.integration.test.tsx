@@ -16,8 +16,16 @@ vi.mock("next/navigation", () => ({
 
 // Mock the content management hook
 const mockUseContentManagement = vi.fn();
+const mockSetIsNavbarVisible = vi.fn();
 vi.mock("./hooks/useContentManagement", () => ({
   useContentManagement: () => mockUseContentManagement(),
+}));
+
+vi.mock("@elzatona/contexts", () => ({
+  useAdminNavbarVisibility: () => ({
+    isNavbarVisible: true,
+    setIsNavbarVisible: mockSetIsNavbarVisible,
+  }),
 }));
 
 // Mock common-ui components to avoid complex rendering
@@ -186,6 +194,7 @@ describe("Admin content management page - Integration", () => {
   });
 
   beforeEach(() => {
+    vi.clearAllMocks();
     mockUseContentManagement.mockReturnValue(buildHookState());
   });
 
@@ -296,6 +305,7 @@ describe("Admin content management page - Integration", () => {
     const questionModal = screen.getByTestId("question-form-modal");
     expect(questionModal).toHaveAttribute("data-read-only", "true");
     expect(questionModal).toHaveAttribute("data-question-id", "q-view-1");
+    expect(mockSetIsNavbarVisible).toHaveBeenCalledWith(false);
   });
 
   it("passes editable mode to question modal for edit flow", () => {
@@ -311,5 +321,21 @@ describe("Admin content management page - Integration", () => {
     const questionModal = screen.getByTestId("question-form-modal");
     expect(questionModal).toHaveAttribute("data-read-only", "false");
     expect(questionModal).toHaveAttribute("data-question-id", "q-edit-1");
+    expect(mockSetIsNavbarVisible).toHaveBeenCalledWith(false);
+  });
+
+  it("keeps navbar visible for create question flow", () => {
+    mockUseContentManagement.mockReturnValue({
+      ...buildHookState(),
+      isQuestionModalOpen: true,
+      isQuestionReadOnly: false,
+      questionToEdit: null,
+      selectedTopicIdForNewQuestion: "topic-1",
+    });
+
+    render(<ContentManagementPage />);
+
+    expect(screen.getByTestId("question-form-modal")).toBeInTheDocument();
+    expect(mockSetIsNavbarVisible).toHaveBeenCalledWith(true);
   });
 });
