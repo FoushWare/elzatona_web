@@ -2,6 +2,7 @@
 
 // Export all contexts from the shared contexts library
 export * from "./AdminAuthContext";
+export * from "./AdminNavbarVisibilityContext";
 export * from "./AuthContext";
 export * from "./CookieAuthContext";
 export * from "./LanguageContext";

@@ -1,7 +1,7 @@
 "use client";
 // Triggering fresh CI run for synchronization check
 
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import {
   Button,
   Dialog,
@@ -25,6 +25,7 @@ import {
 } from "@elzatona/common-ui";
 import type { AdminUnifiedQuestion } from "@elzatona/types";
 import { Loader2 } from "lucide-react";
+import { useAdminNavbarVisibility } from "@elzatona/contexts";
 import { useContentManagement } from "./hooks/useContentManagement";
 
 export default function ContentManagementPage() {
@@ -127,6 +128,17 @@ export default function ContentManagementPage() {
     openEditCardModal,
     submitCard,
   } = useContentManagement();
+  const { setIsNavbarVisible } = useAdminNavbarVisibility();
+
+  const shouldHideNavbar = isQuestionModalOpen && Boolean(questionToEdit);
+
+  useLayoutEffect(() => {
+    setIsNavbarVisible(!shouldHideNavbar);
+
+    return () => {
+      setIsNavbarVisible(true);
+    };
+  }, [setIsNavbarVisible, shouldHideNavbar]);
 
   const unifiedQuestions: AdminUnifiedQuestion[] = questions;
 
