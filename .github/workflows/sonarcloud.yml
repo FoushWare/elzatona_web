@@ -52,6 +52,18 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY || 'placeholder-key' }}
           JWT_SECRET: ${{ secrets.JWT_SECRET || 'placeholder-secret' }}
 
+      - name: Generate coverage report for SonarCloud
+        run: |
+          npx vitest run \
+            libs/contexts/src/lib/AdminNavbarVisibilityContext.test.tsx \
+            --coverage \
+            --coverage.provider=v8 \
+            --coverage.reporter=lcov \
+            --coverage.reporter=text-summary
+          test -f coverage/lcov.info
+        env:
+          NODE_OPTIONS: "--max-old-space-size=1536"
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
