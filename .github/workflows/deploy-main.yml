@@ -75,8 +75,8 @@ jobs:
           echo "Changed files on main push:"
           echo "$CHANGED_FILES"
 
-          WEBSITE_PATTERN='^(apps/website/|libs/common-ui/|libs/contexts/|libs/types/|libs/utilities/|libs/hooks/|libs/shared-atoms/|libs/shared-components/|package.json|package-lock.json|nx.json|tsconfig.base.json|tailwind.config.ts|postcss.config.js)'
-          ADMIN_PATTERN='^(apps/admin/|libs/common-ui/|libs/contexts/|libs/types/|libs/utilities/|libs/hooks/|libs/shared-atoms/|libs/shared-components/|package.json|package-lock.json|nx.json|tsconfig.base.json|tailwind.config.ts|postcss.config.js)'
+          WEBSITE_PATTERN='^(apps/website/|libs/common-ui/|libs/contexts/|libs/types/|libs/utilities/|libs/hooks/|libs/shared-atoms/|libs/shared-components/)'
+          ADMIN_PATTERN='^(apps/admin/|libs/common-ui/|libs/contexts/|libs/types/|libs/utilities/|libs/hooks/|libs/shared-atoms/|libs/shared-components/)'
 
           WEBSITE_CHANGED=false
           ADMIN_CHANGED=false

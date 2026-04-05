@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npx nx build admin",
+  "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
   "git": {
