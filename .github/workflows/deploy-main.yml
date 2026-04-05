@@ -117,6 +117,9 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Install root dependencies
+        run: npm install --prefer-offline --no-audit
+
       - name: Validate Vercel token
         run: |
           if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
@@ -132,6 +135,9 @@ jobs:
           npm pkg delete --prefix apps/website dependencies.@elzatona/database || true
           npm pkg delete --prefix apps/website dependencies.@elzatona/types || true
           npm pkg delete --prefix apps/website dependencies.@elzatona/utilities || true
+          npm pkg delete --prefix apps/website dependencies.@elzatona/hooks || true
+          npm pkg delete --prefix apps/website dependencies.@elzatona/shared-atoms || true
+          npm pkg delete --prefix apps/website dependencies.@elzatona/shared-components || true
           rm -f apps/website/package-lock.json
 
       - name: Deploy website
@@ -157,6 +163,9 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Install root dependencies
+        run: npm install --prefer-offline --no-audit
+
       - name: Validate Vercel token
         run: |
           if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
@@ -172,6 +181,9 @@ jobs:
           npm pkg delete --prefix apps/admin dependencies.@elzatona/database || true
           npm pkg delete --prefix apps/admin dependencies.@elzatona/types || true
           npm pkg delete --prefix apps/admin dependencies.@elzatona/utilities || true
+          npm pkg delete --prefix apps/admin dependencies.@elzatona/hooks || true
+          npm pkg delete --prefix apps/admin dependencies.@elzatona/shared-atoms || true
+          npm pkg delete --prefix apps/admin dependencies.@elzatona/shared-components || true
           rm -f apps/admin/package-lock.json
 
       - name: Deploy admin
