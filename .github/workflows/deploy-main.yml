@@ -53,7 +53,25 @@ jobs:
         run: |
           set -euo pipefail
 
-          CHANGED_FILES="$(git diff-tree --no-commit-id --name-only -r "${{ needs.gate-ci.outputs.head_sha }}")"
+          TARGET_SHA="${{ needs.gate-ci.outputs.head_sha }}"
+          PARENT_COUNT="$(git rev-list --parents -n 1 "$TARGET_SHA" | awk '{print NF-1}')"
+
+          if [ "$PARENT_COUNT" -ge 2 ]; then
+            # Merge commit on main: compare against first parent to include PR changes.
+            CHANGED_FILES="$(git diff --name-only "$TARGET_SHA^1" "$TARGET_SHA")"
+          else
+            # Regular commit on main.
+            CHANGED_FILES="$(git diff --name-only "$TARGET_SHA^" "$TARGET_SHA" || true)"
+          fi
+
+          if [ -z "$CHANGED_FILES" ]; then
+            # Defensive fallback: never skip both deploy targets because of detection failure.
+            echo "No changed files detected for $TARGET_SHA; forcing website/admin deploy to avoid false skip."
+            echo "website_changed=true" >> "$GITHUB_OUTPUT"
+            echo "admin_changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           echo "Changed files on main push:"
           echo "$CHANGED_FILES"
 
