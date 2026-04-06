@@ -1,0 +1,11 @@
+{
+  "name": "zatona-web",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": ".",
+  "targets": {
+    "lint": {
+      "command": "npx eslint . --ext .js,.jsx,.ts,.tsx"
+    }
+  }
+}

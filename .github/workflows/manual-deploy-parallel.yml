@@ -6,19 +6,19 @@ on:
   workflow_dispatch:
     inputs:
       deploy_website:
-        description: 'Deploy website'
+        description: "Deploy website"
         required: true
         type: boolean
         default: true
       deploy_admin:
-        description: 'Deploy admin'
+        description: "Deploy admin"
         required: true
         type: boolean
         default: true
       ref:
-        description: 'Git ref (branch/tag/sha) to deploy'
+        description: "Git ref (branch/tag/sha) to deploy"
         required: false
-        default: 'main'
+        default: "main"
 
 concurrency:
   group: manual-deploy-${{ github.ref }}
@@ -55,6 +55,12 @@ jobs:
           fi
           echo "VERCEL_TOKEN is configured"
 
+      - name: Validate build locally (optional build check)
+        run: npm run build
+        env:
+          NEXT_PUBLIC_APP_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
+
       - name: Deploy website to Vercel
         run: npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
 
@@ -87,6 +93,12 @@ jobs:
             exit 1
           fi
           echo "VERCEL_TOKEN is configured"
+
+      - name: Validate build locally (optional build check)
+        run: npm run build:admin
+        env:
+          NEXT_PUBLIC_APP_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
 
       - name: Deploy admin to Vercel
         run: npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
