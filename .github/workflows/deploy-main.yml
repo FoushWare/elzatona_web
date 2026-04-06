@@ -1,10 +1,13 @@
-name: Deploy Main (CI -> CD)
+name: Deploy Main (CI -> CD) [DISABLED]
 
+# DISABLED: Use manual-deploy-parallel.yml for manual parallel deployment
 on:
-  workflow_run:
-    workflows:
-      - CI Checks (Lint, Type Check, Build)
-    types: [completed]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force deploy (for testing)'
+        required: false
+        default: 'false'
 
 concurrency:
   group: deploy-main-${{ github.event.workflow_run.head_sha }}
@@ -13,7 +16,7 @@ concurrency:
 jobs:
   gate-ci:
     name: Validate Required CI Workflows
-    if: github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main'
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     permissions:
       contents: read
