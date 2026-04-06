@@ -15,6 +15,16 @@ on:
         required: true
         type: boolean
         default: true
+      validate_build_website:
+        description: "Validate website build"
+        required: true
+        type: boolean
+        default: true
+      validate_build_admin:
+        description: "Validate admin build"
+        required: true
+        type: boolean
+        default: true
       ref:
         description: "Git ref (branch/tag/sha) to deploy"
         required: false
@@ -56,6 +66,7 @@ jobs:
           echo "VERCEL_TOKEN is configured"
 
       - name: Validate build locally (optional build check)
+        if: ${{ inputs.validate_build_website }}
         run: npm run build
         env:
           NEXT_PUBLIC_APP_ENV: production
@@ -95,6 +106,7 @@ jobs:
           echo "VERCEL_TOKEN is configured"
 
       - name: Validate build locally (optional build check)
+        if: ${{ inputs.validate_build_admin }}
         run: npm run build:admin
         env:
           NEXT_PUBLIC_APP_ENV: production
