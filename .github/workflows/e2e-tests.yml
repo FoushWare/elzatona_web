@@ -39,36 +39,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: |
-          # Improve resilience for transient npm network issues on CI runners.
-          npm config set fetch-retries 5
-          npm config set fetch-retry-factor 2
-          npm config set fetch-retry-mintimeout 10000
-          npm config set fetch-retry-maxtimeout 120000
-          npm config set fetch-timeout 300000
-
-          for attempt in 1 2 3; do
-            echo "📦 npm install attempt ${attempt}/3"
-            if npm install --no-audit --prefer-online; then
-              echo "✅ Dependencies installed"
-              break
-            fi
-
-            if [ "$attempt" -eq 3 ]; then
-              echo "❌ npm install failed after 3 attempts"
-              exit 1
-            fi
-
-            sleep_seconds=$((attempt * 20))
-            echo "⚠️ Install failed, retrying in ${sleep_seconds}s..."
-            sleep "$sleep_seconds"
-          done
+        run: pnpm install --no-frozen-lockfile --no-audit
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
@@ -139,7 +122,7 @@ jobs:
         if: env.RUN_E2E_TESTS == 'true'
         run: |
           echo "🗄️ Initializing test database schema..."
-          npm run init:db
+          pnpm run init:db
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
@@ -153,7 +136,7 @@ jobs:
           echo "🏗️ Building applications for E2E tests..."
           echo "📊 Using TEST database: ${{ secrets.TEST_SUPABASE_URL }}"
           # Build both website and admin
-          npm run build
+          pnpm run build
           cd apps/admin && npx next build && cd ../..
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
@@ -178,7 +161,7 @@ jobs:
           echo "📊 Database URL: ${{ secrets.TEST_SUPABASE_URL }}"
 
           # Start website server (port 3000)
-          npm run start > website.log 2>&1 &
+          pnpm run start > website.log 2>&1 &
           WEBSITE_PID=$!
 
           # Start admin server (port 3001) - use npx next start directly to avoid bun dependency
@@ -395,7 +378,7 @@ jobs:
           if [ -n "$ADMIN_PID" ]; then
             kill $ADMIN_PID 2>/dev/null || true
           fi
-          pkill -f "npm run start" || true
+          pkill -f "pnpm run start" || true
           pkill -f "next-server" || true
           pkill -f "node.*next" || true
           echo "✅ Servers stopped"

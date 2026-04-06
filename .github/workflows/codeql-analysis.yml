@@ -44,17 +44,19 @@ jobs:
           # The config file specifies the security query suite
           config-file: .github/codeql/codeql-config.yml
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          # Cache omitted - project uses bun.lock, not package-lock.json
-          # Omitting cache parameter disables caching by default
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm install
-        # Using npm install instead of npm ci since package-lock.json doesn't exist
-        # Project uses bun as primary package manager
+        run: pnpm install --no-frozen-lockfile --no-audit
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v4

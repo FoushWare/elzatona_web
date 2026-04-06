@@ -122,13 +122,19 @@ jobs:
         with:
           ref: ${{ needs.gate-ci.outputs.head_sha }}
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "pnpm"
 
       - name: Install root dependencies
-        run: npm install --prefer-offline --no-audit
+        run: pnpm install --no-frozen-lockfile --no-audit
 
       - name: Validate Vercel token
         run: |
@@ -160,13 +166,19 @@ jobs:
         with:
           ref: ${{ needs.gate-ci.outputs.head_sha }}
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "pnpm"
 
       - name: Install root dependencies
-        run: npm install --prefer-offline --no-audit
+        run: pnpm install --no-frozen-lockfile --no-audit
 
       - name: Validate Vercel token
         run: |
