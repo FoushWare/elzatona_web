@@ -53,6 +53,13 @@ jobs:
         run: |
           set -euo pipefail
 
+          # Temporary hotfix: deploy both apps on every successful main CI run.
+          # Restore selective detection in a follow-up PR after the deployment issue is resolved.
+          echo "website_changed=true" >> "$GITHUB_OUTPUT"
+          echo "admin_changed=true" >> "$GITHUB_OUTPUT"
+          echo "Changed files detection bypassed for forced deploy."
+          exit 0
+
           TARGET_SHA="${{ needs.gate-ci.outputs.head_sha }}"
           PARENT_COUNT="$(git rev-list --parents -n 1 "$TARGET_SHA" | awk '{print NF-1}')"
 
