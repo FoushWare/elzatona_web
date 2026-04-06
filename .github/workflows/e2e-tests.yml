@@ -122,7 +122,7 @@ jobs:
         if: env.RUN_E2E_TESTS == 'true'
         run: |
           echo "🗄️ Initializing test database schema..."
-          ppnpm run init:db
+          pnpm run init:db
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
@@ -136,7 +136,7 @@ jobs:
           echo "🏗️ Building applications for E2E tests..."
           echo "📊 Using TEST database: ${{ secrets.TEST_SUPABASE_URL }}"
           # Build both website and admin
-          ppnpm run build
+          pnpm run build
           cd apps/admin && npx next build && cd ../..
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
@@ -161,7 +161,7 @@ jobs:
           echo "📊 Database URL: ${{ secrets.TEST_SUPABASE_URL }}"
 
           # Start website server (port 3000)
-          ppnpm run start > website.log 2>&1 &
+          pnpm run start > website.log 2>&1 &
           WEBSITE_PID=$!
 
           # Start admin server (port 3001) - use npx next start directly to avoid bun dependency
@@ -378,7 +378,7 @@ jobs:
           if [ -n "$ADMIN_PID" ]; then
             kill $ADMIN_PID 2>/dev/null || true
           fi
-          pkill -f "ppnpm run start" || true
+          pkill -f "pnpm run start" || true
           pkill -f "next-server" || true
           pkill -f "node.*next" || true
           echo "✅ Servers stopped"

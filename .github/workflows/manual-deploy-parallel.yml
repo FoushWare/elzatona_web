@@ -73,7 +73,7 @@ jobs:
 
       - name: Validate build locally (optional build check)
         if: ${{ inputs.validate_build_website }}
-        run: ppnpm run build
+        run: pnpm run build
         env:
           NEXT_PUBLIC_APP_ENV: production
           NEXT_TELEMETRY_DISABLED: 1
@@ -119,7 +119,7 @@ jobs:
 
       - name: Validate build locally (optional build check)
         if: ${{ inputs.validate_build_admin }}
-        run: ppnpm run build:admin
+        run: pnpm run build:admin
         env:
           NEXT_PUBLIC_APP_ENV: production
           NEXT_TELEMETRY_DISABLED: 1
