@@ -31,19 +31,19 @@ run_prettier_check() {
     return 0
   fi
 
-  npx prettier --check "${files[@]}"
+  pnpm exec prettier --check "${files[@]}"
 }
 
 run_lint_check() {
-  npm run lint
+  pnpm run lint
 }
 
 run_type_check() {
-  NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=2048}" npm run type-check
+  NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=2048}" pnpm run type-check
 }
 
 run_build_check() {
-  npm run build
+  pnpm run build
 }
 
 case "$MODE" in
