@@ -31,7 +31,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Run Admin unit tests
         run: npx vitest run apps/admin/src --reporter=verbose
@@ -58,7 +58,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Verify pre-build state
         run: |
@@ -68,7 +68,7 @@ jobs:
       - name: Build admin app
         run: |
           echo "🏗️ Building admin app for E2E tests..."
-          npx nx build admin --skip-nx-cache
+          pnpm exec nx build admin --skip-nx-cache
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
           NEXT_TELEMETRY_DISABLED: "1"
@@ -124,7 +124,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Restore Playwright browser cache
         uses: actions/cache@v4

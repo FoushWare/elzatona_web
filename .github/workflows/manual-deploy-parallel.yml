@@ -61,7 +61,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install root dependencies
-        run: pnpm install --no-frozen-lockfile --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Validate Vercel token
         run: |
@@ -73,7 +73,7 @@ jobs:
 
       - name: Validate build locally (optional build check)
         if: ${{ inputs.validate_build_website }}
-        run: pnpm run build
+        run: ppnpm run build
         env:
           NEXT_PUBLIC_APP_ENV: production
           NEXT_TELEMETRY_DISABLED: 1
@@ -107,7 +107,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install root dependencies
-        run: pnpm install --no-frozen-lockfile --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Validate Vercel token
         run: |
@@ -119,7 +119,7 @@ jobs:
 
       - name: Validate build locally (optional build check)
         if: ${{ inputs.validate_build_admin }}
-        run: pnpm run build:admin
+        run: ppnpm run build:admin
         env:
           NEXT_PUBLIC_APP_ENV: production
           NEXT_TELEMETRY_DISABLED: 1

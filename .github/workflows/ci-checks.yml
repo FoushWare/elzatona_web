@@ -34,18 +34,18 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Run Prettier formatting check
-        run: pnpm run format:check:tracked
+        run: ppnpm run format:check:tracked
         continue-on-error: false
 
       - name: Run ESLint check
-        run: pnpm run lint:ci
+        run: ppnpm run lint:ci
         continue-on-error: false
 
       - name: TypeScript type checking
-        run: pnpm run type-check:ci
+        run: ppnpm run type-check:ci
         continue-on-error: false
 
       - name: Run unit tests for admin login components
@@ -71,7 +71,7 @@ jobs:
 
       - name: Build validation
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: pnpm run build:ci
+        run: ppnpm run build:ci
         continue-on-error: false
 
       - name: Cleanup build artifacts

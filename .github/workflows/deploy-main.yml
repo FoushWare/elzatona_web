@@ -134,7 +134,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install root dependencies
-        run: pnpm install --no-frozen-lockfile --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Validate Vercel token
         run: |
@@ -178,7 +178,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install root dependencies
-        run: pnpm install --no-frozen-lockfile --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Validate Vercel token
         run: |
