@@ -128,18 +128,6 @@ jobs:
           fi
           echo "VERCEL_TOKEN is configured"
 
-      - name: Prepare website package manifest for Vercel build
-        run: |
-          npm pkg delete --prefix apps/website dependencies.@elzatona/common-ui || true
-          npm pkg delete --prefix apps/website dependencies.@elzatona/contexts || true
-          npm pkg delete --prefix apps/website dependencies.@elzatona/database || true
-          npm pkg delete --prefix apps/website dependencies.@elzatona/types || true
-          npm pkg delete --prefix apps/website dependencies.@elzatona/utilities || true
-          npm pkg delete --prefix apps/website dependencies.@elzatona/hooks || true
-          npm pkg delete --prefix apps/website dependencies.@elzatona/shared-atoms || true
-          npm pkg delete --prefix apps/website dependencies.@elzatona/shared-components || true
-          rm -f apps/website/package-lock.json
-
       - name: Deploy website
         run: npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
 
@@ -173,18 +161,6 @@ jobs:
             exit 1
           fi
           echo "VERCEL_TOKEN is configured"
-
-      - name: Prepare admin package manifest for Vercel build
-        run: |
-          npm pkg delete --prefix apps/admin dependencies.@elzatona/common-ui || true
-          npm pkg delete --prefix apps/admin dependencies.@elzatona/contexts || true
-          npm pkg delete --prefix apps/admin dependencies.@elzatona/database || true
-          npm pkg delete --prefix apps/admin dependencies.@elzatona/types || true
-          npm pkg delete --prefix apps/admin dependencies.@elzatona/utilities || true
-          npm pkg delete --prefix apps/admin dependencies.@elzatona/hooks || true
-          npm pkg delete --prefix apps/admin dependencies.@elzatona/shared-atoms || true
-          npm pkg delete --prefix apps/admin dependencies.@elzatona/shared-components || true
-          rm -f apps/admin/package-lock.json
 
       - name: Deploy admin
         run: npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
