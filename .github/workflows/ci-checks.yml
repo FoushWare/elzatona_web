@@ -22,29 +22,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: |
-            package-lock.json
-            apps/admin/package-lock.json
-            apps/website/package-lock.json
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm install --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Run Prettier formatting check
-        run: npm run format:check:tracked
+        run: pnpm run format:check:tracked
         continue-on-error: false
 
       - name: Run ESLint check
-        run: npm run lint:ci
+        run: pnpm run lint:ci
         continue-on-error: false
 
       - name: TypeScript type checking
-        run: npm run type-check:ci
+        run: pnpm run type-check:ci
         continue-on-error: false
 
       - name: Run unit tests for admin login components
@@ -70,7 +71,7 @@ jobs:
 
       - name: Build validation
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: npm run build:ci
+        run: pnpm run build:ci
         continue-on-error: false
 
       - name: Cleanup build artifacts

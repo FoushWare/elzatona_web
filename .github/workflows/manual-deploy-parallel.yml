@@ -6,19 +6,29 @@ on:
   workflow_dispatch:
     inputs:
       deploy_website:
-        description: 'Deploy website'
+        description: "Deploy website"
         required: true
         type: boolean
         default: true
       deploy_admin:
-        description: 'Deploy admin'
+        description: "Deploy admin"
+        required: true
+        type: boolean
+        default: true
+      validate_build_website:
+        description: "Validate website build"
+        required: true
+        type: boolean
+        default: true
+      validate_build_admin:
+        description: "Validate admin build"
         required: true
         type: boolean
         default: true
       ref:
-        description: 'Git ref (branch/tag/sha) to deploy'
+        description: "Git ref (branch/tag/sha) to deploy"
         required: false
-        default: 'main'
+        default: "main"
 
 concurrency:
   group: manual-deploy-${{ github.ref }}
@@ -39,13 +49,19 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "pnpm"
 
       - name: Install root dependencies
-        run: npm install --prefer-offline --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Validate Vercel token
         run: |
@@ -54,6 +70,15 @@ jobs:
             exit 1
           fi
           echo "VERCEL_TOKEN is configured"
+
+      - name: Validate build locally (optional build check)
+        if: ${{ inputs.validate_build_website }}
+        run: pnpm run build
+        env:
+          NEXT_PUBLIC_APP_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Deploy website to Vercel
         run: npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
@@ -72,13 +97,19 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "pnpm"
 
       - name: Install root dependencies
-        run: npm install --prefer-offline --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Validate Vercel token
         run: |
@@ -87,6 +118,15 @@ jobs:
             exit 1
           fi
           echo "VERCEL_TOKEN is configured"
+
+      - name: Validate build locally (optional build check)
+        if: ${{ inputs.validate_build_admin }}
+        run: pnpm run build:admin
+        env:
+          NEXT_PUBLIC_APP_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Deploy admin to Vercel
         run: npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}

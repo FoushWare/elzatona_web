@@ -1,0 +1,16 @@
+{
+  "name": "zatona-web",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "*.{js,ts,jsx,tsx,json}",
+          ".github/**/*.{yml,yaml}"
+        ]
+      }
+    }
+  }
+}

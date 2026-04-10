@@ -19,17 +19,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: |
-            package-lock.json
-            apps/admin/package-lock.json
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm install --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Run Admin unit tests
         run: npx vitest run apps/admin/src --reporter=verbose
@@ -44,17 +46,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: |
-            package-lock.json
-            apps/admin/package-lock.json
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm install --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Verify pre-build state
         run: |
@@ -64,7 +68,7 @@ jobs:
       - name: Build admin app
         run: |
           echo "🏗️ Building admin app for E2E tests..."
-          npx nx build admin --skip-nx-cache
+          pnpm exec nx build admin --skip-nx-cache
         env:
           NODE_OPTIONS: "--max-old-space-size=2048"
           NEXT_TELEMETRY_DISABLED: "1"
@@ -108,23 +112,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: |
-            package-lock.json
-            apps/admin/package-lock.json
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm install --no-audit
+        run: pnpm install --no-frozen-lockfile
 
       - name: Restore Playwright browser cache
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json', 'apps/admin/package-lock.json') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-playwright-
 
