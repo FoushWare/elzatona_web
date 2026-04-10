@@ -80,6 +80,10 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
+      - name: Prepare website package manifest for Vercel build
+        run: |
+          node -e 'const fs=require("fs");const p="apps/website/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/auth", "@elzatona/common-ui", "@elzatona/contexts", "@elzatona/database", "@elzatona/hooks", "@elzatona/shared-atoms", "@elzatona/shared-components", "@elzatona/shared-data", "@elzatona/types", "@elzatona/ui", "@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\\n");'
+
       - name: Deploy website to Vercel
         run: npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
         env:
@@ -130,6 +134,10 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Prepare admin package manifest for Vercel build
+        run: |
+          node -e 'const fs=require("fs");const p="apps/admin/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/auth", "@elzatona/common-ui", "@elzatona/contexts", "@elzatona/database", "@elzatona/hooks", "@elzatona/shared-atoms", "@elzatona/shared-components", "@elzatona/shared-data", "@elzatona/types", "@elzatona/ui", "@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\\n");'
 
       - name: Deploy admin to Vercel
         run: npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
