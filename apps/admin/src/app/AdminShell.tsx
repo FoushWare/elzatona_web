@@ -9,7 +9,7 @@ interface AdminShellProps {
   children: React.ReactNode;
 }
 
-export default function AdminShell({ children }: AdminShellProps) {
+export default function AdminShell({ children }: Readonly<AdminShellProps>) {
   const { isNavbarVisible } = useAdminNavbarVisibility();
 
   return (

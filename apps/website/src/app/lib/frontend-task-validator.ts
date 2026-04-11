@@ -245,7 +245,10 @@ export class FrontendTaskValidator {
     iframe: HTMLIFrameElement,
     userCode: string,
   ): Promise<void> {
-    const doc = iframe.contentDocument!;
+    const doc = iframe.contentDocument;
+    if (!doc) {
+      throw new Error("Iframe document is not available");
+    }
     const script = doc.createElement("script");
     script.type = "text/babel";
     script.text = userCode;
@@ -263,7 +266,10 @@ export class FrontendTaskValidator {
     const startTime = Date.now();
 
     try {
-      const doc = iframe.contentDocument!;
+      const doc = iframe.contentDocument;
+      if (!doc) {
+        throw new Error("Iframe document is not available");
+      }
       const root = doc.getElementById("root");
 
       if (!root) {
@@ -396,7 +402,10 @@ export class FrontendTaskValidator {
     const startTime = Date.now();
 
     try {
-      const window = iframe.contentWindow!;
+      const window = iframe.contentWindow;
+      if (!window) {
+        throw new Error("Iframe window is not available");
+      }
 
       const func = (window as any)[functionName];
 
@@ -434,7 +443,10 @@ export class FrontendTaskValidator {
     const startTime = Date.now();
 
     try {
-      const doc = iframe.contentDocument!;
+      const doc = iframe.contentDocument;
+      if (!doc) {
+        throw new Error("Iframe document is not available");
+      }
 
       // Execute test case based on type
 
