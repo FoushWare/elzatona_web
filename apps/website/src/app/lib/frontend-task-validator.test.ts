@@ -482,4 +482,465 @@ describe("FrontendTaskValidator", () => {
       expect(cmp("test@#$%", "test@#$%")).toBe(true);
     });
   });
+
+  describe("execution helpers and validation methods", () => {
+    it("evaluates React test cases across all branches", async () => {
+      const validator = new FrontendTaskValidator() as unknown as {
+        evaluateReactTestCase: (
+          root: HTMLElement,
+          testCase: TestCase,
+        ) => Promise<unknown>;
+        wait: (ms: number) => Promise<void>;
+      };
+
+      vi.spyOn(validator, "wait").mockResolvedValue(undefined);
+
+      const root = document.createElement("div");
+      const status = document.createElement("span");
+      status.textContent = "0";
+      const increment = document.createElement("button");
+      increment.textContent = "+1";
+      increment.addEventListener("click", () => {
+        status.textContent = "1";
+      });
+      const decrement = document.createElement("button");
+      decrement.textContent = "-1";
+      decrement.addEventListener("click", () => {
+        status.textContent = "-1";
+      });
+      const reset = document.createElement("button");
+      reset.textContent = "Reset";
+      reset.addEventListener("click", () => {
+        status.textContent = "0";
+      });
+      root.append(status, increment, decrement, reset);
+
+      expect(
+        await validator.evaluateReactTestCase(root, {
+          id: "initial",
+          description: "initial",
+          input: "initial",
+          expectedOutput: "0",
+          type: "component",
+        }),
+      ).toBe("0");
+
+      expect(
+        await validator.evaluateReactTestCase(root, {
+          id: "increment",
+          description: "increment",
+          input: "increment",
+          expectedOutput: "1",
+          type: "component",
+        }),
+      ).toBe("1");
+
+      expect(
+        await validator.evaluateReactTestCase(root, {
+          id: "decrement",
+          description: "decrement",
+          input: "decrement",
+          expectedOutput: "-1",
+          type: "component",
+        }),
+      ).toBe("-1");
+
+      expect(
+        await validator.evaluateReactTestCase(root, {
+          id: "reset",
+          description: "reset",
+          input: "reset",
+          expectedOutput: "0",
+          type: "component",
+        }),
+      ).toBe("0");
+
+      expect(
+        await validator.evaluateReactTestCase(root, {
+          id: "custom",
+          description: "custom",
+          input: "custom",
+          expectedOutput: "custom text",
+          type: "component",
+        }),
+      ).toContain("0");
+    });
+
+    it("runs the React validation workflow on success and failure", async () => {
+      const validator = new FrontendTaskValidator() as unknown as {
+        validateReactComponent: (
+          userCode: string,
+          testCases: TestCase[],
+        ) => Promise<SolutionValidation>;
+        createTestIframe: () => HTMLIFrameElement & {
+          remove: ReturnType<typeof vi.fn>;
+        };
+        injectReactLibraries: (iframe: HTMLIFrameElement) => Promise<void>;
+        injectUserCode: (
+          iframe: HTMLIFrameElement,
+          userCode: string,
+        ) => Promise<void>;
+        runReactTestCase: (
+          iframe: HTMLIFrameElement,
+          testCase: TestCase,
+        ) => Promise<{ passed: boolean; expectedOutput: unknown }>;
+      };
+
+      const remove = vi.fn();
+      vi.spyOn(validator, "createTestIframe").mockReturnValue({
+        remove,
+      } as unknown as HTMLIFrameElement);
+      vi.spyOn(validator, "injectReactLibraries").mockResolvedValue(undefined);
+      vi.spyOn(validator, "injectUserCode").mockResolvedValue(undefined);
+      vi.spyOn(validator, "runReactTestCase").mockResolvedValue({
+        testCaseId: "tc-1",
+        passed: true,
+        expectedOutput: "ok",
+      } as unknown as { passed: boolean; expectedOutput: unknown });
+
+      const success = await validator.validateReactComponent("code", [
+        {
+          id: "tc-1",
+          description: "react",
+          input: "initial",
+          expectedOutput: "ok",
+          type: "component",
+        },
+      ]);
+
+      expect(success.overallPassed).toBe(true);
+      expect(success.passedTests).toBe(1);
+      expect(remove).toHaveBeenCalledTimes(1);
+
+      vi.restoreAllMocks();
+
+      const validatorFailure = new FrontendTaskValidator() as unknown as {
+        validateReactComponent: (
+          userCode: string,
+          testCases: TestCase[],
+        ) => Promise<SolutionValidation>;
+        createTestIframe: () => HTMLIFrameElement & {
+          remove: ReturnType<typeof vi.fn>;
+        };
+        injectReactLibraries: (iframe: HTMLIFrameElement) => Promise<void>;
+      };
+
+      const failureRemove = vi.fn();
+      vi.spyOn(validatorFailure, "createTestIframe").mockReturnValue({
+        remove: failureRemove,
+      } as unknown as HTMLIFrameElement);
+      vi.spyOn(validatorFailure, "injectReactLibraries").mockRejectedValue(
+        new Error("load failed"),
+      );
+      const consoleErrorSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => undefined);
+
+      const failure = await validatorFailure.validateReactComponent("code", [
+        {
+          id: "tc-1",
+          description: "react",
+          input: "initial",
+          expectedOutput: "ok",
+          type: "component",
+        },
+      ]);
+
+      expect(failure.overallPassed).toBe(false);
+      expect(failure.failedTests).toBe(1);
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      consoleErrorSpy.mockRestore();
+    });
+
+    it("runs the JavaScript validation workflow on success and failure", async () => {
+      const validator = new FrontendTaskValidator() as unknown as {
+        validateJavaScriptFunction: (
+          userCode: string,
+          testCases: TestCase[],
+          functionName: string,
+        ) => Promise<SolutionValidation>;
+        createTestIframe: () => HTMLIFrameElement & {
+          remove: ReturnType<typeof vi.fn>;
+        };
+        injectUserCode: (
+          iframe: HTMLIFrameElement,
+          userCode: string,
+        ) => Promise<void>;
+        runJavaScriptTestCase: (
+          iframe: HTMLIFrameElement,
+          testCase: TestCase,
+          functionName: string,
+        ) => Promise<{ passed: boolean; expectedOutput: unknown }>;
+      };
+
+      const remove = vi.fn();
+      vi.spyOn(validator, "createTestIframe").mockReturnValue({
+        remove,
+      } as unknown as HTMLIFrameElement);
+      vi.spyOn(validator, "injectUserCode").mockResolvedValue(undefined);
+      vi.spyOn(validator, "runJavaScriptTestCase").mockResolvedValue({
+        testCaseId: "js-1",
+        passed: true,
+        expectedOutput: 2,
+      } as unknown as { passed: boolean; expectedOutput: unknown });
+
+      const success = await validator.validateJavaScriptFunction(
+        "code",
+        [
+          {
+            id: "js-1",
+            description: "double",
+            input: 1,
+            expectedOutput: 2,
+            type: "function",
+          },
+        ],
+        "double",
+      );
+
+      expect(success.overallPassed).toBe(true);
+      expect(success.passedTests).toBe(1);
+      expect(remove).toHaveBeenCalledTimes(1);
+
+      vi.restoreAllMocks();
+
+      const validatorFailure = new FrontendTaskValidator() as unknown as {
+        validateJavaScriptFunction: (
+          userCode: string,
+          testCases: TestCase[],
+          functionName: string,
+        ) => Promise<SolutionValidation>;
+        createTestIframe: () => HTMLIFrameElement & {
+          remove: ReturnType<typeof vi.fn>;
+        };
+        injectUserCode: (
+          iframe: HTMLIFrameElement,
+          userCode: string,
+        ) => Promise<void>;
+      };
+
+      const failureRemove = vi.fn();
+      vi.spyOn(validatorFailure, "createTestIframe").mockReturnValue({
+        remove: failureRemove,
+      } as unknown as HTMLIFrameElement);
+      vi.spyOn(validatorFailure, "injectUserCode").mockRejectedValue(
+        new Error("inject failed"),
+      );
+      const consoleErrorSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => undefined);
+
+      const failure = await validatorFailure.validateJavaScriptFunction(
+        "code",
+        [
+          {
+            id: "js-1",
+            description: "double",
+            input: 1,
+            expectedOutput: 2,
+            type: "function",
+          },
+        ],
+        "double",
+      );
+
+      expect(failure.overallPassed).toBe(false);
+      expect(failure.failedTests).toBe(1);
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      consoleErrorSpy.mockRestore();
+    });
+
+    it("runs the CSS/HTML validation workflow on success and failure", async () => {
+      const validator = new FrontendTaskValidator() as unknown as {
+        validateCSSHTML: (
+          userCode: string,
+          testCases: TestCase[],
+        ) => Promise<SolutionValidation>;
+        createTestIframe: () => HTMLIFrameElement & {
+          remove: ReturnType<typeof vi.fn>;
+        };
+        runCSSHTMLTestCase: (
+          iframe: HTMLIFrameElement,
+          testCase: TestCase,
+        ) => Promise<{ passed: boolean; expectedOutput: unknown }>;
+      };
+
+      const remove = vi.fn();
+      vi.spyOn(validator, "createTestIframe").mockReturnValue({
+        remove,
+      } as unknown as HTMLIFrameElement);
+      vi.spyOn(validator, "runCSSHTMLTestCase").mockResolvedValue({
+        testCaseId: "css-1",
+        passed: true,
+        expectedOutput: "grid",
+      } as unknown as { passed: boolean; expectedOutput: unknown });
+
+      const success = await validator.validateCSSHTML("code", [
+        {
+          id: "css-1",
+          description: "grid",
+          input: "check-grid",
+          expectedOutput: "grid",
+          type: "css",
+        },
+      ]);
+
+      expect(success.overallPassed).toBe(true);
+      expect(success.passedTests).toBe(1);
+      expect(remove).toHaveBeenCalledTimes(1);
+
+      vi.restoreAllMocks();
+
+      const validatorFailure = new FrontendTaskValidator() as unknown as {
+        validateCSSHTML: (
+          userCode: string,
+          testCases: TestCase[],
+        ) => Promise<SolutionValidation>;
+        createTestIframe: () => HTMLIFrameElement & {
+          remove: ReturnType<typeof vi.fn>;
+        };
+      };
+
+      vi.spyOn(validatorFailure, "createTestIframe").mockImplementation(() => {
+        throw new Error("iframe failed");
+      });
+      const consoleErrorSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => undefined);
+
+      const failure = await validatorFailure.validateCSSHTML("code", [
+        {
+          id: "css-1",
+          description: "grid",
+          input: "check-grid",
+          expectedOutput: "grid",
+          type: "css",
+        },
+      ]);
+
+      expect(failure.overallPassed).toBe(false);
+      expect(failure.failedTests).toBe(1);
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      consoleErrorSpy.mockRestore();
+    });
+
+    it("exercises runReactTestCase and runJavaScriptTestCase directly", async () => {
+      const validator = new FrontendTaskValidator() as unknown as {
+        runReactTestCase: (
+          iframe: HTMLIFrameElement,
+          testCase: TestCase,
+        ) => Promise<{ passed: boolean; actualOutput?: unknown }>;
+        runJavaScriptTestCase: (
+          iframe: HTMLIFrameElement,
+          testCase: TestCase,
+          functionName: string,
+        ) => Promise<{ passed: boolean; actualOutput?: unknown }>;
+        getReactRoot: (iframe: HTMLIFrameElement) => HTMLElement;
+        renderReactComponent: (
+          iframe: HTMLIFrameElement,
+          root: HTMLElement,
+        ) => void;
+        evaluateReactTestCase: (
+          root: HTMLElement,
+          testCase: TestCase,
+        ) => Promise<unknown>;
+        compareOutputs: (actual: unknown, expected: unknown) => boolean;
+      };
+
+      const root = document.createElement("div");
+      root.id = "root";
+      const mockIframe = {
+        contentDocument: {
+          getElementById: () => root,
+        },
+        contentWindow: {
+          React: { createElement: vi.fn((component: unknown) => component) },
+          ReactDOM: { render: vi.fn() },
+          Counter: () => null,
+          double: (value: number) => value * 2,
+        },
+      } as unknown as HTMLIFrameElement;
+
+      vi.spyOn(validator, "getReactRoot").mockReturnValue(root);
+      vi.spyOn(validator, "renderReactComponent").mockImplementation(
+        () => undefined,
+      );
+      vi.spyOn(validator, "evaluateReactTestCase").mockResolvedValue("1");
+
+      const reactResult = await validator.runReactTestCase(mockIframe, {
+        id: "r1",
+        description: "react",
+        input: "increment",
+        expectedOutput: "1",
+        type: "component",
+      });
+
+      expect(reactResult.passed).toBe(true);
+      expect(reactResult.actualOutput).toBe("1");
+
+      const jsResult = await validator.runJavaScriptTestCase(
+        mockIframe,
+        {
+          id: "j1",
+          description: "js",
+          input: 2,
+          expectedOutput: 4,
+          type: "function",
+        },
+        "double",
+      );
+
+      expect(jsResult.passed).toBe(true);
+      expect(jsResult.actualOutput).toBe(4);
+    });
+
+    it("exercises runCSSHTMLTestCase branches directly", async () => {
+      const validator = new FrontendTaskValidator() as unknown as {
+        runCSSHTMLTestCase: (
+          iframe: HTMLIFrameElement,
+          testCase: TestCase,
+        ) => Promise<{ passed: boolean; actualOutput?: unknown }>;
+      };
+
+      const cardContainer = document.createElement("div");
+      cardContainer.className = "card-container";
+      const gridDoc = {
+        querySelector: (selector: string) =>
+          selector === ".card-container" ? cardContainer : null,
+        querySelectorAll: () => ({ length: 1 }),
+        body: { textContent: "fallback" },
+      } as unknown as Document;
+
+      const iframe = {
+        contentDocument: gridDoc,
+      } as unknown as HTMLIFrameElement;
+
+      const gridResult = await validator.runCSSHTMLTestCase(iframe, {
+        id: "css-1",
+        description: "grid",
+        input: "check-grid",
+        expectedOutput: "block",
+        type: "css",
+      });
+      expect(gridResult.actualOutput).toBe("block");
+
+      const responsiveResult = await validator.runCSSHTMLTestCase(iframe, {
+        id: "css-2",
+        description: "responsive",
+        input: "check-responsive",
+        expectedOutput: "responsive",
+        type: "css",
+      });
+      expect(responsiveResult.actualOutput).toBe("responsive");
+
+      const defaultResult = await validator.runCSSHTMLTestCase(iframe, {
+        id: "css-3",
+        description: "default",
+        input: "other",
+        expectedOutput: "fallback",
+        type: "html",
+      });
+      expect(defaultResult.actualOutput).toBe("fallback");
+    });
+  });
 });
