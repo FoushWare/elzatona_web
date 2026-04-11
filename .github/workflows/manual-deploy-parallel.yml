@@ -81,19 +81,19 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Pull Vercel Project Settings
-        run: npx vercel pull --yes --environment=production --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel pull --yes --environment=production --local-config apps/website/vercel.json --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}
 
       - name: Build website for Vercel
-        run: npx vercel build --prod --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel build --prod --local-config apps/website/vercel.json --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}
 
       - name: Deploy website to Vercel
-        run: npx vercel deploy --prebuilt --prod --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel deploy --prebuilt --prod --local-config apps/website/vercel.json --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}
@@ -144,19 +144,19 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Pull Vercel Project Settings
-        run: npx vercel pull --yes --environment=production --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel pull --yes --environment=production --local-config apps/admin/vercel.json --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
 
       - name: Build admin for Vercel
-        run: npx vercel build --prod --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel build --prod --local-config apps/admin/vercel.json --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
 
       - name: Deploy admin to Vercel
-        run: npx vercel deploy --prebuilt --prod --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel deploy --prebuilt --prod --local-config apps/admin/vercel.json --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
