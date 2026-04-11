@@ -198,7 +198,7 @@
     "jotai": "^2.15.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.542.0",
-    "next": "^16.2.1",
+    "next": "^16.2.3",
     "next-auth": "^4.24.13",
     "node-cron": "^4.2.1",
     "node-fetch": "^2.7.0",
@@ -259,7 +259,8 @@
     "ts-jest": "^29.4.5",
     "tsx": "^4.20.5",
     "typescript": "^5",
-    "vite": "^7.2.6",
+    "vercel": "^50.44.0",
+    "vite": "^7.3.2",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "3.2.4"
   },

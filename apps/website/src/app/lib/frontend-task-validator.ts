@@ -245,7 +245,10 @@ export class FrontendTaskValidator {
     iframe: HTMLIFrameElement,
     userCode: string,
   ): Promise<void> {
-    const doc = iframe.contentDocument!;
+    const doc = iframe.contentDocument;
+    if (!doc) {
+      throw new Error("Iframe document is not available");
+    }
     const script = doc.createElement("script");
     script.type = "text/babel";
     script.text = userCode;
@@ -256,116 +259,15 @@ export class FrontendTaskValidator {
   }
 
   private async runReactTestCase(
-    // NOSONAR - dedicated refactor tracked separately
     iframe: HTMLIFrameElement,
     testCase: TestCase,
   ): Promise<ValidationResult> {
     const startTime = Date.now();
 
     try {
-      const doc = iframe.contentDocument!;
-      const root = doc.getElementById("root");
-
-      if (!root) {
-        throw new Error("Root element not found");
-      }
-
-      // Clear previous content
-      root.innerHTML = "";
-
-      // Render the component
-      const React = (iframe.contentWindow as any).React;
-      const ReactDOM = (iframe.contentWindow as any).ReactDOM;
-
-      if (!React || !ReactDOM) {
-        throw new Error("React libraries not loaded");
-      }
-
-      // Get the component from the global scope
-      const Component =
-        (iframe.contentWindow as any).Counter ||
-        (iframe.contentWindow as any).TodoList;
-
-      if (!Component) {
-        throw new Error("Component not found in user code");
-      }
-
-      // Render component
-      const element = React.createElement(Component);
-      // eslint-disable-next-line react/no-deprecated
-      ReactDOM.render(element, root);
-
-      // Wait for render
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Execute test case
-
-      let actualOutput: any;
-
-      switch (testCase.input) {
-        case "initial": {
-          // Check initial state
-          const initialText = root.textContent || "";
-          actualOutput = initialText.includes("0") ? "0" : initialText;
-          break;
-        }
-
-        case "increment": {
-          // Find and click increment button
-          const incrementBtn = Array.from(root.querySelectorAll("button")).find(
-            (btn) =>
-              btn.textContent?.includes("+1") || btn.textContent?.includes("+"),
-          );
-
-          if (incrementBtn) {
-            incrementBtn.click();
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            const text = root.textContent || "";
-            actualOutput = text.includes("1") ? "1" : text;
-          } else {
-            throw new Error("Increment button not found");
-          }
-          break;
-        }
-
-        case "decrement": {
-          // Find and click decrement button
-          const decrementBtn = Array.from(root.querySelectorAll("button")).find(
-            (btn) =>
-              btn.textContent?.includes("-1") || btn.textContent?.includes("-"),
-          );
-
-          if (decrementBtn) {
-            decrementBtn.click();
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            const text = root.textContent || "";
-            actualOutput = text.includes("-1") ? "-1" : text;
-          } else {
-            throw new Error("Decrement button not found");
-          }
-          break;
-        }
-
-        case "reset": {
-          // Find and click reset button
-          const resetBtn = Array.from(root.querySelectorAll("button")).find(
-            (btn) => btn.textContent?.toLowerCase().includes("reset"),
-          );
-
-          if (resetBtn) {
-            resetBtn.click();
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            const text = root.textContent || "";
-            actualOutput = text.includes("0") ? "0" : text;
-          } else {
-            throw new Error("Reset button not found");
-          }
-          break;
-        }
-
-        default:
-          actualOutput = root.textContent || "";
-      }
+      const root = this.getReactRoot(iframe);
+      this.renderReactComponent(iframe, root);
+      const actualOutput = await this.evaluateReactTestCase(root, testCase);
 
       const executionTime = Date.now() - startTime;
       const passed = this.compareOutputs(actualOutput, testCase.expectedOutput);
@@ -388,6 +290,113 @@ export class FrontendTaskValidator {
     }
   }
 
+  private getReactRoot(iframe: HTMLIFrameElement): HTMLElement {
+    const doc = iframe.contentDocument;
+    if (!doc) {
+      throw new Error("Iframe document is not available");
+    }
+
+    const root = doc.getElementById("root");
+    if (!root) {
+      throw new Error("Root element not found");
+    }
+
+    root.innerHTML = "";
+    return root;
+  }
+
+  private renderReactComponent(
+    iframe: HTMLIFrameElement,
+    root: HTMLElement,
+  ): void {
+    const win = iframe.contentWindow as any;
+    const React = win?.React;
+    const ReactDOM = win?.ReactDOM;
+
+    if (!React || !ReactDOM) {
+      throw new Error("React libraries not loaded");
+    }
+
+    const Component = win.Counter || win.TodoList;
+    if (!Component) {
+      throw new Error("Component not found in user code");
+    }
+
+    const element = React.createElement(Component);
+    // eslint-disable-next-line react/no-deprecated
+    ReactDOM.render(element, root);
+  }
+
+  private async evaluateReactTestCase(
+    root: HTMLElement,
+    testCase: TestCase,
+  ): Promise<any> {
+    await this.wait(100);
+
+    if (testCase.input === "initial") {
+      return this.textOrExpectedDigit(root, "0");
+    }
+
+    if (testCase.input === "increment") {
+      await this.clickButtonAndWait(
+        root,
+        (text) => text.includes("+1") || text.includes("+"),
+        "Increment button not found",
+      );
+      return this.textOrExpectedDigit(root, "1");
+    }
+
+    if (testCase.input === "decrement") {
+      await this.clickButtonAndWait(
+        root,
+        (text) => text.includes("-1") || text.includes("-"),
+        "Decrement button not found",
+      );
+      return this.textOrExpectedDigit(root, "-1");
+    }
+
+    if (testCase.input === "reset") {
+      await this.clickButtonAndWait(
+        root,
+        (text) => text.toLowerCase().includes("reset"),
+        "Reset button not found",
+      );
+      return this.textOrExpectedDigit(root, "0");
+    }
+
+    return root.textContent || "";
+  }
+
+  private async clickButtonAndWait(
+    root: HTMLElement,
+    matcher: (text: string) => boolean,
+    notFoundError: string,
+  ): Promise<void> {
+    const buttons = Array.from(root.querySelectorAll("button"));
+    const matchedButton = buttons.find((button) =>
+      matcher(button.textContent || ""),
+    );
+
+    if (!matchedButton) {
+      throw new Error(notFoundError);
+    }
+
+    matchedButton.click();
+    await this.wait(100);
+  }
+
+  private textOrExpectedDigit(
+    root: HTMLElement,
+    expectedDigit: string,
+  ): string {
+    const text = root.textContent || "";
+    return text.includes(expectedDigit) ? expectedDigit : text;
+  }
+
+  private async wait(ms: number): Promise<void> {
+    await new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   private async runJavaScriptTestCase(
     iframe: HTMLIFrameElement,
     testCase: TestCase,
@@ -396,7 +405,10 @@ export class FrontendTaskValidator {
     const startTime = Date.now();
 
     try {
-      const window = iframe.contentWindow!;
+      const window = iframe.contentWindow;
+      if (!window) {
+        throw new Error("Iframe window is not available");
+      }
 
       const func = (window as any)[functionName];
 
@@ -434,7 +446,10 @@ export class FrontendTaskValidator {
     const startTime = Date.now();
 
     try {
-      const doc = iframe.contentDocument!;
+      const doc = iframe.contentDocument;
+      if (!doc) {
+        throw new Error("Iframe document is not available");
+      }
 
       // Execute test case based on type
 

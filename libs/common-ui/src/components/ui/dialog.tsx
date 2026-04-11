@@ -68,9 +68,9 @@ const DialogHeader = React.forwardRef<
 DialogHeader.displayName = "DialogHeader";
 
 const DialogTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
+  HTMLHeadingElement,
+  React.HTMLAttributes<HTMLHeadingElement> & { children: React.ReactNode }
+>(({ className, children, ...props }, ref) => (
   <h2
     ref={ref}
     className={cn(
@@ -78,7 +78,9 @@ const DialogTitle = React.forwardRef<
       className,
     )}
     {...(props as any)}
-  />
+  >
+    {children}
+  </h2>
 ));
 DialogTitle.displayName = "DialogTitle";
 

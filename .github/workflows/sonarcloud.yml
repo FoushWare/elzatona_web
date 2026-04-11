@@ -62,6 +62,10 @@ jobs:
         run: |
           npx vitest run \
             libs/contexts/src/lib/AdminNavbarVisibilityContext.test.tsx \
+            apps/admin/src/app/AdminShell.test.tsx \
+            libs/common-ui/src/components/ui/dialog.test.tsx \
+            apps/website/src/app/lib/frontend-task-validator.test.ts \
+            apps/website/src/app/lib/frontend-task-validator-coverage.test.ts \
             --coverage \
             --coverage.provider=v8 \
             --coverage.reporter=lcov \
