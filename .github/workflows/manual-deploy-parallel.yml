@@ -84,8 +84,14 @@ jobs:
         run: |
           node -e 'const fs=require("fs");const p="apps/website/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/auth", "@elzatona/common-ui", "@elzatona/contexts", "@elzatona/database", "@elzatona/hooks", "@elzatona/shared-atoms", "@elzatona/shared-components", "@elzatona/shared-data", "@elzatona/types", "@elzatona/ui", "@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2));'
 
+      - name: Build website for Vercel
+        run: npx vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}
+
       - name: Deploy website to Vercel
-        run: npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}
@@ -139,8 +145,14 @@ jobs:
         run: |
           node -e 'const fs=require("fs");const p="apps/admin/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/auth", "@elzatona/common-ui", "@elzatona/contexts", "@elzatona/database", "@elzatona/hooks", "@elzatona/shared-atoms", "@elzatona/shared-components", "@elzatona/shared-data", "@elzatona/types", "@elzatona/ui", "@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2));'
 
+      - name: Build admin for Vercel
+        run: npx vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
+
       - name: Deploy admin to Vercel
-        run: npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
