@@ -146,7 +146,7 @@ jobs:
 
       - name: Prepare website package manifest for Vercel build
         run: |
-          node -e 'const fs=require("fs");const p="apps/website/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\\n");'
+          node -e 'const fs=require("fs");const p="apps/website/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\n");'
 
       - name: Deploy website
         run: npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
@@ -190,7 +190,7 @@ jobs:
 
       - name: Prepare admin package manifest for Vercel build
         run: |
-          node -e 'const fs=require("fs");const p="apps/admin/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\\n");'
+          node -e 'const fs=require("fs");const p="apps/admin/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\n");'
 
       - name: Deploy admin
         run: npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
