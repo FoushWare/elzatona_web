@@ -10,6 +10,13 @@ Welcome to the Elzatona Web documentation! This directory contains all project d
 - **[Local Development](flows/local-development.md)** - Complete development guide
 - **[Environment Setup](flows/environment-setup.md)** - Environment configuration
 
+### API Documentation
+
+- **[Website Swagger UI (local)](http://localhost:3000/api-docs)**
+- **[Admin Swagger UI (local)](http://localhost:3001/api-docs)**
+- **[Website OpenAPI JSON (local)](http://localhost:3000/api/swagger)**
+- **[Admin OpenAPI JSON (local)](http://localhost:3001/api/swagger)**
+
 ### Development Flows
 
 - **[Local Development](flows/local-development.md)** - Development workflow and commands

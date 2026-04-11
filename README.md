@@ -113,9 +113,8 @@ Both applications provide interactive API documentation powered by Swagger UI:
 
 Access the interactive API documentation for the public-facing website:
 
-```
-http://localhost:3000/api-docs
-```
+- [Website Swagger UI (local)](http://localhost:3000/api-docs)
+- [Website OpenAPI JSON (local)](http://localhost:3000/api/swagger)
 
 **Available Endpoints:**
 
@@ -133,9 +132,8 @@ http://localhost:3000/api-docs
 
 Access the interactive API documentation for the admin panel:
 
-```
-http://localhost:3001/api-docs
-```
+- [Admin Swagger UI (local)](http://localhost:3001/api-docs)
+- [Admin OpenAPI JSON (local)](http://localhost:3001/api/swagger)
 
 **Available Endpoints:**
 
@@ -161,8 +159,8 @@ http://localhost:3001/api-docs
    ```
 
 2. **Navigate to the API docs:**
-   - Website: Open `http://localhost:3000/api-docs`
-   - Admin: Open `http://localhost:3001/api-docs`
+   - Website: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+   - Admin: [http://localhost:3001/api-docs](http://localhost:3001/api-docs)
 
 3. **Explore endpoints:**
    - Click on any endpoint to view details
@@ -188,8 +186,8 @@ http://localhost:3001/api-docs
 
 The raw OpenAPI 3.0 specifications are also available:
 
-- Website: `http://localhost:3000/api/swagger`
-- Admin: `http://localhost:3001/api/swagger`
+- Website: [http://localhost:3000/api/swagger](http://localhost:3000/api/swagger)
+- Admin: [http://localhost:3001/api/swagger](http://localhost:3001/api/swagger)
 
 You can import these into tools like Postman, Insomnia, or API testing frameworks.
 
