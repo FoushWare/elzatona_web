@@ -2,7 +2,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "installCommand": "true",
+  "installCommand": "npm install --prefer-offline --no-audit",
   "env": {
     "NODE_ENV": "production"
   },
