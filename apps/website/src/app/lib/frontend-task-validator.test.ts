@@ -348,7 +348,7 @@ describe("FrontendTaskValidator", () => {
         failedTests: 0,
         executionTime: 0,
       };
-      expect(sv.overallPassed).toBaDefined();
+      expect(sv.overallPassed).toBeDefined();
       expect(Array.isArray(sv.results)).toBe(true);
     });
   });
