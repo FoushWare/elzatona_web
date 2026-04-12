@@ -14,7 +14,7 @@ const Dialog = React.forwardRef<
     <dialog
       open
       ref={ref}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 py-8 overflow-y-auto"
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 py-8 overflow-y-auto"
       style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
       {...props}
     >
@@ -44,7 +44,7 @@ const DialogContent = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "relative z-[101] w-full max-w-lg rounded-xl border bg-white dark:bg-gray-900 p-6 shadow-2xl flex flex-col my-8",
+      "relative z-[201] w-full max-w-lg rounded-xl border bg-white dark:bg-gray-900 p-6 shadow-2xl flex flex-col my-8",
       className,
     )}
     {...(props as any)}

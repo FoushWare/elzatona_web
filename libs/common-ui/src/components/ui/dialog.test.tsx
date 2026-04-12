@@ -32,7 +32,7 @@ describe("Dialog", () => {
 
     const dialog = screen.getByRole("dialog");
     expect(dialog).toBeInTheDocument();
-    expect(dialog).toHaveClass("z-[100]");
+    expect(dialog).toHaveClass("z-[200]");
   });
 
   it("closes when the backdrop button is clicked", () => {
