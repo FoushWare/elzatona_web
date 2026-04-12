@@ -151,6 +151,7 @@ jobs:
       - name: Deploy website
         run: |
           set -euo pipefail
+          production_alias="zatonaweb-foushwares-projects.vercel.app"
           timeout 8m npx vercel pull --yes --environment=production --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
           timeout 20m npx vercel build --prod --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
           if [ ! -d "apps/website/.vercel/output" ]; then
@@ -160,15 +161,15 @@ jobs:
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy website attempt ${attempt}/6"
             deploy_log="$(mktemp)"
-            if timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log"; then
-              exit 0
-            fi
+            timeout 12m npx vercel deploy --prebuilt --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
             prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
             if [ -n "$prod_url" ]; then
-              echo "Deploy command failed but produced URL: $prod_url"
+              echo "Deploy command produced URL: $prod_url"
               if timeout 10m npx vercel inspect "$prod_url" --wait --timeout 10m --token=${{ secrets.VERCEL_TOKEN }}; then
-                echo "Website deployment completed successfully despite CLI error."
-                exit 0
+                if timeout 5m npx vercel alias set "$prod_url" "$production_alias" --token=${{ secrets.VERCEL_TOKEN }}; then
+                  echo "Website deployment promoted to production alias: $production_alias"
+                  exit 0
+                fi
               fi
             fi
             if [ "$attempt" -eq 6 ]; then
@@ -224,6 +225,7 @@ jobs:
       - name: Deploy admin
         run: |
           set -euo pipefail
+          production_alias="elzatona-admin-foushwares-projects.vercel.app"
           timeout 8m npx vercel pull --yes --environment=production --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
           timeout 20m npx vercel build --prod --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
           if [ ! -d "apps/admin/.vercel/output" ]; then
@@ -233,15 +235,15 @@ jobs:
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy admin attempt ${attempt}/6"
             deploy_log="$(mktemp)"
-            if timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log"; then
-              exit 0
-            fi
+            timeout 12m npx vercel deploy --prebuilt --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
             prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
             if [ -n "$prod_url" ]; then
-              echo "Deploy command failed but produced URL: $prod_url"
+              echo "Deploy command produced URL: $prod_url"
               if timeout 10m npx vercel inspect "$prod_url" --wait --timeout 10m --token=${{ secrets.VERCEL_TOKEN }}; then
-                echo "Admin deployment completed successfully despite CLI error."
-                exit 0
+                if timeout 5m npx vercel alias set "$prod_url" "$production_alias" --token=${{ secrets.VERCEL_TOKEN }}; then
+                  echo "Admin deployment promoted to production alias: $production_alias"
+                  exit 0
+                fi
               fi
             fi
             if [ "$attempt" -eq 6 ]; then
