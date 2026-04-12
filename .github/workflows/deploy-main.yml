@@ -159,8 +159,20 @@ jobs:
           fi
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy website attempt ${attempt}/6"
-            if timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}; then
+            deploy_log="$(mktemp)"
+            if timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log"; then
               exit 0
+            fi
+            prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
+            if [ -n "$prod_url" ]; then
+              echo "Deploy command failed but produced URL: $prod_url"
+              inspect_log="$(mktemp)"
+              if timeout 3m npx vercel inspect "$prod_url" --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$inspect_log"; then
+                if grep -Eiq 'ready|production' "$inspect_log"; then
+                  echo "Website deployment is reachable and ready despite CLI error."
+                  exit 0
+                fi
+              fi
             fi
             if [ "$attempt" -eq 6 ]; then
               echo "Website deployment failed after 6 attempts"
@@ -223,8 +235,20 @@ jobs:
           fi
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy admin attempt ${attempt}/6"
-            if timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}; then
+            deploy_log="$(mktemp)"
+            if timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log"; then
               exit 0
+            fi
+            prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
+            if [ -n "$prod_url" ]; then
+              echo "Deploy command failed but produced URL: $prod_url"
+              inspect_log="$(mktemp)"
+              if timeout 3m npx vercel inspect "$prod_url" --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$inspect_log"; then
+                if grep -Eiq 'ready|production' "$inspect_log"; then
+                  echo "Admin deployment is reachable and ready despite CLI error."
+                  exit 0
+                fi
+              fi
             fi
             if [ "$attempt" -eq 6 ]; then
               echo "Admin deployment failed after 6 attempts"
