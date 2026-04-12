@@ -153,7 +153,7 @@ jobs:
           set -euo pipefail
           production_alias="zatonaweb-foushwares-projects.vercel.app"
           timeout 8m npx vercel pull --yes --environment=production --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
-          timeout 20m npx vercel build --prod --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
+          timeout 20m npx vercel build --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
           if [ ! -d "apps/website/.vercel/output" ]; then
             echo "Website prebuilt output missing at apps/website/.vercel/output"
             exit 1
@@ -227,7 +227,7 @@ jobs:
           set -euo pipefail
           production_alias="elzatona-admin-foushwares-projects.vercel.app"
           timeout 8m npx vercel pull --yes --environment=production --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
-          timeout 20m npx vercel build --prod --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
+          timeout 20m npx vercel build --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
           if [ ! -d "apps/admin/.vercel/output" ]; then
             echo "Admin prebuilt output missing at apps/admin/.vercel/output"
             exit 1
