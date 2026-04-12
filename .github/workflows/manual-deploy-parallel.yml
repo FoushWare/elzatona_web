@@ -52,7 +52,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 10.33.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -86,8 +86,24 @@ jobs:
       - name: Bypass Vercel Nx Plugin
         run: mv nx.json nx.json.bak
 
+      - name: Prepare website package manifest for Vercel build
+        run: |
+          node -e 'const fs=require("fs");const p="apps/website/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\n");'
+
       - name: Deploy website to Vercel
-        run: npx vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            echo "Deploy website attempt ${attempt}/3"
+            if npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "Website deployment failed after 3 attempts"
+              exit 1
+            fi
+            echo "Retrying website deploy after transient failure..."
+          done
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}
@@ -109,7 +125,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 10.33.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -143,8 +159,24 @@ jobs:
       - name: Bypass Vercel Nx Plugin
         run: mv nx.json nx.json.bak
 
+      - name: Prepare admin package manifest for Vercel build
+        run: |
+          node -e 'const fs=require("fs");const p="apps/admin/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\n");'
+
       - name: Deploy admin to Vercel
-        run: npx vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            echo "Deploy admin attempt ${attempt}/3"
+            if npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "Admin deployment failed after 3 attempts"
+              exit 1
+            fi
+            echo "Retrying admin deploy after transient failure..."
+          done
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
