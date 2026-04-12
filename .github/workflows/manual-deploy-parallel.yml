@@ -93,16 +93,24 @@ jobs:
       - name: Deploy website to Vercel
         run: |
           set -euo pipefail
-          for attempt in 1 2 3; do
-            echo "Deploy website attempt ${attempt}/3"
-            if npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}; then
+          npx vercel pull --yes --environment=production --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
+          npx vercel build --prod --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
+          if [ ! -d "apps/website/.vercel/output" ]; then
+            echo "Website prebuilt output missing at apps/website/.vercel/output"
+            exit 1
+          fi
+          for attempt in 1 2 3 4 5 6; do
+            echo "Deploy website attempt ${attempt}/6"
+            if npx vercel deploy --prebuilt --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}; then
               exit 0
             fi
-            if [ "$attempt" -eq 3 ]; then
-              echo "Website deployment failed after 3 attempts"
+            if [ "$attempt" -eq 6 ]; then
+              echo "Website deployment failed after 6 attempts"
               exit 1
             fi
-            echo "Retrying website deploy after transient failure..."
+            sleep_seconds=$((attempt * 15))
+            echo "Retrying website deploy after transient failure in ${sleep_seconds}s..."
+            sleep "$sleep_seconds"
           done
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -166,16 +174,24 @@ jobs:
       - name: Deploy admin to Vercel
         run: |
           set -euo pipefail
-          for attempt in 1 2 3; do
-            echo "Deploy admin attempt ${attempt}/3"
-            if npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}; then
+          npx vercel pull --yes --environment=production --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
+          npx vercel build --prod --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
+          if [ ! -d "apps/admin/.vercel/output" ]; then
+            echo "Admin prebuilt output missing at apps/admin/.vercel/output"
+            exit 1
+          fi
+          for attempt in 1 2 3 4 5 6; do
+            echo "Deploy admin attempt ${attempt}/6"
+            if npx vercel deploy --prebuilt --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}; then
               exit 0
             fi
-            if [ "$attempt" -eq 3 ]; then
-              echo "Admin deployment failed after 3 attempts"
+            if [ "$attempt" -eq 6 ]; then
+              echo "Admin deployment failed after 6 attempts"
               exit 1
             fi
-            echo "Retrying admin deploy after transient failure..."
+            sleep_seconds=$((attempt * 15))
+            echo "Retrying admin deploy after transient failure in ${sleep_seconds}s..."
+            sleep "$sleep_seconds"
           done
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
