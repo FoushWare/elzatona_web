@@ -93,15 +93,15 @@ jobs:
       - name: Deploy website to Vercel
         run: |
           set -euo pipefail
-          npx vercel pull --yes --environment=production --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
-          npx vercel build --prod --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
+          timeout 8m npx vercel pull --yes --environment=production --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
+          timeout 20m npx vercel build --prod --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
           if [ ! -d "apps/website/.vercel/output" ]; then
             echo "Website prebuilt output missing at apps/website/.vercel/output"
             exit 1
           fi
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy website attempt ${attempt}/6"
-            if npx vercel deploy --prebuilt --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}; then
+            if timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}; then
               exit 0
             fi
             if [ "$attempt" -eq 6 ]; then
@@ -174,15 +174,15 @@ jobs:
       - name: Deploy admin to Vercel
         run: |
           set -euo pipefail
-          npx vercel pull --yes --environment=production --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
-          npx vercel build --prod --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
+          timeout 8m npx vercel pull --yes --environment=production --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
+          timeout 20m npx vercel build --prod --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
           if [ ! -d "apps/admin/.vercel/output" ]; then
             echo "Admin prebuilt output missing at apps/admin/.vercel/output"
             exit 1
           fi
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy admin attempt ${attempt}/6"
-            if npx vercel deploy --prebuilt --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}; then
+            if timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}; then
               exit 0
             fi
             if [ "$attempt" -eq 6 ]; then
