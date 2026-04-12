@@ -1,14 +1,16 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 import { config } from "dotenv";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
 import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
 // CRITICAL: Load environment-specific files BEFORE Next.js loads .env.local
 // This ensures NEXT_PUBLIC_ variables are set correctly
 // Next.js loads .env.local automatically, so we need to override it early
 
 const projectRoot = process.cwd();
+const configDir = dirname(fileURLToPath(import.meta.url));
 
 // Load .env.test.local FIRST if APP_ENV is test (highest priority)
 if (
@@ -51,7 +53,9 @@ const nextConfig: NextConfig = {
   // This ensures Next.js finds pages in apps/website/src/app/
 
   // Turbopack configuration
-  turbopack: {},
+  turbopack: {
+    root: configDir,
+  },
 
   // Skip static generation for problematic pages
   trailingSlash: false,
