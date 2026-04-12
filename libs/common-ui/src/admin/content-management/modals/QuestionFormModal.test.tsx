@@ -25,12 +25,14 @@ describe("QuestionFormModal", () => {
   };
 
   it("renders create mode by default", () => {
-    render(<QuestionFormModal {...defaultProps} />);
+    const { container } = render(<QuestionFormModal {...defaultProps} />);
 
     expect(
       screen.getByRole("heading", { name: "Create New Question" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("dialog")).toHaveClass("z-[100]");
+    expect(screen.getByRole("dialog")).toHaveClass("z-[200]");
+    expect(container.querySelector("dialog > div")).toHaveClass("h-[100dvh]");
+    expect(container.querySelector("dialog > div")).toHaveClass("w-[100vw]");
   });
 
   it("renders view mode when readOnly is true", () => {
