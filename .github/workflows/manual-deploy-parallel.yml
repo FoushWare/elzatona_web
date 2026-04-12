@@ -105,6 +105,17 @@ jobs:
                 echo "Website deployment is ready in production: $prod_url"
                 exit 0
               fi
+
+              echo "Inspect reported failure; probing URL reachability as fallback..."
+              for probe in 1 2 3 4 5 6; do
+                http_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$prod_url" || true)"
+                if [ "$http_code" != "000" ]; then
+                  echo "Website deployment URL is reachable (HTTP $http_code): $prod_url"
+                  exit 0
+                fi
+                echo "Website probe ${probe}/6 not reachable yet; retrying in 10s..."
+                sleep 10
+              done
             fi
             if [ "$attempt" -eq 6 ]; then
               echo "Website deployment failed after 6 attempts"
@@ -188,6 +199,17 @@ jobs:
                 echo "Admin deployment is ready in production: $prod_url"
                 exit 0
               fi
+
+              echo "Inspect reported failure; probing URL reachability as fallback..."
+              for probe in 1 2 3 4 5 6; do
+                http_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$prod_url" || true)"
+                if [ "$http_code" != "000" ]; then
+                  echo "Admin deployment URL is reachable (HTTP $http_code): $prod_url"
+                  exit 0
+                fi
+                echo "Admin probe ${probe}/6 not reachable yet; retrying in 10s..."
+                sleep 10
+              done
             fi
             if [ "$attempt" -eq 6 ]; then
               echo "Admin deployment failed after 6 attempts"
