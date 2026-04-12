@@ -166,12 +166,9 @@ jobs:
             prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
             if [ -n "$prod_url" ]; then
               echo "Deploy command failed but produced URL: $prod_url"
-              inspect_log="$(mktemp)"
-              if timeout 3m npx vercel inspect "$prod_url" --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$inspect_log"; then
-                if grep -Eiq 'ready|production' "$inspect_log"; then
-                  echo "Website deployment is reachable and ready despite CLI error."
-                  exit 0
-                fi
+              if timeout 10m npx vercel inspect "$prod_url" --wait --timeout 10m --token=${{ secrets.VERCEL_TOKEN }}; then
+                echo "Website deployment completed successfully despite CLI error."
+                exit 0
               fi
             fi
             if [ "$attempt" -eq 6 ]; then
@@ -242,12 +239,9 @@ jobs:
             prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
             if [ -n "$prod_url" ]; then
               echo "Deploy command failed but produced URL: $prod_url"
-              inspect_log="$(mktemp)"
-              if timeout 3m npx vercel inspect "$prod_url" --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$inspect_log"; then
-                if grep -Eiq 'ready|production' "$inspect_log"; then
-                  echo "Admin deployment is reachable and ready despite CLI error."
-                  exit 0
-                fi
+              if timeout 10m npx vercel inspect "$prod_url" --wait --timeout 10m --token=${{ secrets.VERCEL_TOKEN }}; then
+                echo "Admin deployment completed successfully despite CLI error."
+                exit 0
               fi
             fi
             if [ "$attempt" -eq 6 ]; then
