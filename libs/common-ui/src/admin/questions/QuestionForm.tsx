@@ -78,7 +78,10 @@ const InputField = ({
   label: string;
 }) => (
   <div>
-    <Label htmlFor={id} className="text-sm font-medium">
+    <Label
+      htmlFor={id}
+      className="text-sm font-medium text-gray-700 dark:text-gray-200"
+    >
       {label}
     </Label>
     <Input
@@ -89,7 +92,7 @@ const InputField = ({
       required={required}
       readOnly={readOnly}
       disabled={disabled}
-      className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""} ${className}`}
+      className={`mt-1 border-gray-300 bg-white text-gray-900 placeholder:text-gray-500 transition-colors hover:border-blue-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-400 dark:hover:border-blue-500 ${readOnly ? "bg-gray-100 text-gray-700 dark:bg-gray-800/60 dark:text-gray-200 cursor-text" : ""} ${className}`}
       placeholder={placeholder}
     />
   </div>
@@ -113,11 +116,13 @@ const SelectField = ({
   placeholder?: string;
 }) => (
   <div>
-    <Label className="text-sm font-medium">{label}</Label>
+    <Label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+      {label}
+    </Label>
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger
         disabled={disabled}
-        className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-not-allowed" : ""}`}
+        className={`mt-1 border-gray-300 bg-white text-gray-900 transition-colors hover:border-blue-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:border-blue-500 ${readOnly ? "bg-gray-100 text-gray-700 dark:bg-gray-800/60 dark:text-gray-200 cursor-not-allowed" : ""}`}
       >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
@@ -306,11 +311,15 @@ export const AdminQuestionForm = React.forwardRef<
     const difficulties = ["beginner", "intermediate", "advanced"];
 
     return (
-      <form ref={ref} onSubmit={handleSubmit} className="space-y-6">
+      <form
+        ref={ref}
+        onSubmit={handleSubmit}
+        className="space-y-6 text-gray-900 dark:text-gray-100"
+      >
         {/* Header Section - Collapsible */}
         <Collapsible open={showQuestionInfo} onOpenChange={setShowQuestionInfo}>
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border">
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-6 pb-4 hover:text-primary transition-colors">
+            <CollapsibleTrigger className="flex w-full items-center justify-between p-6 pb-4 transition-colors hover:text-blue-700 dark:hover:text-blue-300">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Question Information
               </h3>
@@ -407,9 +416,9 @@ export const AdminQuestionForm = React.forwardRef<
 
         {/* Content Section - Collapsible */}
         <Collapsible open={showContent} onOpenChange={setShowContent}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg border shadow-sm">
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-6 pb-4 hover:text-primary transition-colors">
-              <h4 className="text-lg font-semibold flex items-center gap-2">
+          <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <CollapsibleTrigger className="flex w-full items-center justify-between p-6 pb-4 transition-colors hover:text-blue-700 dark:hover:text-blue-300">
+              <h4 className="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
                 <BookOpen className="w-5 h-5 text-blue-600" />
                 Question Content
               </h4>
@@ -432,7 +441,7 @@ export const AdminQuestionForm = React.forwardRef<
                   required={!readOnly}
                   readOnly={readOnly}
                   disabled={readOnly}
-                  className={`mt-1 w-full resize-y ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""}`}
+                  className={`mt-1 w-full resize-y border-gray-300 bg-white text-gray-900 placeholder:text-gray-500 transition-colors hover:border-blue-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-400 dark:hover:border-blue-500 ${readOnly ? "bg-gray-100 text-gray-700 dark:bg-gray-800/60 dark:text-gray-200 cursor-text" : ""}`}
                   placeholder="Enter the question content..."
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
@@ -446,10 +455,10 @@ export const AdminQuestionForm = React.forwardRef<
         {/* Options Section for Multiple Choice Questions - Collapsible */}
         {formData.type === "multiple-choice" && (
           <Collapsible open={showOptions} onOpenChange={setShowOptions}>
-            <div className="bg-white dark:bg-gray-800 rounded-lg border shadow-sm">
+            <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
               <div className="flex items-center justify-between p-6 pb-4">
-                <CollapsibleTrigger className="flex items-center gap-2 hover:text-primary transition-colors flex-1">
-                  <h4 className="text-lg font-semibold flex items-center gap-2">
+                <CollapsibleTrigger className="flex flex-1 items-center gap-2 transition-colors hover:text-blue-700 dark:hover:text-blue-300">
+                  <h4 className="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
                     <TrendingUp className="w-5 h-5 text-purple-600" />
                     Answer Options
                   </h4>
@@ -478,7 +487,7 @@ export const AdminQuestionForm = React.forwardRef<
                         ],
                       }));
                     }}
-                    className="bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200"
+                    className="border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100 dark:border-purple-700 dark:bg-purple-900/30 dark:text-purple-200 dark:hover:bg-purple-900/40"
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Add Option
@@ -528,7 +537,7 @@ export const AdminQuestionForm = React.forwardRef<
                             readOnly={readOnly}
                             disabled={readOnly}
                             placeholder={`Option ${String.fromCodePoint(65 + index)}`}
-                            className={`border-0 bg-transparent p-0 text-sm ${readOnly ? "cursor-text" : ""}`}
+                            className={`border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 transition-colors hover:border-blue-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-400 dark:hover:border-blue-500 ${readOnly ? "bg-gray-100 text-gray-700 dark:bg-gray-800/60 dark:text-gray-200 cursor-text" : ""}`}
                           />
                         </div>
 
@@ -552,7 +561,7 @@ export const AdminQuestionForm = React.forwardRef<
                             }}
                             disabled={readOnly}
                           />
-                          <Label className="text-sm font-medium">
+                          <Label className="text-sm font-medium text-gray-700 dark:text-gray-200">
                             {option.isCorrect ? "✅ Correct" : "❌ Incorrect"}
                           </Label>
                         </div>
@@ -571,7 +580,7 @@ export const AdminQuestionForm = React.forwardRef<
                                 options: newOptions,
                               }));
                             }}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-300 dark:hover:bg-red-900/30 dark:hover:text-red-200"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
@@ -599,9 +608,9 @@ export const AdminQuestionForm = React.forwardRef<
 
         {/* Answer/Explanation Section - Collapsible */}
         <Collapsible open={showExplanation} onOpenChange={setShowExplanation}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg border shadow-sm">
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-6 pb-4 hover:text-primary transition-colors">
-              <h4 className="text-lg font-semibold flex items-center gap-2">
+          <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <CollapsibleTrigger className="flex w-full items-center justify-between p-6 pb-4 transition-colors hover:text-blue-700 dark:hover:text-blue-300">
+              <h4 className="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
                 <HelpCircle className="w-5 h-5 text-orange-600" />
                 {formData.type === "multiple-choice"
                   ? "Explanation"
@@ -610,7 +619,10 @@ export const AdminQuestionForm = React.forwardRef<
               <ChevronIcon show={showExplanation} readOnly={readOnly} />
             </CollapsibleTrigger>
             <CollapsibleContent className="px-6 pb-6">
-              <Label htmlFor="explanation" className="text-sm font-medium">
+              <Label
+                htmlFor="explanation"
+                className="text-sm font-medium text-gray-700 dark:text-gray-200"
+              >
                 {formData.type === "multiple-choice" ? "Explanation" : "Answer"}
               </Label>
               <Textarea
@@ -621,7 +633,7 @@ export const AdminQuestionForm = React.forwardRef<
                 rows={4}
                 readOnly={readOnly}
                 disabled={readOnly}
-                className={`mt-1 ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""}`}
+                className={`mt-1 border-gray-300 bg-white text-gray-900 placeholder:text-gray-500 transition-colors hover:border-blue-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-400 dark:hover:border-blue-500 ${readOnly ? "bg-gray-100 text-gray-700 dark:bg-gray-800/60 dark:text-gray-200 cursor-text" : ""}`}
                 placeholder={
                   formData.type === "multiple-choice"
                     ? "Enter explanation for the correct answer..."
@@ -634,16 +646,19 @@ export const AdminQuestionForm = React.forwardRef<
 
         {/* Learning Resources Section - Collapsible */}
         <Collapsible open={showResources} onOpenChange={setShowResources}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg border shadow-sm">
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-6 pb-4 hover:text-primary transition-colors">
-              <h4 className="text-lg font-semibold flex items-center gap-2">
+          <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <CollapsibleTrigger className="flex w-full items-center justify-between p-6 pb-4 transition-colors hover:text-blue-700 dark:hover:text-blue-300">
+              <h4 className="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
                 <BookOpen className="w-5 h-5 text-blue-600" />
                 Learning Resources (Optional)
               </h4>
               <ChevronIcon show={showResources} readOnly={readOnly} />
             </CollapsibleTrigger>
             <CollapsibleContent className="px-6 pb-6">
-              <Label htmlFor="resources" className="text-sm font-medium">
+              <Label
+                htmlFor="resources"
+                className="text-sm font-medium text-gray-700 dark:text-gray-200"
+              >
                 Resources (JSON Format)
               </Label>
               <Textarea
@@ -658,7 +673,7 @@ export const AdminQuestionForm = React.forwardRef<
                 rows={8}
                 readOnly={readOnly}
                 disabled={readOnly}
-                className={`mt-1 font-mono text-sm ${readOnly ? "bg-gray-50 dark:bg-gray-900 cursor-text" : ""}`}
+                className={`mt-1 border-gray-300 bg-white font-mono text-sm text-gray-900 placeholder:text-gray-500 transition-colors hover:border-blue-300 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-400 dark:hover:border-blue-500 ${readOnly ? "bg-gray-100 text-gray-700 dark:bg-gray-800/60 dark:text-gray-200 cursor-text" : ""}`}
                 placeholder={`[\n  {\n    "type": "video",\n    "title": "Video Title",\n    "url": "https://example.com/video",\n    "description": "Video description",\n    "duration": "10:30"\n  },\n  {\n    "type": "article",\n    "title": "Article Title",\n    "url": "https://example.com/article",\n    "description": "Article description"\n  }\n]`}
               />
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
@@ -675,9 +690,9 @@ export const AdminQuestionForm = React.forwardRef<
           open={showAdditionalSettings}
           onOpenChange={setShowAdditionalSettings}
         >
-          <div className="bg-white dark:bg-gray-800 rounded-lg border shadow-sm">
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-6 pb-4 hover:text-primary transition-colors">
-              <h4 className="text-lg font-semibold flex items-center gap-2">
+          <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <CollapsibleTrigger className="flex w-full items-center justify-between p-6 pb-4 transition-colors hover:text-blue-700 dark:hover:text-blue-300">
+              <h4 className="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
                 <BarChart3 className="w-5 h-5 text-gray-600" />
                 Additional Settings
               </h4>
@@ -695,7 +710,10 @@ export const AdminQuestionForm = React.forwardRef<
                   }
                   disabled={readOnly}
                 />
-                <Label htmlFor="isActive" className="text-sm font-medium">
+                <Label
+                  htmlFor="isActive"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-200"
+                >
                   Question is Active
                 </Label>
               </div>
