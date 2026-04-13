@@ -118,11 +118,11 @@ const TopicNode: React.FC<{
       id={`topic-${topic.id}`}
       className="border-l-2 border-gray-100 pl-4 py-2"
     >
-      <div className="flex items-center justify-between gap-4 p-2 rounded transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+      <div className="flex items-center justify-between gap-4 rounded p-2 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
         {/* Left section: expandable content with description */}
         <button
           type="button"
-          className="flex min-w-0 flex-1 items-center space-x-3 text-left"
+          className="flex min-w-0 flex-1 items-start space-x-3 text-left"
           onClick={() => toggleTopic(topic.id)}
         >
           <div className="flex items-center space-x-2 shrink-0">
@@ -135,18 +135,18 @@ const TopicNode: React.FC<{
             </div>
             <Target className="h-4 w-4 text-orange-600" />
           </div>
-          <div className="min-w-0 text-left flex-1">
-            <h5 className="font-medium text-gray-900 dark:text-white">
+          <div className="min-w-0 flex-1 text-left">
+            <h5 className="break-words font-medium text-gray-900 dark:text-white">
               {topic.name}
             </h5>
-            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">
+            <p className="line-clamp-1 break-words text-sm text-gray-600 dark:text-gray-400">
               {topic.description}
             </p>
           </div>
         </button>
 
         {/* Right section: badges and action buttons - fixed width */}
-        <div className="flex shrink-0 items-center space-x-2 ml-4">
+        <div className="ml-4 flex shrink-0 items-center justify-end space-x-2">
           <Badge
             variant="outline"
             className="shrink-0 whitespace-nowrap bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
@@ -270,18 +270,18 @@ const CategoryNode: React.FC<{
             </div>
             <BookOpen className="h-4 w-4 text-purple-600" />
           </div>
-          <div className="min-w-0 text-left flex-1">
-            <h4 className="font-medium text-gray-900 dark:text-white">
+          <div className="min-w-0 flex-1 text-left">
+            <h4 className="break-words font-medium text-gray-900 dark:text-white">
               {category.name}
             </h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">
+            <p className="line-clamp-1 break-words text-sm text-gray-600 dark:text-gray-400">
               {category.description}
             </p>
           </div>
         </div>
 
         {/* Right section: badge with topic count */}
-        <div className="flex shrink-0 items-center ml-4">
+        <div className="ml-4 flex shrink-0 items-center justify-end">
           <Badge
             variant="outline"
             className="shrink-0 whitespace-nowrap bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
@@ -370,7 +370,7 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
         style={{ borderLeftColor: card.color }}
       >
         <CardHeader className="pb-3 border-b-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group">
-          <div className="flex items-center justify-between">
+          <div className="flex items-start justify-between gap-4">
             <button
               type="button"
               className="flex min-w-0 flex-1 items-start space-x-3 text-left"
@@ -387,16 +387,16 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                 className="h-5 w-5"
                 style={{ color: card.color }}
               />
-              <div className="min-w-0 text-left">
+              <div className="min-w-0 flex-1 text-left">
                 <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
                   {card.title}
                 </CardTitle>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="break-words text-sm text-gray-600 dark:text-gray-400">
                   {card.description}
                 </p>
               </div>
             </button>
-            <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
+            <div className="flex shrink-0 items-center justify-end gap-2">
               <Badge
                 variant="outline"
                 className="shrink-0 whitespace-nowrap bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"

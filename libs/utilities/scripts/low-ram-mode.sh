@@ -9,11 +9,12 @@ export JEST_MAX_WORKERS="1"
 case "$MODE" in
   website)
     echo "Starting website in low-RAM mode..."
-    exec npm run dev:turbo
+    exec npm run dev:standard
     ;;
   admin)
     echo "Starting admin in low-RAM mode..."
-    exec NODE_OPTIONS="--max-old-space-size=1536" npm run dev:admin
+    export NODE_OPTIONS="--max-old-space-size=1536"
+    exec npm run dev:admin:standard
     ;;
   check)
     echo "Running low-RAM checks..."
