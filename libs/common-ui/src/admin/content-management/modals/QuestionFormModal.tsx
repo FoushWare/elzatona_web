@@ -47,7 +47,10 @@ export const QuestionFormModal: React.FC<QuestionFormModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="z-[200] h-[100dvh] w-[100vw] max-w-none overflow-hidden rounded-none border-0 p-0">
+      <DialogContent
+        className="z-[200] h-[100dvh] w-[100vw] max-w-none overflow-hidden rounded-none border-0 p-0"
+        onOpenChange={onOpenChange}
+      >
         <div className="flex h-full flex-col bg-white dark:bg-gray-900">
           <DialogHeader className="px-6 pt-6 pb-4 flex-shrink-0">
             <DialogTitle className="flex items-center space-x-2">

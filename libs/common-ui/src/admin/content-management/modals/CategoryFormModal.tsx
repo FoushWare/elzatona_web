@@ -67,7 +67,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-w-2xl">
+      <DialogContent className="w-full max-w-2xl" onOpenChange={onOpenChange}>
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <FolderOpen className="h-5 w-5 text-green-600" />
