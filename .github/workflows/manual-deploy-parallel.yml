@@ -86,18 +86,14 @@ jobs:
       - name: Bypass Vercel Nx Plugin
         run: mv nx.json nx.json.bak
 
-      - name: Prepare website package manifest for Vercel build
-        run: |
-          node -e 'const fs=require("fs");const p="apps/website/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\n");'
-
       - name: Deploy website to Vercel
         run: |
           set -euo pipefail
-          timeout 8m npx vercel pull --yes --environment=production --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
+          timeout 8m npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy website attempt ${attempt}/6"
             deploy_log="$(mktemp)"
-            timeout 20m npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
+            timeout 20m npx vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
             prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
             if [ -n "$prod_url" ]; then
               echo "Deploy command produced URL: $prod_url"
@@ -105,17 +101,7 @@ jobs:
                 echo "Website deployment is ready in production: $prod_url"
                 exit 0
               fi
-
-              echo "Inspect reported failure; probing URL reachability as fallback..."
-              for probe in 1 2 3 4 5 6; do
-                http_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$prod_url" || true)"
-                if [ "$http_code" != "000" ]; then
-                  echo "Website deployment URL is reachable (HTTP $http_code): $prod_url"
-                  exit 0
-                fi
-                echo "Website probe ${probe}/6 not reachable yet; retrying in 10s..."
-                sleep 10
-              done
+              echo "Website inspect reported deployment not ready or failed; retrying..."
             fi
             if [ "$attempt" -eq 6 ]; then
               echo "Website deployment failed after 6 attempts"
@@ -180,18 +166,14 @@ jobs:
       - name: Bypass Vercel Nx Plugin
         run: mv nx.json nx.json.bak
 
-      - name: Prepare admin package manifest for Vercel build
-        run: |
-          node -e 'const fs=require("fs");const p="apps/admin/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\n");'
-
       - name: Deploy admin to Vercel
         run: |
           set -euo pipefail
-          timeout 8m npx vercel pull --yes --environment=production --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
+          timeout 8m npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy admin attempt ${attempt}/6"
             deploy_log="$(mktemp)"
-            timeout 20m npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
+            timeout 20m npx vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
             prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
             if [ -n "$prod_url" ]; then
               echo "Deploy command produced URL: $prod_url"
@@ -199,17 +181,7 @@ jobs:
                 echo "Admin deployment is ready in production: $prod_url"
                 exit 0
               fi
-
-              echo "Inspect reported failure; probing URL reachability as fallback..."
-              for probe in 1 2 3 4 5 6; do
-                http_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$prod_url" || true)"
-                if [ "$http_code" != "000" ]; then
-                  echo "Admin deployment URL is reachable (HTTP $http_code): $prod_url"
-                  exit 0
-                fi
-                echo "Admin probe ${probe}/6 not reachable yet; retrying in 10s..."
-                sleep 10
-              done
+              echo "Admin inspect reported deployment not ready or failed; retrying..."
             fi
             if [ "$attempt" -eq 6 ]; then
               echo "Admin deployment failed after 6 attempts"
