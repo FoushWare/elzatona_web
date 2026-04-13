@@ -9,13 +9,24 @@ const Dialog = React.forwardRef<
     onOpenChange?: (open: boolean) => void;
   }
 >(({ className: _className, open, onOpenChange, children, ...props }, ref) => {
+  React.useEffect(() => {
+    if (!open) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
   if (!open) return null;
 
   return (
     <dialog
       open
       ref={ref}
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
+      className="fixed inset-0 z-[200] m-0 flex min-h-screen w-screen items-center justify-center p-4 sm:p-6"
       style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
       {...props}
     >
