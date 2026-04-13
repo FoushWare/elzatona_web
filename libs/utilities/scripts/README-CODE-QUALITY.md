@@ -66,6 +66,11 @@ npm run sonar:light
 
 # Quick mode (skip tests and build)
 npm run sonar:quick
+
+# Generate actionable issue reports (recommended first step)
+npm run sonar:report
+npm run sonar:report:blockers
+npm run sonar:report:new-code
 ```
 
 **Prerequisites:**
@@ -243,6 +248,16 @@ npm run sonar:light
 # Or set memory limit
 export SONAR_MEMORY_LIMIT=1024
 npm run sonar
+
+# Low-RAM workflow (8GB machines)
+npm run cleanup:build-cache
+npm run system:memory
+npm run check:low-ram
+
+# Prefer report-first Sonar flow before full scans
+npm run sonar:report:blockers
+# fix issues
+npm run sonar:report:new-code
 ```
 
 ## Integration with Git Hooks

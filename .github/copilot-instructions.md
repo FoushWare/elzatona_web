@@ -46,6 +46,29 @@
 - Most test scripts run with constrained memory/workers by design. Preserve existing flags unless intentionally tuning performance.
 - Use environment setup docs before running app/test commands: [docs/flows/environment-setup.md](../docs/flows/environment-setup.md).
 
+## Low-Resource AI Workflow
+
+- This repository is frequently developed on 8GB RAM machines. Prefer low-memory workflows by default.
+- Before heavy analysis, use focused queries and narrow file scopes. Avoid broad full-repo scans unless explicitly requested.
+- Prefer low-memory scripts when available:
+  - `npm run dev:low-ram`
+  - `npm run dev:low-ram:admin`
+  - `npm run check:low-ram`
+  - `npm run sonar:light`
+  - `npm run sonar:quick`
+  - `npm run sonar:report:blockers`
+- During issue fixing, run report-first Sonar flow:
+  1. `npm run sonar:report:blockers`
+  2. fix listed files/issues
+  3. `npm run sonar:report:new-code`
+  4. run `npm run sonar:light` only when needed
+- For local dev and tests, keep workers low and preserve existing memory limits in package scripts.
+- Do not run multiple heavyweight processes in parallel (for example: full Sonar scan + E2E + multiple dev servers).
+- Do not require Java/Sonar extensions in editor for routine coding; prefer on-demand CLI scans.
+- If memory pressure is high, prioritize these commands:
+  - `npm run cleanup:build-cache`
+  - `npm run system:memory`
+
 ## Conventions
 
 - Keep unit/integration tests co-located with source files; keep E2E in [tests/e2e](../tests/e2e). See [docs/testing/TEST_ORGANIZATION.md](../docs/testing/TEST_ORGANIZATION.md).
