@@ -58,6 +58,7 @@ export {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
+  DialogClose,
 } from "./components/ui/dialog";
 export {
   QuestionContent,
