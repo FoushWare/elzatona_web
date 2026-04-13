@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../utils";
+import { X } from "lucide-react";
 
 const Dialog = React.forwardRef<
   HTMLDialogElement,
@@ -39,8 +40,10 @@ Dialog.displayName = "Dialog";
 
 const DialogContent = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement> & {
+    onOpenChange?: (open: boolean) => void;
+  }
+>(({ className, onOpenChange, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
@@ -48,7 +51,19 @@ const DialogContent = React.forwardRef<
       className,
     )}
     {...(props as any)}
-  />
+  >
+    {onOpenChange && (
+      <button
+        type="button"
+        onClick={() => onOpenChange(false)}
+        className="absolute top-4 right-4 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors z-[202]"
+        aria-label="Close dialog"
+      >
+        <X className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+      </button>
+    )}
+    {props.children}
+  </div>
 ));
 DialogContent.displayName = "DialogContent";
 
@@ -126,6 +141,21 @@ const DialogTrigger = React.forwardRef<
 ));
 DialogTrigger.displayName = "DialogTrigger";
 
+const DialogClose = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => (
+  <button
+    ref={ref}
+    className={cn(
+      "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+      className,
+    )}
+    {...(props as any)}
+  />
+));
+DialogClose.displayName = "DialogClose";
+
 export {
   Dialog,
   DialogContent,
@@ -134,4 +164,5 @@ export {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 };

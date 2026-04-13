@@ -37,7 +37,10 @@ export const DeleteConfirmationModal: React.FC<
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md mx-auto my-auto">
+      <DialogContent
+        className="max-w-md mx-auto my-auto"
+        onOpenChange={onOpenChange}
+      >
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Trash2 className="h-5 w-5 text-red-600" />

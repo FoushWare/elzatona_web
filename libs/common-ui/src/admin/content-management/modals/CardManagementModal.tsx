@@ -49,7 +49,10 @@ export const CardManagementModal: React.FC<CardManagementModalProps> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col mx-auto my-auto">
+      <DialogContent
+        className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col mx-auto my-auto"
+        onOpenChange={onOpenChange}
+      >
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Layers className="h-5 w-5 text-blue-600" />
