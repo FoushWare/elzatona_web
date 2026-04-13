@@ -48,7 +48,7 @@ export const QuestionFormModal: React.FC<QuestionFormModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
-        className="fixed inset-0 z-[201] m-0 h-screen w-screen h-[100dvh] w-[100vw] max-h-none max-w-none overflow-hidden rounded-none border-0 p-0"
+        className="fixed inset-x-0 top-3 bottom-0 z-[201] m-0 h-[calc(100dvh-0.75rem)] w-screen h-[100dvh] w-[100vw] max-h-none max-w-none overflow-hidden rounded-t-2xl border-0 p-0"
         onOpenChange={onOpenChange}
       >
         <div className="flex h-full flex-col bg-white dark:bg-gray-900">
@@ -72,7 +72,7 @@ export const QuestionFormModal: React.FC<QuestionFormModalProps> = ({
               readOnly={readOnly}
             />
             {isLoading && (
-              <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-50">
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/60 dark:bg-gray-900/70">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
               </div>
             )}
