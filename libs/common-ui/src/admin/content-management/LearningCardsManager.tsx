@@ -118,28 +118,35 @@ const TopicNode: React.FC<{
       id={`topic-${topic.id}`}
       className="border-l-2 border-gray-100 pl-4 py-2"
     >
-      <div className="flex items-start justify-between gap-4 p-2 rounded transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+      <div className="flex items-center justify-between gap-4 p-2 rounded transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+        {/* Left section: expandable content with description */}
         <button
           type="button"
-          className="flex min-w-0 flex-1 items-start space-x-2 text-left"
+          className="flex min-w-0 flex-1 items-center space-x-3 text-left"
           onClick={() => toggleTopic(topic.id)}
         >
-          <div className="p-1">
-            {expandedTopics.has(topic.id) ? (
-              <ChevronDown className="h-4 w-4 text-gray-500" />
-            ) : (
-              <ChevronRight className="h-4 w-4 text-gray-500" />
-            )}
+          <div className="flex items-center space-x-2 shrink-0">
+            <div className="p-1">
+              {expandedTopics.has(topic.id) ? (
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              ) : (
+                <ChevronRight className="h-4 w-4 text-gray-500" />
+              )}
+            </div>
+            <Target className="h-4 w-4 text-orange-600" />
           </div>
-          <Target className="h-4 w-4 text-orange-600" />
-          <div className="min-w-0 text-left">
-            <h5 className="font-medium">{topic.name}</h5>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="min-w-0 text-left flex-1">
+            <h5 className="font-medium text-gray-900 dark:text-white">
+              {topic.name}
+            </h5>
+            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">
               {topic.description}
             </p>
           </div>
         </button>
-        <div className="flex shrink-0 items-center space-x-2">
+
+        {/* Right section: badges and action buttons - fixed width */}
+        <div className="flex shrink-0 items-center space-x-2 ml-4">
           <Badge
             variant="outline"
             className="shrink-0 whitespace-nowrap bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
@@ -248,26 +255,33 @@ const CategoryNode: React.FC<{
     >
       <button
         type="button"
-        className="flex items-start justify-between gap-4 py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition-colors"
+        className="flex items-center justify-between gap-4 py-2 px-2 rounded transition-colors w-full hover:bg-gray-50 dark:hover:bg-gray-800"
         onClick={() => toggleCategory(category.id)}
       >
-        <div className="flex min-w-0 flex-1 items-start space-x-2">
-          <div className="p-1">
-            {expandedCategories.has(category.id) ? (
-              <ChevronDown className="h-4 w-4 text-gray-500" />
-            ) : (
-              <ChevronRight className="h-4 w-4 text-gray-500" />
-            )}
+        {/* Left section: description and metadata */}
+        <div className="flex min-w-0 flex-1 items-center space-x-3">
+          <div className="flex items-center space-x-2 shrink-0">
+            <div className="p-1">
+              {expandedCategories.has(category.id) ? (
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              ) : (
+                <ChevronRight className="h-4 w-4 text-gray-500" />
+              )}
+            </div>
+            <BookOpen className="h-4 w-4 text-purple-600" />
           </div>
-          <BookOpen className="h-4 w-4 text-purple-600" />
-          <div className="min-w-0 text-left">
-            <h4 className="font-medium">{category.name}</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="min-w-0 text-left flex-1">
+            <h4 className="font-medium text-gray-900 dark:text-white">
+              {category.name}
+            </h4>
+            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">
               {category.description}
             </p>
           </div>
         </div>
-        <div className="flex shrink-0 items-center space-x-2">
+
+        {/* Right section: badge with topic count */}
+        <div className="flex shrink-0 items-center ml-4">
           <Badge
             variant="outline"
             className="shrink-0 whitespace-nowrap bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
