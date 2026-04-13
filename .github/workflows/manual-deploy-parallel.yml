@@ -83,9 +83,6 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Bypass Vercel Nx Plugin
-        run: mv nx.json nx.json.bak
-
       - name: Deploy website to Vercel
         run: |
           set -euo pipefail
@@ -163,9 +160,6 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-
-      - name: Bypass Vercel Nx Plugin
-        run: mv nx.json nx.json.bak
 
       - name: Deploy admin to Vercel
         run: |
