@@ -144,15 +144,20 @@ jobs:
           fi
           echo "VERCEL_TOKEN is configured"
 
+      - name: Bypass Vercel Nx Plugin (website)
+        run: |
+          if [ -f nx.json ]; then
+            mv nx.json nx.json.bak
+          fi
+
       - name: Deploy website
         run: |
           set -euo pipefail
           timeout 8m npx vercel pull --yes --environment=production --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
-          timeout 20m npx vercel build --prod --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
           for attempt in 1 2 3 4 5 6; do
-            echo "Deploy prebuilt website attempt ${attempt}/6"
+            echo "Deploy website attempt ${attempt}/6"
             deploy_log="$(mktemp)"
-            timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
+            timeout 20m npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
             if grep -Eq 'status[[:space:]]*● Error|Failed to process project graph|Could not find ".modules.yaml"|Error: Command "npx nx build|Error: Command "npm run build" exited with 1' "$deploy_log"; then
               echo "Deploy output indicates explicit build failure; failing deployment step."
               exit 1
@@ -220,15 +225,20 @@ jobs:
           fi
           echo "VERCEL_TOKEN is configured"
 
+      - name: Bypass Vercel Nx Plugin (admin)
+        run: |
+          if [ -f nx.json ]; then
+            mv nx.json nx.json.bak
+          fi
+
       - name: Deploy admin
         run: |
           set -euo pipefail
           timeout 8m npx vercel pull --yes --environment=production --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
-          timeout 20m npx vercel build --prod --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
           for attempt in 1 2 3 4 5 6; do
-            echo "Deploy prebuilt admin attempt ${attempt}/6"
+            echo "Deploy admin attempt ${attempt}/6"
             deploy_log="$(mktemp)"
-            timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
+            timeout 20m npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
             if grep -Eq 'status[[:space:]]*● Error|Failed to process project graph|Could not find ".modules.yaml"|Error: Command "npx nx build|Error: Command "npm run build" exited with 1' "$deploy_log"; then
               echo "Deploy output indicates explicit build failure; failing deployment step."
               exit 1
