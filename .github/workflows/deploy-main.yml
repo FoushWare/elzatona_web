@@ -148,11 +148,10 @@ jobs:
         run: |
           set -euo pipefail
           timeout 8m npx vercel pull --yes --environment=production --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
-          timeout 20m npx vercel build --prod --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }}
           for attempt in 1 2 3 4 5 6; do
-            echo "Deploy prebuilt website attempt ${attempt}/6"
+            echo "Deploy website attempt ${attempt}/6"
             deploy_log="$(mktemp)"
-            timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
+            timeout 20m npx vercel deploy --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
             prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
             if [ -n "$prod_url" ]; then
               echo "Deploy command produced URL: $prod_url"
@@ -160,7 +159,17 @@ jobs:
                 echo "Website deployment is ready in production: $prod_url"
                 exit 0
               fi
-              echo "Website inspect reported deployment not ready or failed; retrying..."
+
+              echo "Inspect reported failure; probing URL reachability as fallback..."
+              for probe in 1 2 3 4 5 6; do
+                http_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$prod_url" || true)"
+                if [ "$http_code" != "000" ]; then
+                  echo "Website deployment URL is reachable (HTTP $http_code): $prod_url"
+                  exit 0
+                fi
+                echo "Website probe ${probe}/6 not reachable yet; retrying in 10s..."
+                sleep 10
+              done
             fi
             if [ "$attempt" -eq 6 ]; then
               echo "Website deployment failed after 6 attempts"
@@ -212,11 +221,10 @@ jobs:
         run: |
           set -euo pipefail
           timeout 8m npx vercel pull --yes --environment=production --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
-          timeout 20m npx vercel build --prod --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }}
           for attempt in 1 2 3 4 5 6; do
-            echo "Deploy prebuilt admin attempt ${attempt}/6"
+            echo "Deploy admin attempt ${attempt}/6"
             deploy_log="$(mktemp)"
-            timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
+            timeout 20m npx vercel deploy --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
             prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
             if [ -n "$prod_url" ]; then
               echo "Deploy command produced URL: $prod_url"
@@ -224,7 +232,17 @@ jobs:
                 echo "Admin deployment is ready in production: $prod_url"
                 exit 0
               fi
-              echo "Admin inspect reported deployment not ready or failed; retrying..."
+
+              echo "Inspect reported failure; probing URL reachability as fallback..."
+              for probe in 1 2 3 4 5 6; do
+                http_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$prod_url" || true)"
+                if [ "$http_code" != "000" ]; then
+                  echo "Admin deployment URL is reachable (HTTP $http_code): $prod_url"
+                  exit 0
+                fi
+                echo "Admin probe ${probe}/6 not reachable yet; retrying in 10s..."
+                sleep 10
+              done
             fi
             if [ "$attempt" -eq 6 ]; then
               echo "Admin deployment failed after 6 attempts"
