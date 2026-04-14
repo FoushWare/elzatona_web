@@ -153,6 +153,10 @@ jobs:
             echo "Deploy prebuilt website attempt ${attempt}/6"
             deploy_log="$(mktemp)"
             timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/website --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
+            if grep -Eq 'status[[:space:]]*● Error|Failed to process project graph|Could not find ".modules.yaml"|Error: Command "npx nx build|Error: Command "npm run build" exited with 1' "$deploy_log"; then
+              echo "Deploy output indicates explicit build failure; failing deployment step."
+              exit 1
+            fi
             prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
             if [ -n "$prod_url" ]; then
               echo "Deploy command produced URL: $prod_url"
@@ -165,19 +169,10 @@ jobs:
               cat "$inspect_log"
 
               if grep -Eq 'status[[:space:]]*● Error|Failed to process project graph|Could not find ".modules.yaml"|Error: Command "npx nx build|Error: Command "npm run build" exited with 1' "$inspect_log"; then
-                echo "Inspect indicates an explicit build failure; not accepting fallback for this attempt."
-              else
-                echo "Inspect reported no explicit build failure; probing URL reachability as fallback..."
-                for probe in 1 2 3 4 5 6; do
-                  http_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$prod_url" || true)"
-                  if [ "$http_code" != "000" ]; then
-                    echo "Website deployment URL is reachable (HTTP $http_code): $prod_url"
-                    exit 0
-                  fi
-                  echo "Website probe ${probe}/6 not reachable yet; retrying in 10s..."
-                  sleep 10
-                done
+                echo "Inspect indicates an explicit build failure; failing deployment step."
+                exit 1
               fi
+              echo "Inspect did not confirm readiness; retrying deployment attempt..."
             fi
             if [ "$attempt" -eq 6 ]; then
               echo "Website deployment failed after 6 attempts"
@@ -234,6 +229,10 @@ jobs:
             echo "Deploy prebuilt admin attempt ${attempt}/6"
             deploy_log="$(mktemp)"
             timeout 12m npx vercel deploy --prebuilt --prod --yes --cwd apps/admin --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log" || true
+            if grep -Eq 'status[[:space:]]*● Error|Failed to process project graph|Could not find ".modules.yaml"|Error: Command "npx nx build|Error: Command "npm run build" exited with 1' "$deploy_log"; then
+              echo "Deploy output indicates explicit build failure; failing deployment step."
+              exit 1
+            fi
             prod_url="$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)"
             if [ -n "$prod_url" ]; then
               echo "Deploy command produced URL: $prod_url"
@@ -246,19 +245,10 @@ jobs:
               cat "$inspect_log"
 
               if grep -Eq 'status[[:space:]]*● Error|Failed to process project graph|Could not find ".modules.yaml"|Error: Command "npx nx build|Error: Command "npm run build" exited with 1' "$inspect_log"; then
-                echo "Inspect indicates an explicit build failure; not accepting fallback for this attempt."
-              else
-                echo "Inspect reported no explicit build failure; probing URL reachability as fallback..."
-                for probe in 1 2 3 4 5 6; do
-                  http_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$prod_url" || true)"
-                  if [ "$http_code" != "000" ]; then
-                    echo "Admin deployment URL is reachable (HTTP $http_code): $prod_url"
-                    exit 0
-                  fi
-                  echo "Admin probe ${probe}/6 not reachable yet; retrying in 10s..."
-                  sleep 10
-                done
+                echo "Inspect indicates an explicit build failure; failing deployment step."
+                exit 1
               fi
+              echo "Inspect did not confirm readiness; retrying deployment attempt..."
             fi
             if [ "$attempt" -eq 6 ]; then
               echo "Admin deployment failed after 6 attempts"
