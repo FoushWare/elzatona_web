@@ -4,6 +4,16 @@ import { config } from "dotenv";
 import { resolve } from "node:path";
 import { existsSync } from "node:fs";
 
+function getAdminRewriteTarget() {
+  const adminUrl = process.env.ADMIN_URL?.replace(/\/+$/, "");
+
+  if (!adminUrl || adminUrl.includes("elzatona-web.com")) {
+    return null;
+  }
+
+  return adminUrl;
+}
+
 // CRITICAL: Load environment-specific files BEFORE Next.js loads .env.local
 // This ensures NEXT_PUBLIC_ variables are set correctly
 // Next.js loads .env.local automatically, so we need to override it early
@@ -95,7 +105,30 @@ const nextConfig: NextConfig = {
 
   // Rewrites are now primarily handled by middleware to prevent loop recursion
   async rewrites() {
-    return [];
+    const adminUrl = getAdminRewriteTarget();
+
+    if (!adminUrl) {
+      return [];
+    }
+
+    return [
+      {
+        source: "/admin",
+        destination: `${adminUrl}/admin`,
+      },
+      {
+        source: "/admin/:path*",
+        destination: `${adminUrl}/admin/:path*`,
+      },
+      {
+        source: "/api/admin/:path*",
+        destination: `${adminUrl}/api/admin/:path*`,
+      },
+      {
+        source: "/admin/_next/:path*",
+        destination: `${adminUrl}/_next/:path*`,
+      },
+    ];
   },
 
   // Disable automatic error page generation
