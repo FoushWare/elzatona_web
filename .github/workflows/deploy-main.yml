@@ -144,6 +144,14 @@ jobs:
           fi
           echo "VERCEL_TOKEN is configured"
 
+      - name: Configure website Vercel project settings
+        run: |
+          curl -fsS -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"buildCommand":"npm run build","outputDirectory":".next"}' \
+            "https://api.vercel.com/v9/projects/${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}"
+
       - name: Bypass Vercel Nx Plugin (website)
         run: |
           if [ -f nx.json ]; then
@@ -242,6 +250,14 @@ jobs:
             exit 1
           fi
           echo "VERCEL_TOKEN is configured"
+
+      - name: Configure admin Vercel project settings
+        run: |
+          curl -fsS -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"buildCommand":"npm run build","outputDirectory":".next"}' \
+            "https://api.vercel.com/v9/projects/${{ secrets.VERCEL_PROJECT_ID_ADMIN }}"
 
       - name: Bypass Vercel Nx Plugin (admin)
         run: |
