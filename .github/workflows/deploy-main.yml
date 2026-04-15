@@ -152,7 +152,7 @@ jobs:
 
       - name: Prepare website package manifest for Vercel build
         run: |
-          node -e 'const fs=require("fs");const p="apps/website/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\n");'
+          node -e 'const fs=require("fs");const root=JSON.parse(fs.readFileSync("package.json","utf8"));const p="apps/website/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];const required=["@sentry/nextjs"];pkg.dependencies=pkg.dependencies||{};for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];}for(const name of required){if(!pkg.dependencies[name]){const v=(root.dependencies&&root.dependencies[name])||(root.devDependencies&&root.devDependencies[name]);if(v) pkg.dependencies[name]=v;}}fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\n");'
 
       - name: Deploy website
         run: |
@@ -247,7 +247,7 @@ jobs:
 
       - name: Prepare admin package manifest for Vercel build
         run: |
-          node -e 'const fs=require("fs");const p="apps/admin/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];} fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\n");'
+          node -e 'const fs=require("fs");const root=JSON.parse(fs.readFileSync("package.json","utf8"));const p="apps/admin/package.json";const pkg=JSON.parse(fs.readFileSync(p,"utf8"));const internal=["@elzatona/common-ui","@elzatona/contexts","@elzatona/database","@elzatona/types","@elzatona/utilities"];const required=["@sentry/nextjs"];pkg.dependencies=pkg.dependencies||{};for(const name of internal){if(pkg.dependencies) delete pkg.dependencies[name]; if(pkg.devDependencies) delete pkg.devDependencies[name];}for(const name of required){if(!pkg.dependencies[name]){const v=(root.dependencies&&root.dependencies[name])||(root.devDependencies&&root.devDependencies[name]);if(v) pkg.dependencies[name]=v;}}fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+"\n");'
 
       - name: Deploy admin
         run: |
