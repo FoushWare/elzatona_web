@@ -74,6 +74,14 @@ jobs:
           fi
           echo "VERCEL_TOKEN is configured"
 
+      - name: Configure website Vercel project settings
+        run: |
+          curl -fsS -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"buildCommand":"npm run build","outputDirectory":".next"}' \
+            "https://api.vercel.com/v9/projects/${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}"
+
       - name: Validate build locally (optional build check)
         if: ${{ inputs.validate_build_website }}
         run: pnpm --dir apps/website run build
@@ -186,6 +194,14 @@ jobs:
             exit 1
           fi
           echo "VERCEL_TOKEN is configured"
+
+      - name: Configure admin Vercel project settings
+        run: |
+          curl -fsS -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"buildCommand":"npm run build","outputDirectory":".next"}' \
+            "https://api.vercel.com/v9/projects/${{ secrets.VERCEL_PROJECT_ID_ADMIN }}"
 
       - name: Validate build locally (optional build check)
         if: ${{ inputs.validate_build_admin }}
