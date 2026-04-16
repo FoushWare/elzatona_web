@@ -19,9 +19,8 @@ function getAdminTargetUrl(request: NextRequest): string | null {
     return "http://localhost:3001";
   }
 
-  // In production, we MUST have ADMIN_URL set.
-  // Returning null here will trigger an error response instead of a private DNS leak.
-  return null;
+  // Production fallback: use canonical admin server when ADMIN_URL is missing or invalid.
+  return "https://elzatona-admin.vercel.app";
 }
 
 export function middleware(request: NextRequest): NextResponse | Response {
