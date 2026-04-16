@@ -109,6 +109,27 @@ jobs:
         run: |
           set -euo pipefail
 
+          ensure_website_ready() {
+            local deployment_url="$1"
+
+            for ready_attempt in 1 2 3 4 5 6; do
+              ready_log="$(mktemp)"
+              if timeout 2m npx vercel inspect "${deployment_url}" --wait --timeout 2m --token=${{ secrets.VERCEL_TOKEN }} >"$ready_log" 2>&1; then
+                cat "$ready_log"
+                return 0
+              fi
+
+              cat "$ready_log"
+              echo "Deployment readiness check ${ready_attempt}/6 did not pass yet."
+
+              if [ "$ready_attempt" -lt 6 ]; then
+                sleep 10
+              fi
+            done
+
+            return 1
+          }
+
           set_website_aliases() {
             local deployment_url="$1"
             echo "Setting website aliases for: ${deployment_url}"
@@ -149,9 +170,16 @@ jobs:
               for probe in 1 2 3 4 5 6; do
                 http_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$prod_url" || true)"
                 if [ "$http_code" != "000" ]; then
-                  set_website_aliases "$prod_url"
                   echo "Website deployment URL is reachable (HTTP $http_code): $prod_url"
-                  exit 0
+
+                  if ensure_website_ready "$prod_url"; then
+                    set_website_aliases "$prod_url"
+                    echo "Website deployment is ready in production: $prod_url"
+                    exit 0
+                  fi
+
+                  echo "Website URL is reachable but deployment is still not ready; continuing retries."
+                  break
                 fi
                 echo "Website probe ${probe}/6 not reachable yet; retrying in 10s..."
                 sleep 10
