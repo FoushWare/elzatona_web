@@ -48,7 +48,7 @@ export const QuestionFormModal: React.FC<QuestionFormModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
-        className="fixed inset-x-0 top-3 bottom-0 z-[201] m-0 h-[calc(100dvh-0.75rem)] w-screen h-[100dvh] w-[100vw] max-h-none max-w-none overflow-hidden rounded-t-2xl border-0 p-0"
+        className="fixed inset-x-0 top-6 sm:top-8 bottom-0 z-[201] m-0 h-[calc(100dvh-1.5rem)] sm:h-[calc(100dvh-2rem)] w-screen w-[100vw] max-h-none max-w-none overflow-hidden rounded-t-2xl border-0 p-0"
         onOpenChange={onOpenChange}
       >
         <div className="flex h-full flex-col bg-white dark:bg-gray-900">
