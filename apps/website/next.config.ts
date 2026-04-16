@@ -7,11 +7,13 @@ import { existsSync } from "node:fs";
 function getAdminRewriteTarget() {
   const adminUrl = process.env.ADMIN_URL?.replace(/\/+$/, "");
 
-  if (!adminUrl || adminUrl.includes("elzatona-web.com")) {
-    return null;
+  if (adminUrl && !adminUrl.includes("elzatona-web.com")) {
+    return adminUrl;
   }
 
-  return adminUrl;
+  return process.env.NODE_ENV === "production"
+    ? "https://elzatona-admin.vercel.app"
+    : null;
 }
 
 // CRITICAL: Load environment-specific files BEFORE Next.js loads .env.local
