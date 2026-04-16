@@ -79,7 +79,7 @@ jobs:
           curl -fsS -X PATCH \
             -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"buildCommand":"npm run build","outputDirectory":".next"}' \
+            -d '{"buildCommand":"npm run build","outputDirectory":"apps/website/.next"}' \
             "https://api.vercel.com/v9/projects/${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}"
 
       - name: Validate build locally (optional build check)
