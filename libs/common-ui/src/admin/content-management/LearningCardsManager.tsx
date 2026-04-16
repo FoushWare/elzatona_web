@@ -147,12 +147,6 @@ const TopicNode: React.FC<{
 
         {/* Right section: badges and action buttons - fixed width */}
         <div className="ml-4 flex shrink-0 items-center justify-end space-x-2">
-          <Badge
-            variant="outline"
-            className="shrink-0 whitespace-nowrap bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
-          >
-            {topicQuestions.length} Questions
-          </Badge>
           <Button
             variant="ghost"
             size="sm"
@@ -165,6 +159,12 @@ const TopicNode: React.FC<{
           >
             <Plus className="h-4 w-4 text-gray-600 dark:text-gray-300" />
           </Button>
+          <Badge
+            variant="outline"
+            className="ml-auto shrink-0 whitespace-nowrap bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300"
+          >
+            {topicQuestions.length} Questions
+          </Badge>
         </div>
       </div>
 
