@@ -108,6 +108,18 @@ jobs:
       - name: Deploy website to Vercel
         run: |
           set -euo pipefail
+
+          set_website_aliases() {
+            local deployment_url="$1"
+            echo "Setting website aliases for: ${deployment_url}"
+            timeout 3m npx vercel alias set "${deployment_url}" elzatona-web.com --token=${{ secrets.VERCEL_TOKEN }}
+
+            # Keep www alias best-effort because some projects intentionally omit it.
+            if ! timeout 3m npx vercel alias set "${deployment_url}" www.elzatona-web.com --token=${{ secrets.VERCEL_TOKEN }}; then
+              echo "www.elzatona-web.com alias not set (continuing)."
+            fi
+          }
+
           timeout 8m npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy website attempt ${attempt}/6"
@@ -123,6 +135,7 @@ jobs:
               inspect_log="$(mktemp)"
               if timeout 12m npx vercel inspect "$prod_url" --wait --timeout 12m --token=${{ secrets.VERCEL_TOKEN }} >"$inspect_log" 2>&1; then
                 cat "$inspect_log"
+                set_website_aliases "$prod_url"
                 echo "Website deployment is ready in production: $prod_url"
                 exit 0
               fi
@@ -136,6 +149,7 @@ jobs:
               for probe in 1 2 3 4 5 6; do
                 http_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$prod_url" || true)"
                 if [ "$http_code" != "000" ]; then
+                  set_website_aliases "$prod_url"
                   echo "Website deployment URL is reachable (HTTP $http_code): $prod_url"
                   exit 0
                 fi
