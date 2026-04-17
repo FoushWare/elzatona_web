@@ -146,7 +146,7 @@ const TopicNode: React.FC<{
         </button>
 
         {/* Right section: badges and action buttons - fixed width */}
-        <div className="ml-4 flex shrink-0 items-center justify-end space-x-2">
+        <div className="ml-4 flex min-w-[10rem] shrink-0 items-center justify-end gap-2">
           <Button
             variant="ghost"
             size="sm"
@@ -281,10 +281,10 @@ const CategoryNode: React.FC<{
         </div>
 
         {/* Right section: badge with topic count */}
-        <div className="ml-4 flex shrink-0 items-center justify-end">
+        <div className="ml-4 flex min-w-[9rem] shrink-0 items-center justify-end">
           <Badge
             variant="outline"
-            className="shrink-0 whitespace-nowrap bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+            className="ml-auto shrink-0 whitespace-nowrap bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
           >
             {categoryTopics.length} Topics
           </Badge>
