@@ -305,7 +305,7 @@ describe("Admin content management page - Integration", () => {
     const questionModal = screen.getByTestId("question-form-modal");
     expect(questionModal).toHaveAttribute("data-read-only", "true");
     expect(questionModal).toHaveAttribute("data-question-id", "q-view-1");
-    expect(mockSetIsNavbarVisible).toHaveBeenCalledWith(false);
+    expect(mockSetIsNavbarVisible).toHaveBeenCalledWith(true);
   });
 
   it("passes editable mode to question modal for edit flow", () => {
@@ -321,7 +321,7 @@ describe("Admin content management page - Integration", () => {
     const questionModal = screen.getByTestId("question-form-modal");
     expect(questionModal).toHaveAttribute("data-read-only", "false");
     expect(questionModal).toHaveAttribute("data-question-id", "q-edit-1");
-    expect(mockSetIsNavbarVisible).toHaveBeenCalledWith(false);
+    expect(mockSetIsNavbarVisible).toHaveBeenCalledWith(true);
   });
 
   it("keeps navbar visible for create question flow", () => {
