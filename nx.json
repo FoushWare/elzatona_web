@@ -32,15 +32,9 @@
       "inputs": ["production", "^production"],
       "cache": true
     },
-    "dev": {
-      "cache": false
-    },
-    "start": {
-      "cache": false
-    },
-    "server": {
-      "cache": false
-    },
+    "dev": { "cache": false },
+    "start": { "cache": false },
+    "server": { "cache": false },
     "lint": {
       "inputs": [
         "default",
@@ -60,29 +54,16 @@
       ],
       "cache": true
     },
-    "e2e": {
-      "inputs": ["default", "^production"],
-      "cache": true
-    }
+    "e2e": { "inputs": ["default", "^production"], "cache": true }
   },
   "generators": {
-    "@nx/next": {
-      "application": {
-        "style": "tailwind",
-        "linter": "eslint"
-      }
-    },
+    "@nx/next": { "application": { "style": "tailwind", "linter": "eslint" } },
     "@nx/react": {
-      "component": {
-        "style": "css",
-        "export": true
-      },
-      "library": {
-        "style": "css",
-        "linter": "eslint"
-      }
+      "component": { "style": "css", "export": true },
+      "library": { "style": "css", "linter": "eslint" }
     }
   },
   "defaultProject": "website",
-  "analytics": false
+  "analytics": false,
+  "nxCloudId": "69e2afb60680f8c80c42021a"
 }
