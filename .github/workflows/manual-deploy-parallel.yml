@@ -229,15 +229,14 @@ jobs:
       - name: Install root dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Setup Nx and Vercel Caching
+      - name: Setup Vercel and Next.js Caching
         uses: actions/cache@v4
         with:
           path: |
-            .nx/cache
             apps/admin/.next/cache
-          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          key: ${{ runner.os }}-next-cache-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-build-cache-
+            ${{ runner.os }}-next-cache-
 
       - name: Validate Vercel token
         run: |
@@ -263,6 +262,7 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
+          NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
           NEXT_PUBLIC_APP_ENV: production
           NEXT_TELEMETRY_DISABLED: 1
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
@@ -288,3 +288,4 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
+          NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
