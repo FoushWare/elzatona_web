@@ -252,7 +252,7 @@ jobs:
           curl -fsS -X PATCH \
             -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"buildCommand":"pnpm --filter admin build","outputDirectory":"apps/admin/.next"}' \
+            -d '{"buildCommand":"pnpm --filter admin build","outputDirectory":"apps/admin/.next","installCommand":"true"}' \
             "https://api.vercel.com/v9/projects/${{ secrets.VERCEL_PROJECT_ID_ADMIN }}"
 
       - name: Validate and build (Local Vercel Build)
