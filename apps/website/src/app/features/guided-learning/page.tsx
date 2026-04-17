@@ -27,12 +27,12 @@ export default function GuidedLearningPage() {
     isLoading: plansLoading,
     error,
     questionsRange,
-    daysRange,
+    milestoneRange,
   } = useGuidedLearningPlans();
   const {
     currentPlan,
-    dailyGoals,
-    currentDay,
+    milestones,
+    currentMilestoneId,
     resumePlan,
     resetPlan,
     selectPlan,
@@ -71,7 +71,6 @@ export default function GuidedLearningPage() {
         {/* Header with stats */}
         <GuidedLearningHeader
           questionsRange={questionsRange}
-          daysRange={daysRange}
         />
 
         {/* Sign-in CTA for non-authenticated users */}
@@ -81,8 +80,8 @@ export default function GuidedLearningPage() {
         {isAuthenticated && currentPlan && (
           <ActivePlanView
             plan={currentPlan}
-            dailyGoals={dailyGoals}
-            currentDay={currentDay}
+            milestones={milestones}
+            currentMilestoneId={currentMilestoneId}
             onResume={resumePlan}
             onReset={resetPlan}
           />

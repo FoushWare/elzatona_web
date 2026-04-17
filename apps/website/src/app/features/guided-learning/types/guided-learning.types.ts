@@ -1,23 +1,10 @@
-export interface LearningPlanSection {
-  id: string;
-  name: string;
-  questions: number;
-  weight: number;
+import { StudyPlan, StudyMilestone, UserStudyPlan } from "@elzatona/types";
+
+export interface LearningPlan extends StudyPlan {
+  isRecommended: boolean;
+  sections?: LearningPlanSection[]; // Keep for legacy if needed, or map to milestones
 }
 
-export interface LearningPlan {
-  id: string;
-  name: string;
-  duration: number;
-  description: string;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-  totalQuestions: number;
-  dailyQuestions: number;
-  sections: LearningPlanSection[];
-  features: string[];
-  estimatedTime: string;
-  isRecommended: boolean;
-}
 
 export interface DailyGoal {
   day: number;
