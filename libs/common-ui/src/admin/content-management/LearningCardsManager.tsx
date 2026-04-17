@@ -396,7 +396,7 @@ export const LearningCardsManager: React.FC<LearningCardsManagerProps> = ({
                 </p>
               </div>
             </button>
-            <div className="flex shrink-0 items-center justify-end gap-2">
+            <div className="ml-auto flex shrink-0 items-center justify-end gap-2">
               <Badge
                 variant="outline"
                 className="shrink-0 whitespace-nowrap bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"

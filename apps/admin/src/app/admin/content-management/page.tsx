@@ -130,15 +130,13 @@ export default function ContentManagementPage() {
   } = useContentManagement();
   const { setIsNavbarVisible } = useAdminNavbarVisibility();
 
-  const shouldHideNavbar = isQuestionModalOpen && Boolean(questionToEdit);
-
   useLayoutEffect(() => {
-    setIsNavbarVisible(!shouldHideNavbar);
+    setIsNavbarVisible(true);
 
     return () => {
       setIsNavbarVisible(true);
     };
-  }, [setIsNavbarVisible, shouldHideNavbar]);
+  }, [setIsNavbarVisible]);
 
   const unifiedQuestions: AdminUnifiedQuestion[] = questions;
 
