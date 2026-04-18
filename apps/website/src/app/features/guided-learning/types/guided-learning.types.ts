@@ -1,4 +1,4 @@
-import { StudyPlan, StudyMilestone, UserStudyPlan } from "@elzatona/types";
+import { StudyPlan } from "@elzatona/types";
 
 export interface LearningPlan extends StudyPlan {
   isRecommended: boolean;

@@ -59,17 +59,17 @@ describe("LearningModeSwitcher", () => {
   });
 
   it("applies scrolled styles when isScrolled is true", () => {
-    const { container } = render(<LearningModeSwitcher isScrolled={true} />);
-    const group = screen.getByRole("group");
+    render(<LearningModeSwitcher isScrolled={true} />);
+    const container = screen.getByLabelText(/learning mode selection/i);
 
-    expect(group.className).toContain("bg-gray-100/80");
-    expect(group.className).toContain("backdrop-blur-md");
+    expect(container.className).toContain("bg-gray-100/80");
+    expect(container.className).toContain("backdrop-blur-md");
   });
 
   it("applies transparent styles when isScrolled is false", () => {
     render(<LearningModeSwitcher isScrolled={false} />);
-    const group = screen.getByRole("group");
+    const container = screen.getByLabelText(/learning mode selection/i);
 
-    expect(group.className).toContain("bg-white/10");
+    expect(container.className).toContain("bg-white/10");
   });
 });

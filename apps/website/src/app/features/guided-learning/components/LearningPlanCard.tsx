@@ -2,7 +2,6 @@
 
 import {
   Clock,
-  Target,
   CheckCircle,
   Star,
   ChevronRight,
