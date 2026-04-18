@@ -338,38 +338,34 @@ function _handleValidationError(
   error: any,
   data: unknown,
 ): { success: false; error: string } {
-  // Log the error type and details for debugging
-  console.error(
-    "🔴 Validation catch block - Error type:",
-    error?.constructor?.name,
-  );
-  console.error("🔴 Validation catch block - Error:", error);
-  console.error("🔴 Validation catch block - Error message:", error?.message);
-  console.error("🔴 Validation catch block - Error stack:", error?.stack);
-  console.error(
-    "🔴 Input data being validated:",
-    JSON.stringify(data, null, 2),
-  );
+  _logValidationErrorContext(error, data);
 
   if (error instanceof z.ZodError) {
     return _formatZodError(error);
   }
 
-  // Handle non-Zod errors (like "Cannot read properties of undefined")
+  return _handleGenericError(error);
+}
+
+/**
+ * Logs context for validation errors to assist debugging.
+ */
+function _logValidationErrorContext(error: any, data: unknown): void {
+  console.error("🔴 Validation catch block - Error type:", error?.constructor?.name);
+  console.error("🔴 Validation catch block - Error message:", error?.message);
+  console.error("🔴 Input data being validated:", JSON.stringify(data, null, 2));
+}
+
+/**
+ * Handles non-Zod errors (like native exceptions).
+ */
+function _handleGenericError(error: any): { success: false; error: string } {
   if (error instanceof Error) {
     console.error("Validation error (non-Zod):", error);
-    return {
-      success: false,
-      error: `Validation error: ${error.message}`,
-    };
+    return { success: false, error: `Validation error: ${error.message}` };
   }
-
-  // Handle any other error type
   console.error("Validation error (unknown type):", error);
-  return {
-    success: false,
-    error: `Validation failed: ${error?.message || "Unknown error"}`,
-  };
+  return { success: false, error: `Validation failed: ${error?.message || "Unknown error"}` };
 }
 
 /**

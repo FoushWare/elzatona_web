@@ -280,6 +280,34 @@ export async function questionsGetHandler(request: NextRequest) {
 }
 
 /**
+ * GET Handler: Fetches a single question by ID.
+ */
+export async function questionsGetByIdHandler(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const { id } = await params;
+    const supabase = getSupabaseClient();
+
+    const { data, error } = await supabase
+      .from("questions")
+      .select("*, categories(id, name), topics(id, name), learning_cards(*)")
+      .eq("id", id)
+      .single();
+
+    if (error || !data) {
+      return NextResponse.json({ success: false, error: "Question not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: transformQuestionForFrontend(data),
+    });
+  } catch (error) {
+    console.error("Error fetching question:", error);
+    return NextResponse.json({ success: false, error: getErrorMessage(error) }, { status: 500 });
+  }
+}
+
+/**
  * POST Handler: Creates questions (bulk import or single).
  */
 export async function questionsPostHandler(request: NextRequest) {
