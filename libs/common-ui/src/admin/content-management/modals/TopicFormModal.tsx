@@ -184,6 +184,8 @@ export const TopicFormModal: React.FC<TopicFormModalProps> = ({
                             : ""
                         }`}
                         tabIndex={0}
+                        role="button"
+                        aria-pressed={categoryId === category.id}
                         onKeyDown={(e) => {
                           if (e.key === "Enter" || e.key === " ") {
                             e.preventDefault();
@@ -215,6 +217,7 @@ export const TopicFormModal: React.FC<TopicFormModalProps> = ({
                       <div
                         className="flex items-center px-2 py-2 text-sm text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded cursor-pointer border-t mt-1 focus:outline-none focus:ring-1 focus:ring-purple-500"
                         tabIndex={0}
+                        role="button"
                         onKeyDown={async (e) => {
                           if (e.key === "Enter" || e.key === " ") {
                             e.preventDefault();

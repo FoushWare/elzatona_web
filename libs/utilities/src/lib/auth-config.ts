@@ -49,8 +49,12 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Here you would validate credentials against your Firebase Auth
-        // For now, return null to indicate invalid credentials
+        // TODO: Implement Firebase Auth validation
+        const isValid = false; // Placeholder for actual validation logic
+        if (!isValid) {
+          return null;
+        }
+
         return null;
       },
     }),

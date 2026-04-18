@@ -12,7 +12,11 @@ export interface CheckboxProps extends Omit<
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, onCheckedChange, checked, onChange, ...props }, ref) => {
     return (
-      <div onClick={(e) => e.stopPropagation()} className="inline-flex">
+      <span
+        onMouseDown={(e) => e.stopPropagation()}
+        role="presentation"
+        className="inline-flex"
+      >
         <label className="relative inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
@@ -39,7 +43,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             />
           </div>
         </label>
-      </div>
+      </span>
     );
   },
 );

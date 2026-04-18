@@ -426,7 +426,11 @@ export async function questionsPostHandler(request: NextRequest) {
         if (codeField !== undefined && codeField !== null && codeField !== "") {
           // Convert to string safely and ensure \n escape sequences become actual newlines
           let codeContent =
-            typeof codeField === "string" ? codeField : String(codeField);
+            typeof codeField === "string"
+              ? codeField
+              : typeof codeField === "object" && codeField !== null
+                ? JSON.stringify(codeField)
+                : String(codeField);
 
           // Convert literal \n escape sequences to actual newlines
           codeContent = normalizeCodeLineBreaks(codeContent);
@@ -452,7 +456,11 @@ export async function questionsPostHandler(request: NextRequest) {
           originalCode !== ""
         ) {
           normalizedData["code"] =
-            typeof originalCode === "string" ? originalCode : "";
+            typeof originalCode === "string"
+              ? originalCode
+              : typeof originalCode === "object" && originalCode !== null
+                ? JSON.stringify(originalCode)
+                : "";
         } else {
           // Explicitly set to null (not undefined) so validation knows it exists
           normalizedData["code"] = null;
@@ -542,7 +550,11 @@ export async function questionsPostHandler(request: NextRequest) {
             originalCode !== ""
           ) {
             let codeContent =
-              typeof originalCode === "string" ? originalCode : "";
+              typeof originalCode === "string"
+                ? originalCode
+                : typeof originalCode === "object" && originalCode !== null
+                  ? JSON.stringify(originalCode)
+                  : "";
             codeContent = codeContent.replaceAll(String.raw`\n`, "\n");
             codeContent = codeContent.replaceAll(String.raw`\r\n`, "\n");
             codeContent = codeContent.replaceAll(String.raw`\r`, "\n");

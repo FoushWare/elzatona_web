@@ -16,6 +16,7 @@ const config = {
   collectCoverageFrom: [
     "src/**/*.{js,jsx,ts,tsx}",
     "../../libs/common-ui/**/*.{js,jsx,ts,tsx}",
+    "../../libs/utilities/**/*.{js,jsx,ts,tsx}",
     "!**/*.d.ts",
     "!**/node_modules/**",
     "!**/__tests__/**",

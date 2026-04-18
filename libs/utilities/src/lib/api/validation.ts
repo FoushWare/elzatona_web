@@ -352,44 +352,7 @@ function _handleValidationError(
   );
 
   if (error instanceof z.ZodError) {
-    // Zod stores errors in error.issues, not error.errors
-    const issues = error.issues || [];
-
-    // Log all errors for debugging
-    console.error("🔴 ZodError.issues array:", JSON.stringify(issues, null, 2));
-    console.error("🔴 ZodError.issues length:", issues.length);
-
-    if (issues.length === 0) {
-      console.error("⚠️ ZodError with no issues - this should not happen");
-      return {
-        success: false,
-        error: "Validation failed: Unknown error (no error details available)",
-      };
-    }
-
-    const firstIssue = issues[0];
-    const errorPath =
-      firstIssue?.path && firstIssue.path.length > 0
-        ? firstIssue.path.join(".")
-        : "root";
-    const errorMessage = firstIssue?.message || "Validation failed";
-
-    // Log all errors for debugging
-    if (issues.length > 1) {
-      console.warn(
-        `⚠️ Multiple validation errors for question:`,
-        issues.map((e: any) => ({
-          path: e.path?.join(".") || "root",
-          message: e.message,
-          code: e.code,
-        })),
-      );
-    }
-
-    return {
-      success: false,
-      error: `${errorMessage} (field: ${errorPath})`,
-    };
+    return _formatZodError(error);
   }
 
   // Handle non-Zod errors (like "Cannot read properties of undefined")
@@ -406,6 +369,50 @@ function _handleValidationError(
   return {
     success: false,
     error: `Validation failed: ${error?.message || "Unknown error"}`,
+  };
+}
+
+/**
+ * Formats a ZodError into a user-friendly error message
+ * Extracted to reduce cognitive complexity
+ */
+function _formatZodError(error: z.ZodError): { success: false; error: string } {
+  const issues = error.issues || [];
+
+  // Log all errors for debugging
+  console.error("🔴 ZodError.issues array:", JSON.stringify(issues, null, 2));
+  console.error("🔴 ZodError.issues length:", issues.length);
+
+  if (issues.length === 0) {
+    console.error("⚠️ ZodError with no issues - this should not happen");
+    return {
+      success: false,
+      error: "Validation failed: Unknown error (no error details available)",
+    };
+  }
+
+  const firstIssue = issues[0];
+  const errorPath =
+    firstIssue?.path && firstIssue.path.length > 0
+      ? firstIssue.path.join(".")
+      : "root";
+  const errorMessage = firstIssue?.message || "Validation failed";
+
+  // Log all errors for debugging
+  if (issues.length > 1) {
+    console.warn(
+      `⚠️ Multiple validation errors for question:`,
+      issues.map((e: any) => ({
+        path: e.path?.join(".") || "root",
+        message: e.message,
+        code: e.code,
+      })),
+    );
+  }
+
+  return {
+    success: false,
+    error: `${errorMessage} (field: ${errorPath})`,
   };
 }
 

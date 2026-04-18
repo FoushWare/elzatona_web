@@ -71,10 +71,22 @@ if (!globalThis.Response) {
 if (!globalThis.vi) {
   globalThis.vi = {
     fn: (...args) => jest.fn(...args),
+    spyOn: (...args) => jest.spyOn(...args),
     mock: (m, f) => {
       if (typeof jest !== "undefined" && jest.mock) jest.mock(m, f);
     },
     clearAllMocks: () =>
       jest.clearAllMocks ? jest.clearAllMocks() : undefined,
+    resetModules: () => (jest.resetModules ? jest.resetModules() : undefined),
+    stubEnv: (name, value) => {
+      if (!globalThis.__originalEnv)
+        globalThis.__originalEnv = { ...process.env };
+      process.env[name] = value;
+    },
+    unstubAllEnvs: () => {
+      if (globalThis.__originalEnv) {
+        process.env = { ...globalThis.__originalEnv };
+      }
+    },
   };
 }
