@@ -47,7 +47,10 @@ export async function GET(request: NextRequest) {
     try {
       supabase = getSupabaseClient(); // Try service role first
     } catch (clientError) {
-      // Fallback to anon key if service role key is not available (e.g., public frontend request)
+      console.warn(
+        "Supabase service client initialization failed, falling back to anon key:",
+        clientError,
+      );
       supabase = getSupabaseClientWithAnonKey();
     }
 
