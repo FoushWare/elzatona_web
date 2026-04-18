@@ -1,9 +1,5 @@
 import {
-  sanitizeHTMLServer,
-  sanitizeTextServer,
-  sanitizeInputServer,
   sanitizeObjectServer,
-  sanitizeRichContent,
   removeAllHTMLTags,
   sanitizeForLogging,
 } from "./sanitize-server";
@@ -49,7 +45,7 @@ describe("sanitize-server object and HTML sanitization", () => {
     // Should remove the tag, body stripping depends on config
     expect(result.name).toContain("John");
     expect(result.name).not.toContain("<script>");
-    expect((result.meta as any).bio).toBe("Hi");
+    expect((result.meta as Record<string, unknown>).bio).toBe("Hi");
   });
 
   it("preserves newlines for specific fields", () => {

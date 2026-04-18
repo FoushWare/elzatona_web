@@ -50,7 +50,7 @@ describe("validation handles error cases", () => {
   });
 
   it("should handle invalid schema gracefully", () => {
-    const result = validateAndSanitize(null as any, {});
+    const result = validateAndSanitize(null as unknown as z.ZodType, {});
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error).toContain("Invalid schema");

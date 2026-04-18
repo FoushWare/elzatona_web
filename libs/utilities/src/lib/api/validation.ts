@@ -402,7 +402,7 @@ function _formatZodError(error: z.ZodError): { success: false; error: string } {
   if (issues.length > 1) {
     console.warn(
       `⚠️ Multiple validation errors for question:`,
-      issues.map((e: any) => ({
+      issues.map((e: z.ZodIssue) => ({
         path: e.path?.join(".") || "root",
         message: e.message,
         code: e.code,
@@ -438,7 +438,7 @@ export function validateAndSanitize<T>(
 
     const result = schema.parse(processedData);
     return { success: true, data: result };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return _handleValidationError(error, data);
   }
 }
