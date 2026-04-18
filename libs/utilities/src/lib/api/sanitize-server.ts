@@ -310,7 +310,8 @@ export function sanitizeForLogging(value: unknown): string {
     return String(value);
   }
 
-  let sanitized = String(value);
+  let sanitized =
+    typeof value === "object" ? JSON.stringify(value) : String(value);
 
   // SECURITY: Remove all control characters (including newlines, carriage returns, tabs, etc.)
   // This prevents log injection attacks where malicious input could break log format

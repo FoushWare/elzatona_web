@@ -11,11 +11,6 @@ import {
   Button,
   Input,
   Textarea,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
 } from "../../../components/ui";
 import { BookOpen, Search, Plus, Check, ChevronsUpDown } from "lucide-react";
 import {
@@ -183,11 +178,21 @@ export const TopicFormModal: React.FC<TopicFormModalProps> = ({
                     .map((category) => (
                       <div
                         key={category.id}
-                        className={`flex items-center justify-between px-2 py-1.5 text-sm rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${
+                        className={`flex items-center justify-between px-2 py-1.5 text-sm rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-purple-500 ${
                           categoryId === category.id
                             ? "bg-purple-50 dark:bg-purple-900/20 text-purple-600"
                             : ""
                         }`}
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            setCategoryId(category.id);
+                            setIsCategoryPopoverOpen(false);
+                            if (errors.categoryId)
+                              setErrors({ ...errors, categoryId: undefined });
+                          }
+                        }}
                         onClick={() => {
                           setCategoryId(category.id);
                           setIsCategoryPopoverOpen(false);
@@ -208,7 +213,18 @@ export const TopicFormModal: React.FC<TopicFormModalProps> = ({
                         c.name.toLowerCase() === categorySearch.toLowerCase(),
                     ) && (
                       <div
-                        className="flex items-center px-2 py-2 text-sm text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded cursor-pointer border-t mt-1"
+                        className="flex items-center px-2 py-2 text-sm text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded cursor-pointer border-t mt-1 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                        tabIndex={0}
+                        onKeyDown={async (e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            if (onCreateCategory) {
+                              await onCreateCategory(categorySearch.trim());
+                              setCategorySearch("");
+                              setIsCategoryPopoverOpen(false);
+                            }
+                          }
+                        }}
                         onClick={async () => {
                           if (onCreateCategory) {
                             await onCreateCategory(categorySearch.trim());

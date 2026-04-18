@@ -72,7 +72,7 @@ if (!globalThis.vi) {
   globalThis.vi = {
     fn: (...args) => jest.fn(...args),
     mock: (m, f) => {
-      if (globalThis.jest !== undefined && jest.mock) jest.mock(m, f);
+      if (typeof jest !== "undefined" && jest.mock) jest.mock(m, f);
     },
     clearAllMocks: () =>
       jest.clearAllMocks ? jest.clearAllMocks() : undefined,

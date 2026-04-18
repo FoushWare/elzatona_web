@@ -331,6 +331,85 @@ function _preprocessData(data: unknown): unknown {
 }
 
 /**
+ * Helper function to handle validation errors and format them for return
+ * Extracts complex error handling logic from validateAndSanitize to reduce complexity
+ */
+function _handleValidationError(
+  error: any,
+  data: unknown,
+): { success: false; error: string } {
+  // Log the error type and details for debugging
+  console.error(
+    "🔴 Validation catch block - Error type:",
+    error?.constructor?.name,
+  );
+  console.error("🔴 Validation catch block - Error:", error);
+  console.error("🔴 Validation catch block - Error message:", error?.message);
+  console.error("🔴 Validation catch block - Error stack:", error?.stack);
+  console.error(
+    "🔴 Input data being validated:",
+    JSON.stringify(data, null, 2),
+  );
+
+  if (error instanceof z.ZodError) {
+    // Zod stores errors in error.issues, not error.errors
+    const issues = error.issues || [];
+
+    // Log all errors for debugging
+    console.error("🔴 ZodError.issues array:", JSON.stringify(issues, null, 2));
+    console.error("🔴 ZodError.issues length:", issues.length);
+
+    if (issues.length === 0) {
+      console.error("⚠️ ZodError with no issues - this should not happen");
+      return {
+        success: false,
+        error: "Validation failed: Unknown error (no error details available)",
+      };
+    }
+
+    const firstIssue = issues[0];
+    const errorPath =
+      firstIssue?.path && firstIssue.path.length > 0
+        ? firstIssue.path.join(".")
+        : "root";
+    const errorMessage = firstIssue?.message || "Validation failed";
+
+    // Log all errors for debugging
+    if (issues.length > 1) {
+      console.warn(
+        `⚠️ Multiple validation errors for question:`,
+        issues.map((e: any) => ({
+          path: e.path?.join(".") || "root",
+          message: e.message,
+          code: e.code,
+        })),
+      );
+    }
+
+    return {
+      success: false,
+      error: `${errorMessage} (field: ${errorPath})`,
+    };
+  }
+
+  // Handle non-Zod errors (like "Cannot read properties of undefined")
+  if (error instanceof Error) {
+    console.error("Validation error (non-Zod):", error);
+    return {
+      success: false,
+      error: `Validation error: ${error.message}`,
+    };
+  }
+
+  // Handle any other error type
+  console.error("Validation error (unknown type):", error);
+  return {
+    success: false,
+    error: `Validation failed: ${error?.message || "Unknown error"}`,
+  };
+}
+
+/**
  * Validates and sanitizes data using a Zod schema
  * @param schema - Zod schema to validate against
  * @param data - Data to validate and sanitize
@@ -353,84 +432,6 @@ export function validateAndSanitize<T>(
     const result = schema.parse(processedData);
     return { success: true, data: result };
   } catch (error: any) {
-    // Log the error type and details for debugging
-    console.error(
-      "🔴 Validation catch block - Error type:",
-      error?.constructor?.name,
-    );
-    console.error("🔴 Validation catch block - Error:", error);
-    console.error("🔴 Validation catch block - Error message:", error?.message);
-    console.error("🔴 Validation catch block - Error stack:", error?.stack);
-    console.error(
-      "🔴 Input data being validated:",
-      JSON.stringify(data, null, 2),
-    );
-
-    if (error instanceof z.ZodError) {
-      // Zod stores errors in error.issues, not error.errors
-      const issues = error.issues || [];
-
-      // Log all errors for debugging
-      console.error(
-        "🔴 ZodError.issues array:",
-        JSON.stringify(issues, null, 2),
-      );
-      console.error("🔴 ZodError.issues length:", issues.length);
-
-      if (issues.length === 0) {
-        console.error("⚠️ ZodError with no issues - this should not happen");
-        console.error("⚠️ Full ZodError object:", {
-          name: error.name,
-          message: error.message,
-          stack: error.stack,
-          issues: error.issues,
-          errors: (error as any).errors,
-        });
-        return {
-          success: false,
-          error:
-            "Validation failed: Unknown error (no error details available)",
-        };
-      }
-
-      const firstIssue = issues[0];
-      const errorPath =
-        firstIssue?.path && firstIssue.path.length > 0
-          ? firstIssue.path.join(".")
-          : "root";
-      const errorMessage = firstIssue?.message || "Validation failed";
-
-      // Log all errors for debugging
-      if (issues.length > 1) {
-        console.warn(
-          `⚠️ Multiple validation errors for question:`,
-          issues.map((e: any) => ({
-            path: e.path?.join(".") || "root",
-            message: e.message,
-            code: e.code,
-          })),
-        );
-      }
-
-      return {
-        success: false,
-        error: `${errorMessage} (field: ${errorPath})`,
-      };
-    }
-    // Handle non-Zod errors (like "Cannot read properties of undefined")
-    if (error instanceof Error) {
-      console.error("Validation error (non-Zod):", error);
-      console.error("Validation error stack:", error.stack);
-      return {
-        success: false,
-        error: `Validation error: ${error.message}`,
-      };
-    }
-    // Handle any other error type
-    console.error("Validation error (unknown type):", error);
-    return {
-      success: false,
-      error: `Validation failed: ${error?.message || "Unknown error"}`,
-    };
+    return _handleValidationError(error, data);
   }
 }

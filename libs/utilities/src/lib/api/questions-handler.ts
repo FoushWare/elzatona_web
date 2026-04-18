@@ -424,8 +424,9 @@ export async function questionsPostHandler(request: NextRequest) {
         // Security: Removed debug logging to prevent information disclosure
 
         if (codeField !== undefined && codeField !== null && codeField !== "") {
-          // Convert to string and ensure \n escape sequences become actual newlines
-          let codeContent = String(codeField);
+          // Convert to string safely and ensure \n escape sequences become actual newlines
+          let codeContent =
+            typeof codeField === "string" ? codeField : String(codeField);
 
           // Convert literal \n escape sequences to actual newlines
           codeContent = normalizeCodeLineBreaks(codeContent);
@@ -450,7 +451,8 @@ export async function questionsPostHandler(request: NextRequest) {
           originalCode !== null &&
           originalCode !== ""
         ) {
-          normalizedData["code"] = String(originalCode);
+          normalizedData["code"] =
+            typeof originalCode === "string" ? originalCode : "";
         } else {
           // Explicitly set to null (not undefined) so validation knows it exists
           normalizedData["code"] = null;
@@ -539,7 +541,8 @@ export async function questionsPostHandler(request: NextRequest) {
             originalCode !== null &&
             originalCode !== ""
           ) {
-            let codeContent = String(originalCode);
+            let codeContent =
+              typeof originalCode === "string" ? originalCode : "";
             codeContent = codeContent.replaceAll(String.raw`\n`, "\n");
             codeContent = codeContent.replaceAll(String.raw`\r\n`, "\n");
             codeContent = codeContent.replaceAll(String.raw`\r`, "\n");
@@ -926,7 +929,9 @@ export async function questionsPostHandler(request: NextRequest) {
           originalCode !== ""
         ) {
           // Last resort: process originalCode now
-          const codeContent = normalizeCodeLineBreaks(String(originalCode));
+          const codeContent = normalizeCodeLineBreaks(
+            typeof originalCode === "string" ? originalCode : "",
+          );
           codeToStore = codeContent;
           // Security: Removed user data from logs to prevent log injection
           console.log("⚠️ Using originalCode as fallback");
@@ -956,7 +961,9 @@ export async function questionsPostHandler(request: NextRequest) {
           originalCode !== ""
         ) {
           // Last resort: process originalCode now
-          const codeContent = normalizeCodeLineBreaks(String(originalCode));
+          const codeContent = normalizeCodeLineBreaks(
+            typeof originalCode === "string" ? originalCode : "",
+          );
           questionWithTimestamps["code"] = codeContent;
           // Security: Removed debug logging to prevent information disclosure
           const _newlineCount = (codeContent.match(/\n/g) || []).length;
@@ -1074,7 +1081,9 @@ export async function questionsPostHandler(request: NextRequest) {
             originalCode !== ""
           ) {
             // Process originalCode as last resort
-            const codeContent = normalizeCodeLineBreaks(String(originalCode));
+            const codeContent = normalizeCodeLineBreaks(
+              typeof originalCode === "string" ? originalCode : "",
+            );
             questionWithTimestamps["code"] = codeContent;
             // Security: Removed debug logging to prevent information disclosure
           } else if (
@@ -1104,7 +1113,9 @@ export async function questionsPostHandler(request: NextRequest) {
             originalCode !== null &&
             originalCode !== ""
           ) {
-            const codeContent = normalizeCodeLineBreaks(String(originalCode));
+            const codeContent = normalizeCodeLineBreaks(
+              typeof originalCode === "string" ? originalCode : "",
+            );
             questionWithTimestamps["code"] = codeContent;
             // Security: Log code length instead of content to prevent log injection
             const sanitizedCodeLength = sanitizeForLogging(
