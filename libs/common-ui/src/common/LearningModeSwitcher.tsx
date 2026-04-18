@@ -21,6 +21,8 @@ export const LearningModeSwitcher: React.FC<LearningModeSwitcherProps> = ({
 
   return (
     <div
+      role="group"
+      aria-label="Learning Mode Switcher"
       className={`relative flex items-center p-1 rounded-xl transition-all duration-300 ${
         isScrolled
           ? "bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-200 dark:border-gray-700 shadow-inner"
@@ -37,6 +39,7 @@ export const LearningModeSwitcher: React.FC<LearningModeSwitcherProps> = ({
       {/* Guided Option */}
       <button
         onClick={() => setUserType("guided")}
+        aria-pressed={isGuided}
         className={`relative z-10 flex items-center justify-center space-x-2 px-4 py-1.5 rounded-lg transition-colors duration-300 ${
           isGuided
             ? isScrolled
@@ -54,6 +57,7 @@ export const LearningModeSwitcher: React.FC<LearningModeSwitcherProps> = ({
       {/* Free Style Option */}
       <button
         onClick={() => setUserType("self-directed")}
+        aria-pressed={!isGuided}
         className={`relative z-10 flex items-center justify-center space-x-2 px-4 py-1.5 rounded-lg transition-colors duration-300 ${
           !isGuided
             ? isScrolled

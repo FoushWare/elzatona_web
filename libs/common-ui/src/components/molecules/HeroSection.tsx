@@ -62,8 +62,8 @@ export function HeroSection({
                 showAnimation ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}
             >
-              <div className="relative inline-block group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative inline-block group/cta">
+                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur opacity-25 group-hover/cta:opacity-50 transition duration-1000 group-hover/cta:duration-200"></div>
                 <CTAButton
                   href={personalizedContent.ctaLink}
                   text={personalizedContent.cta}

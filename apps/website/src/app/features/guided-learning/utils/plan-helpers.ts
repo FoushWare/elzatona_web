@@ -62,7 +62,7 @@ export function getQuestionsRange(
     .filter((n): n is number => typeof n === "number" && !Number.isNaN(n));
 
   if (hours.length >= 1) {
-    return `${Math.min(...hours)}-${Math.max(...hours)} Hours`;
+    return `${Math.min(...hours)}-${Math.max(...hours)}`;
   }
 
   return "Foundational to Expert";

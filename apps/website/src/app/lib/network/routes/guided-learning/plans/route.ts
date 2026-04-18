@@ -51,8 +51,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Import hardcoded featured plans
-    const { studyPlans: hardcodedPlans } =
-      await import("../../../../studyPlans");
+    const { studyPlans: hardcodedPlans } = await import("@elzatona/utilities");
 
     // Convert hardcoded plans to match the expected API structure if needed
     // The new structure is already what we want

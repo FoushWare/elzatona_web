@@ -1,5 +1,42 @@
-// Import StudyPlan from the types package
-import type { StudyPlan } from "@elzatona/types";
+import { StudyPlan, StudyMilestone, StudyTask } from "@elzatona/types";
+
+// Helper to create standardized milestones to reduce duplication
+const createMilestones = (
+  foundationsTasks: StudyTask[],
+  advancedTasks: StudyTask[],
+  practiceTasks: StudyTask[],
+): StudyMilestone[] => [
+  {
+    id: "m1",
+    title: "Foundations & Core Concepts",
+    description:
+      "Master JavaScript and React fundamentals to build a strong foundation.",
+    order: 1,
+    topics: ["JavaScript Fundamentals", "React Core Concepts", "CSS & Styling"],
+    tasks: foundationsTasks,
+  },
+  {
+    id: "m2",
+    title: "Advanced CSS & System Design",
+    description: "Deep dive into layout techniques and frontend system design.",
+    order: 2,
+    topics: [
+      "CSS & Styling",
+      "System Design Basics",
+      "JavaScript Fundamentals",
+    ],
+    tasks: advancedTasks,
+  },
+  {
+    id: "m3",
+    title: "Practice, Review & Mock Sessions",
+    description:
+      "Final preparation with comprehensive reviews and mock interviews.",
+    order: 3,
+    topics: ["All Topics", "System Design Basics", "JavaScript Fundamentals"],
+    tasks: practiceTasks,
+  },
+];
 
 export const studyPlans: StudyPlan[] = [
   {
@@ -131,146 +168,110 @@ export const studyPlans: StudyPlan[] = [
         ],
       },
     ],
-    milestones: [
-      {
-        id: "m1",
-        title: "Foundations & Core Concepts",
-        description:
-          "Master JavaScript and React fundamentals to build a strong foundation.",
-        order: 1,
-        topics: [
-          "JavaScript Fundamentals",
-          "React Core Concepts",
-          "CSS & Styling",
-        ],
-        tasks: [
-          {
-            id: "js-hoisting-study",
-            title: "Study Hoisting Concepts",
-            description: "Read about hoisting and complete practice problems",
-            type: "reading",
-            estimatedTime: 30,
-            resourceUrl: "/questions/quiz/explain-hoisting",
-          },
-          {
-            id: "js-closures-practice",
-            title: "Practice Closure Problems",
-            description: "Complete closure-related coding challenges",
-            type: "practice",
-            estimatedTime: 45,
-            resourceUrl: "/questions/javascript/closure",
-          },
-          {
-            id: "js-promises-study",
-            title: "Study Promises and Async/Await",
-            description: "Learn about promises and async programming",
-            type: "reading",
-            estimatedTime: 45,
-          },
-          {
-            id: "react-hooks-practice",
-            title: "Practice React Hooks",
-            description: "Complete React hooks problems",
-            type: "practice",
-            estimatedTime: 60,
-            resourceUrl: "/questions/react/hooks",
-          },
-          {
-            id: "react-state-study",
-            title: "Study State Management",
-            description: "Learn about useState and useContext",
-            type: "reading",
-            estimatedTime: 60,
-          },
-        ],
-      },
-      {
-        id: "m2",
-        title: "Advanced CSS & System Design",
-        description:
-          "Deep dive into layout techniques and frontend system design.",
-        order: 2,
-        topics: [
-          "CSS & Styling",
-          "System Design Basics",
-          "JavaScript Fundamentals",
-        ],
-        tasks: [
-          {
-            id: "css-layout-practice",
-            title: "Practice CSS Layout",
-            description: "Complete CSS layout challenges",
-            type: "practice",
-            estimatedTime: 45,
-            resourceUrl: "/questions/user-interface/layout",
-          },
-          {
-            id: "responsive-design",
-            title: "Responsive Design Practice",
-            description: "Build responsive components",
-            type: "project",
-            estimatedTime: 75,
-          },
-          {
-            id: "autocomplete-design",
-            title: "Design Autocomplete System",
-            description: "Practice autocomplete system design",
-            type: "practice",
-            estimatedTime: 90,
-            resourceUrl: "/questions/system-design/autocomplete",
-          },
-          {
-            id: "js-advanced-practice",
-            title: "Advanced JavaScript Problems",
-            description: "Complete advanced JavaScript challenges",
-            type: "practice",
-            estimatedTime: 60,
-          },
-        ],
-      },
-      {
-        id: "m3",
-        title: "Practice, Review & Mock Sessions",
-        description:
-          "Final preparation with comprehensive reviews and mock interviews.",
-        order: 3,
-        topics: [
-          "All Topics",
-          "System Design Basics",
-          "JavaScript Fundamentals",
-        ],
-        tasks: [
-          {
-            id: "comprehensive-review",
-            title: "Comprehensive Review",
-            description: "Review all learned concepts",
-            type: "review",
-            estimatedTime: 60,
-          },
-          {
-            id: "mock-practice",
-            title: "Mock Interview Practice",
-            description: "Practice with mock interview questions",
-            type: "practice",
-            estimatedTime: 60,
-          },
-          {
-            id: "mock-interview",
-            title: "Mock Interview",
-            description: "Complete a full mock interview",
-            type: "practice",
-            estimatedTime: 90,
-          },
-          {
-            id: "final-review",
-            title: "Final Review",
-            description: "Quick review of key concepts",
-            type: "review",
-            estimatedTime: 30,
-          },
-        ],
-      },
-    ],
+    milestones: createMilestones(
+      [
+        {
+          id: "js-hoisting-study",
+          title: "Study Hoisting Concepts",
+          description: "Read about hoisting and complete practice problems",
+          type: "reading",
+          estimatedTime: 30,
+          resourceUrl: "/questions/quiz/explain-hoisting",
+        },
+        {
+          id: "js-closures-practice",
+          title: "Practice Closure Problems",
+          description: "Complete closure-related coding challenges",
+          type: "practice",
+          estimatedTime: 45,
+          resourceUrl: "/questions/javascript/closure",
+        },
+        {
+          id: "js-promises-study",
+          title: "Study Promises and Async/Await",
+          description: "Learn about promises and async programming",
+          type: "reading",
+          estimatedTime: 45,
+        },
+        {
+          id: "react-hooks-practice",
+          title: "Practice React Hooks",
+          description: "Complete React hooks problems",
+          type: "practice",
+          estimatedTime: 60,
+          resourceUrl: "/questions/react/hooks",
+        },
+        {
+          id: "react-state-study",
+          title: "Study State Management",
+          description: "Learn about useState and useContext",
+          type: "reading",
+          estimatedTime: 60,
+        },
+      ],
+      [
+        {
+          id: "css-layout-practice",
+          title: "Practice CSS Layout",
+          description: "Complete CSS layout challenges",
+          type: "practice",
+          estimatedTime: 45,
+          resourceUrl: "/questions/user-interface/layout",
+        },
+        {
+          id: "responsive-design",
+          title: "Responsive Design Practice",
+          description: "Build responsive components",
+          type: "project",
+          estimatedTime: 75,
+        },
+        {
+          id: "autocomplete-design",
+          title: "Design Autocomplete System",
+          description: "Practice autocomplete system design",
+          type: "practice",
+          estimatedTime: 90,
+          resourceUrl: "/questions/system-design/autocomplete",
+        },
+        {
+          id: "js-advanced-practice",
+          title: "Advanced JavaScript Problems",
+          description: "Complete advanced JavaScript challenges",
+          type: "practice",
+          estimatedTime: 60,
+        },
+      ],
+      [
+        {
+          id: "comprehensive-review",
+          title: "Comprehensive Review",
+          description: "Review all learned concepts",
+          type: "review",
+          estimatedTime: 60,
+        },
+        {
+          id: "mock-practice",
+          title: "Mock Interview Practice",
+          description: "Practice with mock interview questions",
+          type: "practice",
+          estimatedTime: 60,
+        },
+        {
+          id: "mock-interview",
+          title: "Mock Interview",
+          description: "Complete a full mock interview",
+          type: "practice",
+          estimatedTime: 90,
+        },
+        {
+          id: "final-review",
+          title: "Final Review",
+          description: "Quick review of key concepts",
+          type: "review",
+          estimatedTime: 30,
+        },
+      ],
+    ),
     prerequisites: [
       "Basic JavaScript knowledge",
       "Familiarity with HTML and CSS",
@@ -408,127 +409,104 @@ export const studyPlans: StudyPlan[] = [
         ],
       },
     ],
-    milestones: [
-      {
-        id: "m1",
-        title: "JS Fundamentals & React Core",
-        description:
-          "Build a strong foundation in modern JavaScript and React basics.",
-        order: 1,
-        topics: ["JavaScript Comprehensive", "React Advanced"],
-        tasks: [
-          {
-            id: "es6-study",
-            title: "Study ES6+ Features",
-            description:
-              "Learn about arrow functions, destructuring, and modules",
-            type: "reading",
-            estimatedTime: 45,
-            resourceUrl: "/questions/javascript/es6",
-          },
-          {
-            id: "es6-practice",
-            title: "Practice ES6+ Problems",
-            description: "Complete ES6+ coding challenges",
-            type: "practice",
-            estimatedTime: 45,
-          },
-          {
-            id: "hooks-practice",
-            title: "Practice React Hooks",
-            description: "Complete advanced hooks problems",
-            type: "practice",
-            estimatedTime: 90,
-          },
-          {
-            id: "async-practice",
-            title: "Async Programming Practice",
-            description: "Practice promises, async/await, and callbacks",
-            type: "practice",
-            estimatedTime: 90,
-          },
-        ],
-      },
-      {
-        id: "m2",
-        title: "Advanced React & CSS Mastery",
-        description:
-          "Master performance optimization, state management, and advanced styling.",
-        order: 2,
-        topics: ["React Advanced", "CSS Advanced"],
-        tasks: [
-          {
-            id: "performance-study",
-            title: "Study React Performance",
-            description: "Learn about React.memo, useMemo, and useCallback",
-            type: "reading",
-            estimatedTime: 45,
-            resourceUrl: "/questions/react/performance",
-          },
-          {
-            id: "performance-practice",
-            title: "Performance Optimization Practice",
-            description: "Practice optimizing React components",
-            type: "practice",
-            estimatedTime: 45,
-          },
-          {
-            id: "custom-hooks",
-            title: "Build Custom Hooks",
-            description: "Create reusable custom hooks",
-            type: "project",
-            estimatedTime: 90,
-          },
-          {
-            id: "css-animations-practice",
-            title: "CSS Animations Practice",
-            description: "Create complex CSS animations",
-            type: "practice",
-            estimatedTime: 90,
-            resourceUrl: "/questions/css/animations",
-          },
-        ],
-      },
-      {
-        id: "m3",
-        title: "System Design & Career Readiness",
-        description:
-          "Focus on frontend system design and ace your technical interviews.",
-        order: 3,
-        topics: ["System Design Intermediate", "All Topics"],
-        tasks: [
-          {
-            id: "modal-design",
-            title: "Modal Dialog Design",
-            description: "Design a modal dialog system",
-            type: "practice",
-            estimatedTime: 90,
-            resourceUrl: "/questions/system-design/modal-dialog",
-          },
-          {
-            id: "comprehensive-review",
-            title: "Comprehensive Review",
-            description: "Review all learned concepts",
-            type: "review",
-            estimatedTime: 90,
-          },
-          {
-            id: "mock-interview-1",
-            title: "Mock Interview Session 1",
-            description: "Complete a full mock interview",
-            type: "practice",
-            estimatedTime: 90,
-          },
-          {
-            id: "mock-interview-2",
-            title: "Mock Interview Session 2",
-            description: "Complete final mock interview",
-            type: "practice",
-            estimatedTime: 90,
-          },
-        ],
-      },
-    ],
+    milestones: createMilestones(
+      [
+        {
+          id: "es6-study",
+          title: "Study ES6+ Features",
+          description:
+            "Learn about arrow functions, destructuring, and modules",
+          type: "reading",
+          estimatedTime: 45,
+          resourceUrl: "/questions/javascript/es6",
+        },
+        {
+          id: "es6-practice",
+          title: "Practice ES6+ Problems",
+          description: "Complete ES6+ coding challenges",
+          type: "practice",
+          estimatedTime: 45,
+        },
+        {
+          id: "hooks-practice",
+          title: "Practice React Hooks",
+          description: "Complete advanced hooks problems",
+          type: "practice",
+          estimatedTime: 90,
+          resourceUrl: "/questions/react/hooks",
+        },
+        {
+          id: "async-practice",
+          title: "Async Programming Practice",
+          description: "Practice promises, async/await, and callbacks",
+          type: "practice",
+          estimatedTime: 90,
+        },
+      ],
+      [
+        {
+          id: "performance-study",
+          title: "Study React Performance",
+          description: "Learn about React.memo, useMemo, and useCallback",
+          type: "reading",
+          estimatedTime: 45,
+          resourceUrl: "/questions/react/performance",
+        },
+        {
+          id: "performance-practice",
+          title: "Performance Optimization Practice",
+          description: "Practice optimizing React components",
+          type: "practice",
+          estimatedTime: 45,
+        },
+        {
+          id: "custom-hooks",
+          title: "Build Custom Hooks",
+          description: "Create reusable custom hooks",
+          type: "project",
+          estimatedTime: 90,
+        },
+        {
+          id: "css-animations-practice",
+          title: "CSS Animations Practice",
+          description: "Create complex CSS animations",
+          type: "practice",
+          estimatedTime: 90,
+          resourceUrl: "/questions/css/animations",
+        },
+      ],
+      [
+        {
+          id: "modal-design",
+          title: "Modal Dialog Design",
+          description: "Design a modal dialog system",
+          type: "practice",
+          estimatedTime: 90,
+          resourceUrl: "/questions/system-design/modal-dialog",
+        },
+        {
+          id: "comprehensive-review",
+          title: "Comprehensive Review",
+          description: "Review all learned concepts",
+          type: "review",
+          estimatedTime: 90,
+        },
+        {
+          id: "mock-interview-1",
+          title: "Mock Interview Session 1",
+          description: "Complete a full mock interview",
+          type: "practice",
+          estimatedTime: 90,
+        },
+        {
+          id: "mock-interview-2",
+          title: "Mock Interview Session 2",
+          description: "Complete final mock interview",
+          type: "practice",
+          estimatedTime: 90,
+        },
+      ],
+    ),
     prerequisites: [
       "Basic JavaScript knowledge",
       "Familiarity with React basics",
@@ -667,68 +645,44 @@ export const studyPlans: StudyPlan[] = [
         ],
       },
     ],
-    milestones: [
-      {
-        id: "m1",
-        title: "Expert JavaScript & React Patterns",
-        description:
-          "Master expert-level JavaScript patterns and advanced React architecture.",
-        order: 1,
-        topics: ["JavaScript Mastery", "React Expert Level"],
-        tasks: [
-          {
-            id: "js-advanced-study",
-            title: "Study Advanced JavaScript",
-            description: "Learn advanced JavaScript patterns and concepts",
-            type: "reading",
-            estimatedTime: 90,
-            resourceUrl: "/questions/javascript/advanced-patterns",
-          },
-          {
-            id: "js-advanced-practice",
-            title: "Advanced JavaScript Practice",
-            description: "Practice advanced JavaScript problems",
-            type: "practice",
-            estimatedTime: 90,
-          },
-        ],
-      },
-      {
-        id: "m2",
-        title: "Enterprise System Design & Performance",
-        description:
-          "Deep dive into complex system design and performance optimization at scale.",
-        order: 2,
-        topics: ["System Design Expert", "Performance Optimization"],
-        tasks: [
-          {
-            id: "complex-design",
-            title: "Complex System Design",
-            description: "Practice complex system design problems",
-            type: "practice",
-            estimatedTime: 180,
-            resourceUrl: "/questions/system-design/complex",
-          },
-        ],
-      },
-      {
-        id: "m3",
-        title: "Principal Level Readiness & Mocks",
-        description:
-          "Final push for principal-level roles with intense mock interview sessions.",
-        order: 3,
-        topics: ["All Topics"],
-        tasks: [
-          {
-            id: "expert-mock",
-            title: "Expert Mock Interview",
-            description: "Complete expert-level mock interview",
-            type: "practice",
-            estimatedTime: 180,
-          },
-        ],
-      },
-    ],
+    milestones: createMilestones(
+      [
+        {
+          id: "js-advanced-study",
+          title: "Study Advanced JavaScript",
+          description: "Learn advanced JavaScript patterns and concepts",
+          type: "reading",
+          estimatedTime: 90,
+          resourceUrl: "/questions/javascript/advanced-patterns",
+        },
+        {
+          id: "js-advanced-practice",
+          title: "Advanced JavaScript Practice",
+          description: "Practice advanced JavaScript problems",
+          type: "practice",
+          estimatedTime: 90,
+        },
+      ],
+      [
+        {
+          id: "complex-design",
+          title: "Complex System Design",
+          description: "Practice complex system design problems",
+          type: "practice",
+          estimatedTime: 180,
+          resourceUrl: "/questions/system-design/complex",
+        },
+      ],
+      [
+        {
+          id: "expert-mock",
+          title: "Expert Mock Interview",
+          description: "Complete expert-level mock interview",
+          type: "practice",
+          estimatedTime: 180,
+        },
+      ],
+    ),
     prerequisites: [
       "Strong JavaScript foundation",
       "React experience",
