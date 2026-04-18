@@ -2,9 +2,7 @@ import { StudyPlan, StudyMilestone, UserStudyPlan } from "@elzatona/types";
 
 export interface LearningPlan extends StudyPlan {
   isRecommended: boolean;
-  sections?: LearningPlanSection[]; // Keep for legacy if needed, or map to milestones
 }
-
 
 export interface DailyGoal {
   day: number;

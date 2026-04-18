@@ -18,7 +18,9 @@ export function useActivePlan(isAuthenticated: boolean): UseActivePlanResult {
   const router = useRouter();
   const [currentPlan, setCurrentPlan] = useState<LearningPlan | null>(null);
   const [milestones, setMilestones] = useState<StudyMilestone[]>([]);
-  const [currentMilestoneId, setCurrentMilestoneId] = useState<string | null>(null);
+  const [currentMilestoneId, setCurrentMilestoneId] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!isAuthenticated || globalThis.window === undefined) return;
@@ -31,7 +33,9 @@ export function useActivePlan(isAuthenticated: boolean): UseActivePlanResult {
         setMilestones(plan.milestones || []);
 
         // Track current milestone from storage or default to first
-        const storedMilestone = localStorage.getItem(`plan-progress-${plan.id}`);
+        const storedMilestone = localStorage.getItem(
+          `plan-progress-${plan.id}`,
+        );
         if (storedMilestone) {
           setCurrentMilestoneId(storedMilestone);
         } else if (plan.milestones && plan.milestones.length > 0) {
@@ -65,11 +69,12 @@ export function useActivePlan(isAuthenticated: boolean): UseActivePlanResult {
     (plan: LearningPlan) => {
       localStorage.setItem("active-guided-plan", JSON.stringify(plan));
       localStorage.setItem("plan-start-date", new Date().toISOString());
-      
-      const firstMilestoneId = plan.milestones && plan.milestones.length > 0 
-        ? plan.milestones[0].id 
-        : null;
-      
+
+      const firstMilestoneId =
+        plan.milestones && plan.milestones.length > 0
+          ? plan.milestones[0].id
+          : null;
+
       if (firstMilestoneId) {
         localStorage.setItem(`plan-progress-${plan.id}`, firstMilestoneId);
       }

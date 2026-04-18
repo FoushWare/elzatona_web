@@ -90,7 +90,8 @@ export function PlanSelectionView({
               Objective-Driven Stages
             </h4>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Complete modular milestones at your own pace without rigid deadlines
+              Complete modular milestones at your own pace without rigid
+              deadlines
             </p>
           </div>
           <div>

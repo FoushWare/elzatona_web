@@ -26,13 +26,17 @@ export function ActivePlanView({
   onResume,
   onReset,
 }: Readonly<ActivePlanViewProps>) {
-  const completedMilestones = milestones.filter((m) => m.progress === 100).length;
+  const completedMilestones = milestones.filter(
+    (m) => m.progress === 100,
+  ).length;
   const totalMilestones = milestones.length;
-  const progressPercent = totalMilestones > 0 
-    ? Math.round((completedMilestones / totalMilestones) * 100) 
-    : 0;
+  const progressPercent =
+    totalMilestones > 0
+      ? Math.round((completedMilestones / totalMilestones) * 100)
+      : 0;
 
-  const currentMilestoneIndex = milestones.findIndex(m => m.id === currentMilestoneId) + 1;
+  const currentMilestoneIndex =
+    milestones.findIndex((m) => m.id === currentMilestoneId) + 1;
 
   return (
     <div className="mb-8">
@@ -45,7 +49,7 @@ export function ActivePlanView({
                 Active Learning Path
               </p>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                {plan.title || plan.name}
+                {plan.title}
               </h2>
             </div>
 
@@ -74,7 +78,9 @@ export function ActivePlanView({
           <div className="mb-6">
             <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
               <span className="font-medium">Mastery Progress</span>
-              <span className="font-bold text-blue-600 dark:text-blue-400">{progressPercent}%</span>
+              <span className="font-bold text-blue-600 dark:text-blue-400">
+                {progressPercent}%
+              </span>
             </div>
             <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden shadow-inner">
               <div

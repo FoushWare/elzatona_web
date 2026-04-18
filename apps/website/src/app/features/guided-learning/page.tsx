@@ -71,6 +71,7 @@ export default function GuidedLearningPage() {
         {/* Header with stats */}
         <GuidedLearningHeader
           questionsRange={questionsRange}
+          milestoneRange={milestoneRange}
         />
 
         {/* Sign-in CTA for non-authenticated users */}

@@ -68,9 +68,7 @@ export function getQuestionsRange(
   return "Foundational to Expert";
 }
 
-export function getMilestoneRange(
-  plans: { milestones?: any[] }[],
-): string {
+export function getMilestoneRange(plans: { milestones?: any[] }[]): string {
   const counts = plans
     .map((p) => p.milestones?.length || 0)
     .filter((n) => n > 0);
@@ -82,4 +80,3 @@ export function getMilestoneRange(
   }
   return "Modular";
 }
-

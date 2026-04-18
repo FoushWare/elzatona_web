@@ -51,8 +51,9 @@ export async function GET(request: NextRequest) {
     }
 
     // Import hardcoded featured plans
-    const { studyPlans: hardcodedPlans } = await import("../../../../studyPlans");
-    
+    const { studyPlans: hardcodedPlans } =
+      await import("../../../../studyPlans");
+
     // Convert hardcoded plans to match the expected API structure if needed
     // The new structure is already what we want
     let plans = [...hardcodedPlans];
@@ -66,12 +67,15 @@ export async function GET(request: NextRequest) {
 
       if (!error && dbPlans && dbPlans.length > 0) {
         // Merge DB plans with hardcoded plans, avoiding duplicates by ID
-        const hardcodedIds = new Set(plans.map(p => p.id));
-        const filteredDbPlans = dbPlans.filter(p => !hardcodedIds.has(p.id));
+        const hardcodedIds = new Set(plans.map((p) => p.id));
+        const filteredDbPlans = dbPlans.filter((p) => !hardcodedIds.has(p.id));
         plans = [...plans, ...filteredDbPlans];
       }
     } catch (dbError) {
-      console.warn("⚠️ Database fetch failed for learning plans, using hardcoded only:", dbError);
+      console.warn(
+        "⚠️ Database fetch failed for learning plans, using hardcoded only:",
+        dbError,
+      );
     }
 
     return NextResponse.json({ success: true, data: plans || [] });

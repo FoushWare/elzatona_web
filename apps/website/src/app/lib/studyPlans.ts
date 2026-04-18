@@ -342,7 +342,8 @@ export const studyPlans: StudyPlan[] = [
           {
             id: "es6-study",
             title: "Study ES6+ Features",
-            description: "Learn about arrow functions, destructuring, and modules",
+            description:
+              "Learn about arrow functions, destructuring, and modules",
             type: "reading",
             estimatedTime: 45,
             resourceUrl: "/questions/javascript/es6",
@@ -569,7 +570,8 @@ export const studyPlans: StudyPlan[] = [
           {
             id: "js-advanced-study",
             title: "Study Advanced Patterns",
-            description: "Learn about design patterns and architectural decisions",
+            description:
+              "Learn about design patterns and architectural decisions",
             type: "reading",
             estimatedTime: 120,
             resourceUrl: "/questions/javascript/advanced-patterns",

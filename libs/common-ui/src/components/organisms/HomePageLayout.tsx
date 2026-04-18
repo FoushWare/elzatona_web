@@ -39,7 +39,7 @@ export function HomePageLayout({
     <div className="min-h-screen bg-[#fafafa] dark:bg-[#0a0a0b] relative overflow-hidden">
       {/* Subtle depth layer */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.1),transparent_50%)] pointer-events-none" />
-      
+
       <AnimatedBackground />
 
       <div className="relative z-10 space-y-24 pb-32">

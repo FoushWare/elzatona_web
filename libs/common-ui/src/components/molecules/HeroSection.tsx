@@ -29,9 +29,13 @@ export function HeroSection({
 
       <div className="max-w-7xl mx-auto">
         {/* Glassmorphism Hero Card */}
-        <div className={`relative p-8 md:p-16 rounded-[2.5rem] border border-white/40 dark:border-white/10 bg-white/40 dark:bg-gray-900/40 backdrop-blur-2xl shadow-2xl transition-all duration-1000 ${
-          showAnimation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}>
+        <div
+          className={`relative p-8 md:p-16 rounded-[2.5rem] border border-white/40 dark:border-white/10 bg-white/40 dark:bg-gray-900/40 backdrop-blur-2xl shadow-2xl transition-all duration-1000 ${
+            showAnimation
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-10"
+          }`}
+        >
           <div className="max-w-4xl mx-auto text-center">
             <div className="mb-10">
               <AnimatedTitle
@@ -43,7 +47,9 @@ export function HeroSection({
               {/* Animated subtitle with improved typography */}
               <p
                 className={`mt-6 text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-medium transition-all duration-700 delay-300 ${
-                  showAnimation ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+                  showAnimation
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-5"
                 }`}
               >
                 {personalizedContent.subtitle}
@@ -51,9 +57,11 @@ export function HeroSection({
             </div>
 
             {/* Animated CTA Button with glow effect */}
-            <div className={`mb-16 transition-all duration-700 delay-500 ${
-              showAnimation ? "opacity-100 scale-100" : "opacity-0 scale-95"
-            }`}>
+            <div
+              className={`mb-16 transition-all duration-700 delay-500 ${
+                showAnimation ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              }`}
+            >
               <div className="relative inline-block group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
                 <CTAButton
