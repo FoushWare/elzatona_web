@@ -92,6 +92,7 @@ export class FrontendTaskValidator {
       iframe = this.createTestIframe();
       results = await runner(iframe);
     } catch (error) {
+      console.error("Validation pipeline error:", error);
       results = testCases.map((tc) => ({
         testCaseId: tc.id,
         passed: false,
@@ -186,7 +187,8 @@ export class FrontendTaskValidator {
 
   private getReactRoot(iframe: HTMLIFrameElement): HTMLElement {
     const doc = iframe.contentDocument;
-    const root = doc?.getElementById("root");
+    if (!doc) throw new Error("Iframe document is not available");
+    const root = doc.getElementById("root");
     if (!root) throw new Error("Root element not found");
     root.innerHTML = "";
     return root;

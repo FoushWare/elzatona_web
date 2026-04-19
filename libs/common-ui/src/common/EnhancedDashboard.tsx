@@ -156,48 +156,60 @@ ContinueCard.displayName = "ContinueCard";
 // Main Component
 // -----------------------------------------------------------------------------
 
-export default function EnhancedDashboard() {
+// -----------------------------------------------------------------------------
+// Hooks (Extracted to reduce Cognitive Complexity)
+// -----------------------------------------------------------------------------
+
+function useDashboardData() {
   const { user, logout } = useAuth();
   const router = useRouter();
 
-  // State
   const [dashboardStats, setDashboardStats] =
     useState<LocalDashboardStats | null>(null);
   const [plans, setPlans] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false); // Simulated or hook-based
   const [statsLoading, setStatsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
 
-  // 1. Initial Data Fetching
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setStatsLoading(true);
-        const res = await fetch("/api/dashboard/stats", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("auth-token")}`,
-          },
-        });
-        const json = await res.json();
-        if (json.success) setDashboardStats(json.stats);
-      } catch (e) {
-        console.error("Failed to load dashboard stats", e);
-      } finally {
-        setStatsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  // Fetch stats helper
+  const fetchStats = async (showRefresh = false) => {
+    if (showRefresh) setIsRefreshing(true);
+    else setStatsLoading(true);
+
+    try {
+      const res = await fetch("/api/dashboard/stats", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("auth-token")}`,
+        },
+      });
+      const json = await res.json();
+      if (json.success) setDashboardStats(json.stats);
+    } catch (e) {
+      console.error("Failed to load dashboard stats", e);
+    } finally {
+      setIsRefreshing(false);
+      setStatsLoading(false);
+    }
+  };
 
   useEffect(() => {
+    fetchStats();
     fetch("/api/plans")
       .then((r) => r.json())
       .then((j) => setPlans(j.plans || []))
       .catch(() => {});
   }, []);
 
-  // 2. Auth & Navigation Handlers
+  useLayoutEffect(() => {
+    const pendingIntent = localStorage.getItem(
+      "pending_browse_practice_questions_intent",
+    );
+    if (pendingIntent === "true") {
+      localStorage.removeItem("pending_browse_practice_questions_intent");
+      router.push("/custom-roadmap");
+    }
+  }, [router]);
+
   const handleLogout = async () => {
     setIsSigningOut(true);
     try {
@@ -211,27 +223,37 @@ export default function EnhancedDashboard() {
     }
   };
 
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    try {
-      const res = await fetch("/api/dashboard/stats");
-      const json = await res.json();
-      if (json.success) setDashboardStats(json.stats);
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
+  const handleRefresh = () => fetchStats(true);
 
-  // 3. Layout redirection logic
-  useLayoutEffect(() => {
-    const pendingIntent = localStorage.getItem(
-      "pending_browse_practice_questions_intent",
-    );
-    if (pendingIntent === "true") {
-      localStorage.removeItem("pending_browse_practice_questions_intent");
-      router.push("/custom-roadmap");
-    }
-  }, [router]);
+  return {
+    user,
+    dashboardStats,
+    plans,
+    statsLoading,
+    isRefreshing,
+    isSigningOut,
+    handleLogout,
+    handleRefresh,
+  };
+}
+
+// -----------------------------------------------------------------------------
+// Main Component
+// -----------------------------------------------------------------------------
+
+export default function EnhancedDashboard() {
+  const {
+    user,
+    dashboardStats,
+    plans,
+    statsLoading,
+    isRefreshing,
+    isSigningOut,
+    handleLogout,
+    handleRefresh,
+  } = useDashboardData();
+
+  const isLoading = false; // Placeholder if needed
 
   // Data mapping
   const cards = [
