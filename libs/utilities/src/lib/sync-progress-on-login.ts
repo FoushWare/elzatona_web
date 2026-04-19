@@ -29,46 +29,70 @@ interface FreeStyleProgressData {
 }
 
 /**
- * Sync all guided learning progress from localStorage to database
- * @param authToken - The authentication token (for Authorization header)
- * @param userId - The user ID (to pass in request body for custom auth)
+ * Helper to scan localStorage for keys with a specific prefix.
  */
+function _getLocalStorageKeysByPrefix(prefix: string): string[] {
+  const keys: string[] = [];
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(prefix)) {
+        keys.push(key);
+      }
+    }
+  } catch (err) {
+    console.error(`❌ Error scanning localStorage for prefix ${prefix}:`, err);
+  }
+  return keys;
+}
+
+/**
+ * Helper loop to sync multiple plans.
+ */
+async function _syncGuidedPlansLoop(
+  keys: string[],
+  authToken: string,
+  userId?: string,
+): Promise<{ syncedCount: number; errors: string[] }> {
+  const synced: string[] = [];
+  const errors: string[] = [];
+
+  for (const key of keys) {
+    const planId = key.replace("guided-practice-progress-", "");
+    const result = await _syncSinglePlan(key, planId, authToken, userId);
+    if (result.success) {
+      synced.push(planId);
+    } else if (result.error) {
+      errors.push(result.error);
+    }
+  }
+
+  return { syncedCount: synced.length, errors };
+}
+
 export async function syncAllGuidedProgress(
   authToken: string,
   userId?: string,
 ): Promise<{ success: boolean; synced: number; errors: string[] }> {
-  const synced: string[] = [];
-  const errors: string[] = [];
-
   try {
-    // Find all guided-practice-progress-* keys
-    const guidedKeys: string[] = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith("guided-practice-progress-")) {
-        guidedKeys.push(key);
-      }
-    }
-
+    const guidedKeys = _getLocalStorageKeysByPrefix("guided-practice-progress-");
     console.log(
       `📦 Found ${guidedKeys.length} guided learning progress entries to sync`,
     );
 
-    // Sync each guided progress
-    for (const key of guidedKeys) {
-      const planId = key.replace("guided-practice-progress-", "");
-      const result = await _syncSinglePlan(key, planId, authToken, userId);
-      if (result.success) synced.push(planId);
-      if (result.error) errors.push(result.error);
-    }
-  } catch (error) {
-    errors.push(
-      `Guided progress scan: ${error instanceof Error ? error.message : "Unknown error"}`,
+    const { syncedCount, errors } = await _syncGuidedPlansLoop(
+      guidedKeys,
+      authToken,
+      userId,
     );
-    console.error("❌ Error scanning guided progress:", error);
-  }
 
-  return { success: errors.length === 0, synced: synced.length, errors };
+    return { success: errors.length === 0, synced: syncedCount, errors };
+  } catch (error) {
+    const errorMsg =
+      error instanceof Error ? error.message : String(error || "Unknown error");
+    console.error("❌ Error in syncAllGuidedProgress:", error);
+    return { success: false, synced: 0, errors: [errorMsg] };
+  }
 }
 
 /**
@@ -192,10 +216,19 @@ export async function syncFreeStyleProgress(
 }
 
 /**
+ * Formats multi-sync results for debugging and display.
+ */
+function _logSyncResults(guided: any, freeStyle: any, success: boolean): void {
+  console.log("📊 Progress sync summary:", {
+    guided: { synced: guided.synced, errors: guided.errors.length },
+    freeStyle: { success: freeStyle.success },
+    overallSuccess: success,
+  });
+}
+
+/**
  * Sync all progress from localStorage to database
  * This is the main function to call after user login
- * @param authToken - The authentication token (for Authorization header)
- * @param userId - The user ID (to pass in request body for custom auth)
  */
 export async function syncAllProgressOnLogin(
   authToken: string,
@@ -229,22 +262,8 @@ export async function syncAllProgressOnLogin(
           error: freeStyleResult.reason?.message || "Unknown error",
         };
 
-  const overallSuccess = guided.success && freeStyle.success;
+  const success = guided.success && freeStyle.success;
+  _logSyncResults(guided, freeStyle, success);
 
-  console.log("📊 Progress sync summary:", {
-    guided: {
-      synced: guided.synced,
-      errors: guided.errors.length,
-    },
-    freeStyle: {
-      success: freeStyle.success,
-    },
-    overallSuccess,
-  });
-
-  return {
-    success: overallSuccess,
-    guided,
-    freeStyle,
-  };
+  return { success, guided, freeStyle };
 }

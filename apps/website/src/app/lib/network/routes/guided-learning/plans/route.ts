@@ -31,16 +31,35 @@ async function handleSectionsRequest(searchParams: URLSearchParams) {
 /**
  * Fetches and merges hardcoded plans with those from the database.
  */
-async function fetchCombinedPlans() {
-  let supabase;
+/**
+ * Internal helper to get a Supabase client, falling back to anon key if needed.
+ */
+function _getInternalSupabase() {
   try {
-    supabase = getSupabaseClient();
+    return getSupabaseClient();
   } catch {
-    supabase = getSupabaseClientWithAnonKey();
+    return getSupabaseClientWithAnonKey();
   }
+}
 
+/**
+ * Merges database plans with hardcoded plans, removing duplicates by ID.
+ */
+function _mergeDbWithHardcodedPlans(dbPlans: any[], hardcodedPlans: any[]) {
+  if (!dbPlans || dbPlans.length === 0) return hardcodedPlans;
+
+  const hardcodedIds = new Set(hardcodedPlans.map((p) => p.id));
+  const uniqueDbPlans = dbPlans.filter((p) => !hardcodedIds.has(p.id));
+
+  return [...hardcodedPlans, ...uniqueDbPlans];
+}
+
+/**
+ * Fetches and merges hardcoded plans with those from the database.
+ */
+async function fetchCombinedPlans() {
+  const supabase = _getInternalSupabase();
   const { studyPlans: hardcodedPlans } = await import("@elzatona/utilities");
-  let plans = [...hardcodedPlans];
 
   try {
     const { data: dbPlans, error } = await supabase
@@ -48,18 +67,12 @@ async function fetchCombinedPlans() {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (!error && dbPlans?.length) {
-      const hardcodedIds = new Set(plans.map((p) => p.id));
-      const filteredDbPlans = dbPlans.filter((p) => !hardcodedIds.has(p.id));
-      plans = [...plans, ...filteredDbPlans];
-    }
+    if (error) throw error;
+    return _mergeDbWithHardcodedPlans(dbPlans || [], hardcodedPlans);
   } catch (dbError) {
-    console.warn(
-      "⚠️ Database fetch failed for learning plans, using hardcoded only:",
-      dbError,
-    );
+    console.warn("⚠️ Database fetch failed for learning plans:", dbError);
+    return hardcodedPlans;
   }
-  return plans;
 }
 
 /**
@@ -117,21 +130,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = getSupabaseClient();
-    const { data, error } = await supabase
-      .from("learning_plans")
-      .insert({
-        ...planData,
-        created_at: new Date(),
-        updated_at: new Date(),
-        is_active: planData.isActive ?? true,
-        completionRate: planData.completionRate || 0,
-        enrolledUsers: planData.enrolledUsers || 0,
-      })
-      .select()
-      .single();
-
+    const { data, error } = await _insertLearningPlan(planData);
     if (error) throw error;
+
     return NextResponse.json({
       success: true,
       message: "Plan created successfully",
@@ -140,6 +141,25 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return handleRouteError(error);
   }
+}
+
+/**
+ * Helper to insert a learning plan into Supabase.
+ */
+async function _insertLearningPlan(planData: any) {
+  const supabase = getSupabaseClient();
+  return await supabase
+    .from("learning_plans")
+    .insert({
+      ...planData,
+      created_at: new Date(),
+      updated_at: new Date(),
+      is_active: planData.isActive ?? true,
+      completionRate: planData.completionRate || 0,
+      enrolledUsers: planData.enrolledUsers || 0,
+    })
+    .select()
+    .single();
 }
 
 export async function DELETE(request: NextRequest) {

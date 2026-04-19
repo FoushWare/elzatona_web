@@ -378,42 +378,49 @@ function _handleGenericError(error: any): { success: false; error: string } {
 }
 
 /**
- * Formats a ZodError into a user-friendly error message
- * Extracted to reduce cognitive complexity
+ * Formats a Zod issue path into a string.
+ */
+function _getIssuePath(issue: z.ZodIssue): string {
+  return issue?.path && issue.path.length > 0 ? issue.path.join(".") : "root";
+}
+
+/**
+ * Logs multiple validation issues for debugging purposes.
+ */
+function _logMultipleIssues(issues: z.ZodIssue[]): void {
+  if (issues.length <= 1) return;
+
+  console.warn(
+    `⚠️ Multiple validation errors for question:`,
+    issues.map((e: z.ZodIssue) => ({
+      path: _getIssuePath(e),
+      message: e.message,
+      code: e.code,
+    })),
+  );
+}
+
+/**
+ * Formats a ZodError into a user-friendly error message.
  */
 function _formatZodError(error: z.ZodError): { success: false; error: string } {
   const issues = error.issues || [];
 
-  // Log all errors for debugging
-  console.error("🔴 ZodError.issues array:", JSON.stringify(issues, null, 2));
-  console.error("🔴 ZodError.issues length:", issues.length);
+  // Log summary for debugging
+  console.error("🔴 ZodError.issues count:", issues.length);
 
   if (issues.length === 0) {
-    console.error("⚠️ ZodError with no issues - this should not happen");
     return {
       success: false,
-      error: "Validation failed: Unknown error (no error details available)",
+      error: "Validation failed: Unknown error (no details available)",
     };
   }
 
   const firstIssue = issues[0];
-  const errorPath =
-    firstIssue?.path && firstIssue.path.length > 0
-      ? firstIssue.path.join(".")
-      : "root";
+  const errorPath = _getIssuePath(firstIssue);
   const errorMessage = firstIssue?.message || "Validation failed";
 
-  // Log all errors for debugging
-  if (issues.length > 1) {
-    console.warn(
-      `⚠️ Multiple validation errors for question:`,
-      issues.map((e: z.ZodIssue) => ({
-        path: e.path?.join(".") || "root",
-        message: e.message,
-        code: e.code,
-      })),
-    );
-  }
+  _logMultipleIssues(issues);
 
   return {
     success: false,

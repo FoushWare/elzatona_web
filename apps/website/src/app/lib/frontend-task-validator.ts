@@ -218,21 +218,30 @@ export class FrontendTaskValidator {
     testCase: TestCase,
   ): Promise<any> {
     await this.wait(100);
-    const input = testCase.input;
+    return this._evaluateReactStep(root, testCase.input);
+  }
 
+  private async _evaluateReactStep(
+    root: HTMLElement,
+    input: string,
+  ): Promise<string> {
     if (input === "initial") return this.textOrExpectedDigit(root, "0");
+
     if (input === "increment") {
       await this.clickButton(root, (t) => t.includes("+"));
       return this.textOrExpectedDigit(root, "1");
     }
+
     if (input === "decrement") {
       await this.clickButton(root, (t) => t.includes("-"));
       return this.textOrExpectedDigit(root, "-1");
     }
+
     if (input === "reset") {
       await this.clickButton(root, (t) => t.toLowerCase().includes("reset"));
       return this.textOrExpectedDigit(root, "0");
     }
+
     return root.textContent || "";
   }
 
@@ -312,16 +321,21 @@ export class FrontendTaskValidator {
     }
   }
 
-  private evaluateCSSHTML(doc: Document, input: string): any {
+    return this._evaluateCSSHTMLStep(doc, input);
+  }
+
+  private _evaluateCSSHTMLStep(doc: Document, input: string): any {
     if (input === "check-grid") {
       const el = doc.querySelector(".card-container");
       return el ? getComputedStyle(el).display : "none";
     }
+
     if (input === "check-responsive") {
       return doc.querySelectorAll('[class*="grid"]').length > 0
         ? "responsive"
         : "not-responsive";
     }
+
     return doc.body.textContent || "";
   }
 

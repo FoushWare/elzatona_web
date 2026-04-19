@@ -157,10 +157,106 @@ export class LearningResourcesService {
   }
 
   /**
+   * Internal helper to map a simplified resource to the LearningResource interface.
+   */
+  private static _mapToResource(
+    resource: any,
+    state: "open" | "closed",
+  ): LearningResource {
+    return {
+      id: resource.id,
+      number: resource.id,
+      title: resource.title,
+      state: state as const,
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-12-01T00:00:00Z",
+      ...(state === "closed" && { closed_at: "2024-12-01T00:00:00Z" }),
+      labels: [
+        {
+          name: resource.category,
+          color: this.getCategoryColor(resource.category),
+        },
+      ],
+      user: { login: "FoushWare", avatar_url: "" },
+      html_url: resource.url,
+    };
+  }
+
+  /**
    * Get learning resources data organized by categories
    */
   private static getMockData(): LearningResourcesStats {
-    const learningResources = [
+    const rawResources = MOCK_RESOURCES_DATA;
+    const openRaw = rawResources.filter((r) => !r.completed);
+    const closedRaw = rawResources.filter((r) => r.completed);
+
+    return {
+      total: rawResources.length,
+      open: openRaw.length,
+      closed: closedRaw.length,
+      isMockData: true,
+      openResources: openRaw.map((r) => this._mapToResource(r, "open")),
+      closedResources: closedRaw.map((r) => this._mapToResource(r, "closed")),
+    };
+  }
+
+  /**
+   * Get color for category labels
+   */
+  private static getCategoryColor(category: string): string {
+    const colors: { [key: string]: string } = {
+      Security: "d73a4a",
+      Performance: "0075ca",
+      HTML: "e99695",
+      CSS: "7057ff",
+      API: "008672",
+      Interview: "fbca04",
+      TypeScript: "3178c6",
+      JavaScript: "f9d0c4",
+      React: "61dafb",
+      Testing: "0e8a16",
+      "React 18": "1f883d",
+      "Great Frontend": "b60205",
+      Blogs: "c5def5",
+      "Advanced Topics": "d4c5f9",
+    };
+    return colors[category] || "6f42c1";
+  }
+
+  /**
+   * Get resource priority based on labels
+   */
+  static getResourcePriority(
+    resource: LearningResource,
+  ): "Critical" | "High" | "Medium" | "Low" {
+    const labels = resource.labels.map((label) => label.name.toLowerCase());
+
+    if (labels.includes("critical") || labels.includes("urgent")) {
+      return "Critical";
+    }
+    if (labels.includes("high") || labels.includes("bug")) {
+      return "High";
+    }
+    if (labels.includes("medium") || labels.includes("enhancement")) {
+      return "Medium";
+    }
+    return "Low";
+  }
+
+  /**
+   * Format issue creation date
+   */
+  static formatIssueDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
+}
+
+const MOCK_RESOURCES_DATA = [
       // Security Resources
       {
         id: 1,
@@ -805,107 +901,3 @@ export class LearningResourcesService {
         completed: false,
       },
     ];
-
-    const openResources = learningResources.filter(
-      (resource) => !resource.completed,
-    );
-    const closedResources = learningResources.filter(
-      (resource) => resource.completed,
-    );
-
-    return {
-      total: learningResources.length,
-      open: openResources.length,
-      closed: closedResources.length,
-      isMockData: true,
-      openResources: openResources.map((resource, _index) => ({
-        id: resource.id,
-        number: resource.id,
-        title: resource.title,
-        state: "open" as const,
-        created_at: "2024-01-01T00:00:00Z",
-        updated_at: "2024-12-01T00:00:00Z",
-        labels: [
-          {
-            name: resource.category,
-            color: this.getCategoryColor(resource.category),
-          },
-        ],
-        user: { login: "FoushWare", avatar_url: "" },
-        html_url: resource.url,
-      })),
-      closedResources: closedResources.map((resource, _index) => ({
-        id: resource.id,
-        number: resource.id,
-        title: resource.title,
-        state: "closed" as const,
-        created_at: "2024-01-01T00:00:00Z",
-        updated_at: "2024-12-01T00:00:00Z",
-        closed_at: "2024-12-01T00:00:00Z",
-        labels: [
-          {
-            name: resource.category,
-            color: this.getCategoryColor(resource.category),
-          },
-        ],
-        user: { login: "FoushWare", avatar_url: "" },
-        html_url: resource.url,
-      })),
-    };
-  }
-
-  /**
-   * Get color for category labels
-   */
-  private static getCategoryColor(category: string): string {
-    const colors: { [key: string]: string } = {
-      Security: "d73a4a",
-      Performance: "0075ca",
-      HTML: "e99695",
-      CSS: "7057ff",
-      API: "008672",
-      Interview: "fbca04",
-      TypeScript: "3178c6",
-      JavaScript: "f9d0c4",
-      React: "61dafb",
-      Testing: "0e8a16",
-      "React 18": "1f883d",
-      "Great Frontend": "b60205",
-      Blogs: "c5def5",
-      "Advanced Topics": "d4c5f9",
-    };
-    return colors[category] || "6f42c1";
-  }
-
-  /**
-   * Get resource priority based on labels
-   */
-  static getResourcePriority(
-    resource: LearningResource,
-  ): "Critical" | "High" | "Medium" | "Low" {
-    const labels = resource.labels.map((label) => label.name.toLowerCase());
-
-    if (labels.includes("critical") || labels.includes("urgent")) {
-      return "Critical";
-    }
-    if (labels.includes("high") || labels.includes("bug")) {
-      return "High";
-    }
-    if (labels.includes("medium") || labels.includes("enhancement")) {
-      return "Medium";
-    }
-    return "Low";
-  }
-
-  /**
-   * Format issue creation date
-   */
-  static formatIssueDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  }
-}

@@ -146,6 +146,102 @@ async function checkDuplicateQuestion(
 }
 
 /**
+ * Normalizes field names between frontend and database naming conventions.
+ */
+function _normalizeQuestionFields(questionData: Record<string, any>) {
+  const normalized: Record<string, any> = { ...questionData };
+
+  if (normalized["isActive"] !== undefined)
+    normalized["is_active"] = normalized["isActive"];
+  if (normalized["learningCardId"] !== undefined)
+    normalized["learning_card_id"] = normalized["learningCardId"];
+  if (normalized["timeLimit"] !== undefined)
+    normalized["time_limit"] = normalized["timeLimit"];
+
+  // Normalize code line breaks specifically
+  if (normalized["code"] !== undefined && normalized["code"] !== null) {
+    normalized["code"] = normalizeCodeLineBreaks(String(normalized["code"]));
+  } else {
+    normalized["code"] = null;
+  }
+
+  return normalized;
+}
+
+/**
+ * Resolves relationship IDs (Category, Topic, LearningCard) from names or identifiers.
+ */
+async function _resolveRelationships(
+  supabase: any,
+  data: Record<string, any>,
+  categoryIdParam?: string | null,
+) {
+  const categoryId = await lookupCategory(
+    supabase,
+    data["category_id"] || data["category"],
+  );
+
+  const activeCategoryId = categoryIdParam || categoryId;
+
+  const topicId = await lookupTopic(
+    supabase,
+    data["topic_id"] || data["topic"],
+    activeCategoryId,
+  );
+
+  const learningCardId = await lookupLearningCard(
+    supabase,
+    data["learning_card_id"] || data["learningCardId"],
+  );
+
+  return { categoryId, topicId, learningCardId };
+}
+
+/**
+ * Performs final field mapping and sanitization cleanup.
+ */
+function _prepareFinalDbObject(
+  sanitized: Record<string, any>,
+  lookups: {
+    categoryId: string | null;
+    topicId: string | null;
+    learningCardId: string | null;
+  },
+) {
+  const {
+    category: _c,
+    topic: _t,
+    learningCardId: _lc,
+    learning_card_id: _lci,
+    isActive: _ia,
+    timeLimit: _tl,
+    id: _id,
+    categories: _cs,
+    topics: _ts,
+    learning_cards: _lcs,
+    learning_card: _lcobj,
+    ...dbQuestion
+  } = sanitized;
+
+  const finalQuestion: Record<string, any> = {
+    ...dbQuestion,
+    category_id: lookups.categoryId || null,
+    topic_id: lookups.topicId || null,
+    learning_card_id: lookups.learningCardId || null,
+    content: dbQuestion["content"] || dbQuestion["title"],
+    type:
+      dbQuestion["type"] === "multiple-select"
+        ? "multiple-choice"
+        : dbQuestion["type"] || "multiple-choice",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+
+  if (!("code" in finalQuestion)) finalQuestion["code"] = null;
+  return finalQuestion;
+}
+
+/**
  * Transforms a raw database question for frontend consumption.
  */
 function transformQuestionForFrontend(question: Record<string, any>) {
@@ -174,38 +270,17 @@ async function prepareQuestionForStorage(
   supabase: any,
   questionData: Record<string, any>,
 ) {
-  // 1. Normalize field names
-  const normalized: Record<string, any> = { ...questionData };
-  const originalCode = questionData["code"];
+  // 1. Normalize
+  const normalized = _normalizeQuestionFields(questionData);
+  const processedCode = normalized["code"];
 
-  if (normalized["isActive"] !== undefined)
-    normalized["is_active"] = normalized["isActive"];
-  if (normalized["learningCardId"] !== undefined)
-    normalized["learning_card_id"] = normalized["learningCardId"];
-  if (normalized["timeLimit"] !== undefined)
-    normalized["time_limit"] = normalized["timeLimit"];
-
-  // 2. Preserve and Normalize Code field (CRITICAL for newlines)
-  let processedCode: string | null = null;
-  if (originalCode !== undefined && originalCode !== null) {
-    processedCode = normalizeCodeLineBreaks(String(originalCode));
-    normalized["code"] = processedCode;
-  } else {
-    normalized["code"] = null;
-  }
-
-  // 3. Validation
+  // 2. Validate
   const validation = validateAndSanitize(questionSchema, normalized);
-  if (!validation.success) {
-    throw new Error(validation.error);
-  }
+  if (!validation.success) throw new Error(validation.error);
 
-  // 4. Sanitization (Exclude code from HTML sanitization, rely on CSP)
-  const validatedData = validation.data as Record<string, any>;
-  const sanitized = sanitizeObjectServer(validatedData);
-
-  // Restore processed code after object-wide sanitization
-  sanitized["code"] = processedCode;
+  // 3. Sanitize
+  const sanitized = sanitizeObjectServer(validation.data as Record<string, any>);
+  sanitized["code"] = processedCode; // Restore code newlines
   if (sanitized["explanation"]) {
     sanitized["explanation"] = sanitizeRichContent(
       sanitized["explanation"] as string,
@@ -213,54 +288,62 @@ async function prepareQuestionForStorage(
   }
   sanitized["options"] = processQuestionOptions(sanitized["options"]);
 
-  // 5. Build Final Object with Relationship Lookups
-  const categoryId = await lookupCategory(
-    supabase,
-    sanitized["category_id"] || sanitized["category"],
-  );
-  const topicId = await lookupTopic(
-    supabase,
-    sanitized["topic_id"] || sanitized["topic"],
-    categoryId,
-  );
-  const learningCardId = await lookupLearningCard(
-    supabase,
-    sanitized["learning_card_id"] || sanitized["learningCardId"],
-  );
+  // 4. Resolve Relationships
+  const lookups = await _resolveRelationships(supabase, sanitized);
 
-  const {
-    category: _c,
-    topic: _t,
-    learningCardId: _lc,
-    learning_card_id: _lci,
-    isActive: _ia,
-    timeLimit: _tl,
-    id: _id,
-    categories: _cs,
-    topics: _ts,
-    learning_cards: _lcs,
-    learning_card: _lcobj,
-    ...dbQuestion
-  } = sanitized;
+  // 5. Final Mapping
+  return _prepareFinalDbObject(sanitized, lookups);
+}
 
-  const finalQuestion: Record<string, any> = {
-    ...dbQuestion,
-    category_id: categoryId || null,
-    topic_id: topicId || null,
-    learning_card_id: learningCardId || null,
-    content: dbQuestion["content"] || dbQuestion["title"],
-    type:
-      dbQuestion["type"] === "multiple-select"
-        ? "multiple-choice"
-        : dbQuestion["type"] || "multiple-choice",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
+/**
+ * Internal helper to process the creation of a single question.
+ * Returns a result object with status and data/error info.
+ */
+async function _processSingleCreation(
+  supabase: any,
+  questionData: any,
+  index: number,
+) {
+  try {
+    const finalQuestion = await prepareQuestionForStorage(
+      supabase,
+      questionData,
+    );
 
-  // Ensure code is explicitly null if missing to satisfy Supabase insert
-  if (!("code" in finalQuestion)) finalQuestion["code"] = null;
+    // Check for duplicates
+    const duplicate = await checkDuplicateQuestion(supabase, finalQuestion);
+    if (duplicate) {
+      return {
+        success: false,
+        error: "Duplicate question already exists",
+        questionData,
+        index: index + 1,
+      };
+    }
 
-  return finalQuestion;
+    const { data, error } = await supabase
+      .from("questions")
+      .insert(finalQuestion)
+      .single();
+
+    if (error) {
+      return {
+        success: false,
+        error: getErrorMessage(error),
+        questionData,
+        index: index + 1,
+      };
+    }
+
+    return { success: true, id: data?.id };
+  } catch (err: any) {
+    return {
+      success: false,
+      error: getErrorMessage(err),
+      questionData,
+      index: index + 1,
+    };
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -386,37 +469,24 @@ export async function questionsPostHandler(request: NextRequest) {
     }> = [];
 
     for (let index = 0; index < questions.length; index++) {
-      const questionData = questions[index] as Record<string, unknown>;
       try {
-        const finalQuestion = await prepareQuestionForStorage(
+        const result = await _processSingleCreation(
           supabase,
-          questionData,
+          questions[index],
+          index,
         );
-        const existing = await checkDuplicateQuestion(supabase, finalQuestion);
-
-        if (existing) {
+        if (result.success) {
+          results.push({ success: true, id: result.id });
+        } else {
           errors.push({
-            question: questionData,
-            error: `Duplicate question: same title and ${finalQuestion.code ? "code" : "content"} already exists (ID: ${existing.id})`,
-            index: index + 1,
+            question: result.questionData!,
+            error: result.error!,
+            index: result.index!,
           });
-          continue;
         }
-
-        const { data, error } = await supabase
-          .from("questions")
-          .insert(finalQuestion)
-          .select("*, code")
-          .single();
-
-        if (error)
-          throw new Error(
-            `Database error: ${error.message} (Code: ${error.code})`,
-          );
-        results.push({ success: true, id: data.id });
       } catch (error) {
         const msg = getErrorMessage(error);
-        errors.push({ question: questionData, error: msg, index: index + 1 });
+        errors.push({ question: questions[index], error: msg, index: index + 1 });
         console.error(`Error creating question ${index + 1}:`, msg);
       }
     }
@@ -431,10 +501,10 @@ export async function questionsPostHandler(request: NextRequest) {
         errors: errors.map((e) => `Question ${e.index}: ${e.error}`),
         errorDetails: errors.map((e) => ({
           index: e.index,
-          title: (e.question?.title as string) || "Unknown",
+          title: (e.question as any)?.title || "Unknown",
           error: e.error,
         })),
-        results: results,
+        results,
       },
       message: `Successfully ${isBulkImport ? "imported" : "created"} ${results.length} questions`,
     });
@@ -445,6 +515,52 @@ export async function questionsPostHandler(request: NextRequest) {
       { status: 500 },
     );
   }
+}
+
+/**
+ * Internal helper to update a single question.
+ */
+async function _processSingleUpdate(
+  supabase: any,
+  id: string,
+  updateData: Record<string, any>,
+) {
+  // 1. Resolve Relationships
+  const lookups = await _resolveRelationships(supabase, updateData);
+
+  // 2. Sanitize and Normalize
+  const sanitized = sanitizeObjectServer(updateData);
+  if (sanitized["explanation"])
+    sanitized["explanation"] = sanitizeRichContent(sanitized["explanation"]);
+  if (sanitized["code"])
+    sanitized["code"] = normalizeCodeLineBreaks(String(sanitized["code"]));
+  sanitized["options"] = processQuestionOptions(sanitized["options"]);
+
+  const {
+    category: _c,
+    topic: _t,
+    learningCardId: _lc,
+    learning_card_id: _lci,
+    isActive: _ia,
+    timeLimit: _tl,
+    ...dbUpdate
+  } = sanitized;
+
+  const finalUpdate = {
+    ...dbUpdate,
+    category_id: lookups.categoryId || undefined,
+    topic_id: lookups.topicId || undefined,
+    learning_card_id: lookups.learningCardId || undefined,
+    updated_at: new Date().toISOString(),
+  };
+
+  const { error } = await supabase
+    .from("questions")
+    .update(finalUpdate)
+    .eq("id", id);
+
+  if (error) throw error;
+  return true;
 }
 
 /**
@@ -463,51 +579,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // 1. Prepare data for update (Recycle logic from preparation helper)
-    const categoryId = await lookupCategory(
-      supabase,
-      updateData["category_id"] || updateData["category"],
-    );
-    const topicId = await lookupTopic(
-      supabase,
-      updateData["topic_id"] || updateData["topic"],
-      categoryId,
-    );
-    const learningCardId = await lookupLearningCard(
-      supabase,
-      updateData["learning_card_id"] || updateData["learningCardId"],
-    );
-
-    const sanitized = sanitizeObjectServer(updateData);
-    if (sanitized["explanation"])
-      sanitized["explanation"] = sanitizeRichContent(sanitized["explanation"]);
-    if (sanitized["code"])
-      sanitized["code"] = normalizeCodeLineBreaks(String(sanitized["code"]));
-    sanitized["options"] = processQuestionOptions(sanitized["options"]);
-
-    const {
-      category: _c,
-      topic: _t,
-      learningCardId: _lc,
-      learning_card_id: _lci,
-      isActive: _ia,
-      timeLimit: _tl,
-      ...dbUpdate
-    } = sanitized;
-
-    const finalUpdate = {
-      ...dbUpdate,
-      category_id: categoryId || undefined,
-      topic_id: topicId || undefined,
-      learning_card_id: learningCardId || undefined,
-      updated_at: new Date().toISOString(),
-    };
-
-    const { error } = await supabase
-      .from("questions")
-      .update(finalUpdate)
-      .eq("id", id);
-    if (error) throw error;
+    await _processSingleUpdate(supabase, id, updateData);
 
     _questionsCache = null;
     return NextResponse.json({
