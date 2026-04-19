@@ -47,6 +47,7 @@ const StatCard = memo(({ title, value, icon: Icon, colorClass, loading }: any) =
     </div>
   </div>
 ));
+StatCard.displayName = "StatCard";
 
 const ActionCard = memo(({ card }: { card: any }) => (
   <Link
@@ -65,9 +66,9 @@ const ActionCard = memo(({ card }: { card: any }) => (
       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
         <div className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500" style={{ width: `${card.progress}%` }} />
       </div>
-    )}
   </Link>
 ));
+ActionCard.displayName = "ActionCard";
 
 const ContinueCard = memo(({ data }: { data: ContinueData["recentPath"] }) => (
   <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white mb-8">
@@ -95,6 +96,7 @@ const ContinueCard = memo(({ data }: { data: ContinueData["recentPath"] }) => (
     </div>
   </div>
 ));
+ContinueCard.displayName = "ContinueCard";
 
 // -----------------------------------------------------------------------------
 // Main Component

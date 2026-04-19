@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// v1.0 - Enhanced solution validation system for frontend tasks
-// This file uses 'any' types for test case inputs/outputs which can be of various types
+// v1.1 - Enhanced solution validation system for frontend tasks
+// Refactored to reduce cognitive complexity.
 
 export interface TestCase {
   id: string;
@@ -8,7 +8,7 @@ export interface TestCase {
   input: any;
   expectedOutput: any;
   type: "function" | "component" | "css" | "html";
-  timeout?: number; // in milliseconds
+  timeout?: number;
 }
 
 export interface ValidationResult {
@@ -17,7 +17,7 @@ export interface ValidationResult {
   actualOutput?: any;
   expectedOutput: any;
   error?: string;
-  executionTime: number; // in milliseconds
+  executionTime: number;
 }
 
 export interface SolutionValidation {
@@ -30,488 +30,197 @@ export interface SolutionValidation {
 }
 
 export class FrontendTaskValidator {
-  private readonly timeout: number; // 5 seconds default timeout
+  private readonly timeout: number;
 
   constructor(timeout: number = 5000) {
     this.timeout = timeout;
   }
 
-  /**
-   * Validate a React component solution
-   */
-  async validateReactComponent(
-    userCode: string,
-    testCases: TestCase[],
-  ): Promise<SolutionValidation> {
-    const results: ValidationResult[] = [];
-    const startTime = Date.now();
-
-    try {
-      // Create a sandboxed environment for testing
-      const iframe = this.createTestIframe();
-
-      // Inject React and ReactDOM
+  async validateReactComponent(userCode: string, testCases: TestCase[]): Promise<SolutionValidation> {
+    return this.runValidationPipeline(testCases, async (iframe) => {
       await this.injectReactLibraries(iframe);
-
-      // Inject user code
       await this.injectUserCode(iframe, userCode);
-
-      // Run test cases
-      for (const testCase of testCases) {
-        const result = await this.runReactTestCase(iframe, testCase);
-        results.push(result);
-      }
-
-      // Cleanup
-      iframe.remove();
-    } catch (error) {
-      console.error("Validation error:", error);
-      // Add error result for all test cases
-      testCases.forEach((testCase) => {
-        results.push({
-          testCaseId: testCase.id,
-          passed: false,
-          expectedOutput: testCase.expectedOutput,
-          error: error instanceof Error ? error.message : String(error),
-          executionTime: 0,
-        });
-      });
-    }
-
-    const executionTime = Date.now() - startTime;
-    const passedTests = results.filter((r) => r.passed).length;
-
-    return {
-      overallPassed: passedTests === testCases.length,
-      results,
-      totalTests: testCases.length,
-      passedTests,
-      failedTests: testCases.length - passedTests,
-      executionTime,
-    };
+      return Promise.all(testCases.map(tc => this.runReactTestCase(iframe, tc)));
+    });
   }
 
-  /**
-   * Validate a JavaScript function solution
-   */
-  async validateJavaScriptFunction(
-    userCode: string,
-    testCases: TestCase[],
-    functionName: string,
-  ): Promise<SolutionValidation> {
-    const results: ValidationResult[] = [];
-    const startTime = Date.now();
-
-    try {
-      // Create a sandboxed environment
-      const iframe = this.createTestIframe();
-
-      // Inject user code
+  async validateJavaScriptFunction(userCode: string, testCases: TestCase[], functionName: string): Promise<SolutionValidation> {
+    return this.runValidationPipeline(testCases, async (iframe) => {
       await this.injectUserCode(iframe, userCode);
-
-      // Run test cases
-      for (const testCase of testCases) {
-        const result = await this.runJavaScriptTestCase(
-          iframe,
-          testCase,
-          functionName,
-        );
-        results.push(result);
-      }
-
-      // Cleanup
-      iframe.remove();
-    } catch (error) {
-      console.error("Validation error:", error);
-      testCases.forEach((testCase) => {
-        results.push({
-          testCaseId: testCase.id,
-          passed: false,
-          expectedOutput: testCase.expectedOutput,
-          error: error instanceof Error ? error.message : String(error),
-          executionTime: 0,
-        });
-      });
-    }
-
-    const executionTime = Date.now() - startTime;
-    const passedTests = results.filter((r) => r.passed).length;
-
-    return {
-      overallPassed: passedTests === testCases.length,
-      results,
-      totalTests: testCases.length,
-      passedTests,
-      failedTests: testCases.length - passedTests,
-      executionTime,
-    };
+      return Promise.all(testCases.map(tc => this.runJavaScriptTestCase(iframe, tc, functionName)));
+    });
   }
 
-  /**
-   * Validate CSS/HTML solution
-   */
-  async validateCSSHTML(
-    userCode: string,
-    testCases: TestCase[],
-  ): Promise<SolutionValidation> {
-    const results: ValidationResult[] = [];
-    const startTime = Date.now();
-
-    try {
-      // Create a test iframe
-      const iframe = this.createTestIframe();
-
-      // Inject user code without using deprecated document.write API.
+  async validateCSSHTML(userCode: string, testCases: TestCase[]): Promise<SolutionValidation> {
+    return this.runValidationPipeline(testCases, async (iframe) => {
       iframe.srcdoc = userCode;
+      await new Promise(resolve => { iframe.onload = resolve; setTimeout(resolve, 1000); });
+      return Promise.all(testCases.map(tc => this.runCSSHTMLTestCase(iframe, tc)));
+    });
+  }
 
-      // Wait for content to load
-      await new Promise((resolve) => {
-        iframe.onload = resolve;
-        setTimeout(resolve, 1000); // Fallback timeout
-      });
+  private async runValidationPipeline(testCases: TestCase[], runner: (iframe: HTMLIFrameElement) => Promise<ValidationResult[]>): Promise<SolutionValidation> {
+    const startTime = Date.now();
+    let results: ValidationResult[] = [];
+    let iframe: HTMLIFrameElement | null = null;
 
-      // Run test cases
-      for (const testCase of testCases) {
-        const result = await this.runCSSHTMLTestCase(iframe, testCase);
-        results.push(result);
-      }
-
-      // Cleanup
-      iframe.remove();
+    try {
+      iframe = this.createTestIframe();
+      results = await runner(iframe);
     } catch (error) {
-      console.error("Validation error:", error);
-      testCases.forEach((testCase) => {
-        results.push({
-          testCaseId: testCase.id,
-          passed: false,
-          expectedOutput: testCase.expectedOutput,
-          error: error instanceof Error ? error.message : String(error),
-          executionTime: 0,
-        });
-      });
+      results = testCases.map(tc => ({
+        testCaseId: tc.id, passed: false, expectedOutput: tc.expectedOutput,
+        error: error instanceof Error ? error.message : String(error), executionTime: 0
+      }));
+    } finally {
+      iframe?.remove();
     }
 
     const executionTime = Date.now() - startTime;
-    const passedTests = results.filter((r) => r.passed).length;
-
-    return {
-      overallPassed: passedTests === testCases.length,
-      results,
-      totalTests: testCases.length,
-      passedTests,
-      failedTests: testCases.length - passedTests,
-      executionTime,
-    };
+    const passedTests = results.filter(r => r.passed).length;
+    return { overallPassed: passedTests === testCases.length, results, totalTests: testCases.length, passedTests, failedTests: testCases.length - passedTests, executionTime };
   }
 
   private createTestIframe(): HTMLIFrameElement {
     const iframe = document.createElement("iframe");
-    iframe.style.display = "none";
-    iframe.style.width = "0";
-    iframe.style.height = "0";
-    iframe.style.border = "none";
+    Object.assign(iframe.style, { display: "none", width: "0", height: "0", border: "none" });
     document.body.appendChild(iframe);
     return iframe;
   }
 
   private async injectReactLibraries(iframe: HTMLIFrameElement): Promise<void> {
     return new Promise((resolve, reject) => {
-      iframe.srcdoc = `
-        <!DOCTYPE html>
-        <html>
-        <head>
+      iframe.srcdoc = `<!DOCTYPE html><html><head>
           <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
           <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
           <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-        </head>
-        <body>
-          <div id="root"></div>
-        </body>
-        </html>
-      `;
-
+        </head><body><div id="root"></div></body></html>`;
       iframe.onload = () => resolve();
-      iframe.onerror = () =>
-        reject(new Error("Failed to load React libraries"));
-
-      setTimeout(
-        () => reject(new Error("Timeout loading React libraries")),
-        10000,
-      );
+      iframe.onerror = () => reject(new Error("Failed to load React libraries"));
+      setTimeout(() => reject(new Error("Timeout loading React libraries")), 10000);
     });
   }
 
-  private async injectUserCode(
-    iframe: HTMLIFrameElement,
-    userCode: string,
-  ): Promise<void> {
+  private async injectUserCode(iframe: HTMLIFrameElement, userCode: string): Promise<void> {
     const doc = iframe.contentDocument;
-    if (!doc) {
-      throw new Error("Iframe document is not available");
-    }
+    if (!doc) throw new Error("Iframe document is not available");
     const script = doc.createElement("script");
     script.type = "text/babel";
     script.text = userCode;
     doc.head.appendChild(script);
-
-    // Wait for Babel to transpile
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
   }
 
-  private async runReactTestCase(
-    iframe: HTMLIFrameElement,
-    testCase: TestCase,
-  ): Promise<ValidationResult> {
+  private async runReactTestCase(iframe: HTMLIFrameElement, testCase: TestCase): Promise<ValidationResult> {
     const startTime = Date.now();
-
     try {
       const root = this.getReactRoot(iframe);
       this.renderReactComponent(iframe, root);
       const actualOutput = await this.evaluateReactTestCase(root, testCase);
-
-      const executionTime = Date.now() - startTime;
-      const passed = this.compareOutputs(actualOutput, testCase.expectedOutput);
-
-      return {
-        testCaseId: testCase.id,
-        passed,
-        actualOutput,
-        expectedOutput: testCase.expectedOutput,
-        executionTime,
-      };
+      return { testCaseId: testCase.id, passed: this.compareOutputs(actualOutput, testCase.expectedOutput), actualOutput, expectedOutput: testCase.expectedOutput, executionTime: Date.now() - startTime };
     } catch (error) {
-      return {
-        testCaseId: testCase.id,
-        passed: false,
-        expectedOutput: testCase.expectedOutput,
-        error: error instanceof Error ? error.message : String(error),
-        executionTime: Date.now() - startTime,
-      };
+      return { testCaseId: testCase.id, passed: false, expectedOutput: testCase.expectedOutput, error: error instanceof Error ? error.message : String(error), executionTime: Date.now() - startTime };
     }
   }
 
   private getReactRoot(iframe: HTMLIFrameElement): HTMLElement {
     const doc = iframe.contentDocument;
-    if (!doc) {
-      throw new Error("Iframe document is not available");
-    }
-
-    const root = doc.getElementById("root");
-    if (!root) {
-      throw new Error("Root element not found");
-    }
-
+    const root = doc?.getElementById("root");
+    if (!root) throw new Error("Root element not found");
     root.innerHTML = "";
     return root;
   }
 
-  private renderReactComponent(
-    iframe: HTMLIFrameElement,
-    root: HTMLElement,
-  ): void {
+  private renderReactComponent(iframe: HTMLIFrameElement, root: HTMLElement): void {
     const win = iframe.contentWindow as any;
-    const React = win?.React;
-    const ReactDOM = win?.ReactDOM;
-
-    if (!React || !ReactDOM) {
-      throw new Error("React libraries not loaded");
+    const { React, ReactDOM, Counter, TodoList } = win || {};
+    if (!React || !ReactDOM) throw new Error("React libraries not loaded");
+    const Component = Counter || TodoList;
+    if (!Component) throw new Error("Component not found in user code");
+    
+    // Use createRoot for React 18+ compatibility
+    if (ReactDOM.createRoot) {
+      const reactRoot = ReactDOM.createRoot(root);
+      reactRoot.render(React.createElement(Component));
+    } else {
+      ReactDOM.render(React.createElement(Component), root);
     }
-
-    const Component = win.Counter || win.TodoList;
-    if (!Component) {
-      throw new Error("Component not found in user code");
-    }
-
-    const element = React.createElement(Component);
-    // eslint-disable-next-line react/no-deprecated
-    ReactDOM.render(element, root);
   }
 
-  private async evaluateReactTestCase(
-    root: HTMLElement,
-    testCase: TestCase,
-  ): Promise<any> {
+  private async evaluateReactTestCase(root: HTMLElement, testCase: TestCase): Promise<any> {
     await this.wait(100);
+    const input = testCase.input;
 
-    if (testCase.input === "initial") {
-      return this.textOrExpectedDigit(root, "0");
-    }
-
-    if (testCase.input === "increment") {
-      await this.clickButtonAndWait(
-        root,
-        (text) => text.includes("+1") || text.includes("+"),
-        "Increment button not found",
-      );
+    if (input === "initial") return this.textOrExpectedDigit(root, "0");
+    if (input === "increment") {
+      await this.clickButton(root, t => t.includes("+"));
       return this.textOrExpectedDigit(root, "1");
     }
-
-    if (testCase.input === "decrement") {
-      await this.clickButtonAndWait(
-        root,
-        (text) => text.includes("-1") || text.includes("-"),
-        "Decrement button not found",
-      );
+    if (input === "decrement") {
+      await this.clickButton(root, t => t.includes("-"));
       return this.textOrExpectedDigit(root, "-1");
     }
-
-    if (testCase.input === "reset") {
-      await this.clickButtonAndWait(
-        root,
-        (text) => text.toLowerCase().includes("reset"),
-        "Reset button not found",
-      );
+    if (input === "reset") {
+      await this.clickButton(root, t => t.toLowerCase().includes("reset"));
       return this.textOrExpectedDigit(root, "0");
     }
-
     return root.textContent || "";
   }
 
-  private async clickButtonAndWait(
-    root: HTMLElement,
-    matcher: (text: string) => boolean,
-    notFoundError: string,
-  ): Promise<void> {
-    const buttons = Array.from(root.querySelectorAll("button"));
-    const matchedButton = buttons.find((button) =>
-      matcher(button.textContent || ""),
-    );
-
-    if (!matchedButton) {
-      throw new Error(notFoundError);
-    }
-
-    matchedButton.click();
+  private async clickButton(root: HTMLElement, matcher: (t: string) => boolean): Promise<void> {
+    const btn = Array.from(root.querySelectorAll("button")).find(b => matcher(b.textContent || ""));
+    if (!btn) throw new Error("Button not found");
+    btn.click();
     await this.wait(100);
   }
 
-  private textOrExpectedDigit(
-    root: HTMLElement,
-    expectedDigit: string,
-  ): string {
+  private textOrExpectedDigit(root: HTMLElement, digit: string): string {
     const text = root.textContent || "";
-    return text.includes(expectedDigit) ? expectedDigit : text;
+    return text.includes(digit) ? digit : text;
   }
 
-  private async wait(ms: number): Promise<void> {
-    await new Promise((resolve) => setTimeout(resolve, ms));
-  }
+  private wait(ms: number): Promise<void> { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-  private async runJavaScriptTestCase(
-    iframe: HTMLIFrameElement,
-    testCase: TestCase,
-    functionName: string,
-  ): Promise<ValidationResult> {
-    const startTime = Date.now();
-
+  private async runJavaScriptTestCase(iframe: HTMLIFrameElement, testCase: TestCase, functionName: string): Promise<ValidationResult> {
+    const start = Date.now();
     try {
-      const window = iframe.contentWindow;
-      if (!window) {
-        throw new Error("Iframe window is not available");
-      }
-
-      const func = (window as any)[functionName];
-
-      if (!func) {
-        throw new Error(`Function ${functionName} not found`);
-      }
-
-      // Execute the function with test input
-      const actualOutput = func(testCase.input);
-      const executionTime = Date.now() - startTime;
-      const passed = this.compareOutputs(actualOutput, testCase.expectedOutput);
-
-      return {
-        testCaseId: testCase.id,
-        passed,
-        actualOutput,
-        expectedOutput: testCase.expectedOutput,
-        executionTime,
-      };
-    } catch (error) {
-      return {
-        testCaseId: testCase.id,
-        passed: false,
-        expectedOutput: testCase.expectedOutput,
-        error: error instanceof Error ? error.message : String(error),
-        executionTime: Date.now() - startTime,
-      };
+      const func = (iframe.contentWindow as any)?.[functionName];
+      if (!func) throw new Error(`Function ${functionName} not found`);
+      const actual = func(testCase.input);
+      return { testCaseId: testCase.id, passed: this.compareOutputs(actual, testCase.expectedOutput), actualOutput: actual, expectedOutput: testCase.expectedOutput, executionTime: Date.now() - start };
+    } catch (e) {
+      return { testCaseId: testCase.id, passed: false, expectedOutput: testCase.expectedOutput, error: e instanceof Error ? e.message : String(e), executionTime: Date.now() - start };
     }
   }
 
-  private async runCSSHTMLTestCase(
-    iframe: HTMLIFrameElement,
-    testCase: TestCase,
-  ): Promise<ValidationResult> {
-    const startTime = Date.now();
-
+  private async runCSSHTMLTestCase(iframe: HTMLIFrameElement, testCase: TestCase): Promise<ValidationResult> {
+    const start = Date.now();
     try {
       const doc = iframe.contentDocument;
-      if (!doc) {
-        throw new Error("Iframe document is not available");
-      }
-
-      // Execute test case based on type
-
-      let actualOutput: any;
-
-      switch (testCase.input) {
-        case "check-grid": {
-          const gridElement = doc.querySelector(".card-container");
-          actualOutput = gridElement
-            ? globalThis.window.getComputedStyle(gridElement).display
-            : "none";
-          break;
-        }
-
-        case "check-responsive": {
-          // Check if responsive classes exist
-          const responsiveElements = doc.querySelectorAll('[class*="grid"]');
-          actualOutput =
-            responsiveElements.length > 0 ? "responsive" : "not-responsive";
-          break;
-        }
-
-        default:
-          actualOutput = doc.body.textContent || "";
-      }
-
-      const executionTime = Date.now() - startTime;
-      const passed = this.compareOutputs(actualOutput, testCase.expectedOutput);
-
-      return {
-        testCaseId: testCase.id,
-        passed,
-        actualOutput,
-        expectedOutput: testCase.expectedOutput,
-        executionTime,
-      };
-    } catch (error) {
-      return {
-        testCaseId: testCase.id,
-        passed: false,
-        expectedOutput: testCase.expectedOutput,
-        error: error instanceof Error ? error.message : String(error),
-        executionTime: Date.now() - startTime,
-      };
+      if (!doc) throw new Error("Iframe document missing");
+      const actual = this.evaluateCSSHTML(doc, testCase.input);
+      return { testCaseId: testCase.id, passed: this.compareOutputs(actual, testCase.expectedOutput), actualOutput: actual, expectedOutput: testCase.expectedOutput, executionTime: Date.now() - start };
+    } catch (e) {
+      return { testCaseId: testCase.id, passed: false, expectedOutput: testCase.expectedOutput, error: e instanceof Error ? e.message : String(e), executionTime: Date.now() - start };
     }
+  }
+
+  private evaluateCSSHTML(doc: Document, input: string): any {
+    if (input === "check-grid") {
+      const el = doc.querySelector(".card-container");
+      return el ? getComputedStyle(el).display : "none";
+    }
+    if (input === "check-responsive") {
+      return doc.querySelectorAll('[class*="grid"]').length > 0 ? "responsive" : "not-responsive";
+    }
+    return doc.body.textContent || "";
   }
 
   private compareOutputs(actual: any, expected: any): boolean {
-    // Deep comparison for objects and arrays
-    if (typeof actual === "object" && typeof expected === "object") {
-      return JSON.stringify(actual) === JSON.stringify(expected);
-    }
-
-    // String comparison with normalization
-    if (typeof actual === "string" && typeof expected === "string") {
-      return actual.trim().toLowerCase() === expected.trim().toLowerCase();
-    }
-
-    // Direct comparison
+    if (typeof actual === "object" && typeof expected === "object") return JSON.stringify(actual) === JSON.stringify(expected);
+    if (typeof actual === "string" && typeof expected === "string") return actual.trim().toLowerCase() === expected.trim().toLowerCase();
     return actual === expected;
   }
 }
 
-// Export default validator instance
 export const frontendTaskValidator = new FrontendTaskValidator();

@@ -56,63 +56,10 @@ export async function syncAllGuidedProgress(
 
     // Sync each guided progress
     for (const key of guidedKeys) {
-      try {
-        const progressData = localStorage.getItem(key);
-        if (!progressData) continue;
-
-        const progress: GuidedProgressData = JSON.parse(progressData);
-        const planId = key.replace("guided-practice-progress-", "");
-
-        const response = await fetch("/api/progress/guided-learning/sync", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`, // Pass auth token in header
-          },
-          body: JSON.stringify({
-            planId,
-            completedQuestions: progress.completedQuestions || [],
-            completedTopics: progress.completedTopics || [],
-            completedCategories: progress.completedCategories || [],
-            completedCards: progress.completedCards || [],
-            correctAnswers: progress.correctAnswers || [],
-            currentPosition: progress.currentPosition,
-            lastUpdated: progress.lastUpdated || new Date().toISOString(),
-            ...(userId && { userId }), // Pass user ID if provided (for custom auth)
-          }),
-        });
-
-        if (response.ok) {
-          synced.push(planId);
-          console.log(`✅ Synced guided progress for plan: ${planId}`);
-
-          // Remove from localStorage after successful sync
-          try {
-            localStorage.removeItem(key);
-            console.log(`🗑️ Removed guided progress from localStorage: ${key}`);
-          } catch (removeError) {
-            console.warn(
-              `⚠️ Failed to remove ${key} from localStorage:`,
-              removeError,
-            );
-          }
-        } else {
-          const errorData = await response
-            .json()
-            .catch(() => ({ error: "Unknown error" }));
-          errors.push(`Plan ${planId}: ${errorData.error || "Sync failed"}`);
-          console.error(
-            `❌ Failed to sync guided progress for plan ${planId}:`,
-            errorData,
-          );
-        }
-      } catch (error) {
-        const planId = key.replace("guided-practice-progress-", "");
-        errors.push(
-          `Plan ${planId}: ${error instanceof Error ? error.message : "Parse error"}`,
-        );
-        console.error(`❌ Error syncing guided progress for ${key}:`, error);
-      }
+      const planId = key.replace("guided-practice-progress-", "");
+      const result = await _syncSinglePlan(key, planId, authToken, userId);
+      if (result.success) synced.push(planId);
+      if (result.error) errors.push(result.error);
     }
   } catch (error) {
     errors.push(
@@ -121,11 +68,52 @@ export async function syncAllGuidedProgress(
     console.error("❌ Error scanning guided progress:", error);
   }
 
-  return {
-    success: errors.length === 0,
-    synced: synced.length,
-    errors,
-  };
+  return { success: errors.length === 0, synced: synced.length, errors };
+}
+
+/**
+ * Internal helper to sync a single plan's progress.
+ */
+async function _syncSinglePlan(
+  key: string,
+  planId: string,
+  authToken: string,
+  userId?: string,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const progressData = localStorage.getItem(key);
+    if (!progressData) return { success: false };
+
+    const progress: GuidedProgressData = JSON.parse(progressData);
+    const response = await fetch("/api/progress/guided-learning/sync", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({
+        planId,
+        completedQuestions: progress.completedQuestions || [],
+        completedTopics: progress.completedTopics || [],
+        completedCategories: progress.completedCategories || [],
+        completedCards: progress.completedCards || [],
+        correctAnswers: progress.correctAnswers || [],
+        currentPosition: progress.currentPosition,
+        lastUpdated: progress.lastUpdated || new Date().toISOString(),
+        ...(userId && { userId }),
+      }),
+    });
+
+    if (response.ok) {
+      localStorage.removeItem(key);
+      return { success: true };
+    }
+    
+    const errorData = await response.json().catch(() => ({ error: "Sync failed" }));
+    return { success: false, error: `Plan ${planId}: ${errorData.error || "Unknown error"}` };
+  } catch (error) {
+    return { success: false, error: `Plan ${planId}: ${error instanceof Error ? error.message : "Parse error"}` };
+  }
 }
 
 /**
