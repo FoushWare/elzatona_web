@@ -158,14 +158,18 @@ export const ProblemSolvingEditorMainContent: React.FC<MainContentProps> = ({
             label="Difficulty"
             value={formData.difficulty}
             options={["easy", "medium", "hard"]}
-            onChange={(v: string) => setFormData({ ...formData, difficulty: v })}
+            onChange={(v: string) =>
+              setFormData({ ...formData, difficulty: v })
+            }
             isDark={isDark}
           />
         </div>
         <InputGroup
           label="Function Name"
           value={formData.functionName}
-          onChange={(v: string) => setFormData({ ...formData, functionName: v })}
+          onChange={(v: string) =>
+            setFormData({ ...formData, functionName: v })
+          }
           isDark={isDark}
         />
       </div>

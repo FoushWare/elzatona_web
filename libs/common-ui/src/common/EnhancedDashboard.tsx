@@ -113,42 +113,42 @@ const ContinueCard = memo(({ data }: { data: ContinueData["recentPath"] }) => {
 
   return (
     <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white mb-8">
-    <div className="flex items-center justify-between mb-4">
-      <h2 className="text-2xl font-bold flex items-center">
-        <Play className="w-6 h-6 mr-2" /> Continue Where You Left Off
-      </h2>
-      <span className="text-blue-200 text-sm">Recently accessed</span>
-    </div>
-    <div className="flex items-center justify-between">
-      <div>
-        <h3 className="text-xl font-semibold mb-2">{data.pathName}</h3>
-        <p className="text-blue-100 mb-3">
-          {data.completedSections?.length || 0} sections completed
-        </p>
-        <div className="flex items-center space-x-4 text-sm text-blue-200">
-          <span className="flex items-center">
-            <Timer className="w-4 h-4 mr-1" /> {data.timeSpent}m
-          </span>
-          <span className="flex items-center">
-            <Target className="w-4 h-4 mr-1" /> {data.progress}% complete
-          </span>
-        </div>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold flex items-center">
+          <Play className="w-6 h-6 mr-2" /> Continue Where You Left Off
+        </h2>
+        <span className="text-blue-200 text-sm">Recently accessed</span>
       </div>
-      <Link
-        href={`/learning-paths/${data.pathId}`}
-        className="flex items-center space-x-2 px-6 py-3 bg-white text-blue-600 rounded-xl hover:bg-blue-50 transition-colors font-semibold"
-      >
-        <span>Continue</span> <ArrowRight className="w-4 h-4" />
-      </Link>
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-xl font-semibold mb-2">{data.pathName}</h3>
+          <p className="text-blue-100 mb-3">
+            {data.completedSections?.length || 0} sections completed
+          </p>
+          <div className="flex items-center space-x-4 text-sm text-blue-200">
+            <span className="flex items-center">
+              <Timer className="w-4 h-4 mr-1" /> {data.timeSpent}m
+            </span>
+            <span className="flex items-center">
+              <Target className="w-4 h-4 mr-1" /> {data.progress}% complete
+            </span>
+          </div>
+        </div>
+        <Link
+          href={`/learning-paths/${data.pathId}`}
+          className="flex items-center space-x-2 px-6 py-3 bg-white text-blue-600 rounded-xl hover:bg-blue-50 transition-colors font-semibold"
+        >
+          <span>Continue</span> <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
+      <div className="mt-4 w-full bg-blue-500/30 rounded-full h-2">
+        <div
+          className="bg-white h-2 rounded-full transition-all duration-500"
+          style={{ width: `${data.progress}%` }}
+        />
+      </div>
     </div>
-    <div className="mt-4 w-full bg-blue-500/30 rounded-full h-2">
-      <div
-        className="bg-white h-2 rounded-full transition-all duration-500"
-        style={{ width: `${data.progress}%` }}
-      />
-    </div>
-  </div>
-);
+  );
 });
 ContinueCard.displayName = "ContinueCard";
 

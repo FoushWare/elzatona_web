@@ -66,6 +66,10 @@ jobs:
             libs/common-ui/src/components/ui/dialog.test.tsx \
             apps/website/src/app/lib/frontend-task-validator.test.ts \
             apps/website/src/app/lib/frontend-task-validator-coverage.test.ts \
+            libs/utilities/src/lib/api/questions-handler.test.ts \
+            libs/utilities/src/lib/api/sanitize-server.test.ts \
+            libs/utilities/src/lib/api/validation.test.ts \
+            libs/utilities/src/lib/api/stats-utils.test.ts \
             --coverage \
             --coverage.provider=v8 \
             --coverage.reporter=lcov \

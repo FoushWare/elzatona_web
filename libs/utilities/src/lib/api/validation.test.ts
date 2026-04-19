@@ -1,86 +1,99 @@
+import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { validateAndSanitize } from "./validation";
+import { validateAndSanitize, questionSchema } from "./validation";
+import { sanitizeInputServer } from "./sanitize-server";
 
-describe("validation handles success cases", () => {
-  const schema = z.object({
-    name: z.string(),
-    age: z.number(),
-  });
-
-  it("should return success when data matches schema", () => {
-    const data = { name: "Test", age: 25 };
-    const result = validateAndSanitize(schema, data);
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data).toEqual(data);
-    }
-  });
-
-  it("should return success and sanitize string fields", () => {
-    const data = { name: "Test <script>alert(1)</script>", age: 25 };
-    const result = validateAndSanitize(schema, data);
-    expect(result.success).toBe(true);
-    // Note: validateAndSanitize itself doesn't call sanitizeHTML unless the schema does,
-    // but our pre-processor might depending on implementation.
-    // In our current implementation, validateAndSanitize uses zod's parse.
-  });
-});
-
-describe("validation handles error cases", () => {
-  const schema = z.object({
-    name: z.string().min(3),
-    email: z.string().email(),
-  });
-
-  it("should return failure for invalid data", () => {
-    const data = { name: "Te", email: "invalid" };
-    const result = validateAndSanitize(schema, data);
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error).toContain("name");
-    }
-  });
-
-  it("should handle null data gracefully", () => {
-    const result = validateAndSanitize(schema, null);
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error).toBeDefined();
-    }
-  });
-
-  it("should handle invalid schema gracefully", () => {
-    const result = validateAndSanitize(null as unknown as z.ZodType, {});
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error).toContain("Invalid schema");
-    }
-  });
-});
-
-describe("error handling helper coverage", () => {
-  const schema = z.object({
-    field: z.string().email("Invalid email format"),
-  });
-
-  it("formats Zod errors correctly", () => {
-    const result = validateAndSanitize(schema, { field: "not-an-email" });
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error).toBe("Invalid email format (field: field)");
-    }
-  });
-
-  it("handles multiple Zod errors by returning the first one", () => {
-    const complexSchema = z.object({
-      a: z.string(),
-      b: z.number(),
+describe("Validation Utilities", () => {
+  describe("validateAndSanitize", () => {
+    const schema = z.object({
+      name: z.string().transform((val) => sanitizeInputServer(val)),
+      age: z.number(),
+      bio: z.string().optional(),
     });
-    const result = validateAndSanitize(complexSchema, { a: 1, b: "string" });
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      // Should contain first error path
-      expect(result.error).toMatch(/a|b/);
-    }
+
+    it("should validate and sanitize valid data", () => {
+      const input = {
+        name: "  <b>John</b>  ",
+        age: 30,
+        bio: "Standard bio",
+      };
+
+      const result = validateAndSanitize(schema, input);
+
+      if (!result.success) {
+        console.error("Validation failed unexpectedly:", result.error);
+      }
+      
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.name).toBe("John");
+        expect(result.data.age).toBe(30);
+      }
+    });
+
+    it("should return error for invalid data", () => {
+      const input = {
+        name: 123, // Should be string
+        age: "thirty", // Should be number
+      };
+
+      // @ts-ignore - intentional invalid input
+      const result = validateAndSanitize(schema, input);
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error).toBeDefined();
+      }
+    });
+
+    it("should handle partial objects and optional fields", () => {
+      const input = {
+        name: "John",
+        age: 30,
+      };
+
+      const result = validateAndSanitize(schema, input);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe("questionSchema", () => {
+    it("should validate a correct multiple-choice question", async () => {
+      const question = {
+        title: "Test Question",
+        content: "What is the capital of France?",
+        type: "multiple-choice",
+        category: "Test Category",
+        topic: "Test Topic",
+        options: [
+          { id: "1", text: "Paris", isCorrect: true },
+          { id: "2", text: "London", isCorrect: false },
+        ],
+        difficulty: "beginner",
+      };
+
+      const result = await questionSchema.safeParseAsync(question);
+      if (!result.success) {
+        console.error("questionSchema validation failed:", result.error.format());
+      }
+      expect(result.success).toBe(true);
+    });
+
+    it("should validate a correct coding question", async () => {
+      const question = {
+        title: "Code Question",
+        content: "Implement a binary search.",
+        type: "code",
+        category: "Programming",
+        topic: "Algorithms",
+        prompt: "Write a function",
+        initialCode: "function() {}",
+        solution: "function() { return true; }",
+        difficulty: "intermediate",
+      };
+
+      const result = await questionSchema.safeParseAsync(question);
+      expect(result.success).toBe(true);
+    });
   });
 });

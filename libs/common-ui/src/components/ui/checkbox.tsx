@@ -36,6 +36,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             )}
           >
             <Check
+              aria-hidden="true"
               className={cn(
                 "h-3 w-3 text-primary-foreground transition-opacity",
                 checked ? "opacity-100" : "opacity-0",

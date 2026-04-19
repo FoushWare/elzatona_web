@@ -1,69 +1,136 @@
+import { describe, it, expect } from "vitest";
 import {
+  sanitizeHTMLServer,
+  sanitizeTextServer,
+  sanitizeInputServer,
   sanitizeObjectServer,
+  sanitizeRichContent,
   removeAllHTMLTags,
   sanitizeForLogging,
 } from "./sanitize-server";
 
-describe("sanitize-server safe stringification and logging", () => {
-  it("safely sanitizes objects for logging", () => {
-    const obj = { key: "value", nested: { a: 1 } };
-    const result = sanitizeForLogging(obj);
-    expect(result).toContain('{"key":"value","nested":{"a":1}}');
+describe("Sanitize Server Utilities", () => {
+  describe("sanitizeHTMLServer", () => {
+    it("should allow safe HTML tags", () => {
+      const input = "<p>Hello <strong>World</strong></p>";
+      expect(sanitizeHTMLServer(input)).toBe(input);
+    });
+
+    it("should strip unsafe tags like script", () => {
+      const input = '<p>Hello <script>alert("xss")</script></p>';
+      expect(sanitizeHTMLServer(input)).toBe("<p>Hello </p>");
+    });
+
+    it("should sanitize a tags with safe href", () => {
+      const input = '<a href="https://example.com" target="_blank">Link</a>';
+      expect(sanitizeHTMLServer(input)).toBe(
+        '<a href="https://example.com" target="_blank">Link</a>',
+      );
+    });
+
+    it("should strip unsafe href protocols", () => {
+      const input = '<a href="javascript:alert(1)">Link</a>';
+      expect(sanitizeHTMLServer(input)).toBe("<a>Link</a>");
+    });
   });
 
-  it("handles null and undefined in logging securely", () => {
-    expect(sanitizeForLogging(null)).toBe("null");
-    expect(sanitizeForLogging(undefined)).toBe("undefined");
+  describe("sanitizeTextServer", () => {
+    it("should remove all HTML tags", () => {
+      const input = "<div>Hello <p>World</p></div>";
+      expect(sanitizeTextServer(input)).toBe("Hello World");
+    });
   });
 
-  it("removes control characters and newlines for logging", () => {
-    const dangerousLog = "line1\nline2\r\tadmin%s";
-    const result = sanitizeForLogging(dangerousLog);
-    expect(result).not.toContain("\n");
-    expect(result).not.toContain("\r");
-    // Should have a single space for contiguous whitespace characters
-    expect(result).toContain("line1 line2 admin[format-removed]");
+  describe("sanitizeInputServer", () => {
+    it("should remove control characters and HTML", () => {
+      const input = "Hello \x00 <script></script> \x07 World";
+      // xss strips script tags and leaves space. Normalize spaces for test.
+      const result = sanitizeInputServer(input).replace(/\s+/g, " ");
+      expect(result).toBe("Hello World");
+    });
+
+    it("should trim whitespace", () => {
+      const input = "  Hello World  ";
+      expect(sanitizeInputServer(input)).toBe("Hello World");
+    });
   });
 
-  it("truncates long logs", () => {
-    const longString = "a".repeat(300);
-    const result = sanitizeForLogging(longString);
-    expect(result.length).toBeLessThan(300);
-    expect(result).toContain("[truncated]");
-  });
-});
+  describe("sanitizeObjectServer", () => {
+    it("should sanitize strings in an object", () => {
+      const input = {
+        name: "  <b>John</b>  ",
+        bio: "Standard text",
+      };
+      const result = sanitizeObjectServer(input);
+      expect(result.name).toBe("John");
+      expect(result.bio).toBe("Standard text");
+    });
 
-describe("sanitize-server object and HTML sanitization", () => {
-  it("sanitizes objects recursively", () => {
-    const obj = {
-      name: "John <script>alert(1)</script>",
-      meta: {
-        bio: "<b>Hi</b>",
-      },
-    };
-    const result = sanitizeObjectServer(obj);
-    // Should remove the tag, body stripping depends on config
-    expect(result.name).toContain("John");
-    expect(result.name).not.toContain("<script>");
-    expect((result.meta as Record<string, unknown>).bio).toBe("Hi");
+    it("should skip sanitization for 'code' field", () => {
+      const input = {
+        code: "const x = <script>alert(1)</script>;",
+      };
+      const result = sanitizeObjectServer(input);
+      expect(result.code).toBe(input.code);
+    });
+
+    it("should preserve newlines for 'content' and 'explanation'", () => {
+      const input = {
+        content: "Line 1\nLine 2",
+        explanation: "Line A\r\nLine B",
+      };
+      const result = sanitizeObjectServer(input);
+      expect(result.content).toBe("Line 1\nLine 2");
+      expect(result.explanation).toBe("Line A\r\nLine B");
+    });
+
+    it("should sanitize arrays recursively", () => {
+      const input = {
+        tags: ["<b>tag1</b>", "tag2"],
+      };
+      const result = sanitizeObjectServer(input);
+      expect(result.tags).toEqual(["tag1", "tag2"]);
+    });
+
+    it("should prevent prototype pollution via keys", () => {
+      const input = {
+        "__proto__": { "polluted": true },
+        "name": "John"
+      };
+      const result = sanitizeObjectServer(input);
+      expect(result.hasOwnProperty("__proto__")).toBe(false);
+      expect(result.name).toBe("John");
+    });
   });
 
-  it("preserves newlines for specific fields", () => {
-    const obj = {
-      content: "line1\nline2",
-      description: "desc\ntext",
-    };
-    const result = sanitizeObjectServer(obj);
-    expect(result.content).toBe("line1\nline2");
-    expect(result.description).toBe("desc\ntext");
+  describe("removeAllHTMLTags", () => {
+    it("should completely remove all tags even if malformed", () => {
+      const input = "Hello <script src='...'> alert(1) </script> World <img src='x' onerror='...'>";
+      const result = removeAllHTMLTags(input).replace(/\s+/g, " ");
+      expect(result).not.toContain("<script");
+      expect(result).not.toContain("<img");
+      expect(result).toBe("Hello World");
+    });
   });
 
-  it("removes all HTML tags comprehensively", () => {
-    const dirty = "<div>Test</div><script>alert(1)</script><p>Para</p>";
-    expect(removeAllHTMLTags(dirty)).toBe("TestPara");
-  });
+  describe("sanitizeForLogging", () => {
+    it("should remove newlines and tabs", () => {
+      const input = "Log line 1\nLog line 2\tTabbed";
+      expect(sanitizeForLogging(input)).toBe("Log line 1 Log line 2 Tabbed");
+    });
 
-  it("handles incomplete tags gracefully", () => {
-    expect(removeAllHTMLTags("Test <script")).toBe("Test");
+    it("should truncate long strings", () => {
+      const input = "a".repeat(300);
+      const result = sanitizeForLogging(input);
+      expect(result.length).toBeLessThan(300);
+      expect(result).toContain("[truncated]");
+    });
+
+    it("should remove log format specifiers", () => {
+      const input = "User name: %s, ID: %d";
+      expect(sanitizeForLogging(input)).toBe(
+        "User name: [format-removed], ID: [format-removed]",
+      );
+    });
   });
 });

@@ -176,25 +176,15 @@ export const TopicFormModal: React.FC<TopicFormModalProps> = ({
                         .includes(categorySearch.toLowerCase()),
                     )
                     .map((category) => (
-                      <div
+                      <button
                         key={category.id}
-                        className={`flex items-center justify-between px-2 py-1.5 text-sm rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-purple-500 ${
+                        type="button"
+                        className={`flex w-full items-center justify-between px-2 py-1.5 text-sm rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-purple-500 ${
                           categoryId === category.id
                             ? "bg-purple-50 dark:bg-purple-900/20 text-purple-600"
                             : ""
                         }`}
-                        tabIndex={0}
-                        role="button"
                         aria-pressed={categoryId === category.id}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            setCategoryId(category.id);
-                            setIsCategoryPopoverOpen(false);
-                            if (errors.categoryId)
-                              setErrors({ ...errors, categoryId: undefined });
-                          }
-                        }}
                         onClick={() => {
                           setCategoryId(category.id);
                           setIsCategoryPopoverOpen(false);
@@ -206,7 +196,7 @@ export const TopicFormModal: React.FC<TopicFormModalProps> = ({
                         {categoryId === category.id && (
                           <Check className="h-4 w-4" />
                         )}
-                      </div>
+                      </button>
                     ))}
 
                   {categorySearch.trim() &&
@@ -214,20 +204,9 @@ export const TopicFormModal: React.FC<TopicFormModalProps> = ({
                       (c) =>
                         c.name.toLowerCase() === categorySearch.toLowerCase(),
                     ) && (
-                      <div
-                        className="flex items-center px-2 py-2 text-sm text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded cursor-pointer border-t mt-1 focus:outline-none focus:ring-1 focus:ring-purple-500"
-                        tabIndex={0}
-                        role="button"
-                        onKeyDown={async (e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            if (onCreateCategory) {
-                              await onCreateCategory(categorySearch.trim());
-                              setCategorySearch("");
-                              setIsCategoryPopoverOpen(false);
-                            }
-                          }
-                        }}
+                      <button
+                        type="button"
+                        className="flex w-full items-center px-2 py-2 text-sm text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded cursor-pointer border-t mt-1 focus:outline-none focus:ring-1 focus:ring-purple-500"
                         onClick={async () => {
                           if (onCreateCategory) {
                             await onCreateCategory(categorySearch.trim());
@@ -241,7 +220,7 @@ export const TopicFormModal: React.FC<TopicFormModalProps> = ({
                       >
                         <Plus className="h-4 w-4 mr-2" />
                         <span>Create "{categorySearch}"</span>
-                      </div>
+                      </button>
                     )}
 
                   {categories.length === 0 && !categorySearch && (

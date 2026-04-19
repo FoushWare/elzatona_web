@@ -46,29 +46,29 @@ export function calculateStreak(activityDates: string[]): StreakResult {
     }
   }
 
-  // 2. Calculate Current Streak (working backwards from today or yesterday)
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const todayStr = today.toISOString().split("T")[0];
-
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayStr = yesterday.toISOString().split("T")[0];
-
-  let current = 0;
+  // 2. Calculate Current Streak (working backwards)
   const sortedDesc = [...uniqueDates].reverse();
   const latestDate = sortedDesc[0];
 
-  // If latest activity was today or yesterday, streak is active
-  if (latestDate === todayStr || latestDate === yesterdayStr) {
+  const getDayDiff = (d1Str: string, d2Str: string) => {
+    const d1 = new Date(d1Str);
+    const d2 = new Date(d2Str);
+    d1.setHours(0, 0, 0, 0);
+    d2.setHours(0, 0, 0, 0);
+    return Math.floor((d1.getTime() - d2.getTime()) / (1000 * 60 * 60 * 24));
+  };
+
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
+  const diffFromToday = getDayDiff(todayStr, latestDate);
+
+  let current = 0;
+  // If latest activity was today (0) or yesterday (1), streak is active
+  if (diffFromToday === 0 || diffFromToday === 1) {
     current = 1;
     for (let i = 0; i < sortedDesc.length - 1; i++) {
-      const curr = new Date(sortedDesc[i]);
-      const next = new Date(sortedDesc[i + 1]);
-      const diff = Math.floor(
-        (curr.getTime() - next.getTime()) / (1000 * 60 * 60 * 24),
-      );
-
+      const diff = getDayDiff(sortedDesc[i], sortedDesc[i + 1]);
       if (diff === 1) current++;
       else break;
     }
