@@ -44,28 +44,55 @@ export function sortPlansByDifficulty<T extends { difficulty: string }>(
   });
 }
 
+export interface RangeInfo {
+  min: number | string;
+  max: number | string;
+  type: "questions" | "hours" | "descriptive";
+  label: string;
+}
+
 export function getQuestionsRange(
   plans: { totalQuestions?: number; duration?: { totalHours?: number } }[],
-): string {
-  // If plans have totalQuestions property (legacy or specific to this feature)
+): RangeInfo {
+  // 1. Check for specific question counts
   const nums = plans
     .map((p) => p.totalQuestions)
     .filter((n): n is number => typeof n === "number" && !Number.isNaN(n));
 
   if (nums.length >= 1) {
-    return `${Math.min(...nums)}-${Math.max(...nums)}`;
+    const min = Math.min(...nums);
+    const max = Math.max(...nums);
+    return {
+      min,
+      max,
+      type: "questions",
+      label: min === max ? `${min} questions` : `${min}-${max} questions`,
+    };
   }
 
-  // Fallback to estimated hours if that's what we have
+  // 2. Fallback to estimated hours
   const hours = plans
     .map((p) => p.duration?.totalHours)
     .filter((n): n is number => typeof n === "number" && !Number.isNaN(n));
 
   if (hours.length >= 1) {
-    return `${Math.min(...hours)}-${Math.max(...hours)}`;
+    const min = Math.min(...hours);
+    const max = Math.max(...hours);
+    return {
+      min,
+      max,
+      type: "hours",
+      label: min === max ? `${min}h estimated` : `${min}-${max}h estimated`,
+    };
   }
 
-  return "Foundational to Expert";
+  // 3. Final descriptive fallback
+  return {
+    min: "Foundational",
+    max: "Expert",
+    type: "descriptive",
+    label: "Foundational to Expert",
+  };
 }
 
 export function getMilestoneRange(plans: { milestones?: any[] }[]): string {

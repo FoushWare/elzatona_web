@@ -58,7 +58,7 @@ export function useGuidedLearningPlans(): UsePlansResult {
   }, []);
 
   const plans = useMemo(() => sortPlansByDifficulty(allPlans), [allPlans]);
-  const questionsRange = useMemo(() => getQuestionsRange(plans), [plans]);
+  const questionsRange = useMemo(() => getQuestionsRange(plans).label, [plans]);
   const milestoneRange = useMemo(() => getMilestoneRange(plans), [plans]);
 
   return { plans, allPlans, isLoading, error, questionsRange, milestoneRange };

@@ -86,7 +86,15 @@ export function sanitizeTextServer(text: string): string {
   const filter = new FilterXSS({
     whiteList: {},
     stripIgnoreTag: true,
-    stripIgnoreTagBody: ["script", "style", "iframe", "object", "embed", "meta", "link"],
+    stripIgnoreTagBody: [
+      "script",
+      "style",
+      "iframe",
+      "object",
+      "embed",
+      "meta",
+      "link",
+    ],
   });
 
   return filter.process(text);
@@ -313,7 +321,8 @@ export function sanitizeForLogging(value: unknown): string {
 
   // SECURITY: Replace all contiguous newline-like patterns and tabs with spaces
   // This ensures that log lines are not merged and remain readable
-  let sanitized = typeof value === "object" ? JSON.stringify(value) : String(value);
+  let sanitized =
+    typeof value === "object" ? JSON.stringify(value) : String(value);
   sanitized = sanitized.replaceAll(/[\r\n\t]+/g, " ");
 
   // SECURITY: Remove all other control characters

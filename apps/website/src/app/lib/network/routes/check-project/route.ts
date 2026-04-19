@@ -4,25 +4,39 @@ import { getSupabaseConfig, getApiConfig } from "../../../api-config";
 import { getEnvironment } from "../../../environment";
 
 const adminConfig = {
-  get jwtSecret() { return process.env.JWT_SECRET || "default-secret"; },
+  get jwtSecret() {
+    return process.env.JWT_SECRET || "default-secret";
+  },
 };
 
 export async function GET(request: NextRequest) {
   try {
     const auth = _verifyAdminAuth(request);
-    if (!auth.success) return NextResponse.json({ success: false, error: auth.error }, { status: 401 });
+    if (!auth.success)
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: 401 },
+      );
 
     const config = getSupabaseConfig();
     const env = getEnvironment();
 
-    const urlProjectRef = config.url.match(/https?:\/\/([^.]+)\.supabase\.co/)?.[1];
-    const { ref: keyProjectRef, role: keyRole } = _decodeServiceKey(config.serviceRoleKey);
+    const urlProjectRef = config.url.match(
+      /https?:\/\/([^.]+)\.supabase\.co/,
+    )?.[1];
+    const { ref: keyProjectRef, role: keyRole } = _decodeServiceKey(
+      config.serviceRoleKey,
+    );
 
     const projectData = _getProjectStatus(urlProjectRef, keyProjectRef);
 
     return NextResponse.json({
       success: true,
-      environment: { detected: env, appEnv: process.env.APP_ENV, nodeEnv: process.env.NODE_ENV },
+      environment: {
+        detected: env,
+        appEnv: process.env.APP_ENV,
+        nodeEnv: process.env.NODE_ENV,
+      },
       supabase: {
         url: config.url,
         urlProjectRef: urlProjectRef || "not found",
@@ -35,16 +49,27 @@ export async function GET(request: NextRequest) {
       message: projectData.message,
     });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error instanceof Error ? error.message : "Internal error" }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: error instanceof Error ? error.message : "Internal error",
+      },
+      { status: 500 },
+    );
   }
 }
 
-function _verifyAdminAuth(request: NextRequest): { success: boolean; error?: string } {
+function _verifyAdminAuth(request: NextRequest): {
+  success: boolean;
+  error?: string;
+} {
   const token = request.headers.get("authorization")?.replace("Bearer ", "");
-  if (!token) return { success: false, error: "Unauthorized: Admin token required" };
+  if (!token)
+    return { success: false, error: "Unauthorized: Admin token required" };
   try {
     const decoded = jwt.verify(token, adminConfig.jwtSecret) as any;
-    if (!decoded.adminId && !decoded.id) return { success: false, error: "Unauthorized: Invalid admin token" };
+    if (!decoded.adminId && !decoded.id)
+      return { success: false, error: "Unauthorized: Invalid admin token" };
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized: Invalid or expired token" };
@@ -58,7 +83,9 @@ function _decodeServiceKey(key?: string): { ref?: string; role?: string } {
     if (parts.length !== 3) return {};
     const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
     return { ref: payload.ref, role: payload.role };
-  } catch { return {}; }
+  } catch {
+    return {};
+  }
 }
 
 function _getProjectStatus(urlRef?: string, keyRef?: string) {
@@ -74,8 +101,22 @@ function _getProjectStatus(urlRef?: string, keyRef?: string) {
 
   return {
     isMatch,
-    supabase: { urlProjectName: urlP.name, urlProjectType: urlP.type, keyProjectName: keyP.name, keyProjectType: keyP.type },
-    status: { isTestProject: isTest, isProductionProject: isProd, isCorrectlyConfigured: isMatch && (isTest || isProd) },
-    message: isMatch && isTest ? "✅ Using TEST project correctly" : isMatch && isProd ? "⚠️ Using PRODUCTION project" : "❌ Configuration mismatch"
+    supabase: {
+      urlProjectName: urlP.name,
+      urlProjectType: urlP.type,
+      keyProjectName: keyP.name,
+      keyProjectType: keyP.type,
+    },
+    status: {
+      isTestProject: isTest,
+      isProductionProject: isProd,
+      isCorrectlyConfigured: isMatch && (isTest || isProd),
+    },
+    message:
+      isMatch && isTest
+        ? "✅ Using TEST project correctly"
+        : isMatch && isProd
+          ? "⚠️ Using PRODUCTION project"
+          : "❌ Configuration mismatch",
   };
 }

@@ -1,8 +1,8 @@
 // v1.1 - Refactored Learning Plans Route
 import { NextRequest, NextResponse } from "next/server";
-import { 
-  getSupabaseClient, 
-  getSupabaseClientWithAnonKey 
+import {
+  getSupabaseClient,
+  getSupabaseClientWithAnonKey,
 } from "../../../../get-supabase-client";
 import { AutoLinkingService } from "../../../../auto-linking-service";
 
@@ -54,7 +54,10 @@ async function fetchCombinedPlans() {
       plans = [...plans, ...filteredDbPlans];
     }
   } catch (dbError) {
-    console.warn("⚠️ Database fetch failed for learning plans, using hardcoded only:", dbError);
+    console.warn(
+      "⚠️ Database fetch failed for learning plans, using hardcoded only:",
+      dbError,
+    );
   }
   return plans;
 }
@@ -63,10 +66,14 @@ async function fetchCombinedPlans() {
  * Standardized error handler for the plans route.
  */
 function handleRouteError(error: unknown) {
-  const msg = error instanceof Error ? error.message : "Failed to fetch learning plans";
+  const msg =
+    error instanceof Error ? error.message : "Failed to fetch learning plans";
   console.error("❌ Plans Route Error:", msg);
-  
-  const response: any = { success: false, error: "Failed to fetch learning plans" };
+
+  const response: any = {
+    success: false,
+    error: "Failed to fetch learning plans",
+  };
   if (process.env.NODE_ENV === "development") {
     response.details = msg;
     if (error && typeof error === "object") {
@@ -84,7 +91,7 @@ function handleRouteError(error: unknown) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    
+
     if (searchParams.get("getSections") === "true") {
       return await handleSectionsRequest(searchParams);
     }
@@ -104,7 +111,10 @@ export async function POST(request: NextRequest) {
   try {
     const planData = await request.json();
     if (!planData.name || !planData.duration) {
-      return NextResponse.json({ success: false, error: "Name and duration are required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Name and duration are required" },
+        { status: 400 },
+      );
     }
 
     const supabase = getSupabaseClient();
@@ -122,7 +132,11 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) throw error;
-    return NextResponse.json({ success: true, message: "Plan created successfully", plan: data });
+    return NextResponse.json({
+      success: true,
+      message: "Plan created successfully",
+      plan: data,
+    });
   } catch (error) {
     return handleRouteError(error);
   }
@@ -131,13 +145,23 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const { id } = Object.fromEntries(new URL(request.url).searchParams);
-    if (!id) return NextResponse.json({ success: false, error: "Plan ID is required" }, { status: 400 });
+    if (!id)
+      return NextResponse.json(
+        { success: false, error: "Plan ID is required" },
+        { status: 400 },
+      );
 
     const supabase = getSupabaseClient();
-    const { error } = await supabase.from("learning_plans").delete().eq("id", id);
+    const { error } = await supabase
+      .from("learning_plans")
+      .delete()
+      .eq("id", id);
     if (error) throw error;
 
-    return NextResponse.json({ success: true, message: "Plan deleted successfully" });
+    return NextResponse.json({
+      success: true,
+      message: "Plan deleted successfully",
+    });
   } catch (error) {
     return handleRouteError(error);
   }

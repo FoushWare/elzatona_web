@@ -1,13 +1,13 @@
 // v1.4 - Consolidated Unified Questions API Route
-// Now delegates to the shared @elzatona/utilities library to ensure consistency 
+// Now delegates to the shared @elzatona/utilities library to ensure consistency
 // and resolve monolithic complexity hotspots.
 
 import { NextRequest } from "next/server";
-import { 
-  questionsGetHandler, 
+import {
+  questionsGetHandler,
   questionsPostHandler,
   PUT as questionsPutHandler,
-  DELETE as questionsDeleteHandler
+  DELETE as questionsDeleteHandler,
 } from "@elzatona/utilities";
 
 /**

@@ -1160,7 +1160,11 @@ export function useContentManagement() {
     (id: string) =>
       setExpandedCards((prev) => {
         const next = new Set(prev);
-        next.has(id) ? next.delete(id) : next.add(id);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
         return next;
       }),
     [],
@@ -1170,7 +1174,11 @@ export function useContentManagement() {
     (id: string) =>
       setExpandedCategories((prev) => {
         const next = new Set(prev);
-        next.has(id) ? next.delete(id) : next.add(id);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
         return next;
       }),
     [],
@@ -1180,7 +1188,11 @@ export function useContentManagement() {
     (id: string) =>
       setExpandedTopics((prev) => {
         const next = new Set(prev);
-        next.has(id) ? next.delete(id) : next.add(id);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
         return next;
       }),
     [],
@@ -1190,7 +1202,11 @@ export function useContentManagement() {
     (id: string) =>
       setExpandedPlans((prev) => {
         const next = new Set(prev);
-        next.has(id) ? next.delete(id) : next.add(id);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
         return next;
       }),
     [],
@@ -1200,7 +1216,11 @@ export function useContentManagement() {
     (id: string) =>
       setExpandedPlanCards((prev) => {
         const next = new Set(prev);
-        next.has(id) ? next.delete(id) : next.add(id);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
         return next;
       }),
     [],
@@ -1210,7 +1230,11 @@ export function useContentManagement() {
     (id: string) =>
       setExpandedPlanCategories((prev) => {
         const next = new Set(prev);
-        next.has(id) ? next.delete(id) : next.add(id);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
         return next;
       }),
     [],
@@ -1220,7 +1244,11 @@ export function useContentManagement() {
     (id: string) =>
       setExpandedPlanTopics((prev) => {
         const next = new Set(prev);
-        next.has(id) ? next.delete(id) : next.add(id);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
         return next;
       }),
     [],

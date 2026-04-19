@@ -19,30 +19,44 @@ export async function GET(request: NextRequest) {
     }
 
     const supabase = getSupabaseClient();
-    
+
     // 1. Concurrent data fetching
     const [attemptsRes, progressRes] = await Promise.all([
-      supabase.from("question_attempts").select("question_id, is_correct, points_earned, created_at").eq("user_id", userId),
-      supabase.from("user_progress").select("id, plan_id, progress_data, updated_at, created_at").eq("user_id", userId),
+      supabase
+        .from("question_attempts")
+        .select("question_id, is_correct, points_earned, created_at")
+        .eq("user_id", userId),
+      supabase
+        .from("user_progress")
+        .select("id, plan_id, progress_data, updated_at, created_at")
+        .eq("user_id", userId),
     ]);
 
     const questionAttempts = attemptsRes.data || [];
     const userProgressEntries = progressRes.data || [];
 
     // 2. Aggregate questions and points
-    const { uniqueQuestionIds, totalPoints } = aggregateProgress(questionAttempts, userProgressEntries);
+    const { uniqueQuestionIds, totalPoints } = aggregateProgress(
+      questionAttempts,
+      userProgressEntries,
+    );
     const questionsCompleted = uniqueQuestionIds.size;
 
     // 3. Calculate streak from combined timestamps
     const activityDates = [
-      ...questionAttempts.map(a => a.created_at),
-      ...userProgressEntries.map(e => e.updated_at || e.created_at)
+      ...questionAttempts.map((a) => a.created_at),
+      ...userProgressEntries.map((e) => e.updated_at || e.created_at),
     ].filter(Boolean) as string[];
 
     const streak = calculateStreak(activityDates);
 
     // 4. Calculate achievements based on milestones
-    const achievements = calculateAchievements(questionsCompleted, totalPoints, streak.current, streak.longest);
+    const achievements = calculateAchievements(
+      questionsCompleted,
+      totalPoints,
+      streak.current,
+      streak.longest,
+    );
 
     return NextResponse.json({
       success: true,
@@ -105,24 +119,29 @@ function aggregateProgress(attempts: any[], progressEntries: any[]) {
   let totalPoints = 0;
 
   // Question attempts aggregation
-  attempts.forEach(a => {
+  attempts.forEach((a) => {
     if (a.question_id) uniqueQuestionIds.add(a.question_id);
-    totalPoints += (a.points_earned || 0);
+    totalPoints += a.points_earned || 0;
   });
 
   // User progress aggregation (JSON parsing handle)
-  progressEntries.forEach(entry => {
-    const progressData = typeof entry.progress_data === "string" 
-      ? safeJsonParse(entry.progress_data) 
-      : entry.progress_data;
+  progressEntries.forEach((entry) => {
+    const progressData =
+      typeof entry.progress_data === "string"
+        ? safeJsonParse(entry.progress_data)
+        : entry.progress_data;
 
     if (!progressData) return;
 
     if (Array.isArray(progressData.completedQuestions)) {
-      progressData.completedQuestions.forEach((id: string) => uniqueQuestionIds.add(id));
+      progressData.completedQuestions.forEach((id: string) =>
+        uniqueQuestionIds.add(id),
+      );
     }
     if (Array.isArray(progressData.answeredQuestions)) {
-      progressData.answeredQuestions.forEach((id: string) => uniqueQuestionIds.add(id));
+      progressData.answeredQuestions.forEach((id: string) =>
+        uniqueQuestionIds.add(id),
+      );
     }
     if (Array.isArray(progressData.correctAnswers)) {
       totalPoints += progressData.correctAnswers.length * 10;

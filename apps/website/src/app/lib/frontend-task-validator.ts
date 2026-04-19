@@ -36,30 +36,54 @@ export class FrontendTaskValidator {
     this.timeout = timeout;
   }
 
-  async validateReactComponent(userCode: string, testCases: TestCase[]): Promise<SolutionValidation> {
+  async validateReactComponent(
+    userCode: string,
+    testCases: TestCase[],
+  ): Promise<SolutionValidation> {
     return this.runValidationPipeline(testCases, async (iframe) => {
       await this.injectReactLibraries(iframe);
       await this.injectUserCode(iframe, userCode);
-      return Promise.all(testCases.map(tc => this.runReactTestCase(iframe, tc)));
+      return Promise.all(
+        testCases.map((tc) => this.runReactTestCase(iframe, tc)),
+      );
     });
   }
 
-  async validateJavaScriptFunction(userCode: string, testCases: TestCase[], functionName: string): Promise<SolutionValidation> {
+  async validateJavaScriptFunction(
+    userCode: string,
+    testCases: TestCase[],
+    functionName: string,
+  ): Promise<SolutionValidation> {
     return this.runValidationPipeline(testCases, async (iframe) => {
       await this.injectUserCode(iframe, userCode);
-      return Promise.all(testCases.map(tc => this.runJavaScriptTestCase(iframe, tc, functionName)));
+      return Promise.all(
+        testCases.map((tc) =>
+          this.runJavaScriptTestCase(iframe, tc, functionName),
+        ),
+      );
     });
   }
 
-  async validateCSSHTML(userCode: string, testCases: TestCase[]): Promise<SolutionValidation> {
+  async validateCSSHTML(
+    userCode: string,
+    testCases: TestCase[],
+  ): Promise<SolutionValidation> {
     return this.runValidationPipeline(testCases, async (iframe) => {
       iframe.srcdoc = userCode;
-      await new Promise(resolve => { iframe.onload = resolve; setTimeout(resolve, 1000); });
-      return Promise.all(testCases.map(tc => this.runCSSHTMLTestCase(iframe, tc)));
+      await new Promise((resolve) => {
+        iframe.onload = resolve;
+        setTimeout(resolve, 1000);
+      });
+      return Promise.all(
+        testCases.map((tc) => this.runCSSHTMLTestCase(iframe, tc)),
+      );
     });
   }
 
-  private async runValidationPipeline(testCases: TestCase[], runner: (iframe: HTMLIFrameElement) => Promise<ValidationResult[]>): Promise<SolutionValidation> {
+  private async runValidationPipeline(
+    testCases: TestCase[],
+    runner: (iframe: HTMLIFrameElement) => Promise<ValidationResult[]>,
+  ): Promise<SolutionValidation> {
     const startTime = Date.now();
     let results: ValidationResult[] = [];
     let iframe: HTMLIFrameElement | null = null;
@@ -68,22 +92,37 @@ export class FrontendTaskValidator {
       iframe = this.createTestIframe();
       results = await runner(iframe);
     } catch (error) {
-      results = testCases.map(tc => ({
-        testCaseId: tc.id, passed: false, expectedOutput: tc.expectedOutput,
-        error: error instanceof Error ? error.message : String(error), executionTime: 0
+      results = testCases.map((tc) => ({
+        testCaseId: tc.id,
+        passed: false,
+        expectedOutput: tc.expectedOutput,
+        error: error instanceof Error ? error.message : String(error),
+        executionTime: 0,
       }));
     } finally {
       iframe?.remove();
     }
 
     const executionTime = Date.now() - startTime;
-    const passedTests = results.filter(r => r.passed).length;
-    return { overallPassed: passedTests === testCases.length, results, totalTests: testCases.length, passedTests, failedTests: testCases.length - passedTests, executionTime };
+    const passedTests = results.filter((r) => r.passed).length;
+    return {
+      overallPassed: passedTests === testCases.length,
+      results,
+      totalTests: testCases.length,
+      passedTests,
+      failedTests: testCases.length - passedTests,
+      executionTime,
+    };
   }
 
   private createTestIframe(): HTMLIFrameElement {
     const iframe = document.createElement("iframe");
-    Object.assign(iframe.style, { display: "none", width: "0", height: "0", border: "none" });
+    Object.assign(iframe.style, {
+      display: "none",
+      width: "0",
+      height: "0",
+      border: "none",
+    });
     document.body.appendChild(iframe);
     return iframe;
   }
@@ -96,30 +135,52 @@ export class FrontendTaskValidator {
           <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
         </head><body><div id="root"></div></body></html>`;
       iframe.onload = () => resolve();
-      iframe.onerror = () => reject(new Error("Failed to load React libraries"));
-      setTimeout(() => reject(new Error("Timeout loading React libraries")), 10000);
+      iframe.onerror = () =>
+        reject(new Error("Failed to load React libraries"));
+      setTimeout(
+        () => reject(new Error("Timeout loading React libraries")),
+        10000,
+      );
     });
   }
 
-  private async injectUserCode(iframe: HTMLIFrameElement, userCode: string): Promise<void> {
+  private async injectUserCode(
+    iframe: HTMLIFrameElement,
+    userCode: string,
+  ): Promise<void> {
     const doc = iframe.contentDocument;
     if (!doc) throw new Error("Iframe document is not available");
     const script = doc.createElement("script");
     script.type = "text/babel";
     script.text = userCode;
     doc.head.appendChild(script);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
-  private async runReactTestCase(iframe: HTMLIFrameElement, testCase: TestCase): Promise<ValidationResult> {
+  private async runReactTestCase(
+    iframe: HTMLIFrameElement,
+    testCase: TestCase,
+  ): Promise<ValidationResult> {
     const startTime = Date.now();
     try {
       const root = this.getReactRoot(iframe);
       this.renderReactComponent(iframe, root);
       const actualOutput = await this.evaluateReactTestCase(root, testCase);
-      return { testCaseId: testCase.id, passed: this.compareOutputs(actualOutput, testCase.expectedOutput), actualOutput, expectedOutput: testCase.expectedOutput, executionTime: Date.now() - startTime };
+      return {
+        testCaseId: testCase.id,
+        passed: this.compareOutputs(actualOutput, testCase.expectedOutput),
+        actualOutput,
+        expectedOutput: testCase.expectedOutput,
+        executionTime: Date.now() - startTime,
+      };
     } catch (error) {
-      return { testCaseId: testCase.id, passed: false, expectedOutput: testCase.expectedOutput, error: error instanceof Error ? error.message : String(error), executionTime: Date.now() - startTime };
+      return {
+        testCaseId: testCase.id,
+        passed: false,
+        expectedOutput: testCase.expectedOutput,
+        error: error instanceof Error ? error.message : String(error),
+        executionTime: Date.now() - startTime,
+      };
     }
   }
 
@@ -131,44 +192,55 @@ export class FrontendTaskValidator {
     return root;
   }
 
-  private renderReactComponent(iframe: HTMLIFrameElement, root: HTMLElement): void {
+  private renderReactComponent(
+    iframe: HTMLIFrameElement,
+    root: HTMLElement,
+  ): void {
     const win = iframe.contentWindow as any;
     const { React, ReactDOM, Counter, TodoList } = win || {};
     if (!React || !ReactDOM) throw new Error("React libraries not loaded");
     const Component = Counter || TodoList;
     if (!Component) throw new Error("Component not found in user code");
-    
+
     // Use createRoot for React 18+ compatibility
-    if (ReactDOM.createRoot) {
-      const reactRoot = ReactDOM.createRoot(root);
-      reactRoot.render(React.createElement(Component));
-    } else {
-      ReactDOM.render(React.createElement(Component), root);
-    }
+    if (!ReactDOM.createRoot)
+      throw new Error(
+        "ReactDOM.createRoot not found. Ensure React 18+ is loaded.",
+      );
+    const reactRoot = ReactDOM.createRoot(root);
+    reactRoot.render(React.createElement(Component));
   }
 
-  private async evaluateReactTestCase(root: HTMLElement, testCase: TestCase): Promise<any> {
+  private async evaluateReactTestCase(
+    root: HTMLElement,
+    testCase: TestCase,
+  ): Promise<any> {
     await this.wait(100);
     const input = testCase.input;
 
     if (input === "initial") return this.textOrExpectedDigit(root, "0");
     if (input === "increment") {
-      await this.clickButton(root, t => t.includes("+"));
+      await this.clickButton(root, (t) => t.includes("+"));
       return this.textOrExpectedDigit(root, "1");
     }
     if (input === "decrement") {
-      await this.clickButton(root, t => t.includes("-"));
+      await this.clickButton(root, (t) => t.includes("-"));
       return this.textOrExpectedDigit(root, "-1");
     }
     if (input === "reset") {
-      await this.clickButton(root, t => t.toLowerCase().includes("reset"));
+      await this.clickButton(root, (t) => t.toLowerCase().includes("reset"));
       return this.textOrExpectedDigit(root, "0");
     }
     return root.textContent || "";
   }
 
-  private async clickButton(root: HTMLElement, matcher: (t: string) => boolean): Promise<void> {
-    const btn = Array.from(root.querySelectorAll("button")).find(b => matcher(b.textContent || ""));
+  private async clickButton(
+    root: HTMLElement,
+    matcher: (t: string) => boolean,
+  ): Promise<void> {
+    const btn = Array.from(root.querySelectorAll("button")).find((b) =>
+      matcher(b.textContent || ""),
+    );
     if (!btn) throw new Error("Button not found");
     btn.click();
     await this.wait(100);
@@ -179,29 +251,62 @@ export class FrontendTaskValidator {
     return text.includes(digit) ? digit : text;
   }
 
-  private wait(ms: number): Promise<void> { return new Promise(resolve => setTimeout(resolve, ms)); }
+  private wait(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
-  private async runJavaScriptTestCase(iframe: HTMLIFrameElement, testCase: TestCase, functionName: string): Promise<ValidationResult> {
+  private async runJavaScriptTestCase(
+    iframe: HTMLIFrameElement,
+    testCase: TestCase,
+    functionName: string,
+  ): Promise<ValidationResult> {
     const start = Date.now();
     try {
       const func = (iframe.contentWindow as any)?.[functionName];
       if (!func) throw new Error(`Function ${functionName} not found`);
       const actual = func(testCase.input);
-      return { testCaseId: testCase.id, passed: this.compareOutputs(actual, testCase.expectedOutput), actualOutput: actual, expectedOutput: testCase.expectedOutput, executionTime: Date.now() - start };
+      return {
+        testCaseId: testCase.id,
+        passed: this.compareOutputs(actual, testCase.expectedOutput),
+        actualOutput: actual,
+        expectedOutput: testCase.expectedOutput,
+        executionTime: Date.now() - start,
+      };
     } catch (e) {
-      return { testCaseId: testCase.id, passed: false, expectedOutput: testCase.expectedOutput, error: e instanceof Error ? e.message : String(e), executionTime: Date.now() - start };
+      return {
+        testCaseId: testCase.id,
+        passed: false,
+        expectedOutput: testCase.expectedOutput,
+        error: e instanceof Error ? e.message : String(e),
+        executionTime: Date.now() - start,
+      };
     }
   }
 
-  private async runCSSHTMLTestCase(iframe: HTMLIFrameElement, testCase: TestCase): Promise<ValidationResult> {
+  private async runCSSHTMLTestCase(
+    iframe: HTMLIFrameElement,
+    testCase: TestCase,
+  ): Promise<ValidationResult> {
     const start = Date.now();
     try {
       const doc = iframe.contentDocument;
       if (!doc) throw new Error("Iframe document missing");
       const actual = this.evaluateCSSHTML(doc, testCase.input);
-      return { testCaseId: testCase.id, passed: this.compareOutputs(actual, testCase.expectedOutput), actualOutput: actual, expectedOutput: testCase.expectedOutput, executionTime: Date.now() - start };
+      return {
+        testCaseId: testCase.id,
+        passed: this.compareOutputs(actual, testCase.expectedOutput),
+        actualOutput: actual,
+        expectedOutput: testCase.expectedOutput,
+        executionTime: Date.now() - start,
+      };
     } catch (e) {
-      return { testCaseId: testCase.id, passed: false, expectedOutput: testCase.expectedOutput, error: e instanceof Error ? e.message : String(e), executionTime: Date.now() - start };
+      return {
+        testCaseId: testCase.id,
+        passed: false,
+        expectedOutput: testCase.expectedOutput,
+        error: e instanceof Error ? e.message : String(e),
+        executionTime: Date.now() - start,
+      };
     }
   }
 
@@ -211,14 +316,18 @@ export class FrontendTaskValidator {
       return el ? getComputedStyle(el).display : "none";
     }
     if (input === "check-responsive") {
-      return doc.querySelectorAll('[class*="grid"]').length > 0 ? "responsive" : "not-responsive";
+      return doc.querySelectorAll('[class*="grid"]').length > 0
+        ? "responsive"
+        : "not-responsive";
     }
     return doc.body.textContent || "";
   }
 
   private compareOutputs(actual: any, expected: any): boolean {
-    if (typeof actual === "object" && typeof expected === "object") return JSON.stringify(actual) === JSON.stringify(expected);
-    if (typeof actual === "string" && typeof expected === "string") return actual.trim().toLowerCase() === expected.trim().toLowerCase();
+    if (typeof actual === "object" && typeof expected === "object")
+      return JSON.stringify(actual) === JSON.stringify(expected);
+    if (typeof actual === "string" && typeof expected === "string")
+      return actual.trim().toLowerCase() === expected.trim().toLowerCase();
     return actual === expected;
   }
 }

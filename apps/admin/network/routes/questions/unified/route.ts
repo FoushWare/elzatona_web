@@ -2,10 +2,7 @@
 // Delegates to the shared @elzatona/utilities library.
 
 import { NextRequest } from "next/server";
-import { 
-  questionsGetHandler, 
-  questionsPostHandler
-} from "@elzatona/utilities";
+import { questionsGetHandler, questionsPostHandler } from "@elzatona/utilities";
 
 /**
  * GET /api/admin/questions/unified - Get questions with filters

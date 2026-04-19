@@ -112,7 +112,10 @@ export class LearningResourcesService {
   /**
    * Internal helper to fetch a single page of resources.
    */
-  private static async _fetchPage(page: number, perPage: number): Promise<LearningResource[]> {
+  private static async _fetchPage(
+    page: number,
+    perPage: number,
+  ): Promise<LearningResource[]> {
     const url = `${this.API_BASE}/repos/${this.REPO_OWNER}/${this.REPO_NAME}/issues?state=all&per_page=${perPage}&page=${page}`;
     try {
       const response = await fetch(url, {

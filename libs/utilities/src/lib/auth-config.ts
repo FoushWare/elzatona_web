@@ -51,8 +51,10 @@ export const authOptions: NextAuthOptions = {
 
         // Placeholder for actual validation logic (e.g., Firebase Auth)
         // Avoid constant return value to satisfy Sonar rule typescript:S3516
-        const isDeveloperAccess = credentials.email.endsWith("@elzatona.com") && credentials.password === "dev-access";
-        
+        const isDeveloperAccess =
+          credentials.email.endsWith("@elzatona.com") &&
+          credentials.password === "dev-access";
+
         if (isDeveloperAccess) {
           return {
             id: "dev-user-id",

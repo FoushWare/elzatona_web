@@ -8,8 +8,8 @@ import {
   getErrorMessage,
   normalizeCodeLineBreaks,
   stripUnsafeControlCharacters,
-} from "../../../utilities";
-import { questionSchema } from "../../../validation";
+} from "../../index";
+import { questionSchema } from "./validation";
 
 // -----------------------------------------------------------------------------
 // Constants and Types
@@ -56,7 +56,11 @@ async function lookupCategory(supabase: any, categoryValue: any) {
 /**
  * Looks up a topic ID by name within a category if it's not already a UUID.
  */
-async function lookupTopic(supabase: any, topicValue: any, categoryId?: string | null) {
+async function lookupTopic(
+  supabase: any,
+  topicValue: any,
+  categoryId?: string | null,
+) {
   if (!topicValue || typeof topicValue !== "string") return null;
   const trimmed = topicValue.trim();
   if (isUuid(trimmed)) return trimmed;
@@ -81,15 +85,27 @@ async function lookupLearningCard(supabase: any, identifier: any) {
   if (isUuid(trimmed)) return trimmed;
 
   // Try title
-  let { data } = await supabase.from("learning_cards").select("id").ilike("title", trimmed).maybeSingle();
+  let { data } = await supabase
+    .from("learning_cards")
+    .select("id")
+    .ilike("title", trimmed)
+    .maybeSingle();
   if (data) return data.id;
 
   // Try slug
-  ({ data } = await supabase.from("learning_cards").select("id").ilike("slug", trimmed).maybeSingle());
+  ({ data } = await supabase
+    .from("learning_cards")
+    .select("id")
+    .ilike("slug", trimmed)
+    .maybeSingle());
   if (data) return data.id;
 
   // Try exact ID
-  ({ data } = await supabase.from("learning_cards").select("id").eq("id", trimmed).maybeSingle());
+  ({ data } = await supabase
+    .from("learning_cards")
+    .select("id")
+    .eq("id", trimmed)
+    .maybeSingle());
   return data?.id || null;
 }
 
@@ -109,7 +125,10 @@ function processQuestionOptions(options: any) {
 /**
  * Checks for duplicate questions based on title and (content OR code).
  */
-async function checkDuplicateQuestion(supabase: any, question: Record<string, any>) {
+async function checkDuplicateQuestion(
+  supabase: any,
+  question: Record<string, any>,
+) {
   let query = supabase
     .from("questions")
     .select("id")
@@ -159,9 +178,12 @@ async function prepareQuestionForStorage(
   const normalized: Record<string, any> = { ...questionData };
   const originalCode = questionData["code"];
 
-  if (normalized["isActive"] !== undefined) normalized["is_active"] = normalized["isActive"];
-  if (normalized["learningCardId"] !== undefined) normalized["learning_card_id"] = normalized["learningCardId"];
-  if (normalized["timeLimit"] !== undefined) normalized["time_limit"] = normalized["timeLimit"];
+  if (normalized["isActive"] !== undefined)
+    normalized["is_active"] = normalized["isActive"];
+  if (normalized["learningCardId"] !== undefined)
+    normalized["learning_card_id"] = normalized["learningCardId"];
+  if (normalized["timeLimit"] !== undefined)
+    normalized["time_limit"] = normalized["timeLimit"];
 
   // 2. Preserve and Normalize Code field (CRITICAL for newlines)
   let processedCode: string | null = null;
@@ -185,19 +207,40 @@ async function prepareQuestionForStorage(
   // Restore processed code after object-wide sanitization
   sanitized["code"] = processedCode;
   if (sanitized["explanation"]) {
-    sanitized["explanation"] = sanitizeRichContent(sanitized["explanation"] as string);
+    sanitized["explanation"] = sanitizeRichContent(
+      sanitized["explanation"] as string,
+    );
   }
   sanitized["options"] = processQuestionOptions(sanitized["options"]);
 
   // 5. Build Final Object with Relationship Lookups
-  const categoryId = await lookupCategory(supabase, sanitized["category_id"] || sanitized["category"]);
-  const topicId = await lookupTopic(supabase, sanitized["topic_id"] || sanitized["topic"], categoryId);
-  const learningCardId = await lookupLearningCard(supabase, sanitized["learning_card_id"] || sanitized["learningCardId"]);
+  const categoryId = await lookupCategory(
+    supabase,
+    sanitized["category_id"] || sanitized["category"],
+  );
+  const topicId = await lookupTopic(
+    supabase,
+    sanitized["topic_id"] || sanitized["topic"],
+    categoryId,
+  );
+  const learningCardId = await lookupLearningCard(
+    supabase,
+    sanitized["learning_card_id"] || sanitized["learningCardId"],
+  );
 
   const {
-    category: _c, topic: _t, learningCardId: _lc, learning_card_id: _lci,
-    isActive: _ia, timeLimit: _tl, id: _id, categories: _cs, topics: _ts,
-    learning_cards: _lcs, learning_card: _lcobj, ...dbQuestion
+    category: _c,
+    topic: _t,
+    learningCardId: _lc,
+    learning_card_id: _lci,
+    isActive: _ia,
+    timeLimit: _tl,
+    id: _id,
+    categories: _cs,
+    topics: _ts,
+    learning_cards: _lcs,
+    learning_card: _lcobj,
+    ...dbQuestion
   } = sanitized;
 
   const finalQuestion: Record<string, any> = {
@@ -206,7 +249,10 @@ async function prepareQuestionForStorage(
     topic_id: topicId || null,
     learning_card_id: learningCardId || null,
     content: dbQuestion["content"] || dbQuestion["title"],
-    type: dbQuestion["type"] === "multiple-select" ? "multiple-choice" : (dbQuestion["type"] || "multiple-choice"),
+    type:
+      dbQuestion["type"] === "multiple-select"
+        ? "multiple-choice"
+        : dbQuestion["type"] || "multiple-choice",
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   };
@@ -282,7 +328,10 @@ export async function questionsGetHandler(request: NextRequest) {
 /**
  * GET Handler: Fetches a single question by ID.
  */
-export async function questionsGetByIdHandler(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function questionsGetByIdHandler(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const { id } = await params;
     const supabase = getSupabaseClient();
@@ -294,7 +343,10 @@ export async function questionsGetByIdHandler(request: NextRequest, { params }: 
       .single();
 
     if (error || !data) {
-      return NextResponse.json({ success: false, error: "Question not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: "Question not found" },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json({
@@ -303,7 +355,10 @@ export async function questionsGetByIdHandler(request: NextRequest, { params }: 
     });
   } catch (error) {
     console.error("Error fetching question:", error);
-    return NextResponse.json({ success: false, error: getErrorMessage(error) }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: getErrorMessage(error) },
+      { status: 500 },
+    );
   }
 }
 
@@ -333,9 +388,12 @@ export async function questionsPostHandler(request: NextRequest) {
     for (let index = 0; index < questions.length; index++) {
       const questionData = questions[index] as Record<string, unknown>;
       try {
-        const finalQuestion = await prepareQuestionForStorage(supabase, questionData);
+        const finalQuestion = await prepareQuestionForStorage(
+          supabase,
+          questionData,
+        );
         const existing = await checkDuplicateQuestion(supabase, finalQuestion);
-        
+
         if (existing) {
           errors.push({
             question: questionData,
@@ -351,7 +409,10 @@ export async function questionsPostHandler(request: NextRequest) {
           .select("*, code")
           .single();
 
-        if (error) throw new Error(`Database error: ${error.message} (Code: ${error.code})`);
+        if (error)
+          throw new Error(
+            `Database error: ${error.message} (Code: ${error.code})`,
+          );
         results.push({ success: true, id: data.id });
       } catch (error) {
         const msg = getErrorMessage(error);
@@ -396,22 +457,42 @@ export async function PUT(request: NextRequest) {
     const { id, ...updateData } = body;
 
     if (!id) {
-      return NextResponse.json({ success: false, error: "Question ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Question ID is required" },
+        { status: 400 },
+      );
     }
 
     // 1. Prepare data for update (Recycle logic from preparation helper)
-    const categoryId = await lookupCategory(supabase, updateData["category_id"] || updateData["category"]);
-    const topicId = await lookupTopic(supabase, updateData["topic_id"] || updateData["topic"], categoryId);
-    const learningCardId = await lookupLearningCard(supabase, updateData["learning_card_id"] || updateData["learningCardId"]);
+    const categoryId = await lookupCategory(
+      supabase,
+      updateData["category_id"] || updateData["category"],
+    );
+    const topicId = await lookupTopic(
+      supabase,
+      updateData["topic_id"] || updateData["topic"],
+      categoryId,
+    );
+    const learningCardId = await lookupLearningCard(
+      supabase,
+      updateData["learning_card_id"] || updateData["learningCardId"],
+    );
 
     const sanitized = sanitizeObjectServer(updateData);
-    if (sanitized["explanation"]) sanitized["explanation"] = sanitizeRichContent(sanitized["explanation"]);
-    if (sanitized["code"]) sanitized["code"] = normalizeCodeLineBreaks(String(sanitized["code"]));
+    if (sanitized["explanation"])
+      sanitized["explanation"] = sanitizeRichContent(sanitized["explanation"]);
+    if (sanitized["code"])
+      sanitized["code"] = normalizeCodeLineBreaks(String(sanitized["code"]));
     sanitized["options"] = processQuestionOptions(sanitized["options"]);
 
     const {
-      category: _c, topic: _t, learningCardId: _lc, learning_card_id: _lci,
-      isActive: _ia, timeLimit: _tl, ...dbUpdate
+      category: _c,
+      topic: _t,
+      learningCardId: _lc,
+      learning_card_id: _lci,
+      isActive: _ia,
+      timeLimit: _tl,
+      ...dbUpdate
     } = sanitized;
 
     const finalUpdate = {
@@ -422,14 +503,23 @@ export async function PUT(request: NextRequest) {
       updated_at: new Date().toISOString(),
     };
 
-    const { error } = await supabase.from("questions").update(finalUpdate).eq("id", id);
+    const { error } = await supabase
+      .from("questions")
+      .update(finalUpdate)
+      .eq("id", id);
     if (error) throw error;
 
     _questionsCache = null;
-    return NextResponse.json({ success: true, message: "Question updated successfully" });
+    return NextResponse.json({
+      success: true,
+      message: "Question updated successfully",
+    });
   } catch (error) {
     console.error("Error updating question:", error);
-    return NextResponse.json({ success: false, error: getErrorMessage(error) }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: getErrorMessage(error) },
+      { status: 500 },
+    );
   }
 }
 
@@ -443,16 +533,25 @@ export async function DELETE(request: NextRequest) {
     const id = searchParams.get("id");
 
     if (!id) {
-      return NextResponse.json({ success: false, error: "Question ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Question ID is required" },
+        { status: 400 },
+      );
     }
 
     const { error } = await supabase.from("questions").delete().eq("id", id);
     if (error) throw error;
 
     _questionsCache = null;
-    return NextResponse.json({ success: true, message: "Question deleted successfully" });
+    return NextResponse.json({
+      success: true,
+      message: "Question deleted successfully",
+    });
   } catch (error) {
     console.error("Error deleting question:", error);
-    return NextResponse.json({ success: false, error: getErrorMessage(error) }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: getErrorMessage(error) },
+      { status: 500 },
+    );
   }
 }

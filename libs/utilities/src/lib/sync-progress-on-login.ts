@@ -108,11 +108,19 @@ async function _syncSinglePlan(
       localStorage.removeItem(key);
       return { success: true };
     }
-    
-    const errorData = await response.json().catch(() => ({ error: "Sync failed" }));
-    return { success: false, error: `Plan ${planId}: ${errorData.error || "Unknown error"}` };
+
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: "Sync failed" }));
+    return {
+      success: false,
+      error: `Plan ${planId}: ${errorData.error || "Unknown error"}`,
+    };
   } catch (error) {
-    return { success: false, error: `Plan ${planId}: ${error instanceof Error ? error.message : "Parse error"}` };
+    return {
+      success: false,
+      error: `Plan ${planId}: ${error instanceof Error ? error.message : "Parse error"}`,
+    };
   }
 }
 

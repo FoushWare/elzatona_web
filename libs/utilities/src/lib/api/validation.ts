@@ -351,9 +351,15 @@ function _handleValidationError(
  * Logs context for validation errors to assist debugging.
  */
 function _logValidationErrorContext(error: any, data: unknown): void {
-  console.error("🔴 Validation catch block - Error type:", error?.constructor?.name);
+  console.error(
+    "🔴 Validation catch block - Error type:",
+    error?.constructor?.name,
+  );
   console.error("🔴 Validation catch block - Error message:", error?.message);
-  console.error("🔴 Input data being validated:", JSON.stringify(data, null, 2));
+  console.error(
+    "🔴 Input data being validated:",
+    JSON.stringify(data, null, 2),
+  );
 }
 
 /**
@@ -365,7 +371,10 @@ function _handleGenericError(error: any): { success: false; error: string } {
     return { success: false, error: `Validation error: ${error.message}` };
   }
   console.error("Validation error (unknown type):", error);
-  return { success: false, error: `Validation failed: ${error?.message || "Unknown error"}` };
+  return {
+    success: false,
+    error: `Validation failed: ${error?.message || "Unknown error"}`,
+  };
 }
 
 /**
