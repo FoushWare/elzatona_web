@@ -1,16 +1,17 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import {
-  questionsGetHandler,
-  questionsPostHandler,
-} from "./questions-handler";
+import { questionsGetHandler, questionsPostHandler } from "./questions-handler";
 import { NextRequest } from "next/server";
 
 // -----------------------------------------------------------------------------
 // Shared Mocks
 // -----------------------------------------------------------------------------
 
-const mockSingle = vi.fn().mockResolvedValue({ data: { id: "123" }, error: null });
-const mockMaybeSingle = vi.fn().mockResolvedValue({ data: { id: "456" }, error: null });
+const mockSingle = vi
+  .fn()
+  .mockResolvedValue({ data: { id: "123" }, error: null });
+const mockMaybeSingle = vi
+  .fn()
+  .mockResolvedValue({ data: { id: "456" }, error: null });
 const mockEq = vi.fn().mockReturnThis();
 const mockIlike = vi.fn().mockReturnThis();
 const mockRange = vi.fn().mockReturnThis();
@@ -40,7 +41,10 @@ const mockSupabase = {
 
 vi.mock("../../index", () => ({
   getSupabaseClient: vi.fn(() => mockSupabase),
-  validateAndSanitize: vi.fn((schema: any, data: any) => ({ success: true, data: data })),
+  validateAndSanitize: vi.fn((schema: any, data: any) => ({
+    success: true,
+    data: data,
+  })),
   sanitizeObjectServer: vi.fn((obj: any) => obj),
   sanitizeRichContent: vi.fn((html: any) => html),
   sanitizeForLogging: vi.fn((val: any) => String(val)),
@@ -62,7 +66,7 @@ describe("Questions Handler", () => {
   describe("GET Handler", () => {
     it("should fetch questions with default parameters", async () => {
       mockOrder.mockResolvedValue({ data: [], count: 0, error: null });
-      
+
       const request = new NextRequest("https://example.com/api/questions");
       const response = await questionsGetHandler(request);
       const data = await response.json();
@@ -73,7 +77,7 @@ describe("Questions Handler", () => {
 
     it("should handle filtering by type", async () => {
       mockOrder.mockResolvedValue({ data: [], count: 0, error: null });
-      
+
       const request = new NextRequest(
         "https://example.com/api/questions?type=multiple-choice",
       );
@@ -140,11 +144,11 @@ describe("Questions Handler", () => {
         .mockResolvedValueOnce({ data: null, error: { code: "PGRST116" } }) // Category not found
         .mockResolvedValueOnce({ data: { id: "topic-123" }, error: null }) // Topic found
         .mockResolvedValueOnce({ data: { id: "q-123" }, error: null }); // Insert success
-      
+
       // We need to mock the insert chain to return an ID for the new category
       // Actually, lookupCategory uses .single() after .ilike().
       // Let's just mock the whole sequence.
-      
+
       const mockQuestion = {
         title: "New Cat Q",
         content: "Content",
@@ -164,18 +168,21 @@ describe("Questions Handler", () => {
 
     it("should handle database insert errors", async () => {
       mockMaybeSingle.mockResolvedValue({ data: null, error: null });
-      
+
       mockSingle.mockReset();
       mockSingle
         .mockResolvedValueOnce({ data: { id: "cat-123" }, error: null })
         .mockResolvedValueOnce({ data: { id: "topic-123" }, error: null })
-        .mockResolvedValueOnce({ data: null, error: { message: "Insert failed" } });
+        .mockResolvedValueOnce({
+          data: null,
+          error: { message: "Insert failed" },
+        });
 
-      const mockQuestion = { 
-        title: "Fail Q", 
+      const mockQuestion = {
+        title: "Fail Q",
         content: "C",
         category: "Cat1",
-        topic: "Topic1"
+        topic: "Topic1",
       };
 
       const request = new NextRequest("https://example.com/api/questions", {
@@ -214,9 +221,12 @@ describe("Questions Handler", () => {
       const { DELETE } = await import("./questions-handler");
       mockOrder.mockResolvedValue({ data: null, error: null }); // For delete.eq
 
-      const request = new NextRequest("https://example.com/api/questions?id=q-123", {
-        method: "DELETE",
-      });
+      const request = new NextRequest(
+        "https://example.com/api/questions?id=q-123",
+        {
+          method: "DELETE",
+        },
+      );
 
       const response = await DELETE(request);
       const data = await response.json();

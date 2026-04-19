@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { 
-  getEnvironment, 
-  isTestEnvironment, 
+import {
+  getEnvironment,
+  isTestEnvironment,
   getSupabaseProjectRef,
   assertEnvironment,
   getEnvironmentConfig,
-  logEnvironment
+  logEnvironment,
 } from "./environment";
 
 describe("Environment Utility", () => {
@@ -28,13 +28,19 @@ describe("Environment Utility", () => {
   });
 
   it("should detect environment via Supabase URL project ref", () => {
-    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://kiycimlsatwfqxtfprlr.supabase.co");
+    vi.stubEnv(
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "https://kiycimlsatwfqxtfprlr.supabase.co",
+    );
     expect(getEnvironment()).toBe("test");
     expect(getSupabaseProjectRef()).toBe("kiycimlsatwfqxtfprlr");
   });
 
   it("should detect fallback production project ref", () => {
-    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://hpnewqkvpnthpohvxcmq.supabase.co");
+    vi.stubEnv(
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "https://hpnewqkvpnthpohvxcmq.supabase.co",
+    );
     expect(getEnvironment()).toBe("production");
   });
 

@@ -94,8 +94,8 @@ describe("Sanitize Server Utilities", () => {
 
     it("should prevent prototype pollution via keys", () => {
       const input = {
-        "__proto__": { "polluted": true },
-        "name": "John"
+        __proto__: { polluted: true },
+        name: "John",
       };
       const result = sanitizeObjectServer(input);
       expect(result.hasOwnProperty("__proto__")).toBe(false);
@@ -105,7 +105,8 @@ describe("Sanitize Server Utilities", () => {
 
   describe("removeAllHTMLTags", () => {
     it("should completely remove all tags even if malformed", () => {
-      const input = "Hello <script src='...'> alert(1) </script> World <img src='x' onerror='...'>";
+      const input =
+        "Hello <script src='...'> alert(1) </script> World <img src='x' onerror='...'>";
       const result = removeAllHTMLTags(input).replace(/\s+/g, " ");
       expect(result).not.toContain("<script");
       expect(result).not.toContain("<img");

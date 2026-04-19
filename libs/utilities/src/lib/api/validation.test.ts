@@ -23,7 +23,7 @@ describe("Validation Utilities", () => {
       if (!result.success) {
         console.error("Validation failed unexpectedly:", result.error);
       }
-      
+
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.name).toBe("John");
@@ -74,7 +74,10 @@ describe("Validation Utilities", () => {
 
       const result = await questionSchema.safeParseAsync(question);
       if (!result.success) {
-        console.error("questionSchema validation failed:", result.error.format());
+        console.error(
+          "questionSchema validation failed:",
+          result.error.format(),
+        );
       }
       expect(result.success).toBe(true);
     });
