@@ -352,7 +352,7 @@ function buildTopicCategoryLookup(
   return lookup;
 }
 
-function transformQuestion(q: any): AdminUnifiedQuestion {
+function transformQuestion(q: Record<string, unknown>): AdminUnifiedQuestion {
   const category_id =
     q.category_id ?? q.categoryId ?? getPrimaryNestedId(q.categories) ?? "";
   const topic_id =
@@ -364,15 +364,14 @@ function transformQuestion(q: any): AdminUnifiedQuestion {
     "";
 
   return {
-    ...q,
+    ...(q as Record<string, unknown>),
     category_id,
     topic_id,
     learning_card_id,
     isActive: q.isActive ?? q.is_active ?? true,
     createdAt: q.createdAt ?? q.created_at ?? "",
     updatedAt: q.updatedAt ?? q.updated_at ?? "",
-    // Ensure nested objects are handled if needed
-  };
+  } as AdminUnifiedQuestion;
 }
 
 export const contentManagementMappingTestUtils = {
@@ -675,21 +674,6 @@ function normalizePlanStatus(
   return fallback;
 }
 
-function normalizeLearningCard(
-  card: DatabaseLearningCardRecord,
-): AdminLearningCard {
-  return {
-    id: card.id,
-    title: card.title,
-    description: card.description ?? card.content ?? "",
-    color: card.color ?? "#3B82F6",
-    icon: card.icon ?? "BookOpen",
-    order_index: card.order_index ?? card.order ?? 0,
-    is_active: card.is_active ?? card.isPublished ?? true,
-    created_at: toIsoDate(card.created_at ?? card.createdAt),
-    updated_at: toIsoDate(card.updated_at ?? card.updatedAt),
-  };
-}
 
 function getErrorMessage(error: unknown, fallbackMessage: string): string {
   return error instanceof Error ? error.message : fallbackMessage;
@@ -1016,7 +1000,7 @@ export function useContentManagement() {
     } finally {
       setLoading(false);
     }
-  }, [cardRepository, planRepository]);
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -1153,7 +1137,15 @@ export function useContentManagement() {
     setExpandedCards(newExpandedCards);
     setExpandedCategories(newExpandedCategories);
     setExpandedTopics(newExpandedTopics);
-  }, [debouncedSearchTerm, topics, categories, questions]);
+  }, [
+    debouncedSearchTerm,
+    topics,
+    categories,
+    questions,
+    expandedCards,
+    expandedCategories,
+    expandedTopics,
+  ]);
 
   // Toggles
   const toggleCard = useCallback(
@@ -1290,7 +1282,11 @@ export function useContentManagement() {
   const toggleQuestionSelection = useCallback((id: string) => {
     setSelectedQuestions((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
   }, []);
@@ -1420,7 +1416,7 @@ export function useContentManagement() {
         );
       }
     },
-    [planRepository],
+    [],
   );
 
   const openDeleteCardModal = useCallback((card: AdminLearningCard) => {
@@ -1457,7 +1453,11 @@ export function useContentManagement() {
       try {
         // ARCHITECTURAL: Fetch current plan cards using planRepository.getPlanCards(selectedPlanId) and available cards
         // Requires implementing new repository methods for plan-card relationships
-        const current: any = [];
+        const current: {
+          card_id: string;
+          order_index: number;
+          is_active: boolean;
+        }[] = [];
         setPlanCards(current || []);
         setAvailableCards(cards);
       } catch (err) {
@@ -1569,7 +1569,7 @@ export function useContentManagement() {
         toast.error(err instanceof Error ? err.message : "Failed to add card");
       }
     },
-    [selectedPlanForCards, planCards, planRepository],
+    [selectedPlanForCards, planCards],
   );
 
   const removeCardFromPlan = useCallback(
@@ -1591,7 +1591,7 @@ export function useContentManagement() {
         );
       }
     },
-    [selectedPlanForCards, planRepository],
+    [selectedPlanForCards],
   );
 
   const toggleCardActiveStatus = useCallback(
@@ -1617,7 +1617,7 @@ export function useContentManagement() {
         );
       }
     },
-    [selectedPlanForCards, planRepository],
+    [selectedPlanForCards],
   );
 
   const createSpacedRepetitionPlans = useCallback(async () => {
@@ -1855,7 +1855,7 @@ export function useContentManagement() {
           ...cleanData
         } = data;
 
-        const payload: any = {
+        const payload: Record<string, unknown> = {
           ...cleanData,
           topic_id: selectedTopicIdForNewQuestion,
         };
@@ -1908,7 +1908,7 @@ export function useContentManagement() {
   }, []);
 
   const submitCard = useCallback(
-    async (data: any) => {
+    async (data: Record<string, any>) => {
       setIsSubmittingCard(true);
       try {
         const payload = {
@@ -1930,7 +1930,7 @@ export function useContentManagement() {
           toast.success("Card updated");
         } else {
           // Create
-          (payload as any).is_active = true;
+          (payload as Record<string, any>).is_active = true;
           const { error: createError } = await supabase
             .from("learning_cards")
             .insert(payload);

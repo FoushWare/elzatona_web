@@ -74,19 +74,19 @@ export class MarkdownQuestionParser {
   private static readonly QUESTION_PATTERNS = {
     // GitHub-style multiple choice with code blocks and options
     multipleChoice:
-      /^#{1,6}\s*(\d+)\.?\s*(.*?)\n```[\s\S]*?```\n((?:-?\s*[A-Z]:\s*.*\n?)+)/gm,
+      /^#{1,6}\s*(?<number>\d+)\.?\s*(?<title>.*?)\n```[\s\S]*?```\n(?<options>(?:-?\s*[A-Z]:\s*.*\n?)+)/gm,
     // Simple multiple choice format
-    simpleMultipleChoice: /^(\d+\.?\s*.*?)\n((?:[a-zA-Z]\)\s*.*(?:\n|$))+)/gm,
+    simpleMultipleChoice: /^(?<question>\d+\.?\s*.*?)\n(?<options>(?:[a-zA-Z]\)\s*.*(?:\n|$))+)/gm,
     // True/False questions
     trueFalse:
-      /^#{1,6}\s*(\d+)\.?\s*(.*?)\n```[\s\S]*?```\n-?\s*(True|False)\s*\[(?:correct|x|✓)\]/gm,
+      /^#{1,6}\s*(?<number>\d+)\.?\s*(?<title>.*?)\n```[\s\S]*?```\n-?\s*(?<answer>True|False)\s*\[(?:correct|x|✓)\]/gm,
     // Open-ended questions
     openEnded:
-      /^#{1,6}\s*(\d+)\.?\s*(.*?)\n```[\s\S]*?```\n(?:-?\s*Answer:?\s*(.*))?$/gm,
+      /^#{1,6}\s*(?<number>\d+)\.?\s*(?<title>.*?)\n```[\s\S]*?```\n(?:-?\s*Answer:?\s*(?<answer>.*))?$/gm,
   };
 
   private static readonly OPTION_PATTERN =
-    /^([a-zA-Z])\)\s*(.*?)(?:\s*\[(?:correct|x|✓)\])?$/gm;
+    /^(?<id>[a-zA-Z])\)\s*(?<text>.*?)(?:\s*\[(?:correct|x|✓)\])?$/gm;
 
   /**
    * Parse markdown content to extract questions
@@ -349,8 +349,8 @@ export class MarkdownQuestionParser {
       return "";
     }
 
-    const answerMatch = /Answer:\s*([A-D])/i.exec(line);
-    return answerMatch ? answerMatch[1].toLowerCase() : "";
+    const answerMatch = /Answer:\s*(?<answer>[A-D])/i.exec(line);
+    return answerMatch?.groups?.answer ? answerMatch.groups.answer.toLowerCase() : "";
   }
 
   /**
@@ -363,9 +363,9 @@ export class MarkdownQuestionParser {
     for (let j = startIndex; j < Math.min(startIndex + 10, lines.length); j++) {
       const answerLine = lines[j].trim();
       if (answerLine.includes("Answer:") || answerLine.includes("**Answer:")) {
-        const answerMatch = /Answer:\s*([A-D])/i.exec(answerLine);
-        if (answerMatch) {
-          return answerMatch[1].toLowerCase();
+        const answerMatch = /Answer:\s*(?<answer>[A-D])/i.exec(answerLine);
+        if (answerMatch?.groups?.answer) {
+          return answerMatch.groups.answer.toLowerCase();
         }
       }
     }
@@ -516,13 +516,13 @@ export class MarkdownQuestionParser {
     const options: Array<{ id: string; text: string; isCorrect: boolean }> = [];
 
     // Try GitHub-style format first (- A: text)
-    const githubPattern = /^-?\s*([A-Z]):\s*(.*?)$/gm;
+    const githubPattern = /^-?\s*(?<id>[A-Z]):\s*(?<text>.*?)$/gm;
     const githubMatches = [...optionsText.matchAll(githubPattern)];
 
     if (githubMatches.length > 0) {
       for (const match of githubMatches) {
-        const id = match[1].toLowerCase();
-        const text = match[2].trim();
+        const id = match.groups?.id?.toLowerCase() || "";
+        const text = (match.groups?.text || "").trim();
         const isCorrect = correctAnswer
           ? id === correctAnswer.toLowerCase()
           : text.includes("[correct]") ||
@@ -540,8 +540,8 @@ export class MarkdownQuestionParser {
     const matches = [...optionsText.matchAll(this.OPTION_PATTERN)];
 
     for (const match of matches) {
-      const id = match[1].toLowerCase();
-      const text = match[2].trim();
+      const id = match.groups?.id?.toLowerCase() || "";
+      const text = (match.groups?.text || "").trim();
       const isCorrect = correctAnswer
         ? id === correctAnswer.toLowerCase()
         : match[0].includes("[correct]") ||

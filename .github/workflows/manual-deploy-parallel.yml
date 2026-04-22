@@ -57,7 +57,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "pnpm"
 
       - name: Enable Corepack
@@ -107,7 +107,7 @@ jobs:
 
       - name: Deploy website to Vercel (Prebuilt)
         run: |
-          set -euo pipefail
+          set -uo pipefail # Removed -e to allow retry loop to handle failures manually
 
           set_website_aliases() {
             local deployment_url="$1"
@@ -122,13 +122,22 @@ jobs:
 
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy website attempt ${attempt}/6"
-            deploy_output=$(npx vercel deploy --prebuilt --prod --yes --token=${{ secrets.VERCEL_TOKEN }})
-            if [ $? -eq 0 ]; then
-                # Extract URL from output if possible, or use standard prod URL for aliasing
-                prod_url=$(echo "$deploy_output" | grep -Eo 'https://[^ ]+\.vercel\.app' | tail -n 1 || echo "https://elzatona-web.com")
-                echo "Admin deployment is ready in production."
+            deploy_log="$(mktemp)"
+            if timeout 15m npx vercel deploy --prebuilt --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log"; then
+                prod_url=$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)
+                if [ -z "$prod_url" ]; then
+                  echo "Warning: Could not extract specific deployment URL; using production domain fallback."
+                  # Fallback to the project's default production URL if extraction fails
+                  prod_url="elzatona-web.vercel.app" 
+                fi
+                echo "Website deployment is ready: $prod_url"
                 set_website_aliases "$prod_url"
                 exit 0
+            fi
+
+            if grep -Eq 'Failed to process project graph|Could not find ".modules.yaml"|ENOENT: no such file or directory|Error: Command "npx nx build|Error: Command "npm run build" exited with 1|Error: Command "npm install" exited with 1|Error: The request timed out' "$deploy_log"; then
+              echo "Deploy output indicates explicit failure or timeout; failing deployment step."
+              exit 1
             fi
 
             if [ "$attempt" -eq 6 ]; then
@@ -166,7 +175,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "pnpm"
 
       - name: Enable Corepack
@@ -216,13 +225,20 @@ jobs:
 
       - name: Deploy admin to Vercel (Prebuilt)
         run: |
-          set -euo pipefail
+          set -uo pipefail
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy admin attempt ${attempt}/6"
-            if npx vercel deploy --prebuilt --prod --yes --token=${{ secrets.VERCEL_TOKEN }}; then
+            deploy_log="$(mktemp)"
+            if timeout 15m npx vercel deploy --prebuilt --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log"; then
               echo "Admin deployment is ready in production."
               exit 0
             fi
+
+            if grep -Eq 'Failed to process project graph|Could not find ".modules.yaml"|ENOENT: no such file or directory|Error: Command "npx nx build|Error: Command "npm run build" exited with 1|Error: Command "npm install" exited with 1|Error: The request timed out' "$deploy_log"; then
+              echo "Deploy output indicates explicit failure or timeout; failing deployment step."
+              exit 1
+            fi
+
             if [ "$attempt" -eq 6 ]; then
               echo "Admin deployment failed after 6 attempts"
               exit 1

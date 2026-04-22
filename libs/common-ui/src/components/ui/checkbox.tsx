@@ -14,7 +14,6 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     return (
       <span
         onMouseDown={(e) => e.stopPropagation()}
-        role="presentation"
         className="inline-flex"
       >
         <label className="relative inline-flex items-center cursor-pointer">
