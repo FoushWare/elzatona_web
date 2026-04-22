@@ -168,6 +168,7 @@ jobs:
 
       - name: Deploy website
         run: |
+          set +e
           set -uo pipefail
           timeout 8m npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           for attempt in 1 2 3 4 5 6; do
@@ -275,6 +276,7 @@ jobs:
 
       - name: Deploy admin
         run: |
+          set +e
           set -uo pipefail
           timeout 8m npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           for attempt in 1 2 3 4 5 6; do

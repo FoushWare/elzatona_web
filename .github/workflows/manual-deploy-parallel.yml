@@ -71,7 +71,7 @@ jobs:
         with:
           path: |
             apps/website/.next/cache
-          key: ${{ runner.os }}-website-next-cache-${{ github.sha }}
+          key: ${{ runner.os }}-website-next-cache-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-website-next-cache-
 
@@ -107,7 +107,8 @@ jobs:
 
       - name: Deploy website to Vercel (Prebuilt)
         run: |
-          set -uo pipefail # Removed -e to allow retry loop to handle failures manually
+          set +e # Explicitly disable exit-on-error to allow retry loop to handle failures
+          set -uo pipefail
 
           set_website_aliases() {
             local deployment_url="$1"
@@ -189,7 +190,7 @@ jobs:
         with:
           path: |
             apps/admin/.next/cache
-          key: ${{ runner.os }}-next-cache-${{ github.sha }}
+          key: ${{ runner.os }}-next-cache-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-next-cache-
 
@@ -225,6 +226,7 @@ jobs:
 
       - name: Deploy admin to Vercel (Prebuilt)
         run: |
+          set +e
           set -uo pipefail
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy admin attempt ${attempt}/6"

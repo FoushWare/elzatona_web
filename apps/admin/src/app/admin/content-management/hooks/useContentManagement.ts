@@ -56,22 +56,6 @@ type DatabasePlanRecord = {
   updatedAt?: string | Date | null;
 };
 
-type DatabaseLearningCardRecord = {
-  id: string;
-  title: string;
-  description?: string | null;
-  content?: string | null;
-  color?: string | null;
-  icon?: string | null;
-  order_index?: number | null;
-  order?: number | null;
-  is_active?: boolean | null;
-  isPublished?: boolean | null;
-  created_at?: string | Date | null;
-  updated_at?: string | Date | null;
-  createdAt?: string | Date | null;
-  updatedAt?: string | Date | null;
-};
 
 type PlanGenerationMetadata = {
   title: string;
