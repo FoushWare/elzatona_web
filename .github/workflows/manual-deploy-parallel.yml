@@ -88,14 +88,14 @@ jobs:
           curl -fsS -X PATCH \
             -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"buildCommand":"pnpm --filter website build","outputDirectory":"apps/website/.next","installCommand":"true"}' \
+            -d '{"buildCommand":"pnpm --filter website build","outputDirectory":"apps/website/.next","installCommand":"echo skip"}' \
             "https://api.vercel.com/v9/projects/${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}"
 
       - name: Validate and build (Local Vercel Build)
         if: ${{ inputs.validate_build_website }}
         run: |
-          npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          npx vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          npx vercel@latest pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          npx vercel@latest build --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}
@@ -113,10 +113,10 @@ jobs:
           set_website_aliases() {
             local deployment_url="$1"
             echo "Setting website aliases for: ${deployment_url}"
-            timeout 3m npx vercel alias set "${deployment_url}" elzatona-web.com --token=${{ secrets.VERCEL_TOKEN }}
+            timeout 3m npx vercel@latest alias set "${deployment_url}" elzatona-web.com --token=${{ secrets.VERCEL_TOKEN }}
 
             # Keep www alias best-effort because some projects intentionally omit it.
-            if ! timeout 3m npx vercel alias set "${deployment_url}" www.elzatona-web.com --token=${{ secrets.VERCEL_TOKEN }}; then
+            if ! timeout 3m npx vercel@latest alias set "${deployment_url}" www.elzatona-web.com --token=${{ secrets.VERCEL_TOKEN }}; then
               echo "www.elzatona-web.com alias not set (continuing)."
             fi
           }
@@ -124,7 +124,7 @@ jobs:
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy website attempt ${attempt}/6"
             deploy_log="$(mktemp)"
-            if timeout 15m npx vercel deploy --prebuilt --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log"; then
+            if timeout 15m npx vercel@latest deploy --prebuilt --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log"; then
                 prod_url=$(grep -Eo 'https://[^ ]+\.vercel\.app' "$deploy_log" | tail -n 1 || true)
                 if [ -z "$prod_url" ]; then
                   echo "Warning: Could not extract specific deployment URL; using production domain fallback."
@@ -207,14 +207,14 @@ jobs:
           curl -fsS -X PATCH \
             -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"buildCommand":"pnpm --filter admin build","outputDirectory":"apps/admin/.next","installCommand":"true"}' \
+            -d '{"buildCommand":"pnpm --filter admin build","outputDirectory":"apps/admin/.next","installCommand":"echo skip"}' \
             "https://api.vercel.com/v9/projects/${{ secrets.VERCEL_PROJECT_ID_ADMIN }}"
 
       - name: Validate and build (Local Vercel Build)
         if: ${{ inputs.validate_build_admin }}
         run: |
-          npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          npx vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          npx vercel@latest pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          npx vercel@latest build --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
@@ -231,7 +231,7 @@ jobs:
           for attempt in 1 2 3 4 5 6; do
             echo "Deploy admin attempt ${attempt}/6"
             deploy_log="$(mktemp)"
-            if timeout 15m npx vercel deploy --prebuilt --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log"; then
+            if timeout 15m npx vercel@latest deploy --prebuilt --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee "$deploy_log"; then
               echo "Admin deployment is ready in production."
               exit 0
             fi
