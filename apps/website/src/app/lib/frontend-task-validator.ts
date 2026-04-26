@@ -321,6 +321,7 @@ export class FrontendTaskValidator {
     }
   }
 
+  private evaluateCSSHTML(doc: Document, input: string): any {
     return this._evaluateCSSHTMLStep(doc, input);
   }
 

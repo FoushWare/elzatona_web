@@ -247,5 +247,24 @@ describe("Questions Handler", () => {
       expect(data.success).toBe(false);
       expect(data.error).toContain("ID is required");
     });
+
+    it("should handle update errors gracefully", async () => {
+      const { PUT } = await import("./questions-handler");
+      // Force an error in update by mocking order to throw
+      mockOrder.mockResolvedValueOnce({
+        data: null,
+        error: { message: "Update failed" },
+      });
+
+      const request = new NextRequest("https://example.com/api/questions", {
+        method: "PUT",
+        body: JSON.stringify({ id: "q-123", title: "Fail Update" }),
+      });
+
+      const response = await PUT(request);
+      const data = await response.json();
+
+      expect(data.success).toBe(false);
+    });
   });
 });
