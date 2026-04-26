@@ -56,7 +56,6 @@ type DatabasePlanRecord = {
   updatedAt?: string | Date | null;
 };
 
-
 type PlanGenerationMetadata = {
   title: string;
   description: string;
@@ -658,7 +657,6 @@ function normalizePlanStatus(
   return fallback;
 }
 
-
 function getErrorMessage(error: unknown, fallbackMessage: string): string {
   return error instanceof Error ? error.message : fallbackMessage;
 }
@@ -928,10 +926,12 @@ export function useContentManagement() {
         topicsResult.error,
       ].filter((message): message is string => Boolean(message));
 
-      const normalizedCards = cardsResult.data;
+      const normalizedCards = cardsResult.data || [];
       const { cards: canonicalCards, idsByKey } =
         buildCanonicalCards(normalizedCards);
-      const normalizedQuestions = questionsResult.data.map(transformQuestion);
+      const normalizedQuestions = (questionsResult.data || []).map(
+        transformQuestion,
+      );
       const categoryCardLookup = buildCategoryCardLookup(normalizedQuestions);
       const topicCategoryLookup = buildTopicCategoryLookup(normalizedQuestions);
 
