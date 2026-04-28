@@ -31,11 +31,13 @@ vi.mock("@elzatona/contexts", () => ({
 // Mock common-ui components to avoid complex rendering
 vi.mock("@elzatona/common-ui", () => ({
   Button: ({ children, onClick, ...props }: Record<string, unknown>) => (
-    <button onClick={onClick as any} {...props as any}>
+    <button onClick={onClick as any} {...(props as any)}>
       {children as any}
     </button>
   ),
-  Dialog: ({ children }: { children: React.ReactNode }) => <div data-testid="dialog">{children}</div>,
+  Dialog: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="dialog">{children}</div>
+  ),
   DialogContent: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="dialog-content">{children}</div>
   ),
@@ -48,10 +50,14 @@ vi.mock("@elzatona/common-ui", () => ({
   DialogDescription: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="dialog-description">{children}</div>
   ),
-  Input: ({ ...props }: Record<string, unknown>) => <input {...props as any} />,
-  Label: ({ children, ...props }: Record<string, unknown>) => <label {...props as any}>{children as any}</label>,
+  Input: ({ ...props }: Record<string, unknown>) => (
+    <input {...(props as any)} />
+  ),
+  Label: ({ children, ...props }: Record<string, unknown>) => (
+    <label {...(props as any)}>{children as any}</label>
+  ),
   Textarea: ({ children, ...props }: Record<string, unknown>) => (
-    <textarea {...props as any}>{children as any}</textarea>
+    <textarea {...(props as any)}>{children as any}</textarea>
   ),
   Select: ({ children, value, onValueChange }: Record<string, unknown>) => (
     <select
@@ -62,12 +68,20 @@ vi.mock("@elzatona/common-ui", () => ({
       {children as any}
     </select>
   ),
-  SelectTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  SelectValue: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  SelectContent: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  SelectItem: ({ children, value }: { children: React.ReactNode; value: string }) => (
-    <option value={value}>{children}</option>
+  SelectTrigger: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
   ),
+  SelectValue: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  SelectContent: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+  SelectItem: ({
+    children,
+    value,
+  }: {
+    children: React.ReactNode;
+    value: string;
+  }) => <option value={value}>{children}</option>,
   StatsSection: ({ stats }: { stats: Record<string, number> }) => (
     <div data-testid="stats-section">
       {stats &&
@@ -110,7 +124,11 @@ vi.mock("@elzatona/common-ui", () => ({
     <div data-testid="delete-confirmation-modal" />
   ),
   CardManagementModal: () => <div data-testid="card-management-modal" />,
-  QuestionFormModal: ({ isOpen, readOnly, question }: Record<string, unknown>) =>
+  QuestionFormModal: ({
+    isOpen,
+    readOnly,
+    question,
+  }: Record<string, unknown>) =>
     isOpen ? (
       <div
         data-testid="question-form-modal"

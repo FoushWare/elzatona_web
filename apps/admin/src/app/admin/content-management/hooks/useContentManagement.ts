@@ -929,8 +929,8 @@ export function useContentManagement() {
       const normalizedCards = cardsResult.data || [];
       const { cards: canonicalCards, idsByKey } =
         buildCanonicalCards(normalizedCards);
-      const normalizedQuestions = (questionsResult.data || []).map(
-        transformQuestion,
+      const normalizedQuestions = (questionsResult.data || []).map((q) =>
+        transformQuestion(q as unknown as Record<string, unknown>),
       );
       const categoryCardLookup = buildCategoryCardLookup(normalizedQuestions);
       const topicCategoryLookup = buildTopicCategoryLookup(normalizedQuestions);

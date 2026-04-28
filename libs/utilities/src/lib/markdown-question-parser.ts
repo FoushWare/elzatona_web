@@ -76,7 +76,8 @@ export class MarkdownQuestionParser {
     multipleChoice:
       /^#{1,6}\s*(?<number>\d+)\.?\s*(?<title>.*?)\n```[\s\S]*?```\n(?<options>(?:-?\s*[A-Z]:\s*.*\n?)+)/gm,
     // Simple multiple choice format
-    simpleMultipleChoice: /^(?<question>\d+\.?\s*.*?)\n(?<options>(?:[a-zA-Z]\)\s*.*(?:\n|$))+)/gm,
+    simpleMultipleChoice:
+      /^(?<question>\d+\.?\s*.*?)\n(?<options>(?:[a-zA-Z]\)\s*.*(?:\n|$))+)/gm,
     // True/False questions
     trueFalse:
       /^#{1,6}\s*(?<number>\d+)\.?\s*(?<title>.*?)\n```[\s\S]*?```\n-?\s*(?<answer>True|False)\s*\[(?:correct|x|✓)\]/gm,
@@ -350,7 +351,9 @@ export class MarkdownQuestionParser {
     }
 
     const answerMatch = /Answer:\s*(?<answer>[A-D])/i.exec(line);
-    return answerMatch?.groups?.answer ? answerMatch.groups.answer.toLowerCase() : "";
+    return answerMatch?.groups?.answer
+      ? answerMatch.groups.answer.toLowerCase()
+      : "";
   }
 
   /**

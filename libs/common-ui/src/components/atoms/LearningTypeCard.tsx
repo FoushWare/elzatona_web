@@ -25,7 +25,8 @@ const colorVariants = {
     iconBg: "bg-indigo-600",
     ring: "ring-indigo-400",
     text: "text-indigo-600 dark:text-indigo-400",
-    hoverText: "group-hover/card:text-indigo-600 dark:group-hover/card:text-indigo-400",
+    hoverText:
+      "group-hover/card:text-indigo-600 dark:group-hover/card:text-indigo-400",
   },
   green: {
     gradient:
@@ -33,7 +34,8 @@ const colorVariants = {
     iconBg: "bg-green-600",
     ring: "ring-green-400",
     text: "text-green-600 dark:text-green-400",
-    hoverText: "group-hover/card:text-green-600 dark:group-hover/card:text-green-400",
+    hoverText:
+      "group-hover/card:text-green-600 dark:group-hover/card:text-green-400",
   },
 };
 

@@ -279,7 +279,9 @@ async function prepareQuestionForStorage(
   if (!validation.success) throw new Error(validation.error);
 
   // 3. Sanitize
-  const sanitized = sanitizeObjectServer(validation.data as Record<string, any>);
+  const sanitized = sanitizeObjectServer(
+    validation.data as Record<string, any>,
+  );
   sanitized["code"] = processedCode; // Restore code newlines
   if (sanitized["explanation"]) {
     sanitized["explanation"] = sanitizeRichContent(
@@ -486,7 +488,11 @@ export async function questionsPostHandler(request: NextRequest) {
         }
       } catch (error) {
         const msg = getErrorMessage(error);
-        errors.push({ question: questions[index], error: msg, index: index + 1 });
+        errors.push({
+          question: questions[index],
+          error: msg,
+          index: index + 1,
+        });
         console.error(`Error creating question ${index + 1}:`, msg);
       }
     }

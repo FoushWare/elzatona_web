@@ -75,7 +75,9 @@ export async function syncAllGuidedProgress(
   userId?: string,
 ): Promise<{ success: boolean; synced: number; errors: string[] }> {
   try {
-    const guidedKeys = _getLocalStorageKeysByPrefix("guided-practice-progress-");
+    const guidedKeys = _getLocalStorageKeysByPrefix(
+      "guided-practice-progress-",
+    );
     console.log(
       `📦 Found ${guidedKeys.length} guided learning progress entries to sync`,
     );

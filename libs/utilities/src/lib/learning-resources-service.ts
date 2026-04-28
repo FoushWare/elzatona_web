@@ -167,7 +167,7 @@ export class LearningResourcesService {
       id: resource.id,
       number: resource.id,
       title: resource.title,
-      state: state as const,
+      state,
       created_at: "2024-01-01T00:00:00Z",
       updated_at: "2024-12-01T00:00:00Z",
       ...(state === "closed" ? { closed_at: "2024-12-01T00:00:00Z" } : {}),
