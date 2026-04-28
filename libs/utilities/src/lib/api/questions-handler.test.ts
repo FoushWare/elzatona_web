@@ -250,10 +250,40 @@ describe("Questions Handler", () => {
 
     it("should handle update errors gracefully", async () => {
       const { PUT } = await import("./questions-handler");
-      // Force an error in update by mocking order to throw
-      mockOrder.mockResolvedValueOnce({
-        data: null,
-        error: { message: "Update failed" },
+      // Force an error in update by mocking eq to throw for this specific ID
+      mockEq.mockImplementationOnce((field, value) => {
+        // This will be consumed by the lookups first, so we actually want to mock it differently
+        // A safer way is to mock the `update` method itself to return an object with an `eq` method that fails
+      });
+      // Wait, mockFrom is a vi.fn(). I can just mock update
+      mockFrom.mockImplementation((table) => {
+        const defaultChain = {
+          select: vi.fn().mockReturnThis(),
+          eq: mockEq,
+          ilike: mockIlike,
+          range: mockRange,
+          order: mockOrder,
+          limit: mockLimit,
+          head: vi.fn().mockReturnThis(),
+          count: vi.fn().mockReturnThis(),
+          single: mockSingle,
+          maybeSingle: mockMaybeSingle,
+          insert: mockInsert,
+          update: vi.fn().mockReturnThis(),
+          delete: vi.fn().mockReturnThis(),
+        };
+
+        if (table === "questions") {
+          return {
+            ...defaultChain,
+            update: vi.fn().mockReturnValue({
+              eq: vi
+                .fn()
+                .mockResolvedValue({ error: { message: "Update failed" } }),
+            }),
+          };
+        }
+        return defaultChain;
       });
 
       const request = new NextRequest("https://example.com/api/questions", {
@@ -265,6 +295,23 @@ describe("Questions Handler", () => {
       const data = await response.json();
 
       expect(data.success).toBe(false);
+
+      // Restore the original mockFrom implementation
+      mockFrom.mockImplementation(() => ({
+        select: vi.fn().mockReturnThis(),
+        eq: mockEq,
+        ilike: mockIlike,
+        range: mockRange,
+        order: mockOrder,
+        limit: mockLimit,
+        head: vi.fn().mockReturnThis(),
+        count: vi.fn().mockReturnThis(),
+        single: mockSingle,
+        maybeSingle: mockMaybeSingle,
+        insert: mockInsert,
+        update: vi.fn().mockReturnThis(),
+        delete: vi.fn().mockReturnThis(),
+      }));
     });
   });
 });
