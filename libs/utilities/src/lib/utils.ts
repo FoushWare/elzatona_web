@@ -80,7 +80,7 @@ export const truncateText = (text: string, maxLength: number): string => {
  */
 export function normalizeCodeLineBreaks(code: string): string {
   if (!code) return "";
-  return code.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  return code.replaceAll("\r\n", "\n").replaceAll("\r", "\n");
 }
 
 /**

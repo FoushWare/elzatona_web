@@ -347,7 +347,7 @@ function transformQuestion(q: Record<string, unknown>): AdminUnifiedQuestion {
     "";
 
   return {
-    ...(q as Record<string, unknown>),
+    ...q,
     category_id,
     topic_id,
     learning_card_id,
@@ -764,7 +764,6 @@ async function loadLearningPlans(): Promise<LoadResult<LearningPlan>> {
 export function useContentManagement() {
   // Inject repositories
   const cardRepository = useLearningCardRepository();
-  const planRepository = usePlanRepository();
 
   // Transform database Topic to admin Topic
   const transformTopicToAdmin = (

@@ -110,9 +110,6 @@ interface MainContentProps {
   setShowFileExplorer: (show: boolean) => void;
   showPreview: boolean;
   activeBrowserTab: "browser" | "console";
-  setActiveBrowserTab: (tab: "browser" | "console") => void;
-  consoleOutput: string[];
-  setConsoleOutput: (output: string[]) => void;
 }
 
 export const FrontendTaskEditorMainContent: React.FC<MainContentProps> = (

@@ -25,9 +25,8 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  // Ensure the ID from params is used if not in body
-  const { id } = await params;
-  return questionsPutHandler(request); // Library PUT handler already handles id lookup
+  // The PUT handler from the library expects the ID in the body
+  return questionsPutHandler(request);
 }
 
 /**

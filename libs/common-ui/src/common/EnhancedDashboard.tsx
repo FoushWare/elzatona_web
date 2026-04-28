@@ -18,8 +18,6 @@ import {
   CheckCircle,
   Loader2,
   LogOut,
-  Settings,
-  Trophy,
   Star,
   Play,
   ArrowRight,
@@ -27,7 +25,6 @@ import {
   Flame,
   Medal,
   ChevronRight,
-  FolderOpen,
   Activity,
   RefreshCw,
 } from "lucide-react";

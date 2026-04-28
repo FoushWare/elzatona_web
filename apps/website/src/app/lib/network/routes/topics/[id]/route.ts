@@ -27,6 +27,7 @@ export async function GET(
       );
     return NextResponse.json({ success: true, data: topic });
   } catch (error) {
+    console.error("Failed to fetch topic:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch topic" },
       { status: 500 },
@@ -66,6 +67,7 @@ export async function PUT(
       data: updatedTopic,
     });
   } catch (error) {
+    console.error("Failed to update topic:", error);
     return NextResponse.json(
       { success: false, error: "Failed to update topic" },
       { status: 500 },
@@ -118,6 +120,7 @@ export async function DELETE(
       message: "Topic deleted successfully",
     });
   } catch (error) {
+    console.error("Failed to delete topic:", error);
     return NextResponse.json(
       { success: false, error: "Failed to delete topic" },
       { status: 500 },

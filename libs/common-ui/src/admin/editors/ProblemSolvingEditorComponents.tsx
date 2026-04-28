@@ -99,12 +99,6 @@ interface MainContentProps {
   setActiveTab: (tab: string) => void;
   formData: any;
   setFormData: (data: any) => void;
-  starterCode: string;
-  setStarterCode: (code: string) => void;
-  solutionCode: string;
-  setSolutionCode: (code: string) => void;
-  showFileExplorer: boolean;
-  setShowFileExplorer: (show: boolean) => void;
   children?: React.ReactNode;
 }
 

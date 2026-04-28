@@ -27,8 +27,9 @@ async function fetchCardCategories(supabase: any, cardIds: string[]) {
 
     if (!error && data?.length) return data;
   } catch (err) {
-    console.log(
-      "card_categories table not found, falling back to direct categories",
+    console.warn(
+      "card_categories table not found or query failed, falling back to direct categories:",
+      err instanceof Error ? err.message : String(err),
     );
   }
 
@@ -106,6 +107,41 @@ async function resolveTopicQuestionCounts(supabase: any, topicIds: string[]) {
 // Hierarchy Builders
 // -----------------------------------------------------------------------------
 
+function _buildCategoryTopics(
+  cat: any,
+  topicsMap: Map<string, any>,
+  questions: any[],
+  counts: Map<string, number>,
+) {
+  const catTopics = Array.from(topicsMap.values()).filter(
+    (t) => t.category_id === cat?.id,
+  );
+  return catTopics.map((topic) => ({
+    ...topic,
+    questions: questions.filter((q) => q.topic_id === topic.id),
+    totalQuestionCount: counts.get(topic.id) || 0,
+  }));
+}
+
+function _buildCardCategories(
+  cardId: string,
+  cardCategories: any[],
+  topicsMap: Map<string, any>,
+  questions: any[],
+  counts: Map<string, number>,
+) {
+  return cardCategories
+    .filter((cc: any) => cc.card_id === cardId)
+    .map((cc: any) => {
+      const cat = cc.categories;
+      return {
+        ...cat,
+        topics: _buildCategoryTopics(cat, topicsMap, questions, counts),
+      };
+    })
+    .filter((c) => c.id);
+}
+
 function buildHierarchy(
   planCards: any[],
   cardCategories: any[],
@@ -118,23 +154,13 @@ function buildHierarchy(
       const card = pc.learning_cards;
       if (!card) return null;
 
-      const categories = cardCategories
-        .filter((cc: any) => cc.card_id === pc.card_id)
-        .map((cc: any) => {
-          const cat = cc.categories;
-          const catTopics = Array.from(topicsMap.values()).filter(
-            (t) => t.category_id === cat?.id,
-          );
-          return {
-            ...cat,
-            topics: catTopics.map((topic) => ({
-              ...topic,
-              questions: questions.filter((q) => q.topic_id === topic.id),
-              totalQuestionCount: counts.get(topic.id) || 0,
-            })),
-          };
-        })
-        .filter((c) => c.id);
+      const categories = _buildCardCategories(
+        pc.card_id,
+        cardCategories,
+        topicsMap,
+        questions,
+        counts,
+      );
 
       return { ...card, planCardId: pc.id, categories };
     })

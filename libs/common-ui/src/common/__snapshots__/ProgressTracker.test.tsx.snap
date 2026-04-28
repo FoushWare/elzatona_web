@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`S-UT-SNAPSHOT: Progress Tracker Snapshot Tests > should match progress tracker snapshot (challenge tracking) 1`] = `<div />`;
 

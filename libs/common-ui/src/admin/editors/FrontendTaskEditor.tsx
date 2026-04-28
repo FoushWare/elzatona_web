@@ -171,9 +171,6 @@ export default function FrontendTaskEditor({
         setShowFileExplorer={setShowFileExplorer}
         showPreview={showPreview}
         activeBrowserTab={activeBrowserTab}
-        setActiveBrowserTab={setActiveBrowserTab}
-        consoleOutput={consoleOutput}
-        setConsoleOutput={setConsoleOutput}
       />
     </div>
   );

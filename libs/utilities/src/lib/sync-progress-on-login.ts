@@ -91,7 +91,11 @@ export async function syncAllGuidedProgress(
     return { success: errors.length === 0, synced: syncedCount, errors };
   } catch (error) {
     const errorMsg =
-      error instanceof Error ? error.message : String(error || "Unknown error");
+      error instanceof Error
+        ? error.message
+        : typeof error === "string"
+          ? error
+          : "Unknown error";
     console.error("❌ Error in syncAllGuidedProgress:", error);
     return { success: false, synced: 0, errors: [errorMsg] };
   }

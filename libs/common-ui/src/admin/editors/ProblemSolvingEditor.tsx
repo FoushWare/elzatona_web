@@ -241,12 +241,6 @@ export default function ProblemSolvingEditor({
         setActiveTab={(tab) => setActiveTab(tab as "starter" | "solution")}
         formData={formData}
         setFormData={setFormData}
-        starterCode={starterCode}
-        setStarterCode={setStarterCode}
-        solutionCode={solutionCode}
-        setSolutionCode={setSolutionCode}
-        showFileExplorer={fileExplorerState.showFileExplorer}
-        setShowFileExplorer={fileExplorerState.setShowFileExplorer}
       >
         <div className="h-full">
           <Editor

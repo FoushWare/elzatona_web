@@ -360,7 +360,7 @@ export class FrontendTaskValidator {
     });
 
     if (!btn) throw new Error(`Button for ${label} not found`);
-    (btn as HTMLButtonElement).click();
+    btn.click();
     await this._waitForRender();
   }
 
