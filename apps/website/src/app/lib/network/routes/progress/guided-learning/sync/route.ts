@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     if (!token) return _devModeResponse("authentication not fully configured");
 
     let user = await verifySupabaseToken(token);
-    if (!user) user = await _resolveUserFromData(progressData);
+    user ??= await _resolveUserFromData(progressData);
     if (!user) return _devModeResponse("token invalid");
 
     const { error } = await _syncToDatabase(user.id, progressData);
