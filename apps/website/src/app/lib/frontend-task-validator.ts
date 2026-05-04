@@ -158,15 +158,13 @@ export class FrontendTaskValidator {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
-  private async runReactTestCase(
-    iframe: HTMLIFrameElement,
+  private async runTestCase(
     testCase: TestCase,
+    evaluator: () => Promise<any> | any,
   ): Promise<ValidationResult> {
     const startTime = Date.now();
     try {
-      const root = this.getReactRoot(iframe);
-      this.renderReactComponent(iframe, root);
-      const actualOutput = await this.evaluateReactTestCase(root, testCase);
+      const actualOutput = await evaluator();
       return {
         testCaseId: testCase.id,
         passed: this.compareOutputs(actualOutput, testCase.expectedOutput),
@@ -183,6 +181,40 @@ export class FrontendTaskValidator {
         executionTime: Date.now() - startTime,
       };
     }
+  }
+
+  private async runReactTestCase(
+    iframe: HTMLIFrameElement,
+    testCase: TestCase,
+  ): Promise<ValidationResult> {
+    return this.runTestCase(testCase, async () => {
+      const root = this.getReactRoot(iframe);
+      this.renderReactComponent(iframe, root);
+      return this.evaluateReactTestCase(root, testCase);
+    });
+  }
+
+  private async runJavaScriptTestCase(
+    iframe: HTMLIFrameElement,
+    testCase: TestCase,
+    functionName: string,
+  ): Promise<ValidationResult> {
+    return this.runTestCase(testCase, () => {
+      const func = (iframe.contentWindow as any)?.[functionName];
+      if (!func) throw new Error(`Function ${functionName} not found`);
+      return func(testCase.input);
+    });
+  }
+
+  private async runCSSHTMLTestCase(
+    iframe: HTMLIFrameElement,
+    testCase: TestCase,
+  ): Promise<ValidationResult> {
+    return this.runTestCase(testCase, () => {
+      const doc = iframe.contentDocument;
+      if (!doc) throw new Error("Iframe document missing");
+      return this.evaluateCSSHTML(doc, testCase.input);
+    });
   }
 
   private getReactRoot(iframe: HTMLIFrameElement): HTMLElement {
@@ -204,7 +236,6 @@ export class FrontendTaskValidator {
     const Component = Counter || TodoList;
     if (!Component) throw new Error("Component not found in user code");
 
-    // Use createRoot for React 18+ compatibility
     if (!ReactDOM.createRoot)
       throw new Error(
         "ReactDOM.createRoot not found. Ensure React 18+ is loaded.",
@@ -225,21 +256,24 @@ export class FrontendTaskValidator {
     root: HTMLElement,
     input: string,
   ): Promise<string> {
-    if (input === "initial") return this.textOrExpectedDigit(root, "0");
+    const handlers: Record<string, () => Promise<string>> = {
+      initial: async () => this.textOrExpectedDigit(root, "0"),
+      increment: async () => {
+        await this.clickButton(root, (t) => t.includes("+"));
+        return this.textOrExpectedDigit(root, "1");
+      },
+      decrement: async () => {
+        await this.clickButton(root, (t) => t.includes("-"));
+        return this.textOrExpectedDigit(root, "-1");
+      },
+      reset: async () => {
+        await this.clickButton(root, (t) => t.toLowerCase().includes("reset"));
+        return this.textOrExpectedDigit(root, "0");
+      },
+    };
 
-    if (input === "increment") {
-      await this.clickButton(root, (t) => t.includes("+"));
-      return this.textOrExpectedDigit(root, "1");
-    }
-
-    if (input === "decrement") {
-      await this.clickButton(root, (t) => t.includes("-"));
-      return this.textOrExpectedDigit(root, "-1");
-    }
-
-    if (input === "reset") {
-      await this.clickButton(root, (t) => t.toLowerCase().includes("reset"));
-      return this.textOrExpectedDigit(root, "0");
+    if (handlers[input]) {
+      return handlers[input]();
     }
 
     return root.textContent || "";
@@ -266,75 +300,21 @@ export class FrontendTaskValidator {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  private async runJavaScriptTestCase(
-    iframe: HTMLIFrameElement,
-    testCase: TestCase,
-    functionName: string,
-  ): Promise<ValidationResult> {
-    const start = Date.now();
-    try {
-      const func = (iframe.contentWindow as any)?.[functionName];
-      if (!func) throw new Error(`Function ${functionName} not found`);
-      const actual = func(testCase.input);
-      return {
-        testCaseId: testCase.id,
-        passed: this.compareOutputs(actual, testCase.expectedOutput),
-        actualOutput: actual,
-        expectedOutput: testCase.expectedOutput,
-        executionTime: Date.now() - start,
-      };
-    } catch (e) {
-      return {
-        testCaseId: testCase.id,
-        passed: false,
-        expectedOutput: testCase.expectedOutput,
-        error: e instanceof Error ? e.message : String(e),
-        executionTime: Date.now() - start,
-      };
-    }
-  }
-
-  private async runCSSHTMLTestCase(
-    iframe: HTMLIFrameElement,
-    testCase: TestCase,
-  ): Promise<ValidationResult> {
-    const start = Date.now();
-    try {
-      const doc = iframe.contentDocument;
-      if (!doc) throw new Error("Iframe document missing");
-      const actual = this.evaluateCSSHTML(doc, testCase.input);
-      return {
-        testCaseId: testCase.id,
-        passed: this.compareOutputs(actual, testCase.expectedOutput),
-        actualOutput: actual,
-        expectedOutput: testCase.expectedOutput,
-        executionTime: Date.now() - start,
-      };
-    } catch (e) {
-      return {
-        testCaseId: testCase.id,
-        passed: false,
-        expectedOutput: testCase.expectedOutput,
-        error: e instanceof Error ? e.message : String(e),
-        executionTime: Date.now() - start,
-      };
-    }
-  }
-
   private evaluateCSSHTML(doc: Document, input: string): any {
-    return this._evaluateCSSHTMLStep(doc, input);
-  }
+    const handlers: Record<string, () => any> = {
+      "check-grid": () => {
+        const el = doc.querySelector(".card-container");
+        return el ? getComputedStyle(el).display : "none";
+      },
+      "check-responsive": () => {
+        return doc.querySelectorAll('[class*="grid"]').length > 0
+          ? "responsive"
+          : "not-responsive";
+      },
+    };
 
-  private _evaluateCSSHTMLStep(doc: Document, input: string): any {
-    if (input === "check-grid") {
-      const el = doc.querySelector(".card-container");
-      return el ? getComputedStyle(el).display : "none";
-    }
-
-    if (input === "check-responsive") {
-      return doc.querySelectorAll('[class*="grid"]').length > 0
-        ? "responsive"
-        : "not-responsive";
+    if (handlers[input]) {
+      return handlers[input]();
     }
 
     return doc.body.textContent || "";
