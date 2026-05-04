@@ -1,5 +1,11 @@
 import React from "react";
-import { ArrowLeft, Sun, Moon, Monitor, Save } from "lucide-react";
+import { ArrowLeft, Save } from "lucide-react";
+import {
+  ThemeToggle,
+  InputGroup,
+  TextAreaGroup,
+  SelectGroup,
+} from "./SharedEditorComponents";
 
 interface HeaderProps {
   isDark: boolean;
@@ -54,7 +60,7 @@ export const ProblemSolvingEditorHeader: React.FC<HeaderProps> = ({
         </div>
       </div>
       <div className="flex items-center gap-3">
-        <ThemeToggle theme={theme} setTheme={setTheme} />
+        <ThemeToggle theme={theme} setTheme={setTheme} isDark={isDark} />
         <button
           onClick={handleSave}
           className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors flex items-center gap-2"
@@ -63,30 +69,6 @@ export const ProblemSolvingEditorHeader: React.FC<HeaderProps> = ({
         </button>
       </div>
     </div>
-  </div>
-);
-
-const ThemeToggle = ({
-  theme,
-  setTheme,
-}: {
-  theme: string;
-  setTheme: (t: any) => void;
-}) => (
-  <div className="flex items-center gap-1 p-1 rounded-lg bg-gray-200 dark:bg-gray-700">
-    {[
-      { val: "light", icon: Sun },
-      { val: "dark", icon: Moon },
-      { val: "system", icon: Monitor },
-    ].map(({ val, icon: Icon }) => (
-      <button
-        key={val}
-        onClick={() => setTheme(val)}
-        className={`p-2 rounded transition-colors ${theme === val ? "bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm" : "text-gray-600 hover:text-gray-900"}`}
-      >
-        <Icon className="w-4 h-4" />
-      </button>
-    ))}
   </div>
 );
 
@@ -210,57 +192,5 @@ export const ProblemSolvingEditorMainContent: React.FC<MainContentProps> = ({
         Test cases coming soon...
       </div>
     </div>
-  </div>
-);
-
-const InputGroup = ({ label, value, onChange, isDark }: any) => (
-  <div>
-    <label
-      className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
-    >
-      {label}
-    </label>
-    <input
-      type="text"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className={`w-full p-3 rounded-lg border ${isDark ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-300"}`}
-    />
-  </div>
-);
-
-const TextAreaGroup = ({ label, value, onChange, isDark }: any) => (
-  <div>
-    <label
-      className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
-    >
-      {label}
-    </label>
-    <textarea
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className={`w-full p-3 rounded-lg border h-32 ${isDark ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-300"}`}
-    />
-  </div>
-);
-
-const SelectGroup = ({ label, value, options, onChange, isDark }: any) => (
-  <div>
-    <label
-      className={`block text-sm font-medium mb-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}
-    >
-      {label}
-    </label>
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className={`w-full p-3 rounded-lg border ${isDark ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-300"}`}
-    >
-      {options.map((opt: string) => (
-        <option key={opt} value={opt.toLowerCase()}>
-          {opt}
-        </option>
-      ))}
-    </select>
   </div>
 );

@@ -31,24 +31,44 @@ function isUuid(str: string): boolean {
 }
 
 /**
+ * Generic lookup helper to find an entity ID by name or identifier.
+ */
+async function _lookupEntityId(
+  supabase: any,
+  table: string,
+  identifier: any,
+  searchFields: string[] = ["name"],
+  filterField?: string,
+  filterValue?: any,
+) {
+  if (!identifier || typeof identifier !== "string") return null;
+  const trimmed = identifier.trim();
+  if (isUuid(trimmed)) return trimmed;
+
+  for (const field of searchFields) {
+    let query = supabase.from(table).select("id").ilike(field, trimmed);
+    if (filterField && filterValue) query = query.eq(filterField, filterValue);
+
+    const { data } = await query.maybeSingle();
+    if (data) return data.id;
+  }
+
+  // Fallback for exact ID match if it's not a UUID but still could be an ID
+  const { data } = await supabase
+    .from(table)
+    .select("id")
+    .eq("id", trimmed)
+    .maybeSingle();
+
+  if (!data) console.error(`${table} lookup failed for: ${trimmed}`);
+  return data?.id || null;
+}
+
+/**
  * Looks up a category ID by name if it's not already a UUID.
  */
 async function lookupCategory(supabase: any, categoryValue: any) {
-  if (!categoryValue || typeof categoryValue !== "string") return null;
-  const trimmed = categoryValue.trim();
-  if (isUuid(trimmed)) return trimmed;
-
-  const { data, error } = await supabase
-    .from("categories")
-    .select("id")
-    .ilike("name", trimmed)
-    .single();
-
-  if (error || !data) {
-    console.error(`Category lookup failed for: ${trimmed}`);
-    return null;
-  }
-  return data.id;
+  return _lookupEntityId(supabase, "categories", categoryValue);
 }
 
 /**
@@ -59,52 +79,24 @@ async function lookupTopic(
   topicValue: any,
   categoryId?: string | null,
 ) {
-  if (!topicValue || typeof topicValue !== "string") return null;
-  const trimmed = topicValue.trim();
-  if (isUuid(trimmed)) return trimmed;
-
-  let query = supabase.from("topics").select("id").ilike("name", trimmed);
-  if (categoryId) query = query.eq("category_id", categoryId);
-
-  const { data, error } = await query.single();
-  if (error || !data) {
-    console.error(`Topic lookup failed for: ${trimmed}`);
-    return null;
-  }
-  return data.id;
+  return _lookupEntityId(
+    supabase,
+    "topics",
+    topicValue,
+    ["name"],
+    categoryId ? "category_id" : undefined,
+    categoryId,
+  );
 }
 
 /**
  * Looks up a learning card ID by identifier (slug, title, or ID).
  */
 async function lookupLearningCard(supabase: any, identifier: any) {
-  if (!identifier || typeof identifier !== "string") return null;
-  const trimmed = identifier.trim();
-  if (isUuid(trimmed)) return trimmed;
-
-  // Try title
-  let { data } = await supabase
-    .from("learning_cards")
-    .select("id")
-    .ilike("title", trimmed)
-    .maybeSingle();
-  if (data) return data.id;
-
-  // Try slug
-  ({ data } = await supabase
-    .from("learning_cards")
-    .select("id")
-    .ilike("slug", trimmed)
-    .maybeSingle());
-  if (data) return data.id;
-
-  // Try exact ID
-  ({ data } = await supabase
-    .from("learning_cards")
-    .select("id")
-    .eq("id", trimmed)
-    .maybeSingle());
-  return data?.id || null;
+  return _lookupEntityId(supabase, "learning_cards", identifier, [
+    "title",
+    "slug",
+  ]);
 }
 
 /**

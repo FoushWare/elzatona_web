@@ -1,18 +1,6 @@
 // v1.1 - Refactored Plan Hierarchy Route
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-import { getSupabaseConfig } from "../../../../../api-config";
-
-// -----------------------------------------------------------------------------
-// Database Helper functions
-// -----------------------------------------------------------------------------
-
-function getSupabaseClient() {
-  const config = getSupabaseConfig();
-  return createClient(config.url, config.serviceRoleKey, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
-}
+import { getSupabaseClient } from "../../../../../get-supabase-client";
 
 /**
  * Fetches categories associated with a list of card IDs, handling junction table or direct relationships.

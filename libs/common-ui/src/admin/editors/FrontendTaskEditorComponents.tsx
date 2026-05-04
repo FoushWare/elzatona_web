@@ -1,5 +1,6 @@
 import React from "react";
-import { ArrowLeft, Sun, Moon, Monitor, Save, Code } from "lucide-react";
+import { ArrowLeft, Save, Code } from "lucide-react";
+import { ThemeToggle, TabHeader, InputGroup } from "./SharedEditorComponents";
 
 interface HeaderProps {
   isDark: boolean;
@@ -58,7 +59,7 @@ export const FrontendTaskEditorHeader: React.FC<HeaderProps> = ({
         </div>
       </div>
       <div className="flex items-center gap-3">
-        <ThemeToggle theme={theme} setTheme={setTheme} />
+        <ThemeToggle theme={theme} setTheme={setTheme} isDark={isDark} />
         {mode !== "view" && (
           <button
             onClick={handleSave}
@@ -75,24 +76,6 @@ export const FrontendTaskEditorHeader: React.FC<HeaderProps> = ({
         </button>
       </div>
     </div>
-  </div>
-);
-
-const ThemeToggle = ({ theme, setTheme }: any) => (
-  <div className="flex items-center gap-1 p-1 rounded-lg bg-gray-200 dark:bg-gray-700">
-    {[
-      { val: "light", icon: Sun },
-      { val: "dark", icon: Moon },
-      { val: "system", icon: Monitor },
-    ].map(({ val, icon: Icon }) => (
-      <button
-        key={val}
-        onClick={() => setTheme(val)}
-        className={`p-2 rounded transition-colors ${theme === val ? "bg-white dark:bg-gray-800 shadow-sm" : "text-gray-500"}`}
-      >
-        <Icon className="w-4 h-4" />
-      </button>
-    ))}
   </div>
 );
 
@@ -135,31 +118,23 @@ export const FrontendTaskEditorMainContent: React.FC<MainContentProps> = (
       >
         <TabHeader
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          tabs={["description", "solution"]}
+          onTabChange={setActiveTab}
           isDark={isDark}
         />
         <div className="flex-1 overflow-y-auto p-6">
           {activeTab === "description" && mode !== "view" && (
-            <div className="space-y-4">
-              <label
-                className={`block text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
-              >
-                Task Title
-              </label>
-              <input
-                type="text"
-                value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
-                className={`w-full p-2 rounded-lg border ${isDark ? "bg-gray-700 border-gray-600 text-white" : "border-gray-300"}`}
-              />
-            </div>
+            <InputGroup
+              label="Task Title"
+              value={formData.title}
+              onChange={(v: string) => setFormData({ ...formData, title: v })}
+              isDark={isDark}
+            />
           )}
         </div>
         <div
           className="absolute right-0 inset-y-0 w-1 cursor-col-resize hover:bg-blue-500"
-          onMouseDown={(e) => handleMouseDown(e, "left")}
+          onMouseDown={(e: React.MouseEvent) => handleMouseDown(e, "left")}
         />
       </div>
 
@@ -184,7 +159,7 @@ export const FrontendTaskEditorMainContent: React.FC<MainContentProps> = (
       >
         <div
           className="absolute left-0 inset-y-0 w-1 cursor-col-resize hover:bg-blue-500"
-          onMouseDown={(e) => handleMouseDown(e, "right")}
+          onMouseDown={(e: React.MouseEvent) => handleMouseDown(e, "right")}
         />
         <div
           className={`border-b p-4 text-sm font-medium ${isDark ? "text-white border-gray-700" : "text-gray-900 border-gray-200"}`}
@@ -195,19 +170,3 @@ export const FrontendTaskEditorMainContent: React.FC<MainContentProps> = (
     </div>
   );
 };
-
-const TabHeader = ({ activeTab, setActiveTab, isDark }: any) => (
-  <div
-    className={`flex border-b ${isDark ? "border-gray-700" : "border-gray-200"}`}
-  >
-    {["description", "solution"].map((tab: any) => (
-      <button
-        key={tab}
-        onClick={() => setActiveTab(tab)}
-        className={`px-4 py-3 text-sm font-medium capitalize ${activeTab === tab ? "border-b-2 border-blue-500 text-blue-500" : "text-gray-500"}`}
-      >
-        {tab}
-      </button>
-    ))}
-  </div>
-);
