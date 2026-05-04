@@ -117,6 +117,8 @@ export default function ProblemSolvingEditor({
     leftPanelWidth,
     rightPanelWidth,
     handleMouseDown,
+    copied,
+    setCopied,
   } = editorState;
 
   // Simple form handlers

@@ -166,8 +166,6 @@ export default function FrontendTaskEditor({
         mode={mode}
         showFileExplorer={showFileExplorer}
         setShowFileExplorer={setShowFileExplorer}
-        showPreview={showPreview}
-        activeBrowserTab={activeBrowserTab}
       />
     </div>
   );
