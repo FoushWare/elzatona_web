@@ -61,12 +61,45 @@ export const idSchema = z
   .max(100, "ID must be less than 100 characters")
   .transform((val) => sanitizeInputServer(val));
 
+// Helper for code field transformation
+const transformCodeField = (val: any) => {
+  return val === undefined ? null : val;
+};
+
+// Helper for difficulty field transformation
+const transformDifficultyField = (val: any) => {
+  if (val && (val as string) === "difficult") {
+    return "advanced";
+  }
+  return val;
+};
+
+// Helper for explanation field transformation
+const transformExplanationField = (val: any) => {
+  if (!val || val === null || val === "") return undefined;
+  return sanitizeInputServer(val);
+};
+
+// Helper for options field transformation
+const transformOptionsField = (val: any) => {
+  if (!val || !Array.isArray(val) || val.length === 0) {
+    return undefined;
+  }
+  try {
+    return val.filter(
+      (item) => item && typeof item === "object" && item.id && item.text,
+    );
+  } catch (e) {
+    console.warn("Error filtering options array:", e);
+    return undefined;
+  }
+};
+
 // Question validation schema
-// Based on actual database schema: category_id and topic_id are nullable (optional)
 export const questionSchema = z
   .object({
-    title: titleSchema, // Required in DB (NOT NULL)
-    content: contentSchema, // Required in DB (NOT NULL) - using contentSchema which requires min 1 char
+    title: titleSchema,
+    content: contentSchema,
     code: z
       .union([
         z.string().max(50000, "Code must be less than 50000 characters"),
@@ -76,57 +109,41 @@ export const questionSchema = z
       ])
       .optional()
       .nullable()
-      .transform((val) => {
-        // CRITICAL: Always preserve the code field value, even if it's empty/null
-        // Don't sanitize code field here - it will be handled separately in the API route
-        // to preserve newlines and formatting
-        // Return the value as-is (including null/empty string) - don't convert to undefined
-        return val === undefined ? null : val;
-      }), // Optional code field for formatted display
+      .transform(transformCodeField),
     type: z
       .union([
         z.enum(["multiple-choice", "true-false", "code", "mcq"]),
         z.undefined(),
       ])
       .optional()
-      .default("multiple-choice"), // Required in DB, default to 'multiple-choice'
-    category: z.string().min(1).optional(), // Optional - used for lookup if category_id not provided
+      .default("multiple-choice"),
+    category: z.string().min(1).optional(),
     category_id: z
       .union([z.string().uuid(), z.literal(""), z.undefined(), z.null()])
-      .optional(), // Optional in DB (nullable)
-    topic: z.string().optional(), // Optional - used for lookup if topic_id not provided
+      .optional(),
+    topic: z.string().optional(),
     topic_id: z
       .union([z.string().uuid(), z.literal(""), z.undefined(), z.null()])
-      .optional(), // Optional in DB (nullable)
+      .optional(),
     difficulty: z
       .enum(["beginner", "intermediate", "advanced"])
       .optional()
-      .transform((val) => {
-        // DB constraint: 'beginner', 'intermediate', 'advanced' (nullable)
-        // Map "difficult" to "advanced" if somehow it gets through
-        if (val && (val as string) === "difficult") {
-          return "advanced";
-        }
-        return val;
-      }),
+      .transform(transformDifficultyField),
     explanation: z
       .string()
       .max(5000, "Explanation must be less than 5000 characters")
       .optional()
       .nullable()
-      .transform((val) => {
-        if (!val || val === null || val === "") return undefined;
-        return sanitizeInputServer(val);
-      }),
-    points: z.number().int().min(1).max(100).optional().default(1), // DB default is 1
+      .transform(transformExplanationField),
+    points: z.number().int().min(1).max(100).optional().default(1),
     is_active: z.boolean().optional().default(true),
-    isActive: z.boolean().optional().default(true), // Accept both camelCase and snake_case
-    timeLimit: z.number().int().min(0).max(3600).optional(), // Accept camelCase (in seconds, max 1 hour)
-    time_limit: z.number().int().min(0).max(3600).optional(), // Accept snake_case (in seconds, max 1 hour)
+    isActive: z.boolean().optional().default(true),
+    timeLimit: z.number().int().min(0).max(3600).optional(),
+    time_limit: z.number().int().min(0).max(3600).optional(),
     learningCardId: z
       .union([
         z.string().uuid(),
-        z.string().min(1), // Allow non-UUID identifiers like "core-technologies"
+        z.string().min(1),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -135,7 +152,7 @@ export const questionSchema = z
     learning_card_id: z
       .union([
         z.string().uuid(),
-        z.string().min(1), // Allow non-UUID identifiers like "core-technologies"
+        z.string().min(1),
         z.literal(""),
         z.undefined(),
         z.null(),
@@ -143,7 +160,7 @@ export const questionSchema = z
       .optional(),
     tags: z.array(z.string()).optional(),
     hints: z.array(z.string()).optional(),
-    metadata: z.any().optional().nullable(), // Accept any object structure for metadata
+    metadata: z.any().optional().nullable(),
     options: z
       .union([
         z.array(
@@ -160,29 +177,14 @@ export const questionSchema = z
               .transform((val) => (val ? sanitizeInputServer(val) : undefined)),
           }),
         ),
-        z.string().transform(() => undefined), // If options is a string (invalid), transform to undefined
+        z.string().transform(() => undefined),
         z.undefined(),
         z.null(),
       ])
       .optional()
-      .transform((val) => {
-        // Ensure we return undefined if val is not a valid array
-        // This prevents "Cannot read properties of undefined (reading '0')" errors
-        if (!val || !Array.isArray(val) || val.length === 0) {
-          return undefined;
-        }
-        // Validate that all array elements are valid objects
-        try {
-          return val.filter(
-            (item) => item && typeof item === "object" && item.id && item.text,
-          );
-        } catch (e) {
-          console.warn("Error filtering options array:", e);
-          return undefined;
-        }
-      }),
+      .transform(transformOptionsField),
   })
-  .catchall(z.any()); // Allow extra fields that we'll filter out later
+  .catchall(z.any());
 // Note: category_id and topic_id are optional in the database schema (nullable)
 // No refinement needed - both can be null/undefined
 

@@ -453,39 +453,10 @@ export async function questionsPostHandler(request: NextRequest) {
       );
     }
 
-    const results: Array<{ success: boolean; id?: string }> = [];
-    const errors: Array<{
-      question: Record<string, unknown>;
-      error: string;
-      index: number;
-    }> = [];
-
-    for (let index = 0; index < questions.length; index++) {
-      try {
-        const result = await _processSingleCreation(
-          supabase,
-          questions[index],
-          index,
-        );
-        if (result.success) {
-          results.push({ success: true, id: result.id });
-        } else {
-          errors.push({
-            question: result.questionData!,
-            error: result.error!,
-            index: result.index!,
-          });
-        }
-      } catch (error) {
-        const msg = getErrorMessage(error);
-        errors.push({
-          question: questions[index],
-          error: msg,
-          index: index + 1,
-        });
-        console.error(`Error creating question ${index + 1}:`, msg);
-      }
-    }
+    const { results, errors } = await _processQuestionBatch(
+      supabase,
+      questions,
+    );
 
     _questionsCache = null;
 
@@ -511,6 +482,46 @@ export async function questionsPostHandler(request: NextRequest) {
       { status: 500 },
     );
   }
+}
+
+/**
+ * Internal helper to process a batch of questions.
+ */
+async function _processQuestionBatch(supabase: any, questions: any[]) {
+  const results: Array<{ success: boolean; id?: string }> = [];
+  const errors: Array<{
+    question: Record<string, unknown>;
+    error: string;
+    index: number;
+  }> = [];
+
+  for (let index = 0; index < questions.length; index++) {
+    try {
+      const result = await _processSingleCreation(
+        supabase,
+        questions[index],
+        index,
+      );
+      if (result.success) {
+        results.push({ success: true, id: result.id });
+      } else {
+        errors.push({
+          question: result.questionData!,
+          error: result.error!,
+          index: result.index!,
+        });
+      }
+    } catch (error) {
+      const msg = getErrorMessage(error);
+      errors.push({
+        question: questions[index],
+        error: msg,
+        index: index + 1,
+      });
+    }
+  }
+
+  return { results, errors };
 }
 
 /**

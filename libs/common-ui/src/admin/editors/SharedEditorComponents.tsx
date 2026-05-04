@@ -41,6 +41,23 @@ export const ThemeToggle = ({
 );
 
 /**
+ * Shared styling utility for editor fields
+ */
+const getFieldStyles = (isDark: boolean) => ({
+  label: `block text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`,
+  input: `w-full p-2 rounded-lg border transition-colors ${
+    isDark
+      ? "bg-gray-700 border-gray-600 text-white focus:border-indigo-500"
+      : "bg-white border-gray-300 focus:border-blue-500"
+  }`,
+  select: `w-full p-3 rounded-lg border transition-colors ${
+    isDark
+      ? "bg-gray-700 border-gray-600 text-white focus:border-indigo-500"
+      : "bg-white border-gray-300 focus:border-blue-500"
+  }`,
+});
+
+/**
  * Shared Input Group component
  */
 export const InputGroup = ({
@@ -50,26 +67,21 @@ export const InputGroup = ({
   isDark,
   type = "text",
   placeholder = "",
-}: any) => (
-  <div className="space-y-2">
-    <label
-      className={`block text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
-    >
-      {label}
-    </label>
-    <input
-      type={type}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      className={`w-full p-2 rounded-lg border transition-colors ${
-        isDark
-          ? "bg-gray-700 border-gray-600 text-white focus:border-indigo-500"
-          : "bg-white border-gray-300 focus:border-blue-500"
-      }`}
-    />
-  </div>
-);
+}: any) => {
+  const styles = getFieldStyles(isDark);
+  return (
+    <div className="space-y-2">
+      <label className={styles.label}>{label}</label>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className={styles.input}
+      />
+    </div>
+  );
+};
 
 /**
  * Shared Text Area Group component
@@ -81,26 +93,21 @@ export const TextAreaGroup = ({
   isDark,
   rows = 4,
   placeholder = "",
-}: any) => (
-  <div className="space-y-2">
-    <label
-      className={`block text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
-    >
-      {label}
-    </label>
-    <textarea
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      rows={rows}
-      placeholder={placeholder}
-      className={`w-full p-3 rounded-lg border transition-colors ${
-        isDark
-          ? "bg-gray-700 border-gray-600 text-white focus:border-indigo-500"
-          : "bg-white border-gray-300 focus:border-blue-500"
-      }`}
-    />
-  </div>
-);
+}: any) => {
+  const styles = getFieldStyles(isDark);
+  return (
+    <div className="space-y-2">
+      <label className={styles.label}>{label}</label>
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        rows={rows}
+        placeholder={placeholder}
+        className={`${styles.input} p-3`}
+      />
+    </div>
+  );
+};
 
 /**
  * Shared Select Group component
@@ -111,34 +118,29 @@ export const SelectGroup = ({
   options,
   onChange,
   isDark,
-}: any) => (
-  <div className="space-y-2">
-    <label
-      className={`block text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
-    >
-      {label}
-    </label>
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className={`w-full p-3 rounded-lg border transition-colors ${
-        isDark
-          ? "bg-gray-700 border-gray-600 text-white focus:border-indigo-500"
-          : "bg-white border-gray-300 focus:border-blue-500"
-      }`}
-    >
-      {options.map((opt: string | { label: string; value: string }) => {
-        const val = typeof opt === "string" ? opt.toLowerCase() : opt.value;
-        const label = typeof opt === "string" ? opt : opt.label;
-        return (
-          <option key={val} value={val}>
-            {label}
-          </option>
-        );
-      })}
-    </select>
-  </div>
-);
+}: any) => {
+  const styles = getFieldStyles(isDark);
+  return (
+    <div className="space-y-2">
+      <label className={styles.label}>{label}</label>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={styles.select}
+      >
+        {options.map((opt: string | { label: string; value: string }) => {
+          const val = typeof opt === "string" ? opt.toLowerCase() : opt.value;
+          const label = typeof opt === "string" ? opt : opt.label;
+          return (
+            <option key={val} value={val}>
+              {label}
+            </option>
+          );
+        })}
+      </select>
+    </div>
+  );
+};
 
 /**
  * Shared Tab Header component
