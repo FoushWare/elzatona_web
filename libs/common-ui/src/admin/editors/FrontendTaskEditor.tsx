@@ -128,13 +128,10 @@ export default function FrontendTaskEditor({
     handleMouseDown,
     showFileExplorer,
     setShowFileExplorer,
-    consoleOutput,
-    setConsoleOutput,
     showPreview,
     activeTab,
     setActiveTab,
     activeBrowserTab,
-    setActiveBrowserTab,
   } = editorState;
 
   // Simple form handlers

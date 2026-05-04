@@ -11,7 +11,6 @@ import {
 } from "../../../../apps/website/src/app/lib/supabase-client";
 import {
   BookOpen,
-  Code,
   Target,
   Zap,
   BarChart3,
@@ -31,7 +30,6 @@ import {
 
 // Types
 import type {
-  DashboardStats as SupabaseDashboardStats,
   ContinueData,
   UserProgress,
 } from "../../../../apps/website/src/app/lib/supabase-progress";

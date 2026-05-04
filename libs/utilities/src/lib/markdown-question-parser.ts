@@ -335,7 +335,7 @@ export class MarkdownQuestionParser {
       return "";
     }
 
-    const answerMatch = /Answer:\s*([A-D])/i.exec(line);
+    const answerMatch = /Answer:\s*(?<answer>[A-D])/i.exec(line);
     return answerMatch?.groups?.answer
       ? answerMatch.groups.answer.toLowerCase()
       : "";
@@ -351,7 +351,7 @@ export class MarkdownQuestionParser {
     for (let j = startIndex; j < Math.min(startIndex + 10, lines.length); j++) {
       const answerLine = lines[j].trim();
       if (answerLine.includes("Answer:") || answerLine.includes("**Answer:")) {
-        const answerMatch = /Answer:\s*([A-D])/i.exec(answerLine);
+        const answerMatch = /Answer:\s*(?<answer>[A-D])/i.exec(answerLine);
         if (answerMatch?.groups?.answer) {
           return answerMatch.groups.answer.toLowerCase();
         }

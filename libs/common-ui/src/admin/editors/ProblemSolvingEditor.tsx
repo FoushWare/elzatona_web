@@ -113,17 +113,10 @@ export default function ProblemSolvingEditor({
     setSolutionCode,
     activeTab,
     setActiveTab,
-    fileExplorerState,
     dynamicFieldsState,
     leftPanelWidth,
     rightPanelWidth,
     handleMouseDown,
-    copied,
-    setCopied,
-    showPreview,
-    setShowPreview,
-    activeBrowserTab,
-    setActiveBrowserTab,
   } = editorState;
 
   // Simple form handlers

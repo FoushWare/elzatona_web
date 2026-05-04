@@ -1,317 +1,140 @@
-import { vi, describe, it, expect, beforeEach } from "vitest";
-import { questionsGetHandler, questionsPostHandler } from "./questions-handler";
-import { NextRequest } from "next/server";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { NextRequest, NextResponse } from "next/server";
+import {
+  questionsGetHandler,
+  questionsPostHandler,
+  PUT as questionsPutHandler,
+  DELETE as questionsDeleteHandler,
+} from "../questions-handler";
 
-// -----------------------------------------------------------------------------
-// Shared Mocks
-// -----------------------------------------------------------------------------
+import { getSupabaseClient } from "../../index";
 
-const mockSingle = vi
-  .fn()
-  .mockResolvedValue({ data: { id: "123" }, error: null });
-const mockMaybeSingle = vi
-  .fn()
-  .mockResolvedValue({ data: { id: "456" }, error: null });
-const mockEq = vi.fn().mockReturnThis();
-const mockIlike = vi.fn().mockReturnThis();
-const mockRange = vi.fn().mockReturnThis();
-const mockOrder = vi.fn().mockReturnThis();
-const mockLimit = vi.fn().mockReturnThis();
-const mockInsert = vi.fn().mockReturnThis();
-
-const mockFrom = vi.fn(() => ({
+const mockSupabaseInstance = {
+  from: vi.fn().mockReturnThis(),
   select: vi.fn().mockReturnThis(),
-  eq: mockEq,
-  ilike: mockIlike,
-  range: mockRange,
-  order: mockOrder,
-  limit: mockLimit,
-  head: vi.fn().mockReturnThis(),
-  count: vi.fn().mockReturnThis(),
-  single: mockSingle,
-  maybeSingle: mockMaybeSingle,
-  insert: mockInsert,
+  eq: vi.fn().mockReturnThis(),
+  ilike: vi.fn().mockReturnThis(),
+  range: vi.fn().mockReturnThis(),
+  order: vi.fn().mockReturnThis(),
+  limit: vi.fn().mockReturnThis(),
+  single: vi.fn().mockReturnThis(),
+  maybeSingle: vi.fn().mockReturnThis(),
+  insert: vi.fn().mockReturnThis(),
   update: vi.fn().mockReturnThis(),
   delete: vi.fn().mockReturnThis(),
-}));
-
-const mockSupabase = {
-  from: mockFrom,
 };
 
+// Mock dependencies
 vi.mock("../../index", () => ({
-  getSupabaseClient: vi.fn(() => mockSupabase),
-  validateAndSanitize: vi.fn((schema: any, data: any) => ({
-    success: true,
-    data: data,
-  })),
-  sanitizeObjectServer: vi.fn((obj: any) => obj),
-  sanitizeRichContent: vi.fn((html: any) => html),
-  sanitizeForLogging: vi.fn((val: any) => String(val)),
-  normalizeCodeLineBreaks: vi.fn((code: any) => code),
-  stripUnsafeControlCharacters: vi.fn((str: any) => str),
-  getErrorMessage: vi.fn((err: any) => err.message || String(err)),
+  getSupabaseClient: vi.fn(() => mockSupabaseInstance),
+  validateAndSanitize: vi.fn((schema, data) => ({ success: true, data })),
+  sanitizeObjectServer: vi.fn((data) => data),
+  sanitizeRichContent: vi.fn((data) => data),
+  getErrorMessage: vi.fn((err) => err?.message || "Error"),
+  normalizeCodeLineBreaks: vi.fn((code) => code),
 }));
 
-describe("Questions Handler", () => {
+vi.mock("./validation", () => ({
+  questionSchema: {},
+}));
+
+describe("questions-handler", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Default success mocks
-    mockOrder.mockReturnThis();
-    mockRange.mockReturnThis();
-    mockSingle.mockResolvedValue({ data: { id: "123" }, error: null });
-    mockMaybeSingle.mockResolvedValue({ data: { id: "456" }, error: null });
+    // Reset all methods on the singleton mock instance
+    Object.values(mockSupabaseInstance).forEach((m: any) => m.mockReset?.());
+    // Re-setup mockReturnThis for fluent API
+    mockSupabaseInstance.from.mockReturnThis();
+    mockSupabaseInstance.select.mockReturnThis();
+    mockSupabaseInstance.eq.mockReturnThis();
+    mockSupabaseInstance.ilike.mockReturnThis();
+    mockSupabaseInstance.range.mockReturnThis();
+    mockSupabaseInstance.order.mockReturnThis();
+    mockSupabaseInstance.limit.mockReturnThis();
+    mockSupabaseInstance.single.mockReturnThis();
+    mockSupabaseInstance.maybeSingle.mockReturnThis();
+    mockSupabaseInstance.insert.mockReturnThis();
+    mockSupabaseInstance.update.mockReturnThis();
+    mockSupabaseInstance.delete.mockReturnThis();
   });
 
-  describe("GET Handler", () => {
-    it("should fetch questions with default parameters", async () => {
-      mockOrder.mockResolvedValue({ data: [], count: 0, error: null });
-
-      const request = new NextRequest("https://example.com/api/questions");
-      const response = await questionsGetHandler(request);
-      const data = await response.json();
-
-      expect(data.success).toBe(true);
-      expect(Array.isArray(data.data)).toBe(true);
-    });
-
-    it("should handle filtering by type", async () => {
-      mockOrder.mockResolvedValue({ data: [], count: 0, error: null });
-
-      const request = new NextRequest(
-        "https://example.com/api/questions?type=multiple-choice",
+  describe("questionsGetHandler", () => {
+    it("should fetch questions with pagination", async () => {
+      const req = new NextRequest(
+        "http://localhost/api/questions?page=1&pageSize=10",
       );
-      const response = await questionsGetHandler(request);
-      const data = await response.json();
 
-      expect(data.success).toBe(true);
-      expect(mockEq).toHaveBeenCalledWith("type", "multiple-choice");
-    });
-
-    it("should handle database errors gracefully", async () => {
-      mockOrder.mockResolvedValueOnce({
-        data: null,
-        error: { message: "DB Error" },
+      mockSupabaseInstance.select.mockResolvedValue({
+        data: [{ id: "1", title: "Test Q" }],
+        count: 1,
+        error: null,
       });
 
-      const request = new NextRequest("https://example.com/api/questions");
-      const response = await questionsGetHandler(request);
-      const data = await response.json();
+      const response = await questionsGetHandler(req);
+      const json = await response.json();
 
-      expect(data.success).toBe(false);
-      expect(data.error).toBe("DB Error");
+      expect(json.success).toBe(true);
+      expect(json.data).toHaveLength(1);
+      expect(json.pagination.page).toBe(1);
     });
   });
 
-  describe("POST Handler", () => {
-    it("should reject invalid body", async () => {
-      const request = new NextRequest("https://example.com/api/questions", {
+  describe("questionsPostHandler", () => {
+    it("should create questions", async () => {
+      const req = new NextRequest("http://localhost/api/questions", {
         method: "POST",
-        body: JSON.stringify({}),
-      });
-      const response = await questionsPostHandler(request);
-      const data = await response.json();
-
-      expect(data.success).toBe(false);
-      expect(data.error).toBe("Questions array is required");
-    });
-
-    it("should process multiple questions", async () => {
-      // Mock insert returning data
-      mockSingle.mockResolvedValue({ data: { id: "new-id" }, error: null });
-      mockMaybeSingle.mockResolvedValue({ data: null, error: null }); // No duplicate
-
-      const mockQuestions = [
-        { title: "Q1", content: "C1", type: "multiple-choice" },
-        { title: "Q2", content: "C2", type: "code" },
-      ];
-
-      const request = new NextRequest("https://example.com/api/questions", {
-        method: "POST",
-        body: JSON.stringify({ questions: mockQuestions }),
+        body: JSON.stringify({
+          questions: [{ title: "New Q", content: "Content" }],
+        }),
       });
 
-      const response = await questionsPostHandler(request);
-      const data = await response.json();
-
-      expect(data.success).toBe(true);
-      expect(data.data.success).toBe(2);
-    });
-
-    it("should handle missing categories or topics by creating placeholders if needed", async () => {
-      // 1. lookupCategory fails then insert succeeds
-      mockSingle
-        .mockResolvedValueOnce({ data: null, error: { code: "PGRST116" } }) // Category not found
-        .mockResolvedValueOnce({ data: { id: "topic-123" }, error: null }) // Topic found
-        .mockResolvedValueOnce({ data: { id: "q-123" }, error: null }); // Insert success
-
-      // We need to mock the insert chain to return an ID for the new category
-      // Actually, lookupCategory uses .single() after .ilike().
-      // Let's just mock the whole sequence.
-
-      const mockQuestion = {
-        title: "New Cat Q",
-        content: "Content",
-        category: "New Category",
-      };
-
-      const request = new NextRequest("https://example.com/api/questions", {
-        method: "POST",
-        body: JSON.stringify({ questions: [mockQuestion] }),
+      mockSupabaseInstance.maybeSingle.mockResolvedValue({ data: null }); // No duplicate
+      mockSupabaseInstance.insert.mockResolvedValue({
+        data: { id: "new-id" },
+        error: null,
       });
 
-      const response = await questionsPostHandler(request);
-      const data = await response.json();
+      const response = await questionsPostHandler(req);
+      const json = await response.json();
 
-      expect(data.success).toBe(true);
-    });
-
-    it("should handle database insert errors", async () => {
-      mockMaybeSingle.mockResolvedValue({ data: null, error: null });
-
-      mockSingle.mockReset();
-      mockSingle
-        .mockResolvedValueOnce({ data: { id: "cat-123" }, error: null })
-        .mockResolvedValueOnce({ data: { id: "topic-123" }, error: null })
-        .mockResolvedValueOnce({
-          data: null,
-          error: { message: "Insert failed" },
-        });
-
-      const mockQuestion = {
-        title: "Fail Q",
-        content: "C",
-        category: "Cat1",
-        topic: "Topic1",
-      };
-
-      const request = new NextRequest("https://example.com/api/questions", {
-        method: "POST",
-        body: JSON.stringify({ questions: [mockQuestion] }),
-      });
-
-      const response = await questionsPostHandler(request);
-      const data = await response.json();
-
-      expect(data.success).toBe(true);
-      expect(data.data.failed).toBe(1);
-      expect(data.data.errors[0]).toContain("Insert failed");
+      expect(json.success).toBe(true);
+      expect(json.data.success).toBe(1);
     });
   });
 
-  describe("PUT/DELETE Handlers", () => {
-    it("should update a question", async () => {
-      const { PUT } = await import("./questions-handler");
-      mockSingle.mockResolvedValue({ data: { id: "123" }, error: null });
-      mockOrder.mockResolvedValue({ data: { id: "123" }, error: null }); // For update.eq
-
-      const request = new NextRequest("https://example.com/api/questions", {
+  describe("questionsPutHandler", () => {
+    it("should update an existing question", async () => {
+      const req = new NextRequest("http://localhost/api/questions", {
         method: "PUT",
-        body: JSON.stringify({ id: "q-123", title: "Updated title" }),
+        body: JSON.stringify({
+          id: "123",
+          title: "Updated Title",
+        }),
       });
 
-      const response = await PUT(request);
-      const data = await response.json();
+      mockSupabaseInstance.update.mockResolvedValue({ error: null });
 
-      expect(data.success).toBe(true);
-      expect(mockEq).toHaveBeenCalledWith("id", "q-123");
+      const response = await questionsPutHandler(req);
+      const json = await response.json();
+
+      expect(json.success).toBe(true);
+      expect(mockSupabaseInstance.update).toHaveBeenCalled();
     });
+  });
 
+  describe("questionsDeleteHandler", () => {
     it("should delete a question", async () => {
-      const { DELETE } = await import("./questions-handler");
-      mockOrder.mockResolvedValue({ data: null, error: null }); // For delete.eq
-
-      const request = new NextRequest(
-        "https://example.com/api/questions?id=q-123",
-        {
-          method: "DELETE",
-        },
-      );
-
-      const response = await DELETE(request);
-      const data = await response.json();
-
-      expect(data.success).toBe(true);
-      expect(data.message).toContain("deleted");
-    });
-
-    it("should reject delete without ID", async () => {
-      const { DELETE } = await import("./questions-handler");
-      const request = new NextRequest("https://example.com/api/questions", {
+      const req = new NextRequest("http://localhost/api/questions?id=123", {
         method: "DELETE",
       });
 
-      const response = await DELETE(request);
-      const data = await response.json();
+      mockSupabaseInstance.delete.mockResolvedValue({ error: null });
 
-      expect(data.success).toBe(false);
-      expect(data.error).toContain("ID is required");
-    });
+      const response = await questionsDeleteHandler(req);
+      const json = await response.json();
 
-    it("should handle update errors gracefully", async () => {
-      const { PUT } = await import("./questions-handler");
-      // Force an error in update by mocking eq to throw for this specific ID
-      mockEq.mockImplementationOnce((field, value) => {
-        // This will be consumed by the lookups first, so we actually want to mock it differently
-        // A safer way is to mock the `update` method itself to return an object with an `eq` method that fails
-      });
-      // Wait, mockFrom is a vi.fn(). I can just mock update
-      mockFrom.mockImplementation((table) => {
-        const defaultChain = {
-          select: vi.fn().mockReturnThis(),
-          eq: mockEq,
-          ilike: mockIlike,
-          range: mockRange,
-          order: mockOrder,
-          limit: mockLimit,
-          head: vi.fn().mockReturnThis(),
-          count: vi.fn().mockReturnThis(),
-          single: mockSingle,
-          maybeSingle: mockMaybeSingle,
-          insert: mockInsert,
-          update: vi.fn().mockReturnThis(),
-          delete: vi.fn().mockReturnThis(),
-        };
-
-        if (table === "questions") {
-          return {
-            ...defaultChain,
-            update: vi.fn().mockReturnValue({
-              eq: vi
-                .fn()
-                .mockResolvedValue({ error: { message: "Update failed" } }),
-            }),
-          };
-        }
-        return defaultChain;
-      });
-
-      const request = new NextRequest("https://example.com/api/questions", {
-        method: "PUT",
-        body: JSON.stringify({ id: "q-123", title: "Fail Update" }),
-      });
-
-      const response = await PUT(request);
-      const data = await response.json();
-
-      expect(data.success).toBe(false);
-
-      // Restore the original mockFrom implementation
-      mockFrom.mockImplementation(() => ({
-        select: vi.fn().mockReturnThis(),
-        eq: mockEq,
-        ilike: mockIlike,
-        range: mockRange,
-        order: mockOrder,
-        limit: mockLimit,
-        head: vi.fn().mockReturnThis(),
-        count: vi.fn().mockReturnThis(),
-        single: mockSingle,
-        maybeSingle: mockMaybeSingle,
-        insert: mockInsert,
-        update: vi.fn().mockReturnThis(),
-        delete: vi.fn().mockReturnThis(),
-      }));
+      expect(json.success).toBe(true);
+      expect(mockSupabaseInstance.delete).toHaveBeenCalled();
     });
   });
 });

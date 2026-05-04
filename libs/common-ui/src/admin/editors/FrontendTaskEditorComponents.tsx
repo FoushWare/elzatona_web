@@ -108,8 +108,6 @@ interface MainContentProps {
   mode: "create" | "edit" | "view";
   showFileExplorer: boolean;
   setShowFileExplorer: (show: boolean) => void;
-  showPreview: boolean;
-  activeBrowserTab: "browser" | "console";
 }
 
 export const FrontendTaskEditorMainContent: React.FC<MainContentProps> = (

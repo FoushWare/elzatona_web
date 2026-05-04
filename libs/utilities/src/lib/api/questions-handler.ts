@@ -4,10 +4,8 @@ import {
   validateAndSanitize,
   sanitizeObjectServer,
   sanitizeRichContent,
-  sanitizeForLogging,
   getErrorMessage,
   normalizeCodeLineBreaks,
-  stripUnsafeControlCharacters,
 } from "../../index";
 import { questionSchema } from "./validation";
 
@@ -360,8 +358,8 @@ export async function questionsGetHandler(request: NextRequest) {
     const supabase = getSupabaseClient();
     const { searchParams } = new URL(request.url);
 
-    const page = parseInt(searchParams.get("page") || "1");
-    const pageSize = parseInt(searchParams.get("pageSize") || "10");
+    const page = Number.parseInt(searchParams.get("page") || "1", 10);
+    const pageSize = Number.parseInt(searchParams.get("pageSize") || "10", 10);
     const categoryId = searchParams.get("categoryId");
     const topicId = searchParams.get("topicId");
     const search = searchParams.get("search");

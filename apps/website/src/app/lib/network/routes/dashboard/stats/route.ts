@@ -32,6 +32,9 @@ export async function GET(request: NextRequest) {
         .eq("user_id", userId),
     ]);
 
+    if (attemptsRes.error) throw attemptsRes.error;
+    if (progressRes.error) throw progressRes.error;
+
     const questionAttempts = attemptsRes.data || [];
     const userProgressEntries = progressRes.data || [];
 

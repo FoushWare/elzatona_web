@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { getSupabaseConfig, getApiConfig } from "../../../api-config";
+import { getSupabaseConfig } from "../../../api-config";
 import { getEnvironment } from "../../../environment";
 
 const adminConfig = {
@@ -112,11 +112,16 @@ function _getProjectStatus(urlRef?: string, keyRef?: string) {
       isProductionProject: isProd,
       isCorrectlyConfigured: isMatch && (isTest || isProd),
     },
-    message:
-      isMatch && isTest
-        ? "✅ Using TEST project correctly"
-        : isMatch && isProd
-          ? "⚠️ Using PRODUCTION project"
-          : "❌ Configuration mismatch",
+    message: _getProjectMessage(isMatch, isTest, isProd),
   };
+}
+
+function _getProjectMessage(
+  isMatch: boolean,
+  isTest: boolean,
+  isProd: boolean,
+): string {
+  if (isMatch && isTest) return "✅ Using TEST project correctly";
+  if (isMatch && isProd) return "⚠️ Using PRODUCTION project";
+  return "❌ Configuration mismatch";
 }

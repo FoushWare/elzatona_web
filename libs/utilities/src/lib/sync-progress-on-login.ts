@@ -36,7 +36,7 @@ function _getLocalStorageKeysByPrefix(prefix: string): string[] {
   try {
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && key.startsWith(prefix)) {
+      if (key?.startsWith(prefix)) {
         keys.push(key);
       }
     }
@@ -90,12 +90,13 @@ export async function syncAllGuidedProgress(
 
     return { success: errors.length === 0, synced: syncedCount, errors };
   } catch (error) {
-    const errorMsg =
-      error instanceof Error
-        ? error.message
-        : typeof error === "string"
-          ? error
-          : "Unknown error";
+    let errorMsg = "Unknown error";
+    if (error instanceof Error) {
+      errorMsg = error.message;
+    } else if (typeof error === "string") {
+      errorMsg = error;
+    }
+
     console.error("❌ Error in syncAllGuidedProgress:", error);
     return { success: false, synced: 0, errors: [errorMsg] };
   }

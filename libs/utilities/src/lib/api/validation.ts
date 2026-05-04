@@ -3,7 +3,7 @@
  * Validates and sanitizes user inputs before processing
  */
 
-import { z, ZodIssue } from "zod";
+import { z } from "zod";
 import { sanitizeInputServer } from "./sanitize-server";
 
 /**
@@ -380,19 +380,19 @@ function _handleGenericError(error: any): { success: false; error: string } {
 /**
  * Formats a Zod issue path into a string.
  */
-function _getIssuePath(issue: ZodIssue): string {
+function _getIssuePath(issue: z.ZodIssue): string {
   return issue?.path && issue.path.length > 0 ? issue.path.join(".") : "root";
 }
 
 /**
  * Logs multiple validation issues for debugging purposes.
  */
-function _logMultipleIssues(issues: ZodIssue[]): void {
+function _logMultipleIssues(issues: z.ZodIssue[]): void {
   if (issues.length <= 1) return;
 
   console.warn(
     `⚠️ Multiple validation errors for question:`,
-    issues.map((e: ZodIssue) => ({
+    issues.map((e: z.ZodIssue) => ({
       path: _getIssuePath(e),
       message: e.message,
       code: e.code,

@@ -11,10 +11,7 @@ import type {
   AdminUnifiedQuestion,
   Topic as AdminTopic,
 } from "@elzatona/types";
-import {
-  useLearningCardRepository,
-  usePlanRepository,
-} from "@elzatona/database/client";
+import { useLearningCardRepository } from "@elzatona/database/client";
 import { supabase } from "@elzatona/utilities";
 import type { Topic as DatabaseTopic } from "@elzatona/database";
 
