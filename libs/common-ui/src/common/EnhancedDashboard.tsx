@@ -14,7 +14,6 @@ import {
   Target,
   Zap,
   BarChart3,
-  CheckCircle,
   Loader2,
   LogOut,
   Star,
@@ -29,10 +28,7 @@ import {
 } from "lucide-react";
 
 // Types
-import type {
-  ContinueData,
-  UserProgress,
-} from "../../../../apps/website/src/app/lib/supabase-progress";
+import type { ContinueData } from "../../../../apps/website/src/app/lib/supabase-progress";
 
 interface LocalDashboardStats {
   questionsCompleted: number;

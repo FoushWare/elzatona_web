@@ -71,4 +71,13 @@ describe("Unified Questions Route (Root)", () => {
     expect(questionsDeleteHandler).toHaveBeenCalledWith(request);
     expect(response).toBe(mockResponse);
   });
+
+  it("should handle errors in delegated GET handler", async () => {
+    const request = new NextRequest("http://localhost/api/questions/unified");
+    vi.mocked(questionsGetHandler).mockRejectedValueOnce(
+      new Error("GET failed"),
+    );
+
+    await expect(GET(request)).rejects.toThrow("GET failed");
+  });
 });
