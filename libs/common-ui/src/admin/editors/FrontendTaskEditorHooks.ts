@@ -225,27 +225,3 @@ export const useFileManagement = (task?: AdminFrontendTask | null) => {
     setShowFileExplorer,
   };
 };
-
-// Hook for console management
-export const useConsoleManagement = () => {
-  const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
-  const [showConsole] = useState(true);
-
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      // SECURITY: Verify message origin to prevent XSS
-      if (event.origin !== globalThis.window.location.origin) {
-        console.warn("Received message from untrusted origin:", event.origin);
-        return;
-      }
-      if (event.data.type === "console") {
-        setConsoleOutput((prev) => [...prev.slice(-19), event.data.message]);
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, []);
-
-  return { consoleOutput, setConsoleOutput, showConsole };
-};
