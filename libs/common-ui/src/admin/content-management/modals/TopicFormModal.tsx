@@ -89,6 +89,13 @@ export const TopicFormModal: React.FC<TopicFormModalProps> = ({
     onOpenChange(false);
   };
 
+  let submitButtonText = "Create Topic";
+  if (isSubmitting) {
+    submitButtonText = "Saving...";
+  } else if (topic) {
+    submitButtonText = "Save Changes";
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="w-full max-w-2xl" onOpenChange={onOpenChange}>
@@ -266,11 +273,7 @@ export const TopicFormModal: React.FC<TopicFormModalProps> = ({
               disabled={isSubmitting}
               className="bg-purple-600 hover:bg-purple-700 text-white"
             >
-              {isSubmitting
-                ? "Saving..."
-                : topic
-                  ? "Save Changes"
-                  : "Create Topic"}
+              {submitButtonText}
             </Button>
           </DialogFooter>
         </form>

@@ -73,7 +73,9 @@ if (!globalThis.vi) {
     fn: (...args) => jest.fn(...args),
     spyOn: (...args) => jest.spyOn(...args),
     mock: (m, f) => {
-      if (typeof jest !== "undefined" && jest.mock) jest.mock(m, f);
+      if (typeof globalThis !== "undefined" && globalThis.jest?.mock) {
+        globalThis.jest.mock(m, f);
+      }
     },
     clearAllMocks: () =>
       jest.clearAllMocks ? jest.clearAllMocks() : undefined,

@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
         // Internal validation logic for development and testing access
         // Handles different tiers of access with distinct return values
         const email = credentials.email.toLowerCase();
-        const password = credentials.password;
+        const { password } = credentials;
 
         if (email.endsWith("@elzatona.com") && password === "dev-access") {
           return {
