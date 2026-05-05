@@ -5,7 +5,7 @@ import {
   questionsPostHandler,
   PUT as questionsPutHandler,
   DELETE as questionsDeleteHandler,
-} from "../questions-handler";
+} from "./questions-handler";
 
 import { getSupabaseClient } from "../../index";
 
@@ -42,8 +42,11 @@ describe("questions-handler", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset all methods on the singleton mock instance
-    Object.values(mockSupabaseInstance).forEach((m: any) => m.mockReset?.());
-    // Re-setup mockReturnThis for fluent API
+    Object.values(mockSupabaseInstance).forEach((m: any) => {
+      if (typeof m.mockReset === "function") m.mockReset();
+    });
+
+    // Default: all methods return this for chaining
     mockSupabaseInstance.from.mockReturnThis();
     mockSupabaseInstance.select.mockReturnThis();
     mockSupabaseInstance.eq.mockReturnThis();
@@ -64,7 +67,8 @@ describe("questions-handler", () => {
         "http://localhost/api/questions?page=1&pageSize=10",
       );
 
-      mockSupabaseInstance.select.mockResolvedValue({
+      // Final call in GET is .order()
+      mockSupabaseInstance.order.mockResolvedValue({
         data: [{ id: "1", title: "Test Q" }],
         count: 1,
         error: null,
@@ -88,8 +92,13 @@ describe("questions-handler", () => {
         }),
       });
 
-      mockSupabaseInstance.maybeSingle.mockResolvedValue({ data: null }); // No duplicate
-      mockSupabaseInstance.insert.mockResolvedValue({
+      // maybeSingle is used for duplicate check
+      mockSupabaseInstance.maybeSingle.mockResolvedValue({
+        data: null,
+        error: null,
+      });
+      // single is the final call for insert
+      mockSupabaseInstance.single.mockResolvedValue({
         data: { id: "new-id" },
         error: null,
       });
@@ -112,7 +121,8 @@ describe("questions-handler", () => {
         }),
       });
 
-      mockSupabaseInstance.update.mockResolvedValue({ error: null });
+      // final call for update is eq()
+      mockSupabaseInstance.eq.mockResolvedValue({ error: null });
 
       const response = await questionsPutHandler(req);
       const json = await response.json();
@@ -128,7 +138,8 @@ describe("questions-handler", () => {
         method: "DELETE",
       });
 
-      mockSupabaseInstance.delete.mockResolvedValue({ error: null });
+      // final call for delete is eq()
+      mockSupabaseInstance.eq.mockResolvedValue({ error: null });
 
       const response = await questionsDeleteHandler(req);
       const json = await response.json();
